@@ -1,17 +1,11 @@
 import { auth } from '@/auth';
 
-import { SignInHero } from './_components/sign-in';
-import { Sidebar } from './_components/sidebar';
-
-const Page = async () => {
+export const Sidebar = async () => {
 	const session = await auth();
 
-	return session ? (
-		<main className="container">
-			<Sidebar />
-
-			<div className="pl-[20rem]">
-				<h1 className="text-xl">{session?.user.name}</h1>
+	return (
+		<div className="fixed top-[100px] bg-primary-100 h-[calc(100vh-132px)] w-[18rem] overflow-y-auto rounded-lg pl-8 pr-6">
+			<aside>
 				<div className="py-10">blabla blabla</div>
 				<div className="py-10">blabla blabla</div>
 				<div className="py-10">blabla blabla</div>
@@ -22,11 +16,8 @@ const Page = async () => {
 				<div className="py-10">blabla blabla</div>
 				<div className="py-10">blabla blabla</div>
 				<div className="py-10">blabla blabla</div>
-			</div>
-		</main>
-	) : (
-		<SignInHero />
+				<div className="py-10">blabla blabla</div>
+			</aside>
+		</div>
 	);
 };
-
-export default Page;

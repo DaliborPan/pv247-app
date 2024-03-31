@@ -25,7 +25,7 @@ const UserMenuItem = async () => {
 };
 
 export const Navigation = () => (
-	<header className="px-10 flex items-center gap-x-20 border-b py-2 mb-8 bg-white">
+	<header className="px-10 flex items-center gap-x-20 border-b py-2 mb-8 bg-white sticky top-0">
 		<Image src={MUNI_LOGO} width={100} alt="muni-logo" />
 
 		<nav className="grow">
