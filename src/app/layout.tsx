@@ -3,7 +3,11 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 
+import { auth } from '@/auth';
+
 import { cn } from '../lib/cn';
+
+import { Navigation } from './_components/navigation';
 
 const poppins = Poppins({ subsets: ['latin'], weight: ['400'] });
 
@@ -11,18 +15,33 @@ export const metadata: Metadata = {
 	title: 'PV247 app'
 };
 
-const RootLayout = ({
+const RootLayout = async ({
 	children
 }: Readonly<{
 	children: React.ReactNode;
-}>) => (
-	<html lang="en">
-		<body
-			className={cn('min-h-screen flex flex-col bg-neutral', poppins.className)}
-		>
-			{children}
-		</body>
-	</html>
-);
+}>) => {
+	const session = await auth();
+
+	return (
+		<html lang="en">
+			<body
+				className={cn(
+					'min-h-screen flex flex-col bg-background',
+					poppins.className
+				)}
+			>
+				{session ? (
+					<>
+						<Navigation />
+
+						{children}
+					</>
+				) : (
+					children
+				)}
+			</body>
+		</html>
+	);
+};
 
 export default RootLayout;
