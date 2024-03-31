@@ -100,7 +100,8 @@ module.exports = {
 					'index'
 				]
 			}
-		]
+		],
+		'import/namespace': 'off'
 	},
 	settings: {
 		// Fix react version detection

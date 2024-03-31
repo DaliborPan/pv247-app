@@ -3,6 +3,8 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 
+import { cn } from '../lib/cn';
+
 const poppins = Poppins({ subsets: ['latin'], weight: ['400'] });
 
 export const metadata: Metadata = {
@@ -15,7 +17,11 @@ const RootLayout = ({
 	children: React.ReactNode;
 }>) => (
 	<html lang="en">
-		<body className={poppins.className}>{children}</body>
+		<body
+			className={cn('min-h-screen flex flex-col bg-neutral', poppins.className)}
+		>
+			{children}
+		</body>
 	</html>
 );
 
