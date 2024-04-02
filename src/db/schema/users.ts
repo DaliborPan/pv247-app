@@ -6,8 +6,6 @@ import {
 } from 'drizzle-orm/sqlite-core';
 import type { AdapterAccount } from '@auth/core/adapters';
 
-import { projects } from './projects';
-
 export const users = sqliteTable('user', {
 	id: text('id').notNull().primaryKey(),
 	name: text('name'),
@@ -17,15 +15,15 @@ export const users = sqliteTable('user', {
 	role: text('role').$type<'student' | 'lector'>(),
 
 	// lector
-	lectorId: text('lectorId'), // reference to users.id
+	lectorId: text('lectorId'),
 	lectorName: text('lectorName'),
 
 	// project
-	projectId: text('projectId').references(() => projects.id, {
-		onDelete: 'set null'
-	}),
+	projectId: text('projectId'),
 	projectName: text('projectName')
 });
+
+export type User = typeof users.$inferSelect;
 
 export const accounts = sqliteTable(
 	'account',

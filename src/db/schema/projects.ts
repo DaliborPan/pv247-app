@@ -7,3 +7,5 @@ export const projects = sqliteTable('project', {
 	name: text('name').notNull(),
 	description: text('description')
 });
+
+export type Project = typeof projects.$inferSelect;

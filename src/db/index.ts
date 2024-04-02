@@ -1,16 +1,36 @@
 import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
 
-import { homeworks } from './schema/homeworks';
-import { lectures } from './schema/lectures';
-import { projects } from './schema/projects';
-import { users } from './schema/users';
+import { homeworks, type Homework } from './schema/homeworks';
+import { lectures, type Lecture } from './schema/lectures';
+import { projects, type Project } from './schema/projects';
+import { users, type User } from './schema/users';
+import * as relations from './schema/relations';
 
 const client = createClient({
 	url: process.env.DATABASE_URL ?? '',
 	authToken: process.env.AUTH_TOKEN
 });
 
-const db = drizzle(client);
+const db = drizzle(client, {
+	schema: {
+		homeworks,
 
-export { db, homeworks, lectures, projects, users };
+		lectures,
+		projects,
+		users,
+		...relations
+	}
+});
+
+export {
+	db,
+	homeworks,
+	lectures,
+	projects,
+	users,
+	type Homework,
+	type Lecture,
+	type Project,
+	type User
+};
