@@ -16,15 +16,19 @@ export const Sidebar = async () => {
 				<div className="flex flex-col gap-y-1">
 					<div className="flex items-center">
 						<span className="grow text-gray-600">Lectures</span>
-						<span className="text-sm text-primary font-bold">2/10</span>
+						<span className="text-sm text-primary font-medium">2/10</span>
 					</div>
 					<div className="flex items-center">
 						<span className="grow text-gray-600">Homeworks</span>
-						<span className="text-sm text-primary font-bold">1/10 | 30p</span>
+						<span className="text-sm text-primary font-medium">1/10 | 30p</span>
 					</div>
 					<div className="flex items-center">
 						<span className="grow text-gray-600">Project</span>
-						<span className="text-sm text-primary font-bold">None</span>
+						<span className="text-sm text-primary font-medium">None</span>
+					</div>
+					<div className="flex items-center">
+						<span className="grow text-gray-600">Attendance</span>
+						<span className="text-sm text-primary font-medium">1/2</span>
 					</div>
 				</div>
 			</div>
@@ -67,7 +71,7 @@ export const Sidebar = async () => {
 						className="flex items-center text-sm"
 					>
 						<span className="grow text-gray-600">Introduction</span>
-						<span className="text-sm text-primary font-bold">30/30</span>
+						<span className="text-sm text-primary font-medium">30/30</span>
 					</Link>
 
 					<Link href="/lectures/react" className="flex items-center text-sm">
@@ -91,7 +95,7 @@ export const Sidebar = async () => {
 					<h3 className="text-xl grow">Project</h3>
 
 					<Button
-						className="bg-primary-200 text-primary-500 hover:bg-primary-300 hover:text-primary-600 size-9"
+						className="bg-primary-200 text-primary-500 hover:bg-primary-300 hover:text-primary-600"
 						size="sm"
 						iconLeft={{
 							name: 'Plus'
