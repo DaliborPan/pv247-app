@@ -14,6 +14,10 @@ export const users = sqliteTable('user', {
 	image: text('image'),
 	role: text('role').$type<'student' | 'lector'>(),
 
+	// edited info
+	firstName: text('firstName'),
+	lastName: text('lastName'),
+
 	// lector
 	lectorId: text('lectorId'),
 	lectorName: text('lectorName'),

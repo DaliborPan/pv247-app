@@ -7,10 +7,14 @@ declare module 'next-auth' {
 		user: DefaultSession['user'] & {
 			id: string;
 			role: 'lector' | 'student';
+			firstName?: string;
+			lastName?: string;
 		};
 	}
 
 	interface User extends AdapterUser {
 		role: 'lector' | 'student';
+		firstName?: string;
+		lastName?: string;
 	}
 }

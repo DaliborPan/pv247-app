@@ -6,7 +6,7 @@ const Page = async () => {
 	return (
 		<>
 			<h1>Profile</h1>
-			<p>{session?.user.name}</p>
+			<p>{session?.user.firstName}</p>
 		</>
 	);
 };
