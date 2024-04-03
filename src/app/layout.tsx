@@ -9,6 +9,7 @@ import { cn } from '../lib/cn';
 
 import { Navigation } from './_components/navigation';
 import { SignInHero } from './_components/sign-in';
+import { Providers } from './_components/providers';
 
 const poppins = Poppins({
 	subsets: ['latin'],
@@ -34,15 +35,17 @@ const RootLayout = async ({
 					poppins.className
 				)}
 			>
-				{session ? (
-					<>
-						<Navigation />
+				<Providers>
+					{session ? (
+						<>
+							<Navigation />
 
-						{children}
-					</>
-				) : (
-					<SignInHero />
-				)}
+							{children}
+						</>
+					) : (
+						<SignInHero />
+					)}
+				</Providers>
 			</body>
 		</html>
 	);

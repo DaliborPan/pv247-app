@@ -2,8 +2,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Slot } from '@radix-ui/react-slot';
 import { useMutation } from '@tanstack/react-query';
 import React, { type ComponentType, useState } from 'react';
-import { type FieldValues, Form, useForm } from 'react-hook-form';
+import { type FieldValues, useForm } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
+
+import { Form } from '@/components/form/form';
 
 import { Dialog } from '../dialog';
 
@@ -117,7 +119,7 @@ export const Prompt = <T extends FieldValues>({
 								{confirm ? (
 									confirm({ isError, isLoading })
 								) : (
-									<Dialog.ConfirmButton />
+									<Dialog.ConfirmButton isLoading={isLoading} />
 								)}
 							</Slot>
 						</Dialog.Footer>

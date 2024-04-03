@@ -11,14 +11,16 @@ const buttonVariants = cva(
 	{
 		variants: {
 			variant: {
-				primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
-				destructive:
+				'primary': 'bg-primary text-primary-foreground hover:bg-primary/90',
+				'destructive':
 					'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-				outline:
+				'outline':
 					'border border-slate-800 bg-background hover:bg-accent hover:text-accent-foreground',
-				secondary: 'bg-slate-800 text-slate-200 hover:bg-slate-800/80',
-				ghost: 'hover:bg-accent hover:text-accent-foreground',
-				link: 'text-primary underline-offset-4 hover:underline'
+				'outline/primary':
+					'border border-primary bg-background text-primary hover:bg-primary-100',
+				'secondary': 'bg-slate-800 text-slate-200 hover:bg-slate-800/80',
+				'ghost': 'hover:bg-accent hover:text-accent-foreground',
+				'link': 'text-primary underline-offset-4 hover:underline'
 			},
 			size: {
 				md: 'h-10 px-4 py-2',
@@ -46,6 +48,8 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
 			name: IconName;
 			className?: string;
 		};
+
+		isLoading?: boolean;
 	};
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -55,6 +59,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			variant,
 			size,
 			asChild = false,
+			isLoading = false,
 			children,
 			iconLeft,
 			iconRight,
@@ -79,10 +84,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
 				{children}
 
-				{iconRight && (
+				{(!!iconRight || isLoading) && (
 					<Icon
-						name={iconRight.name}
-						className={cn(children && 'ml-2', iconRight.className)}
+						name={iconRight?.name ?? 'Loader'}
+						className={cn(children && 'ml-2', iconRight?.className)}
 					/>
 				)}
 			</Comp>

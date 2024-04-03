@@ -7,10 +7,11 @@ export const DialogConfirmButton = forwardRef<
 	ButtonProps & {
 		isError?: boolean;
 	}
->(({ children, isError = false, ...props }, ref) => (
+>(({ children, isError = false, isLoading, ...props }, ref) => (
 	<Button
 		ref={ref}
 		color={isError ? 'error' : 'primary'}
+		isLoading={isLoading}
 		size="sm"
 		iconLeft={{
 			name: 'Check'
