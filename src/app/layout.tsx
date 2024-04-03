@@ -8,6 +8,7 @@ import { auth } from '@/auth';
 import { cn } from '../lib/cn';
 
 import { Navigation } from './_components/navigation';
+import { SignInHero } from './_components/sign-in';
 
 const poppins = Poppins({
 	subsets: ['latin'],
@@ -40,7 +41,7 @@ const RootLayout = async ({
 						{children}
 					</>
 				) : (
-					children
+					<SignInHero />
 				)}
 			</body>
 		</html>

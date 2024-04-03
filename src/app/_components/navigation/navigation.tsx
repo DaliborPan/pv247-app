@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { auth } from '@/auth';
 import { cn } from '@/lib/cn';
@@ -16,11 +17,11 @@ const UserMenuItem = async () => {
 	const session = await auth();
 
 	return (
-		<div className="flex items-center gap-x-3">
+		<Link href="/profile" className="flex items-center gap-x-3">
 			<div className="size-8 rounded-full bg-neutral" />
 
 			<span>{session?.user.name}</span>
-		</div>
+		</Link>
 	);
 };
 
