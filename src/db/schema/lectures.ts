@@ -9,7 +9,8 @@ export const lectures = sqliteTable('lecture', {
 	slug: text('slug').notNull().default(''),
 
 	// homework
-	homeworkName: text('homeworkName').notNull().default('')
+	homeworkName: text('homeworkName').notNull().default(''),
+	homeworkPreview: text('homeworkPreview').notNull().default('')
 });
 
 export type Lecture = typeof lectures.$inferSelect;

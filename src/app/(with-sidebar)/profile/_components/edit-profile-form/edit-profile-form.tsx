@@ -24,6 +24,13 @@ export const EditProfileForm = ({ userId }: { userId: string }) => (
 			await editProfileAction(data);
 		}}
 	>
-		<Button>Edit</Button>
+		<Button
+			className="-mt-4 -mr-4"
+			size="sm"
+			variant="outline"
+			iconLeft={{
+				name: 'Pencil'
+			}}
+		/>
 	</Prompt>
 );
