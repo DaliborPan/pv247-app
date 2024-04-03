@@ -170,7 +170,7 @@ export const Sidebar = async () => {
 					<h3 className="text-xl grow">Project</h3>
 
 					<Button
-						className="bg-primary-200 text-primary-500 hover:bg-primary-300 hover:text-primary-600"
+						variant="primary/inverse"
 						size="sm"
 						iconLeft={{
 							name: 'Plus'

@@ -4,6 +4,32 @@ import { Button } from '@/components/base/button';
 
 import { EditProfileForm } from './_components/edit-profile-form';
 
+const ProjectCard = async () => {
+	const session = await auth();
+
+	if (!session) return null;
+
+	const hasProject = session?.user.projectId;
+
+	return (
+		<div className="bg-white shadow-lg rounded-lg p-8 mx-6 mt-8">
+			<h3 className="text-xl mb-4">Project</h3>
+
+			<div>
+				{hasProject ? "You're in a project" : "You're not in a project"}
+			</div>
+		</div>
+	);
+};
+
+const AttendanceCard = () => (
+	<div className="bg-white shadow-lg rounded-lg p-8 mx-6 mt-8">
+		<h3 className="text-xl mb-4">Attendance</h3>
+
+		<div>TBA</div>
+	</div>
+);
+
 const HomeworksCard = async () => {
 	const availableLectures = await query.getAvailableLectures();
 
@@ -26,7 +52,7 @@ const HomeworksCard = async () => {
 
 						<Button
 							size="sm"
-							variant="outline"
+							variant="primary/inverse"
 							iconLeft={{
 								name: 'ArrowRight'
 							}}
@@ -70,6 +96,10 @@ const Page = async () => {
 			</div>
 
 			<HomeworksCard />
+
+			<AttendanceCard />
+
+			<ProjectCard />
 		</>
 	);
 };
