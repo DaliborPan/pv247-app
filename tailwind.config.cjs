@@ -28,7 +28,10 @@ module.exports = {
 				'destructive-foreground': 'hsl(210 40% 98%)',
 
 				'accent': 'hsl(210 40% 96.1%)',
-				'accent-foreground': 'hsl(222.2 47.4% 11.2%)'
+				'accent-foreground': 'hsl(222.2 47.4% 11.2%)',
+
+				'muted': 'hsl(217.2 32.6% 17.5%)',
+				'muted-foreground': 'hsl(215 20.2% 65.1%)'
 			}
 		}
 	}

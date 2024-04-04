@@ -5,7 +5,7 @@ import React, { type ComponentType, useState } from 'react';
 import { type FieldValues, useForm } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
 
-import { Form } from '@/components/form/form';
+import { Form } from '@/components/form';
 
 import { Dialog } from '../dialog';
 
