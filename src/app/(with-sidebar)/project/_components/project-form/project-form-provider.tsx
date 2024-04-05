@@ -5,13 +5,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { type PropsWithChildren } from 'react';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 
 import { Form } from '@/components/form';
 import { Button } from '@/components/base/button';
 
 import { projectFormSchema, type ProjectFormSchema } from './schema';
-import { createProjectAction, updateProjectAction } from './project-action';
+import { useSubmitProjectFormMutation } from './mutation';
 
 export const ProjectFormProvider = ({
 	children,
@@ -20,7 +19,6 @@ export const ProjectFormProvider = ({
 	defaultValues?: Partial<ProjectFormSchema> & { id: string };
 }>) => {
 	const session = useSession();
-	const router = useRouter();
 
 	const form = useForm<ProjectFormSchema>({
 		resolver: zodResolver(projectFormSchema),
@@ -29,6 +27,10 @@ export const ProjectFormProvider = ({
 			description: '',
 			students: []
 		}
+	});
+
+	const { mutateAsync } = useSubmitProjectFormMutation({
+		projectId: defaultValues?.id
 	});
 
 	const onSubmit = async (data: ProjectFormSchema) => {
@@ -43,23 +45,10 @@ export const ProjectFormProvider = ({
 			return;
 		}
 
-		const actionData = {
+		await mutateAsync({
 			...data,
 			students: [...data.students, session.data.user.id]
-		};
-
-		if (defaultValues) {
-			await updateProjectAction({
-				...actionData,
-				id: defaultValues.id
-			});
-
-			toast.success('Project updated successfully.');
-
-			router.replace('/project');
-		} else {
-			await createProjectAction(actionData);
-		}
+		});
 	};
 
 	return (
@@ -68,6 +57,7 @@ export const ProjectFormProvider = ({
 				<div className="flex items-center mb-6">
 					<h1 className="text-3xl grow">Create a project</h1>
 					<Button
+						isLoading={form.formState.isSubmitting}
 						type="submit"
 						iconLeft={{
 							name: 'Send'
