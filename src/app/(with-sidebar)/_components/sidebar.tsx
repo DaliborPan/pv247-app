@@ -150,38 +150,32 @@ const OverviewCard = async () => {
 	);
 };
 
-export const Sidebar = async () => {
-	const session = await auth();
+export const Sidebar = async () => (
+	<aside className="fixed top-[100px] h-[calc(100vh-132px)] w-[18rem] overflow-y-auto flex flex-col gap-y-8">
+		{/* Overview */}
+		<OverviewCard />
 
-	return (
-		<aside className="fixed top-[100px] h-[calc(100vh-132px)] w-[18rem] overflow-y-auto flex flex-col gap-y-8">
-			{/* Overview */}
-			<OverviewCard />
+		{/* Lectures */}
+		<LecturesCard />
 
-			{/* Lectures */}
-			<LecturesCard />
+		{/* Homeworks */}
+		<HomeworksCard />
 
-			{/* Homeworks */}
-			<HomeworksCard />
+		{/* Project */}
+		<div className="bg-primary-100 rounded-lg pl-8 pr-6 py-6">
+			<div className="flex items-center mb-4">
+				<h3 className="text-xl grow">Project</h3>
 
-			{/* Project */}
-			<div className="bg-primary-100 rounded-lg pl-8 pr-6 py-6">
-				<div className="flex items-center mb-4">
-					<h3 className="text-xl grow">Project</h3>
-
-					<Button
-						variant="primary/inverse"
-						size="sm"
-						iconLeft={{
-							name: 'Plus'
-						}}
-					/>
-				</div>
-
-				<span className="text-gray-600 text-sm">
-					Project not submitted yet.
-				</span>
+				<Button
+					variant="primary/inverse"
+					size="sm"
+					iconLeft={{
+						name: 'Plus'
+					}}
+				/>
 			</div>
-		</aside>
-	);
-};
+
+			<span className="text-gray-600 text-sm">Project not submitted yet.</span>
+		</div>
+	</aside>
+);

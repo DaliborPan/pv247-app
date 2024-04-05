@@ -1,6 +1,7 @@
 import { auth } from '@/auth';
 import { query } from '@/db/query';
 import { Button } from '@/components/base/button';
+import { Hero } from '@/components/hero';
 
 import { EditProfileForm } from './_components/edit-profile-form';
 
@@ -79,21 +80,15 @@ const Page = async () => {
 
 	return (
 		<>
-			<div className="bg-gradient-to-tr from-primary-100 to-primary rounded-lg py-28" />
-
-			<div className="flex mx-6 -mt-20 bg-white shadow-lg rounded-lg p-8">
-				<div className="flex items-center gap-x-6 grow">
-					<div className="size-20 bg-gradient-to-tr from-primary-100 to-primary-300 rounded-full shadow" />
-					<div>
-						<div className="text-2xl font-medium text-slate-900">
-							{displayName}
-						</div>
-						<div className="text-gray-500 text-sm">{displayRole}</div>
+			<Hero actions={<EditProfileForm userId={session.user.id} />}>
+				<div className="size-20 bg-gradient-to-tr from-primary-100 to-primary-300 rounded-full shadow" />
+				<div>
+					<div className="text-2xl font-medium text-slate-900">
+						{displayName}
 					</div>
+					<div className="text-gray-500 text-sm">{displayRole}</div>
 				</div>
-
-				<EditProfileForm userId={session.user.id} />
-			</div>
+			</Hero>
 
 			<HomeworksCard />
 

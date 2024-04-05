@@ -5,29 +5,33 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { type PropsWithChildren } from 'react';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 import { Form } from '@/components/form';
 import { Button } from '@/components/base/button';
 
-import {
-	createProjectFormSchema,
-	type CreateProjectFormSchema
-} from './schema';
-import { createProjectAction } from './create-project-action';
+import { projectFormSchema, type ProjectFormSchema } from './schema';
+import { createProjectAction, updateProjectAction } from './project-action';
 
-export const CreateProjectFormProvider = ({ children }: PropsWithChildren) => {
+export const ProjectFormProvider = ({
+	children,
+	defaultValues
+}: PropsWithChildren<{
+	defaultValues?: Partial<ProjectFormSchema> & { id: string };
+}>) => {
 	const session = useSession();
+	const router = useRouter();
 
-	const form = useForm<CreateProjectFormSchema>({
-		resolver: zodResolver(createProjectFormSchema),
-		defaultValues: {
+	const form = useForm<ProjectFormSchema>({
+		resolver: zodResolver(projectFormSchema),
+		defaultValues: defaultValues ?? {
 			name: '',
 			description: '',
 			students: []
 		}
 	});
 
-	const onSubmit = async (data: CreateProjectFormSchema) => {
+	const onSubmit = async (data: ProjectFormSchema) => {
 		if (!session?.data?.user) {
 			return;
 		}
@@ -39,10 +43,23 @@ export const CreateProjectFormProvider = ({ children }: PropsWithChildren) => {
 			return;
 		}
 
-		await createProjectAction({
+		const actionData = {
 			...data,
-			students: [...data.students, session?.data?.user.id]
-		});
+			students: [...data.students, session.data.user.id]
+		};
+
+		if (defaultValues) {
+			await updateProjectAction({
+				...actionData,
+				id: defaultValues.id
+			});
+
+			toast.success('Project updated successfully.');
+
+			router.replace('/project');
+		} else {
+			await createProjectAction(actionData);
+		}
 	};
 
 	return (

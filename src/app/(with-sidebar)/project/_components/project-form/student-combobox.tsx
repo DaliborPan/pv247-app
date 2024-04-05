@@ -7,18 +7,16 @@ import { Combobox, type ComboboxOption } from '@/components/base/combobox';
 import { Button } from '@/components/base/button';
 import { FormLabel } from '@/components/form';
 
-import { type CreateProjectFormSchema } from './schema';
+import { type ProjectFormSchema } from './schema';
 
 const StudentSelectedComboboxItem = ({
 	studentOption
 }: {
 	studentOption: ComboboxOption;
 }) => {
-	const formContext = useFormContext<CreateProjectFormSchema>();
+	const formContext = useFormContext<ProjectFormSchema>();
 
 	const students = formContext.watch('students');
-
-	console.log(studentOption);
 
 	return (
 		<div className="flex items-center p-4 bg-white rounded-lg">
@@ -49,7 +47,7 @@ const StudentSelectedComboboxItem = ({
 };
 
 export const StudentCombobox = ({ options }: { options: ComboboxOption[] }) => {
-	const formContext = useFormContext<CreateProjectFormSchema>();
+	const formContext = useFormContext<ProjectFormSchema>();
 
 	const students = formContext.watch('students');
 

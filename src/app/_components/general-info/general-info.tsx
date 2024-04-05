@@ -25,10 +25,10 @@ export const GeneralInfo = () => (
 
 		<p>
 			Each seminar will consist of two parts. The first half will be dedicated
-			to explaining the current week's topics. In the second half of the
-			seminar, you will be solving the current week's assignments (more on those
-			later). Also don't be afraid to ask questions, especially during the
-			second half of the seminar.
+			to explaining the current week&apos;s topics. In the second half of the
+			seminar, you will be solving the current week&apos;s assignments (more on
+			those later). Also don&apos;t be afraid to ask questions, especially
+			during the second half of the seminar.
 		</p>
 
 		<h3>Attendance</h3>
@@ -74,8 +74,9 @@ export const GeneralInfo = () => (
 			<strong>IMPORTANT!</strong> When accepting first assignment you will be
 			asked to authorize GitHub Classroom to access your account. You will also
 			be asked to select your UCO and name from the list of students, so your
-			GitHub account can be linked. If you don't see your UCO on the list or you
-			somehow skip the step, please contact us so we can link it manually.
+			GitHub account can be linked. If you don&apos;t see your UCO on the list
+			or you somehow skip the step, please contact us so we can link it
+			manually.
 		</p>
 
 		<p>
@@ -86,7 +87,7 @@ export const GeneralInfo = () => (
 		<p>
 			Accept the assignment and use the provided link to get to your repository.
 			Instructions will be provided in `README.MD`. You should then clone the
-			repository or you can also use Github's built in VS Code editor by
+			repository or you can also use Github&apos;s built in VS Code editor by
 			pressing `.` or changing `.com` to `.dev` on repository dashboard (you can
 			read more about this feature
 			<a href="https://docs.github.com/en/codespaces/developing-in-codespaces/web-based-editor">
@@ -121,8 +122,8 @@ export const GeneralInfo = () => (
 		<h3>Feedback</h3>
 
 		<p>
-			After submissions close we will review them using Github's PR review. Feel
-			free to reply to the comments and ask questions about the feedback.
+			After submissions close we will review them using Github&apos;s PR review.
+			Feel free to reply to the comments and ask questions about the feedback.
 		</p>
 
 		<h3>Team project</h3>

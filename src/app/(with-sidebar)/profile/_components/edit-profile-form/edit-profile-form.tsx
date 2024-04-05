@@ -25,7 +25,6 @@ export const EditProfileForm = ({ userId }: { userId: string }) => (
 		}}
 	>
 		<Button
-			className="-mt-4 -mr-4"
 			size="sm"
 			variant="outline"
 			iconLeft={{

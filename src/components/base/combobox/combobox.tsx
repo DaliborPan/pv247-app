@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Check, ChevronsUpDown, LucideIcon } from 'lucide-react';
+import { Check, ChevronsUpDown, type LucideIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { cn } from '@/lib/cn';
