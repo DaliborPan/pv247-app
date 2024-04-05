@@ -1,3 +1,3 @@
 'use client';
 
-export { Form } from './form';
+export { Form, FormLabel } from './form';

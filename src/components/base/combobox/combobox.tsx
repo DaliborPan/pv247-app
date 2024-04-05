@@ -57,7 +57,7 @@ export const Combobox = ({
 						role="combobox"
 						{...triggerButtonProps}
 						className={cn(
-							'w-[200px] flex justify-between',
+							'w-[200px] flex justify-between text-gray-600 border-gray-600',
 							triggerButtonProps?.className
 						)}
 						aria-expanded={open}
@@ -65,7 +65,7 @@ export const Combobox = ({
 						{value
 							? options.find(option => option.value === value)?.label
 							: triggerPlaceholder}
-						<TriggerIcon className="ml-2 size-4 shrink-0 opacity-50" />
+						<TriggerIcon className="ml-2 size-4 shrink-0" />
 					</Button>
 				)}
 			</PopoverTrigger>

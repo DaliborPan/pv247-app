@@ -8,6 +8,10 @@ module.exports = {
 				center: true
 			},
 
+			fontSize: {
+				xxs: '.625rem'
+			},
+
 			colors: {
 				'neutral': '#f7f7fa',
 				'background': '#f7f7fa',
