@@ -11,7 +11,8 @@ export const lectures = sqliteTable('lecture', {
 
 	// homework
 	homeworkName: text('homeworkName').notNull().default(''),
-	homeworkPreview: text('homeworkPreview').notNull().default('')
+	homeworkPreview: text('homeworkPreview').notNull().default(''),
+	homeworkClassroomLink: text('homeworkClassroomLink').notNull().default('')
 });
 
 export type Lecture = typeof lectures.$inferSelect;
