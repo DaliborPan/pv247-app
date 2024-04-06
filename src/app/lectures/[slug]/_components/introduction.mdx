@@ -1,6 +1,351 @@
-# Welcome!
+# Introduction
 
-textasdsa
+Hello and welcome to the PV247 Modern Web Development course! We are here to deliver you a good set of basics for modern frontend development, mainly in React framework, with a particular focus on Next.js. Halfway through the course, you should have enough knowledge to create your own simple React applications. To pass this course, you should demonstrate that you can build a full-stack application with TypeScript and the Next.js framework so that it can be professionally built upon after the course is finished.
 
-- text
-- text
+## Topics
+
+1. Introduction
+2. React
+3. Styling your app, tailwind, accessibility
+4. Component lifecycle, state & effect
+5. Other react hooks, memoization, forms and tables
+6. Context, Async, React Query
+7. Next.js - The React Framework For The Web
+8. Next.js - Loading UI & Streaming, API routes, React Server Components
+9. Next.js - Caching, Database, Auth, Deployment
+10. Testing
+
+We are experienced developers who actively work in the technologies that this course teaches. We all have a portfolio of applications we've created either as personal, hobby projects or typically larger projects at work. Some of us still work at InQool, an industry partner of the Faculty of Informatics and operator of this course.
+
+#### Dalibor Pantlík
+
+Is a frontend developer with overlap into the backend as well, with more than three years of experience in three companies in total. He is currently working as a team lead frontend developer at InQool. He is a student in the third year of Eng studies at FI MUNI. Part of his master's thesis is dedicated to preparing material for this course.
+
+#### Maroš Beťko
+
+[TBA]
+
+#### Adam Grygar
+
+[TBA]
+
+Other teachers that you can come into contact with are **Tadeáš Pavlík**, **Miroslav Janska**, and **Ladislav Burgr**.
+
+## About InQool
+
+https://inqool.cz/
+
+InQool was founded in 2010 by three graduates of the Faculty of Informatics at Masaryk University. Now, it boasts a team of over 70 developers dedicated to creating web applications and native applications for mobile devices. The company primarily focuses on projects for the public sector, where its developed information systems contribute to the digitalization and improvement of administrative processes. Regarding technology, the company prefers Java for the backend and React or Nextjs for the frontend.
+
+The PV247 course at Masaryk University's Faculty of Informatics was not previously associated with InQool. However, in 2019, the company took the lead on this course with a vision to attract frontend-focused developer talent more effectively. Through ongoing contact with students during the semester, InQool developers have a unique chance to meet and eventually engage new promising talent.
+
+## Course organization
+
+The course covers ten weeks of lectures, with a 2.5-hour block in one week. Typically, the hour and a half (lecture) discusses the new technology. In the following hour (practicum), students have space to implement the weekly assignment, with teachers remaining available. Students are required to attend the first block (lecture). They can work out the weekly assignment independently at home if they want. It is recommended that they work on the assignment immediately after class, as the teachers remain available to them for any questions.
+
+### Prerequisites
+
+The prerequisite for this course is a basic knowledge of web development and scripting language programming. Suppose students have not taken PB138 "Web Development and Markup Language Fundamentals," which includes an intro to web development and React programming. In that case, students are required to study the very basics of JavaScript, TypeScript, React, how REST APIs work, etc., independently. Going into great detail on all aspects of web development is impossible, so these prerequisites are required.
+
+### Course objective
+
+> The course's main objective is to provide enough information and knowledge to enable students to develop a complete full-stack web application at the end of the course.
+
+The main focus will, of course, be the frontend part of the application; however, thanks to the Nextjs framework, the server and database part of the web application development will also be partially covered. However, the output knowledge of this course includes more than just the ability to create an application; it also consists of an overall understanding of modern web principles, especially on the client frontend part.
+
+### Evaluation
+
+Each week, students are given a short homework assignment to turn in within one week. Some weeks, the assignment will be worth 10 point; some weeks, it will be worth 30 points. In total, up to 210 points can be earned for homework. At the end of the semester, students will form teams of 3-4 people and develop a collaborative final project (web application). This will earn up to 250 points.
+
+To pass the colloquium, a minimum total of 300 points is required. Furthermore, only two unexcused absences are allowed.
+
+### Homeworks and team project
+
+Homework will be assigned each week, and you will have one week to work on it so that we can look at it together the following week. Some assignments will be graded with a maximum of 10 points, some with 30 points. If there is a significant problem or unmet requirement, it will be deducted in quarters, i.e., 25 points.
+
+The final project can have any topic and must meet the basic requirements for the final project, which will be specified later. You should start working on it during the semester, around weeks 7 and 8. There will be a short review of your projects in week 10, where we will want to see that you have at least started the project and have implemented 20% of it. Project presentations will be held on May 14 and 15, 2024. The project will be graded up to 250 points.
+
+# Today's lecture
+
+In today's lesson, we will cover an introduction to frontend development. We'll explore who a frontend developer is and place this domain within the context of the overall development of modern (not only web) applications. Next, we'll discuss the web platform and all the terms we'll encounter here. Then, we'll move precisely to the programming language that will guide us throughout the course, first javascript and then typescript. Aside from the language itself, we'll also discuss other things related to the entire frontend ecosystem, as well as tools for improving code.
+
+## Who is a Frontend developer?
+
+![](./assets/lecture1/lecture1-frontend-developer.jpeg)
+
+Front-end web development, also known as client-side development, is the practice of producing HTML, CSS, and JavaScript for a website or Web Application that a user can see and interact with directly. The frontend developer position is critical as it not only describes the coverage of the implementation of the website design but also its functionality and responsibility.
+
+The work of a frontend developer is not only about programming the application itself. Since he develops what the end user, or customer, sees, it is essential to have a certain feel for design and to know the principles of user experience (UX) and user interfaces (UI). Large companies often have dedicated experts and designers for these purposes. However, it is common practice for the developer to devise and design parts of the UI or some complete pages. It should be noted that a web application can only be successful with a hilarious, clear, and intuitive user interface.
+
+### Goal
+
+The goal of the frontend developer is to ensure that end users can use the application effectively and efficiently to obtain relevant information. This is further complicated by the fact that users use the app on different devices with different screen sizes. The developer must, therefore, consider different browsers (cross-browsers), devices (cross-device), and operating systems (cross-platform).
+
+### Dynamic and rapidly changing area
+
+The frontend area is very dynamic and rapidly changing. Developers must (or at least should) keep up with current trends or risk their code becoming outdated quickly. In the last few years, several new fundamental principles have emerged in this area, making frontend a challenging discipline. As it may seem, it is not just about dealing with the design of individual elements on a page but implementing functionality, storing application state, caching, and a host of other things a frontend developer must address to achieve a quality web application.
+
+## Web platform
+
+There are multiple platforms on which a frontend programmer can develop applications. Among them is the web platform, which has the advantage that it can be accessed by virtually all devices that access it through a web browser. Developers on this platform use technologies such as HTML, CSS, and JavaScript.
+
+### HTML, CSS, JS
+
+HTML and CSS are basically used to create the user interface and place the elements on the screen.
+
+**HTML (Hyper Text Markdown Language)** serves as the backbone of any web application. It defines the structure of the actual page, and the semantics of the elements are determined based on HTML tags. These tags have a predefined appearance that may vary slightly from browser to browser. Tags can be dynamically added, removed, and modified using JavaScript and have styling assigned using CSS to achieve a modern and intuitive user interface.
+
+**The CSS (Cascading Style Sheets)** language ensures that elements are correctly placed and look good on the page. It works by defining classes that are then assigned to individual HTML tags.
+
+**JavaScript (JS)** is a scripting language that enables interactivity on a page. In order for a button on a page to perform an action or for various elements to be reordered, hidden, etc., based on some conditions, we need this language to do so.
+
+### DOM
+
+The Document Object Model (DOM) represents the structure of a webpage as a logical tree of nodes. It also defines methods through which the structure of the page, its styling, or content can be programmatically altered. The Document interface describes the HTML DOM, and individual HTML tags also have their interfaces. For example, `<button>` is represented by the `HTMLButtonElement` interface, which defines all the methods and attributes of the button and how we can programmatically manipulate it.
+
+> reference: [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction)
+
+### Web API
+
+A Web API is a set of tools to interact with a web application. One of the APIs is the DOM mentioned above. Other well-known APIs include `fetch` (used to retrieve data from external sources - such as the backend via the network interface), `file` (for working with files), `history` (for retrieving information from the browser's history, manipulating it or navigating back) and `window` (for accessing the browser's storage such as `localstorage` or `session storage,` opening a new window, etc.).
+
+### Frontend frameworks
+
+It is well-known that JS frameworks are created and evolve very quickly. Discussion about which framework is the best and which one to choose in general for all use cases could be relatively useless. There is not only one framework that fits some use cases initially. Despite this, trends have been set over the last few years, and some frameworks are at the forefront and hold their position and dominance. These trends are tracked annually through surveys, and developers have regularly put React in the top position in recent years. The fact that one framework has established itself is good for the entire frontend development and community. For more information, not just about frameworks, check out the [StateOfJs](https://stateofjs.com/) survey, which tracks the popularity of frameworks and all things around the javascript world in general.
+
+![](./assets/lecture1/lecture1-state-of-js.png)
+
+## JavaScript
+
+JavaScript (JS) is a flexible and powerful scripting language that forms the basis of frontend development. As the scripting language of the web, JavaScript is essential in creating dynamic and interactive user experiences. Knowledge of JavaScript will be a prerequisite when working with React or any modern web framework.
+
+Here is a list of general advice while working with javascript:
+
+- There is rarely a reason to use `var.` Always start with `const` and change it to `let` if you need to reassign the variable.
+- Always use `===` instead of `==`. This eliminates the possibility of errors caused by unexpected type coercion.
+- Familiarize yourself with how the spread operator `...` and object destructuring work. Destructuring is commonly used when accessing component props or a state hook in React.
+- Prefer using optional chaining `?.` together with nullish coalescing `??`. Since type coercion in Javascript works the way it does, using these operators is safer.
+- Learn how array methods like `map,` `join,` `filter,` and `reduce` work. They are great for keeping your code without side effects caused by mutating your data and are also more compact and readable than general `for` or `while` loops.
+
+JavaScript is still evolving as a language. New versions are coming, and browsers must always cover these new features and changes. Be aware of using the latest features since they might only work in some browsers. The big update came in 2015, called ES6—[Here's](https://www.w3schools.com/js/js_es6.asp) a list of features. You should become familiar with most of them. In June 2023, ES2023 was released with interesting [updates to array methods](https://www.w3schools.com/js/js_2023.asp); take a look at them.
+
+### Node
+
+![](./assets//lecture1//lecture1-nodejs.png)
+
+In order to run JavaScript, we need a runtime. NodeJS is an Open Source, cross-platform runtime environment for executing JS code. It's been widely used for server-side programming, achieving the same programming language on both server and client.
+
+We will meet it when we discuss the NextJS framework later in the semester, which uses the Node runtime by default. Node was introduced in 2009, and since then, with the advent of several technologies, its complexity has increased, and its efficiency and speed have slowed down. That's why alternatives were created; specifically, in 2023, it was **Bun**.
+
+### Bun
+
+https://bun.sh/
+
+![](./assets//lecture1//lecture1-bun.png)
+
+The goal of this tool is to unify, speed up, and change the complexity of the javascript runtime while not throwing away all compatibility with the large ecosystem around Node and NPM. If you've ever used Node before, learning how to use Bun is relatively easy. You'll basically get rid of the other tools you used when using Node since Bun has them built-in.
+
+Bun serves not only as a javascript runtime but also as a **transpiler** (converting from one language to another, in this case, typescript - javascript), **bundler** (handling all the code in your project, including installed packages; more later), and **package manager**. We will not use it in our course since it is still in its first production version. But it is a technology that is definitely worth following.
+
+## Node Package Manager
+
+Npm is the world's largest software registry, similar to the NuGet in the C# world. Open-source developers from all around the globe use npm to share and use packages, and many organizations use npm to manage their private development as well.
+
+### package.json
+
+The `package.json` file is a crucial element that serves as a manifest of an application. It contains various metadata that is relevant to the project. Creating a `package.json` file in your project gives you access to dependency management, allowing you to install dependencies easily. You also get access to the `scripts` section where you can put commands you need to run from CLI, like building your app, running it in dev mode, or running linter. In centralizing this information, `package.json` ensures a well-organized, manageable, and consistent development environment, helps with collaborative development, and ensures integrity across different development stages and among other team members.
+
+![](./assets/lecture1/lecture1-package-json.png)
+
+### Npx
+
+From version `npm@5.2.0`, alongside **npm**, a binary called **npx** is also installed. **npx** is a tool intended to help round out the experience of using packages from the **npm** registry. In the same way, npm makes it super easy to install and manage dependencies hosted on the registry, **npx** makes it easy to use CLI tools and other executables hosted on the registry. For example, we will use **npx** to scaffold a new project using `create-next-app.`
+
+### Creating packages
+
+While npm provides public free package hosting, they also offer the CLI tool for working with the packages locally. Every project with `package.json` is also a publishable package you can import into other projects. You can use `npm init` to create a minimal viable `package.json` following a few prompts. After that, you are ready to install dependencies and add scripts.
+
+### Other package managers
+
+`Yarn` is an alternative to using npm as your package manager. Historically, it was created because npm had many issues, but nowadays, the difference is slight, and it's more of a preference.
+
+There is also `pnpm` that boasts its ability to save disk space by using singular node_modules cache and linking to it from your packages instead of making a copy for each project.
+
+## Tooling, linting and formatting
+
+While at first glance similar, formatters and linters aim to fix different problems. Formatters mainly take care of indentation, new lines, and automatic wrapping. Liners handle various coding conventions and rules you want to follow, like controlling unused variables, usage of let/var, etc. Generally, linters provide warning messages about broken rules, but many also have autofix actions that blur the line between linters and formatters even more.
+
+### Prettier
+
+Popular formatter for javascript, typescript, and many other file formats commonly used in web development like JSON, HTML, and CSS (you can find the complete list [here](https://prettier.io/docs/en/index.html) with an option to add a [plugin](https://prettier.io/docs/en/plugins.html) to support more file types). You can read more about their philosophy and what exactly they aim to achieve on their website. The most important part for us is that prettier builds on having as few options as possible to make it easy to start using and provide robust and consistent formatting.
+
+You can install it via npm and then create a `.prettierrc` file (or any other of [these options](https://prettier.io/docs/en/configuration.html)) and change [options](https://prettier.io/docs/en/options.html) you want.
+
+![](./assets/lecture1/lecture1-prettier-ugly.png)
+
+![](./assets/lecture1/lecture1-prettier-nice.png)
+
+### ESLint
+
+ESLint is the most popular linting tool for javascript and typescript code. It is highly configurable; many custom plugins extend the functionality by providing custom rules, and there are also many configs that you can use as-is or extend them with your own preferred rules. You can find some interesting configs [here](https://github.com/dustinspecker/awesome-eslint#configs).
+
+Like Prettier, you can install it via npm, and after setting it up, you will have a `.eslintrc` file in your directory, which you can then configure as desired.
+
+![](./assets/lecture1/lecture1-eslint.png)
+
+![](./assets/lecture1/lecture1-eslint-errors-demo.png)
+
+## Typescript
+
+TypeScript is a statically-typed superset of JavaScript that brings a multitude of powerful features to the world of web development. It was designed to enhance the maintainability and scalability of JavaScript projects by providing a strong type system and advanced tooling. Here's a summary of TypeScript's most interesting features:
+
+- **Static Typing**: TypeScript enforces strong typing, allowing developers to catch type-related errors during development rather than at runtime. This leads to more robust and bug-resistant code.
+- **Type Inference**: TypeScript can often infer types without explicit annotations, making the code concise while still being statically typed.
+
+```
+const name = 'John';
+//      ^-- string</pre>
+```
+
+```
+const name: string = 'John';
+```
+
+Only provide type declarations when necessary. An inferred type can never be wrong, a type you manually add can.
+
+```typescript
+// TypeScript
+
+const getPath = (url: string) => {
+	return url.split("https://")[1];
+}
+
+...
+
+getPath(1);
+//  ^--- Error: Argument of type 'number' is not assignable to parameter of type 'string'.
+```
+
+vs
+
+```javascript
+// JavaScript
+
+const getPath = (url) => {
+	return url.split("https://")[1];
+}
+
+...
+
+getPath(1);
+
+// Runtime error - Uncaught TypeError: url.split is not a function
+```
+
+Because `any` type can break out of the safety of static typing, try to use it only as a last resort.
+
+```typescript
+// TypeScript
+
+const getPath = (url: any) => {
+	return url.split("https://")[1];
+}
+
+...
+
+getPath(1);
+//      ^--- No error.
+
+// Runtime error - Uncaught TypeError: url.split is not a function
+```
+
+- **Interfaces and Type Aliases**: Developers can define custom types with interfaces and type aliases, facilitating code readability and reusability.
+
+  ```typescript
+  interface Person {
+  	name: string;
+  	age: number;
+  }
+
+  type Point = { x: number; y: number };
+  ```
+
+- **Union and Intersection Types**: TypeScript supports creating complex types by combining multiple types using unions and intersections.
+
+  ```typescript
+  type Status = 'active' | 'inactive';
+  type Employee = { name: string } & { role: string };
+  ```
+
+- **Enums**: Enums provide a way to define a set of named constant values, improving code readability and maintainability.
+
+  ```typescript
+  enum Color {
+  	Red,
+  	Green,
+  	Blue
+  }
+
+  let chosenColor = Color.Red;
+  ```
+
+An interesting alternative is having array of possible values and infering type from it.
+
+```typescript
+const colors = ['Red', 'Green', 'Blue'] as const;
+type Color = (typeof colors)[number];
+//    ^-- "Red" | "Green" | "Blue"
+```
+
+- **Generics**: TypeScript supports generics, allowing you to write reusable and type-safe code components.
+
+  ```typescript
+  function identity<T>(arg: T): T {
+  	return arg;
+  }
+
+  let result = identity<string>('TypeScript'); // result is of type string
+  ```
+
+- **Strict Null Checks**: TypeScript introduces strict null checks to prevent null and undefined runtime errors.
+
+  ```typescript
+  let user: string | null = null;
+  console.log(user.length);
+  //            ^--- Error: Object is possibly 'null'
+  ```
+
+- **Utility Types**: TypeScript provides utility types that allow developers to easily manipulate and transform types. These utility types include `Partial`, `Required`, `Readonly`, `Pick`, and `Record`, among others. They simplify common type transformations and enhance code expressiveness and maintainability. For example:
+
+  ```typescript
+  interface User {
+  	name: string;
+  	email: string;
+  }
+
+  // Makes all properties in User optional
+  type PartialUser = Partial<User>;
+
+  // Makes all properties in User readonly
+  type ReadonlyUser = Readonly<User>;
+
+  // Picks selected properties from User
+  type UserSubset = Pick<User, 'name'>;
+
+  // Creates a dictionary with User objects
+  type UserDictionary = Record<string, User>;
+  ```
+
+  These utility types empower developers to work with types in a more dynamic and expressive manner, reducing the need for redundant type definitions and improving code reuse.
+
+- **TypeScript Definition Files**: TypeScript definition files (.d.ts) allow you to add type information to JavaScript libraries, enabling better type checking and autocompletion.
+
+These features make TypeScript a compelling choice for developers looking to improve code quality, catch errors early in development, and enhance the overall developer experience in JavaScript-based projects.
+
+## Next lecture
+
+In the next lecture, we will dive into the React framework. We will cover the basics of React, including components, props, TSX, imports, responding to events etc. We will also explore the benefits of using TypeScript with React.
+
+## Assignment
+
+In the first task, we will not be focusing on the frontend yet, but on typescript and writing clean and quality code.

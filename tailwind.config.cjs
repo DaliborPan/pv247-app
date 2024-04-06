@@ -35,7 +35,10 @@ module.exports = {
 				'accent-foreground': 'hsl(222.2 47.4% 11.2%)',
 
 				'muted': 'hsl(217.2 32.6% 17.5%)',
-				'muted-foreground': 'hsl(215 20.2% 65.1%)'
+				'muted-foreground': 'hsl(215 20.2% 65.1%)',
+
+				// `p` tag in lecture
+				'markdown': 'hsl(222deg, 22%, 5%)'
 			}
 		}
 	}
