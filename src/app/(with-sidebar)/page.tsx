@@ -1,21 +1,27 @@
-import { auth } from '@/auth';
 import { Button } from '@/components/base/button';
+import { getAvailableLectures } from '@/db/query/lectures';
+import { LecturePreview } from '@/components/lecture-preview';
 
 import { GeneralInfo } from '../_components/general-info';
 
 const Page = async () => {
-	const session = await auth();
+	const availableLectures = await getAvailableLectures();
+	const currentLecture = availableLectures.pop();
+
+	if (!currentLecture) {
+		return null;
+	}
 
 	return (
 		<>
-			<h1 className="text-3xl mb-6">Home page</h1>
+			<h1 className="mb-6 text-3xl">Home page</h1>
 
-			<section className="flex items-center gap-x-8 mb-12">
-				<div className="px-6 py-4 border bg-white rounded-lg">
+			<section className="flex items-center mb-12 gap-x-8">
+				<div className="px-6 py-4 bg-white border rounded-lg">
 					<div className="flex items-center">
 						<div className="grow">
 							<span className="text-xs text-gray-500">Current lecture</span>
-							<h3 className="text-xl -mt-1 truncate">Introduction</h3>
+							<h3 className="-mt-1 text-xl truncate">{currentLecture.name}</h3>
 						</div>
 
 						<Button
@@ -27,11 +33,7 @@ const Page = async () => {
 						/>
 					</div>
 
-					<p className="mt-4 text-sm text-gray-600 line-clamp-3">
-						Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur
-						sagittis hendrerit ante. Donec ipsum massa, ullamcorper in, auctor
-						et, scelerisque sed, est. Fusce suscipit libero eget elit
-					</p>
+					<LecturePreview>{currentLecture.preview}</LecturePreview>
 				</div>
 			</section>
 

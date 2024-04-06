@@ -4,6 +4,7 @@ import { Button } from '@/components/base/button';
 import { db, type Lecture } from '@/db';
 import { Badge } from '@/components/base/badge/badge';
 import { Icon } from '@/components/base/icon';
+import { LecturePreview } from '@/components/lecture-preview';
 
 const formatDate = (date: string) => {
 	const d = new Date(date);
@@ -15,30 +16,26 @@ const formatDate = (date: string) => {
 	});
 };
 
-const LectureCard = ({ lecture }: { lecture: Lecture }) => {
-	console.log(lecture);
+const LectureCard = ({ lecture }: { lecture: Lecture }) => (
+	<div className="p-6 bg-white rounded-lg shadow">
+		<h2 className="text-xl font-medium">{lecture.name}</h2>
 
-	return (
-		<div className="p-6 bg-white rounded-lg shadow">
-			<h2 className="text-xl font-medium">{lecture.name}</h2>
+		<LecturePreview className="mt-3 line-clamp-4">
+			{lecture.preview}
+		</LecturePreview>
 
-			<p className="mt-3 text-sm leading-6 text-gray-600 line-clamp-4">
-				{lecture.preview}
-			</p>
+		<div className="flex items-end justify-between mt-6">
+			<Link href={`/lectures/${lecture.slug}`}>
+				<Button size="sm">Open lecture</Button>
+			</Link>
 
-			<div className="flex items-end justify-between mt-6">
-				<Link href={`/lectures/${lecture.slug}`}>
-					<Button size="sm">Open lecture</Button>
-				</Link>
-
-				<Badge variant="outline">
-					<Icon name="Clock" className="mr-2" />
-					{formatDate(lecture.availableFrom)}
-				</Badge>
-			</div>
+			<Badge variant="outline">
+				<Icon name="Clock" className="mr-2" />
+				{formatDate(lecture.availableFrom)}
+			</Badge>
 		</div>
-	);
-};
+	</div>
+);
 
 const Page = async () => {
 	const lectures = await db.query.lectures.findMany();
