@@ -1,6 +1,10 @@
 # Introduction
 
-Hello and welcome to the PV247 Modern Web Development course! We are here to deliver you a good set of basics for modern frontend development, mainly in React framework, with a particular focus on Next.js. Halfway through the course, you should have enough knowledge to create your own simple React applications. To pass this course, you should demonstrate that you can build a full-stack application with TypeScript and the Next.js framework so that it can be professionally built upon after the course is finished.
+Hello and welcome to the _PV247 Modern Web Development_ course!
+
+---
+
+We are here to deliver you a good set of basics for modern frontend development, mainly in React framework, with a particular focus on Next.js. Halfway through the course, you should have enough knowledge to create your own simple React applications. To pass this course, you should demonstrate that you can build a full-stack application with TypeScript and the Next.js framework so that it can be professionally built upon after the course is finished.
 
 ## Topics
 
@@ -33,7 +37,7 @@ Other teachers that you can come into contact with are **Tadeáš Pavlík**, **M
 
 ## About InQool
 
-https://inqool.cz/
+[https://inqool.cz/](https://inqool.cz/)
 
 InQool was founded in 2010 by three graduates of the Faculty of Informatics at Masaryk University. Now, it boasts a team of over 70 developers dedicated to creating web applications and native applications for mobile devices. The company primarily focuses on projects for the public sector, where its developed information systems contribute to the digitalization and improvement of administrative processes. Regarding technology, the company prefers Java for the backend and React or Nextjs for the frontend.
 
@@ -71,7 +75,7 @@ In today's lesson, we will cover an introduction to frontend development. We'll 
 
 ## Who is a Frontend developer?
 
-![](./assets/lecture1/lecture1-frontend-developer.jpeg)
+![](/assets/lecture1/lecture1-frontend-developer.jpeg)
 
 Front-end web development, also known as client-side development, is the practice of producing HTML, CSS, and JavaScript for a website or Web Application that a user can see and interact with directly. The frontend developer position is critical as it not only describes the coverage of the implementation of the website design but also its functionality and responsibility.
 
@@ -113,7 +117,7 @@ A Web API is a set of tools to interact with a web application. One of the APIs 
 
 It is well-known that JS frameworks are created and evolve very quickly. Discussion about which framework is the best and which one to choose in general for all use cases could be relatively useless. There is not only one framework that fits some use cases initially. Despite this, trends have been set over the last few years, and some frameworks are at the forefront and hold their position and dominance. These trends are tracked annually through surveys, and developers have regularly put React in the top position in recent years. The fact that one framework has established itself is good for the entire frontend development and community. For more information, not just about frameworks, check out the [StateOfJs](https://stateofjs.com/) survey, which tracks the popularity of frameworks and all things around the javascript world in general.
 
-![](./assets/lecture1/lecture1-state-of-js.png)
+![](/assets/lecture1/lecture1-state-of-js.png)
 
 ## JavaScript
 
@@ -131,7 +135,7 @@ JavaScript is still evolving as a language. New versions are coming, and browser
 
 ### Node
 
-![](./assets//lecture1//lecture1-nodejs.png)
+![](/assets/lecture1/lecture1-nodejs.png)
 
 In order to run JavaScript, we need a runtime. NodeJS is an Open Source, cross-platform runtime environment for executing JS code. It's been widely used for server-side programming, achieving the same programming language on both server and client.
 
@@ -139,9 +143,9 @@ We will meet it when we discuss the NextJS framework later in the semester, whic
 
 ### Bun
 
-https://bun.sh/
+[https://bun.sh/](https://bun.sh/)
 
-![](./assets//lecture1//lecture1-bun.png)
+![](/assets/lecture1/lecture1-bun.png)
 
 The goal of this tool is to unify, speed up, and change the complexity of the javascript runtime while not throwing away all compatibility with the large ecosystem around Node and NPM. If you've ever used Node before, learning how to use Bun is relatively easy. You'll basically get rid of the other tools you used when using Node since Bun has them built-in.
 
@@ -155,7 +159,7 @@ Npm is the world's largest software registry, similar to the NuGet in the C# wor
 
 The `package.json` file is a crucial element that serves as a manifest of an application. It contains various metadata that is relevant to the project. Creating a `package.json` file in your project gives you access to dependency management, allowing you to install dependencies easily. You also get access to the `scripts` section where you can put commands you need to run from CLI, like building your app, running it in dev mode, or running linter. In centralizing this information, `package.json` ensures a well-organized, manageable, and consistent development environment, helps with collaborative development, and ensures integrity across different development stages and among other team members.
 
-![](./assets/lecture1/lecture1-package-json.png)
+![](/assets/lecture1/lecture1-package-json.png)
 
 ### Npx
 
@@ -181,9 +185,9 @@ Popular formatter for javascript, typescript, and many other file formats common
 
 You can install it via npm and then create a `.prettierrc` file (or any other of [these options](https://prettier.io/docs/en/configuration.html)) and change [options](https://prettier.io/docs/en/options.html) you want.
 
-![](./assets/lecture1/lecture1-prettier-ugly.png)
+![](/assets/lecture1/lecture1-prettier-ugly.png)
 
-![](./assets/lecture1/lecture1-prettier-nice.png)
+![](/assets/lecture1/lecture1-prettier-nice.png)
 
 ### ESLint
 
@@ -191,9 +195,9 @@ ESLint is the most popular linting tool for javascript and typescript code. It i
 
 Like Prettier, you can install it via npm, and after setting it up, you will have a `.eslintrc` file in your directory, which you can then configure as desired.
 
-![](./assets/lecture1/lecture1-eslint.png)
+![](/assets/lecture1/lecture1-eslint.png)
 
-![](./assets/lecture1/lecture1-eslint-errors-demo.png)
+![](/assets/lecture1/lecture1-eslint-errors-demo.png)
 
 ## Typescript
 
@@ -202,19 +206,19 @@ TypeScript is a statically-typed superset of JavaScript that brings a multitude 
 - **Static Typing**: TypeScript enforces strong typing, allowing developers to catch type-related errors during development rather than at runtime. This leads to more robust and bug-resistant code.
 - **Type Inference**: TypeScript can often infer types without explicit annotations, making the code concise while still being statically typed.
 
-```
+```ts
 const name = 'John';
-//      ^-- string</pre>
+//      ^-- string
 ```
 
-```
+```ts
 const name: string = 'John';
 ```
 
 Only provide type declarations when necessary. An inferred type can never be wrong, a type you manually add can.
 
 ```typescript
-// TypeScript
+/** TypeScript */
 
 const getPath = (url: string) => {
 	return url.split("https://")[1];
@@ -229,7 +233,7 @@ getPath(1);
 vs
 
 ```javascript
-// JavaScript
+/** JavaScript */
 
 const getPath = (url) => {
 	return url.split("https://")[1];
@@ -245,7 +249,7 @@ getPath(1);
 Because `any` type can break out of the safety of static typing, try to use it only as a last resort.
 
 ```typescript
-// TypeScript
+/** TypeScript */
 
 const getPath = (url: any) => {
 	return url.split("https://")[1];
@@ -272,7 +276,7 @@ getPath(1);
 
 - **Union and Intersection Types**: TypeScript supports creating complex types by combining multiple types using unions and intersections.
 
-  ```typescript
+  ```ts
   type Status = 'active' | 'inactive';
   type Employee = { name: string } & { role: string };
   ```

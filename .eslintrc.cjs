@@ -26,7 +26,7 @@ module.exports = {
 		'.eslintrc.cjs',
 		'tailwind.config.cjs',
 		'postcss.config.js',
-		'next.config.js',
+		'next.config.mjs',
 		'/**/*.md',
 		'/**/*.html'
 	],

@@ -1,4 +1,5 @@
 import type { MDXComponents } from 'mdx/types';
+import Image from 'next/image';
 
 export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
 	// headings
@@ -15,7 +16,7 @@ export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
 	ul: ({ children }) => <ul className="pl-6 mb-6 list-disc">{children}</ul>,
 	ol: ({ children }) => <ol className="pl-6 mb-6 list-decimal">{children}</ol>,
 	li: ({ children }) => (
-		<li className="my-2 font-light text-markdown">{children}</li>
+		<li className="my-2 font-light text-markdown leading-8">{children}</li>
 	),
 
 	// text
@@ -25,24 +26,42 @@ export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
 		</p>
 	),
 	a: ({ children, ...props }) => (
-		<a className="pl-1 underline text-primary hover:no-underline" {...props}>
+		<a
+			className="pl-1 underline text-primary hover:no-underline"
+			{...props}
+			target="_blank"
+		>
 			{children}
 		</a>
 	),
 	strong: ({ children }) => (
 		<strong className="font-semibold text-black">{children}</strong>
 	),
+	em: ({ children }) => (
+		<em className="not-italic text-primary font-normal">{children}</em>
+	),
 
 	// code
 	code: ({ children }) => (
-		<code className="px-2 py-1 font-serif text-sm rounded-lg bg-primary-100">
+		<code className="px-2 py-1 text-sm rounded-lg bg-primary-100">
 			{children}
 		</code>
 	),
 	pre: ({ children }) => (
-		<pre className="p-4 my-6 bg-gradient-to-tr from-white to-primary-100 shadow rounded-lg [&>code]:bg-transparent">
+		<pre className="p-4 my-6 bg-[#0c0c1a] shadow rounded-lg [&>code]:bg-transparent [&>code]:px-0">
 			{children}
 		</pre>
+	),
+
+	// image
+	img: ({ src, alt }) => (
+		<Image
+			src={src ?? ''}
+			alt={alt ?? ''}
+			className="rounded shadow"
+			width={500}
+			height={1}
+		/>
 	),
 	...components
 });
