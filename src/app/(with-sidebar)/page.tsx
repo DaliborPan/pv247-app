@@ -1,11 +1,11 @@
 import { Button } from '@/components/base/button';
-import { getAvailableLectures } from '@/db/query/lectures';
 import { LecturePreview } from '@/components/lecture-preview';
+import { query } from '@/db/query';
 
 import { GeneralInfo } from '../_components/general-info';
 
 const Page = async () => {
-	const availableLectures = await getAvailableLectures();
+	const availableLectures = await query.getAvailableLectures();
 	const currentLecture = availableLectures.pop();
 
 	if (!currentLecture) {
