@@ -1,23 +1,49 @@
+import Link from 'next/link';
+
 import { auth } from '@/auth';
 import { query } from '@/db/query';
 import { Button } from '@/components/base/button';
 import { Hero } from '@/components/hero';
+import { db } from '@/db';
 
 import { EditProfileForm } from './_components/edit-profile-form';
 
 const ProjectCard = async () => {
 	const session = await auth();
 
-	if (!session) return null;
+	if (!session?.user) return null;
 
-	const hasProject = session?.user.projectId;
+	const project = await db.query.projects.findFirst({
+		where: (project, { eq }) => eq(project.id, session.user.projectId ?? '')
+	});
+
+	if (!project) return null;
 
 	return (
 		<div className="p-8 mx-6 mt-8 bg-white rounded-lg shadow-lg">
-			<h3 className="mb-4 text-xl">Project</h3>
+			<div className="flex items-center">
+				<h3 className="mb-4 text-xl grow">Project</h3>
+				<Link href="/project">
+					<Button
+						variant="primary/inverse"
+						size="sm"
+						iconLeft={{
+							name: 'ArrowRight'
+						}}
+					/>
+				</Link>
+			</div>
 
-			<div>
-				{hasProject ? "You're in a project" : "You're not in a project"}
+			<div className="flex flex-col gap-y-2">
+				<div>
+					<span className="text-xs text-gray-500">Project name</span>
+					<h4 className="-mt-1">{project.name}</h4>
+				</div>
+
+				<div>
+					<span className="text-xs text-gray-500">Project description</span>
+					<p className="line-clamp-2">{project.description}</p>
+				</div>
 			</div>
 		</div>
 	);
@@ -42,7 +68,7 @@ const HomeworksCard = async () => {
 				{availableLectures.map((lecture, index) => (
 					<div
 						key={lecture.slug}
-						className="flex items-center p-4 bg-primary-100 rounded-md"
+						className="flex items-center p-4 rounded-md bg-primary-100"
 					>
 						<div className="grow">
 							<span className="text-xs text-gray-500">
