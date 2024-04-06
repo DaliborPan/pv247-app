@@ -1,0 +1,468 @@
+import { IncorrectUsageOfKeys } from './incorrect-usage-of-keys';
+import { CorrectUsageOfKeys } from './correct-usage-of-keys';
+
+# What's React?
+
+In today's lesson, we'll explore the React library. We'll learn how it works and its fundamental principles, explain the components and learn how to work with them. We'll further connect it to typescript and learn the basic constructs when defining a user interface using TSX.
+
+---
+
+React is a JavaScript library for building user interfaces. UI consists of small, elementary elements such as buttons, text, or images. Using React, we can create small, reusable UI parts called _components_ to build a complex and maintainable web interface. These components serve as the building blocks of our application, enabling us to assemble complex user interfaces quickly. The true power of React lies in its component-based architecture, which promotes code reusability and better organization.
+
+![](/assets/lecture2/lecture2-components.png)
+
+## Single Page Application (SPA)
+
+A Single Page Application (SPA) is a type of web application or website that interacts with the user by dynamically rewriting the current page rather than loading entire new pages from the server. All necessary HTML, JS, and CSS code is either retrieved with a single page load (initial load), or some resources are dynamically loaded and added to the page as necessary, usually in response to user actions. The page does not reload at any time; content (DOM) is dynamically changed using JS.
+
+![](/assets/lecture2/lecture2-spa:mpa.png)
+
+**User Experience** - SPA allows smooth transitions and great interactivity. Every time the user does some action, the page does not refresh; it just renders something else.
+
+**AJAX** - is often used in combination with SPA. Because all resources the application needs are retrieved on initial load, modern applications often need data to be displayed or submitted.
+
+**Client-side Rendering** - Resources are transmitted only once; only data is transmitted back and forth. By using pure React, you can only achieve client-side rendering. With a framework like Nextjs, there is the possibility of implementing server-side rendering as well.
+
+**Routing** - The traditional approach is about having a lot of links in your application; for each URL, the browser needs to request the server for new resource files. With SPA, routing is handled by JS without making additional requests for resources.
+
+### When to use
+
+Single Page Application approach has its use cases. We can mention information systems, where all application pages are behind an authentication. However, for webs that are publicly accessible to anyone and that fetch data from public APIs, SPA might not be a good option.
+
+### Disadvantages
+
+**SEO Optimization** - The app's content is loaded dynamically by JS. Crawlers work with the initial HTML page to index your application. With SPA, it always gets a blank page since the content will be rendered after JS gets parsed and executed.
+
+**Initial Load Performance** - Since all of the resources for the app need to be retrieved once at the beginning, it might quickly become slow. It does not matter in some applications, but on the e-commerce page, it might be a big deal.
+
+## React component tree
+
+The resulting UI, composed of components, is organized in a hierarchical tree structure in React. This structure ensures data flows in only one direction through the props. The child Component inside the tree cannot modify the data it has received from its parent. If we need a Child component to be able to modify the data or state of its parent, the parent must provide a function for the child to call to modify the data. Each component defines what will be displayed on the screen where the component is placed or called based on its state and the props received.
+
+![](/assets/lecture2/lecture2-data-flow.png)
+
+```ts
+type ChildComponentProps = {
+  onClick: () => void
+}
+
+function ChildComponent({ onClick }: ChildComponentProps) {
+  return (
+    <button onClick={onClick}>Click me</button>
+  );
+}
+
+function ParentComponent() {
+  const onClick = () => {
+    console.log("Button clicked in parent");
+  };
+
+  return <ChildComponent onClick={onClick} />;
+}
+```
+
+The React component tree plays a vital role in updating the user interface. If a component changes state or gets new props, it must be re-rendered to the screen, and at the same time, all children of that component must be re-rendered as well. This is where the advantage of the tree structure comes in, where it is easy to see which components on the screen need to be updated. At the same time, React uses the VDOM, where it compares its in-memory stored DOM of the current and previous version, and then when it detects that the component has changed not only its state or its props but also its actual UI, it updates it's in the browser DOM.
+
+![](/assets/lecture2/lecture2-dom.png)
+
+## React component
+
+A component is a building block of UI, which together combine to create a whole complex interface. Today, we consider a React component as a normal typescript function that has component parameters, namely:
+
+- Returns either **tsx** or **null**.
+- Optionally takes a `key: value` object, called **props**, as its parameters.
+
+Historically, components were written as classes that extended React.Component. However, with the increasing popularity of declarative programming, we don't use class components in React anymore.
+
+A component can be a single small button that can be extended and modified in various ways via props, or it can be an entire page.
+
+### Props
+
+Props allow the parent to pass read-only data to the child component to modify its appearance or behavior. It is a fundamental feature of components that will enable you to create reusable components.
+
+Basic example of component accepting props:
+
+```ts
+type MyComponentProps = {
+  onClick: () => void;
+  label: string;
+}
+
+function MyComponent(props: MyComponentProps) {
+  const onClick = props.onClick;
+  const label = props.label;
+
+  return <button onClick={onClick}>{label}</button>;
+}
+```
+
+With ES6 destructuring, we can destructure the props object directly in the function parameters.
+
+```ts
+type MyComponentProps = {
+  onClick: () => void;
+  label: string;
+}
+
+function MyComponent({ onClick, label }: MyComponentProps) {
+  return <button onClick={onClick}>{label}</button>;
+}
+```
+
+We can also extends already defined props with additional props. For example, props for `<button>` are already defined in React. We can extends them with `label`.
+
+```ts
+type MyComponentProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  label: string;
+}
+
+function MyComponent({ label, ...props }: MyComponentProps) {
+  return <button {...props}>{label}</button>;
+}
+```
+
+When using a component as a wrapper, meaning we want to include some content (children) inside the component, we can use the `children` prop. This is a special prop that is automatically passed to the component and contains all the children of the component. We can get the type for children from React as well `PropsWithChildren`.
+
+```ts
+type MyComponentProps = React.PropsWithChildren<{
+  color: string;
+}>
+
+function MyComponent({ children, color }: MyComponentProps) {
+  return <button className={`${color}`}>{children}</button>;
+}
+```
+
+## JSX (TSX)
+
+This is an extension of JavaScript used in React to declare the UI that a component should display easily. It allows writing HTML-like syntax directly in the JS/TS file. In addition to all the standard HTML tags, JSX can include component invocations like `<MyComponent props1="props1" />` as well as any JavaScript expression enclosed in curly braces `<span>{totalCount}</span>`. JSX is merely syntactic sugar over `React.createElement(...)`, and tools like **babel** can transform JSX into calls to this function.
+
+#### Rules for writing JSX/TSX
+
+- JSX must always have just one root element.
+- All tags must be closed.
+- Because JavaScript has some rules for naming variables, not all attribute HTML tags match how they are written in HTML. So the rule in JS is that all attributes with a hyphen in their name are written `camelCase` in JSX. For example, `stroke-width` -> `strokeWidth`. Then there are exceptions, such as the very commonly used `className`, which replaces the original HTML tag attribute `class`, which is a reserved word in JS.
+
+## Importing and exporting components
+
+It is common practice to put components in their files. It would be tough to navigate if we had all the components of an application in one file. Therefore, we need a mechanism by which we can export and import components (or other functions and constants). With the advent of ES6, we have the following options:
+
+### Export
+
+There are two options, namely named and default export. Within a single file, it is possible to combine these two approaches.
+
+- **Named** - we can export multiple components from one file.
+
+  ```ts
+  export const MyComponent = () => { ... };
+  ```
+
+- **Default** - we can export only one component from a file. When we subsequently import such a component, we can assign any name to it.
+
+  ```ts
+  export default MyComponent;
+  ```
+
+### Import
+
+All components are imported right at the beginning of the file.
+
+- Importing a named export (multiple components)
+
+  ```ts
+  import { MyComponentOne, MyComponentTwo } from './MyComponent';
+  ```
+
+- Importing a default export
+  ````ts
+  import MyComponentWithDifferentName from './MyComponent';```
+  ````
+
+The named exported component can be renamed within the import:
+
+```ts
+import { MyComponent as MyComponentWithDifferentName } from './MyComponent';
+```
+
+### Folder structure
+
+In general, there is no single best advice on how to organize your components within an application. Later in the semester, we will use the Nextjs framework, which uses folder structure for routing purposes. The developer organizes the other components as they see fit. Using pure React (if we want to split our application into multiple pages), we can implement a router using an external library and organize all components as we see fit.
+
+## Rendering
+
+It is the process of transforming React components and elements into DOM nodes. Whenever a component changes its state or props, it will be rerendered with all its children. However, unless the state has changed so that it affects the resulting UI, the DOM will not be updated, which is a significant advantage of React in terms of optimization.
+
+### Conditional rendering
+
+A frequently used construct within TSX is conditional rendering. This is the rendering of a component or element under a condition.
+
+Example using `&&`:
+
+```ts
+{isLoggedIn && <LogoutButton />}
+```
+
+The logout button is only rendered if `isLoggedIn` is a truthy value. If `isLoggedIn` is passed via props and its value changes, it will trigger a rerender, and since a chunk of the UI depends on this variable, the DOM will also be updated.
+
+Example of using the ternary operator:
+
+```ts
+{isLoggedIn ? <LogoutButton /> : <LoginButton />}
+```
+
+If we want the component not to render anything based on a condition, it is typical to use the classic if statement.
+
+```ts
+function Banner({ hidden }: { hidden: boolean }) {
+  if (hidden) {
+    return null;
+  }
+
+  return <div>Banner!</div>; }
+```
+
+An alternative is to use the ternary operator again.
+
+```ts
+function Banner({ hidden }: { hidden: boolean }) {
+  return hidden ? null : (
+    <div>Banner!</div>
+  )
+```
+
+## Mapping over array items
+
+It is often necessary to render several identical components based on a provided array of items. To do this, we use functional methods over an array, mainly the `map` function.
+
+```ts
+{items.map(item => <Item key={item.id} {...item} />)}
+```
+
+```ts
+type Item = { id: string; label: string };
+
+function MyListComponent({ items }: { items: Item[] }) {
+  return (
+    <ul>
+      {items.map((item) => (
+        <li key={item.id}>
+          <span>{item.label}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
+
+Every component implicitly takes the `key` as its property. When mapping over elements, it is essential to provide it explicitly. React keys identify which items have changed in the sheet and must be rerendered or removed from the DOM. If only some items have changed, those that haven't will not be rerendered due to the unique key by which React knows the item hasn't changed.
+
+### Incorrect usage of keys
+
+{/* prettier-ignore-start */}
+
+<IncorrectUsageOfKeys>
+
+{/* prettier-ignore-start */}
+```ts
+const IncorrectUsageOfKeys = () => {
+
+  const [items, setItems] = useState(['Item 1', 'Item 2', 'Item 3']);
+
+  return (
+    <ul>
+      {items.map((item, index) => (
+         <li key={index}>
+           <input type="text" />
+           <span className="ml-2">{item}</span>
+         </li>
+      ))}
+
+      <li>
+        <button
+          onClick={() => setItems(items.toReversed())}
+        >
+          Reverse
+        </button>
+      </li>
+    </ul>
+  );
+}
+
+```
+{/* prettier-ignore-end */}
+
+</IncorrectUsageOfKeys>
+
+### Fixed usage of keys
+
+{/* prettier-ignore-start */}
+
+<CorrectUsageOfKeys>
+
+{/* prettier-ignore-start */}
+```ts
+const CorrectUsageOfKeys = () => {
+  
+  const [items, setItems] = useState(['Item 1', 'Item 2', 'Item 3']);
+
+  return (
+    <ul>
+      {items.map((item) => (
+         <li key={item}>
+           <input type="text" />
+           <span className="ml-2">{item}</span>
+         </li>
+      ))}
+
+      <li>
+        <button
+          onClick={() => setItems(items.toReversed())}
+        >
+          Reverse
+        </button>
+      </li>
+    </ul>
+  );
+}
+
+```
+{/* prettier-ignore-end */}
+
+</CorrectUsageOfKeys>
+
+## Keeping components pure
+
+Firstly, let's define a pure function in the context of programming:
+
+1. **Deterministic Output:** The output of a pure function is solely determined by its input values. Given the same input, a pure function will always return the same output.
+2. **No Side Effects:** Pure functions do not cause side effects. This means they don't alter external state, variables, or data outside the function scope. They also don't rely on any external state.
+
+React components in the context of pure functions:
+
+- Props serve as input components - Despite this, a component may depend on other external variables. These are typically constants. Importantly, they always return the same output for the same input.
+- No side effect during rendering - components do not modify global or other variables during their rendering. Again, for the same input, it always returns the same output.
+
+These facts allow for determinism, predictability, and reusability of components. As for side effects, React provides us with the ability to do different side effects when the defined variables change. However, this does not apply to the pure function property. Nor does it cover that a component can get data from external sources via API or otherwise, in which case it can return different UIs on different calls at different times.
+
+## Responding to events
+
+React lets you add event handlers to your TSX. Event handlers are custom defined functions that are triggered in response to user interactions like clicking, hovering, focusing on form inputs, and so on.
+
+Built-in components (or rather elements - button, anchor, ...) only support built-in browser events like `onClick`. However, when you create your own components, you can define custom event handler next to other properties of a component. These event handlers can have custom name, eg `onCardClick`.
+
+The World Wide Web (W3C) specifies the standards with which all modern web browsers operate. This makes the event system abstracted away from the native event system of the browser.
+
+### Basic example
+
+```typescript
+function MyComponent() {
+  const onClick = () => {
+    console.log('Button clicked');
+  };
+
+  return <button onClick={onClick}>Click me</button>;
+}
+```
+
+We define the onClick function as a lambda function, which we then pass to the `<button>` element as its event handler. The advantage of using a lambda function over the classic `function` definition is that the `onClick` function can be called after it is declared. This is not possible:
+
+```typescript
+function MyComponent({ param }: { param: string | undefined }) {
+  if (param === undefined) return null;
+
+  onClick();
+  // ^--- Error: Block-scoped variable 'onClick' used before its declaration.
+
+  const onClick = () => {
+    console.log(param);
+  };
+
+  return <button onClick={onClick}>Click me</button>;
+}
+```
+
+If we used a `function` declaration, this would be possible.
+
+```ts
+function MyComponent({ param }: { param: string | undefined }) {
+  if (param === undefined) return null;
+
+  onClick();
+
+  function onClick() {
+    console.log(param);
+  }
+
+  return <button onClick={onClick}>Click me</button>;
+}
+```
+
+This is the principle of hoisting. When compiling the code, all functions defined by `function` are moved to the beginning of the file, so it is possible to use a defined function anywhere.
+
+Using the lambda function has another advantage, thanks to the latest version of Typescript v5.4, where typescript can infer types better. In our case, the `param` variable will be inside the `onClick` lambda function of type `string,` not `string | undefined.` This is due to the fact that right at the beginning of the component, we verified that `param` does not equal `undefined.`
+
+```typescript
+// Typescript v5.4
+function MyComponent({ param }: { param: string | undefined }) {
+  if (param === undefined) return null;
+
+  const onClick = () => {
+    console.log(param);
+    //            ^---- : string
+  };
+
+  return <button onClick={onClick}>Click me</button>;
+}
+```
+
+### Child to parent communication
+
+Often, you want a child component to communicate back to the parent. We can do this by passing functions from the parent to the child that the child can call.
+
+```ts
+type ChildComponentProps = {
+  onChildClick: (data: string) => void;
+};
+
+function ChildComponent({ onChildClick }: ChildComponentProps) {
+  return <button onClick={() => onChildClick('Child data')}>Click me</button>;
+}
+
+function ParentComponent() {
+  const onChildClick = (data: string) => {
+    console.log('Received from child:', data);
+  };
+
+  return <ChildComponent onChildClick={onChildClick} />;
+}
+```
+
+### Native events
+
+When we work with native elements like `<button>,` their event handlers provide us with events. React wraps these events in a `SyntheticEvent` object, which provides native support across all modern web browsers. We can call methods like `stopPropagation()` or `preventDefault()` on this event. For example, submitting a form tries to refresh the page by default. We need to call `stopPropagation()` in our onClick function to prevent this default behavior.
+
+```typescript
+const PreventDefaultExample = () => {
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    // prevent browser refresh
+    event.preventDefault();
+
+    console.log(event.currentTarget.surname.value);
+  };
+
+  return (
+    <form onSubmit={onSubmit}>
+      <input name="surname" />
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
+```
+
+## Next lecture
+
+In the next lesson, we'll look at component libraries and general web application styling options. We will also discuss basic accessibility concepts that every web developer should follow concerning people with disabilities.
+
+## Assignment
+
+This week, your task is implementing a simple page showing GitHub repositories from the "database" and a form to "add" a new repository.

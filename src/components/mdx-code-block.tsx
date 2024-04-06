@@ -20,7 +20,7 @@ export const MdxCodeBlock = ({ children }: PropsWithChildren<object>) => {
 		<pre
 			ref={ref}
 			className={cn(
-				'p-4 my-6 bg-[#0c0c1a] rounded-lg shadow [&>code]:px-0 [&>code]:bg-transparent overflow-hidden relative',
+				'p-4 my-6 bg-[#0c0c1a] rounded-lg shadow [&>code]:px-0 [&>code]:bg-transparent overflow-y-hidden relative',
 				!expanded &&
 					height > 321 &&
 					'max-h-[322px] after:content-[""] after:absolute after:inset-x-0 after:bottom-0 after:h-20 after:bg-gradient-to-b after:from-transparent after:to-gray-700'

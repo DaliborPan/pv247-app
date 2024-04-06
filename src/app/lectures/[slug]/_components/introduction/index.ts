@@ -1,3 +1,3 @@
-import Introduction from './introduction.mdx';
+import IntroductionMdx from './introduction.mdx';
 
-export { Introduction };
+export { IntroductionMdx };

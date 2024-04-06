@@ -18,7 +18,7 @@ export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
 	ul: ({ children }) => <ul className="pl-6 mb-6 list-disc">{children}</ul>,
 	ol: ({ children }) => <ol className="pl-6 mb-6 list-decimal">{children}</ol>,
 	li: ({ children }) => (
-		<li className="my-2 font-light text-markdown leading-8">{children}</li>
+		<li className="my-2 font-light leading-8 text-markdown">{children}</li>
 	),
 
 	// text
@@ -61,5 +61,9 @@ export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
 			height={1}
 		/>
 	),
+
+	// other
+	hr: () => <hr className="my-8 border-t border-gray-200" />,
+
 	...components
 });

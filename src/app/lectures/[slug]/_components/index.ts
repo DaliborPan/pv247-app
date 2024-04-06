@@ -2,13 +2,14 @@ import { type ComponentType } from 'react';
 
 import { type LectureSlug } from '@/schema/lecture';
 
-import { Introduction } from './introduction';
+import { IntroductionMdx } from './introduction';
+import { ReactMdx } from './react';
 
 type MdxComponent = ComponentType<{ readonly components?: object | undefined }>;
 
 const lectureMdxComponentsMap: Record<LectureSlug, MdxComponent> = {
-	introduction: Introduction,
-	react: Introduction
+	introduction: IntroductionMdx,
+	react: ReactMdx
 };
 
 export const getLectureMdxComponent = (slug: LectureSlug) =>
