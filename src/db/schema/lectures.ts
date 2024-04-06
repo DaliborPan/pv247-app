@@ -7,6 +7,7 @@ export const lectures = sqliteTable('lecture', {
 	name: text('name').notNull(),
 	availableFrom: text('availableFrom').notNull(),
 	slug: text('slug').notNull().default(''),
+	preview: text('preview').notNull().default(''),
 
 	// homework
 	homeworkName: text('homeworkName').notNull().default(''),
