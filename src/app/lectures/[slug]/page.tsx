@@ -1,16 +1,8 @@
 import { redirect } from 'next/navigation';
 
-import { type LectureSlug, lectureSlugSchema } from '@/schema/lecture';
+import { lectureSlugSchema } from '@/schema/lecture';
 
-import Introduction from './_components/introduction.mdx';
-
-const slugMap: Record<
-	LectureSlug,
-	(props: { readonly components?: object | undefined }) => JSX.Element
-> = {
-	introduction: Introduction,
-	react: () => <div>React</div>
-};
+import { getLectureMdxComponent } from './_components';
 
 const Page = ({ params }: { params: { slug: string } }) => {
 	const parsed = lectureSlugSchema.safeParse(params.slug);
@@ -19,9 +11,9 @@ const Page = ({ params }: { params: { slug: string } }) => {
 		redirect('/lectures');
 	}
 
-	const Component = slugMap[parsed.data];
+	const MdxComponent = getLectureMdxComponent(parsed.data);
 
-	return <Component />;
+	return <MdxComponent />;
 };
 
 export default Page;

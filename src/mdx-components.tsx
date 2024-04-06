@@ -27,7 +27,7 @@ export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
 	),
 	a: ({ children, ...props }) => (
 		<a
-			className="pl-1 underline text-primary hover:no-underline"
+			className="ml-px underline text-primary hover:no-underline"
 			{...props}
 			target="_blank"
 		>
