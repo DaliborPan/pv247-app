@@ -139,13 +139,65 @@ const OverviewCard = async () => {
 				</div>
 				<div className="flex items-center">
 					<span className="text-gray-600 grow">Project</span>
-					<span className="text-sm font-medium text-primary">None</span>
+
+					{/* TODO: actual state - accepted/pending/not submitted */}
+					<Icon name="X" className="text-primary" />
 				</div>
 				<div className="flex items-center">
 					<span className="text-gray-600 grow">Attendance</span>
 					<span className="text-sm font-medium text-primary">1/2</span>
 				</div>
 			</div>
+		</div>
+	);
+};
+
+const ProjectCard = async () => {
+	const session = await auth();
+
+	const projectUsers = await db.query.users.findMany({
+		where: (users, { eq }) => eq(users.projectId, session?.user.projectId ?? '')
+	});
+
+	if (!projectUsers?.length || !session?.user?.projectName) {
+		return null;
+	}
+
+	const projectName = session.user.projectName;
+
+	return (
+		<div className="py-6 pl-8 pr-6 rounded-lg bg-primary-100">
+			<div className="flex items-center mb-4">
+				<h3 className="text-xl grow">Project</h3>
+
+				<Link href="/project">
+					<Button
+						variant="primary/inverse"
+						size="sm"
+						iconLeft={{
+							name: projectName ? 'ArrowRight' : 'Plus'
+						}}
+					/>
+				</Link>
+			</div>
+
+			{projectName ? (
+				<div className="flex flex-col gap-y-2">
+					<span className="text-sm font-medium text-primary">
+						{projectName}
+					</span>
+
+					<div className="flex items-center text-sm text-gray-600">
+						{/* TODO: Icon based on if project is accepted or not */}
+						<Icon name="Users" className="mr-2" />
+						<span className="truncate">{projectUsers.length} students</span>
+					</div>
+				</div>
+			) : (
+				<span className="text-sm text-gray-600">
+					Project not submitted yet.
+				</span>
+			)}
 		</div>
 	);
 };
@@ -162,20 +214,6 @@ export const Sidebar = async () => (
 		<HomeworksCard />
 
 		{/* Project */}
-		<div className="py-6 pl-8 pr-6 rounded-lg bg-primary-100">
-			<div className="flex items-center mb-4">
-				<h3 className="text-xl grow">Project</h3>
-
-				<Button
-					variant="primary/inverse"
-					size="sm"
-					iconLeft={{
-						name: 'Plus'
-					}}
-				/>
-			</div>
-
-			<span className="text-sm text-gray-600">Project not submitted yet.</span>
-		</div>
+		<ProjectCard />
 	</aside>
 );
