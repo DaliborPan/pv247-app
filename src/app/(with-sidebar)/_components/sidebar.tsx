@@ -17,8 +17,8 @@ const LecturesCard = async () => {
 	const availableLength = lectures.filter(getIsAvailable).length;
 
 	return (
-		<div className="bg-primary-100 rounded-lg pl-8 pr-6 py-6">
-			<h3 className="text-xl mb-4">Lectures</h3>
+		<div className="py-6 pl-8 pr-6 rounded-lg bg-primary-100">
+			<h3 className="mb-4 text-xl">Lectures</h3>
 
 			<div className="flex flex-col gap-y-2">
 				{lectures.slice(0, availableLength + 1).map(lecture => {
@@ -34,7 +34,7 @@ const LecturesCard = async () => {
 								!isAvailable && 'opacity-50 cursor-not-allowed'
 							)}
 						>
-							<span className="grow text-gray-600">{lecture.name}</span>
+							<span className="text-gray-600 grow">{lecture.name}</span>
 							<Icon name={isAvailable ? 'ArrowRight' : 'Lock'} />
 						</Link>
 					);
@@ -60,8 +60,8 @@ const HomeworksCard = async () => {
 	const availableLength = lectures.filter(getIsAvailable).length;
 
 	return (
-		<div className="bg-primary-100 rounded-lg pl-8 pr-6 py-6">
-			<h3 className="text-xl mb-4">Homeworks</h3>
+		<div className="py-6 pl-8 pr-6 rounded-lg bg-primary-100">
+			<h3 className="mb-4 text-xl">Homeworks</h3>
 
 			<div className="flex flex-col gap-y-2">
 				{lectures.slice(0, availableLength + 1).map(lecture => {
@@ -78,10 +78,10 @@ const HomeworksCard = async () => {
 								!isAvailable && 'opacity-50 cursor-not-allowed'
 							)}
 						>
-							<span className="grow text-gray-600">{lecture.homeworkName}</span>
+							<span className="text-gray-600 grow">{lecture.homeworkName}</span>
 
 							{homework ? (
-								<span className="text-primary text-sm font-medium">
+								<span className="text-sm font-medium text-primary">
 									{homework.points}/{homework.maxPoints}
 								</span>
 							) : (
@@ -121,29 +121,29 @@ const OverviewCard = async () => {
 	}, 0);
 
 	return (
-		<div className="bg-primary-100 rounded-lg pl-8 pr-6 py-6">
-			<h3 className="text-xl mb-4">Overview</h3>
+		<div className="py-6 pl-8 pr-6 rounded-lg bg-primary-100">
+			<h3 className="mb-4 text-xl">Overview</h3>
 
 			<div className="flex flex-col gap-y-1">
 				<div className="flex items-center">
-					<span className="grow text-gray-600">Lectures</span>
-					<span className="text-sm text-primary font-medium">
+					<span className="text-gray-600 grow">Lectures</span>
+					<span className="text-sm font-medium text-primary">
 						{availableLength}/{lectures.length}
 					</span>
 				</div>
 				<div className="flex items-center">
-					<span className="grow text-gray-600">Homeworks</span>
-					<span className="text-sm text-primary font-medium">
+					<span className="text-gray-600 grow">Homeworks</span>
+					<span className="text-sm font-medium text-primary">
 						{awardedHomeworksLength}/{lectures.length} | {totalPoints}p
 					</span>
 				</div>
 				<div className="flex items-center">
-					<span className="grow text-gray-600">Project</span>
-					<span className="text-sm text-primary font-medium">None</span>
+					<span className="text-gray-600 grow">Project</span>
+					<span className="text-sm font-medium text-primary">None</span>
 				</div>
 				<div className="flex items-center">
-					<span className="grow text-gray-600">Attendance</span>
-					<span className="text-sm text-primary font-medium">1/2</span>
+					<span className="text-gray-600 grow">Attendance</span>
+					<span className="text-sm font-medium text-primary">1/2</span>
 				</div>
 			</div>
 		</div>
@@ -162,7 +162,7 @@ export const Sidebar = async () => (
 		<HomeworksCard />
 
 		{/* Project */}
-		<div className="bg-primary-100 rounded-lg pl-8 pr-6 py-6">
+		<div className="py-6 pl-8 pr-6 rounded-lg bg-primary-100">
 			<div className="flex items-center mb-4">
 				<h3 className="text-xl grow">Project</h3>
 
@@ -175,7 +175,7 @@ export const Sidebar = async () => (
 				/>
 			</div>
 
-			<span className="text-gray-600 text-sm">Project not submitted yet.</span>
+			<span className="text-sm text-gray-600">Project not submitted yet.</span>
 		</div>
 	</aside>
 );

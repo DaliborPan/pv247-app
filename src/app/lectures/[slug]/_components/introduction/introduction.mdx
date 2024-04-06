@@ -159,7 +159,32 @@ Npm is the world's largest software registry, similar to the NuGet in the C# wor
 
 The `package.json` file is a crucial element that serves as a manifest of an application. It contains various metadata that is relevant to the project. Creating a `package.json` file in your project gives you access to dependency management, allowing you to install dependencies easily. You also get access to the `scripts` section where you can put commands you need to run from CLI, like building your app, running it in dev mode, or running linter. In centralizing this information, `package.json` ensures a well-organized, manageable, and consistent development environment, helps with collaborative development, and ensures integrity across different development stages and among other team members.
 
-![](/assets/lecture1/lecture1-package-json.png)
+```json
+{
+	"name": "pv247-app",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint"
+	},
+	"dependencies": {
+		"next": "14.1.4",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0"
+	},
+	"devDependencies": {
+		"@types/node": "^20.11.28",
+		"@types/react": "^18.2.61",
+		"@types/react-dom": "^18.2.18",
+		"eslint": "^8.57.0",
+		"prettier": "^3.2.5",
+		"typescript": "^5.4.2"
+	}
+}
+```
 
 ### Npx
 
@@ -185,9 +210,47 @@ Popular formatter for javascript, typescript, and many other file formats common
 
 You can install it via npm and then create a `.prettierrc` file (or any other of [these options](https://prettier.io/docs/en/configuration.html)) and change [options](https://prettier.io/docs/en/options.html) you want.
 
-![](/assets/lecture1/lecture1-prettier-ugly.png)
+{/* prettier-ignore-start */}
 
-![](/assets/lecture1/lecture1-prettier-nice.png)
+```tsx
+/** Without prettier */
+
+export function KeyDemo() {
+	const [items, setItems] = useState(['Item 1', 'Item 2', 'Item 3']);
+
+	return (<ul>
+			{items.map(item => (<ListItem item={item} key={item} />))}
+
+			<li><button onClick={() => setItems([...items].reverse())} type="button">
+					Reverse items button
+			</button></li>
+		</ul>);
+}
+```
+
+{/* prettier-ignore-end */}
+
+```tsx
+/** With prettier */
+
+export function KeyDemo() {
+	const [items, setItems] = useState(['Item 1', 'Item 2', 'Item 3']);
+
+	return (
+		<ul>
+			{items.map(item => (
+				<ListItem item={item} key={item} />
+			))}
+
+			<li>
+				<button onClick={() => setItems([...items].reverse())} type="button">
+					Reverse items button
+				</button>
+			</li>
+		</ul>
+	);
+}
+```
 
 ### ESLint
 
@@ -195,7 +258,56 @@ ESLint is the most popular linting tool for javascript and typescript code. It i
 
 Like Prettier, you can install it via npm, and after setting it up, you will have a `.eslintrc` file in your directory, which you can then configure as desired.
 
-![](/assets/lecture1/lecture1-eslint.png)
+```js
+/** eslintrc.js */
+
+const { resolve } = require('node:path');
+const { JAVASCRIPT_FILES } = require('@vercel/style-guide/eslint/constants');
+
+const project = resolve(__dirname, 'tsconfig.json');
+
+/** @type {import('eslint').Linter.Config} */
+module.exports = {
+	root: true,
+	extends: [
+		require.resolve('@vercel/style-guide/eslint/browser'),
+		require.resolve('@vercel/style-guide/eslint/react'),
+		require.resolve('@vercel/style-guide/eslint/next'),
+		require.resolve('@vercel/style-guide/eslint/node'),
+		require.resolve('@vercel/style-guide/eslint/typescript')
+	],
+	parserOptions: { project },
+	settings: {
+		'import/resolver': { typescript: { project } }
+	},
+	rules: {
+		'@typescript-eslint/explicit-function-return-type': 'off',
+		'@typescript-eslint/consistent-type-definitions': 'off',
+		'@typescript-eslint/no-misused-promises': 'off',
+		'no-console': 'off'
+	},
+	overrides: [
+		{
+			files: JAVASCRIPT_FILES,
+			extends: ['plugin:@typescript-eslint/disable-type-checked']
+		},
+		{
+			files: [
+				'**/*.d.ts',
+				'next.config.js',
+				'prettier.config.js',
+				'src/app/**/page.tsx',
+				'src/app/**/layout.tsx',
+				'tailwind.config.ts',
+				'next.config.mjs'
+			],
+			rules: {
+				'import/no-default-export': 'off'
+			}
+		}
+	]
+};
+```
 
 ![](/assets/lecture1/lecture1-eslint-errors-demo.png)
 

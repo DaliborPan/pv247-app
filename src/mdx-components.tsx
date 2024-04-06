@@ -1,6 +1,8 @@
 import type { MDXComponents } from 'mdx/types';
 import Image from 'next/image';
 
+import { MdxCodeBlock } from './components/mdx-code-block';
+
 export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
 	// headings
 	h1: ({ children }) => <h1 className="mt-20 mb-8 text-5xl">{children}</h1>,
@@ -38,7 +40,7 @@ export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
 		<strong className="font-semibold text-black">{children}</strong>
 	),
 	em: ({ children }) => (
-		<em className="not-italic text-primary font-normal">{children}</em>
+		<em className="not-italic font-normal text-primary">{children}</em>
 	),
 
 	// code
@@ -47,11 +49,7 @@ export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
 			{children}
 		</code>
 	),
-	pre: ({ children }) => (
-		<pre className="p-4 my-6 bg-[#0c0c1a] shadow rounded-lg [&>code]:bg-transparent [&>code]:px-0">
-			{children}
-		</pre>
-	),
+	pre: ({ children }) => <MdxCodeBlock>{children}</MdxCodeBlock>,
 
 	// image
 	img: ({ src, alt }) => (

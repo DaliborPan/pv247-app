@@ -13,8 +13,8 @@ const ProjectCard = async () => {
 	const hasProject = session?.user.projectId;
 
 	return (
-		<div className="bg-white shadow-lg rounded-lg p-8 mx-6 mt-8">
-			<h3 className="text-xl mb-4">Project</h3>
+		<div className="p-8 mx-6 mt-8 bg-white rounded-lg shadow-lg">
+			<h3 className="mb-4 text-xl">Project</h3>
 
 			<div>
 				{hasProject ? "You're in a project" : "You're not in a project"}
@@ -24,8 +24,8 @@ const ProjectCard = async () => {
 };
 
 const AttendanceCard = () => (
-	<div className="bg-white shadow-lg rounded-lg p-8 mx-6 mt-8">
-		<h3 className="text-xl mb-4">Attendance</h3>
+	<div className="p-8 mx-6 mt-8 bg-white rounded-lg shadow-lg">
+		<h3 className="mb-4 text-xl">Attendance</h3>
 
 		<div>TBA</div>
 	</div>
@@ -35,14 +35,14 @@ const HomeworksCard = async () => {
 	const availableLectures = await query.getAvailableLectures();
 
 	return (
-		<div className="bg-white shadow-lg rounded-lg p-8 mx-6 mt-8">
-			<h3 className="text-xl mb-4">Homeworks</h3>
+		<div className="p-8 mx-6 mt-8 bg-white rounded-lg shadow-lg">
+			<h3 className="mb-4 text-xl">Homeworks</h3>
 
 			<div className="flex flex-col gap-y-2">
 				{availableLectures.map((lecture, index) => (
 					<div
 						key={lecture.slug}
-						className="bg-primary-100 p-4 rounded-md flex items-center"
+						className="flex items-center p-4 bg-primary-100 rounded-md"
 					>
 						<div className="grow">
 							<span className="text-xs text-gray-500">
@@ -81,12 +81,12 @@ const Page = async () => {
 	return (
 		<>
 			<Hero actions={<EditProfileForm userId={session.user.id} />}>
-				<div className="size-20 bg-gradient-to-tr from-primary-100 to-primary-300 rounded-full shadow" />
+				<div className="rounded-full shadow size-20 bg-gradient-to-tr from-primary-100 to-primary-300" />
 				<div>
 					<div className="text-2xl font-medium text-slate-900">
 						{displayName}
 					</div>
-					<div className="text-gray-500 text-sm">{displayRole}</div>
+					<div className="text-sm text-gray-500">{displayRole}</div>
 				</div>
 			</Hero>
 

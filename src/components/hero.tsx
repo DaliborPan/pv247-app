@@ -6,9 +6,9 @@ export type HeroProps = PropsWithChildren<{
 
 export const Hero = ({ actions, children }: HeroProps) => (
 	<>
-		<div className="bg-gradient-to-tr from-primary-100 to-primary rounded-lg py-28" />
+		<div className="rounded-lg bg-gradient-to-tr from-primary-100 to-primary py-28" />
 
-		<div className="flex mx-6 -mt-20 bg-white shadow-lg rounded-lg p-8">
+		<div className="flex p-8 mx-6 -mt-20 bg-white rounded-lg shadow-lg">
 			<div className="flex items-center gap-x-6 grow">{children}</div>
 
 			<div className="-mt-4 -mr-4">{actions}</div>

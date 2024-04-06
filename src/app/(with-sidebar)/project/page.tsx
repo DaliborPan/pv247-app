@@ -38,13 +38,13 @@ const ProjectHero = async ({
 				</Link>
 			}
 		>
-			<div className="size-20 bg-gradient-to-tr from-primary-500 to-primary-100 rounded-full shadow" />
+			<div className="rounded-full shadow size-20 bg-gradient-to-tr from-primary-500 to-primary-100" />
 
 			<div>
 				<div className="text-2xl font-medium text-slate-900">{projectName}</div>
-				<div className="flex items-center gap-x-2 mt-1">
+				<div className="flex items-center mt-1 gap-x-2">
 					<Icon name="Users" />
-					<div className="text-gray-500 text-sm">{displayUsers}</div>
+					<div className="text-sm text-gray-500">{displayUsers}</div>
 				</div>
 			</div>
 		</Hero>
@@ -59,8 +59,8 @@ const ProjectCard = async ({ projectId }: { projectId: string }) => {
 	if (!project) return null;
 
 	return (
-		<div className="bg-white shadow-lg rounded-lg p-8 mx-6 mt-8">
-			<h3 className="text-xl mb-4">Description</h3>
+		<div className="p-8 mx-6 mt-8 bg-white rounded-lg shadow-lg">
+			<h3 className="mb-4 text-xl">Description</h3>
 
 			<p className="text-gray-500">{project.description}</p>
 		</div>

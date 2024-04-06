@@ -18,7 +18,7 @@ const UserMenuItem = async () => {
 
 	return (
 		<Link href="/profile" className="flex items-center gap-x-3">
-			<div className="size-8 rounded-full bg-neutral" />
+			<div className="rounded-full size-8 bg-neutral" />
 
 			<span>{session?.user.name}</span>
 		</Link>
@@ -26,7 +26,7 @@ const UserMenuItem = async () => {
 };
 
 export const Navigation = () => (
-	<header className="px-10 flex items-center gap-x-20 border-b py-2 mb-8 bg-white sticky top-0">
+	<header className="sticky top-0 z-20 flex items-center px-10 py-2 mb-8 bg-white border-b gap-x-20">
 		<Image src={MUNI_LOGO} width={100} alt="muni-logo" />
 
 		<nav className="grow">

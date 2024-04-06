@@ -62,7 +62,7 @@ export const FormCombobox = ({
 										? options.find(option => option.value === field.value)
 												?.label
 										: 'Select language'}
-									<TriggerIcon className="ml-2 size-4 shrink-0 opacity-50" />
+									<TriggerIcon className="ml-2 opacity-50 size-4 shrink-0" />
 								</Button>
 							</FormControl>
 						}

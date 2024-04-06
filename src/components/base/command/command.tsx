@@ -28,7 +28,7 @@ type CommandDialogProps = DialogProps;
 
 const CommandDialog = ({ children, ...props }: CommandDialogProps) => (
 	<Dialog {...props}>
-		<Dialog.Content className="overflow-hidden p-0 shadow-lg">
+		<Dialog.Content className="p-0 overflow-hidden shadow-lg">
 			<Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:size-5">
 				{children}
 			</Command>
@@ -41,8 +41,8 @@ const CommandInput = React.forwardRef<
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
 	// eslint-disable-next-line react/no-unknown-property
-	<div className="flex items-center border-b px-3" cmdk-input-wrapper="">
-		<Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+	<div className="flex items-center px-3 border-b" cmdk-input-wrapper="">
+		<Search className="w-4 h-4 mr-2 opacity-50 shrink-0" />
 		<CommandPrimitive.Input
 			ref={ref}
 			className={cn(
@@ -75,7 +75,7 @@ const CommandEmpty = React.forwardRef<
 >((props, ref) => (
 	<CommandPrimitive.Empty
 		ref={ref}
-		className="py-6 text-center text-sm"
+		className="py-6 text-sm text-center"
 		{...props}
 	/>
 ));

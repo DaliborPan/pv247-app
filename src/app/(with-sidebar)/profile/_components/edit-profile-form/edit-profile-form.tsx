@@ -13,7 +13,7 @@ export const EditProfileForm = ({ userId }: { userId: string }) => (
 			id: userId
 		}}
 		content={
-			<div className="flex flex-col gap-y-3 pt-2">
+			<div className="flex flex-col pt-2 gap-y-3">
 				<FormInput name="firstName" label="First name" />
 				<FormInput name="lastName" label="Last name" />
 			</div>
