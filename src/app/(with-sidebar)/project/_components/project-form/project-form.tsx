@@ -1,7 +1,8 @@
-import { and, eq, inArray, isNull, or } from 'drizzle-orm';
+import { and, eq, inArray, isNull, not, or } from 'drizzle-orm';
 
 import { FormInput } from '@/components/form/form-fields';
 import { db } from '@/db';
+import { auth } from '@/auth';
 
 import { ProjectFormProvider } from './project-form-provider';
 import { StudentCombobox } from './student-combobox';
@@ -12,10 +13,16 @@ export const ProjectForm = async ({
 }: {
 	defaultValues?: Partial<ProjectFormSchema> & { id: string };
 }) => {
+	const session = await auth();
+
 	const students = await db.query.users.findMany({
 		where: ({ role, projectId, id }) =>
 			or(
-				and(eq(role, 'student'), isNull(projectId)),
+				and(
+					eq(role, 'student'),
+					isNull(projectId),
+					not(eq(id, session?.user?.id ?? ''))
+				),
 				inArray(id, [
 					...(defaultValues?.students?.length ? defaultValues.students : [''])
 				])
