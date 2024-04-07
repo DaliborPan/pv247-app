@@ -5,6 +5,8 @@ import { type PropsWithChildren } from 'react';
 
 import { auth } from '@/auth';
 
+import { SubNavigation } from './_components/sub-navigation';
+
 const Layout = async ({ children }: PropsWithChildren<object>) => {
 	const session = await auth();
 	const role = session?.user?.role;
@@ -13,7 +15,13 @@ const Layout = async ({ children }: PropsWithChildren<object>) => {
 		return redirect('/');
 	}
 
-	return <div className="container">{children}</div>;
+	return (
+		<div className="-mt-8">
+			<SubNavigation />
+
+			<main className="container mt-8">{children}</main>
+		</div>
+	);
 };
 
 export default Layout;

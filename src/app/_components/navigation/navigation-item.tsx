@@ -11,7 +11,9 @@ type NavigationItemProps = PropsWithChildren<{
 export const NavigationItem = ({ children, href }: NavigationItemProps) => {
 	const pathname = usePathname();
 
-	const isActive = pathname.endsWith(href);
+	const isActive = href.includes('lector')
+		? pathname.startsWith(href)
+		: pathname === href;
 
 	return (
 		<li className="relative whitespace-nowrap mt-[2px]">

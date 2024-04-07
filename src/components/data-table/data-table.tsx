@@ -53,7 +53,7 @@ export const DataTable = <TData extends BaseObject>({
 				<tbody className="">
 					{table.getRowModel().rows.map(row => (
 						<tr
-							className="flex transition-colors border-b even:bg-white/50 odd:bg-white"
+							className="flex items-center transition-colors border-b even:bg-white/50 odd:bg-white"
 							key={row.id}
 						>
 							{row.getVisibleCells().map(cell => (
