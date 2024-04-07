@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { auth } from '@/auth';
 import { query } from '@/db/query';
 import { Button } from '@/components/base/button';
-import { Hero } from '@/components/hero';
+import { Hero, ListCard } from '@/components/person-detail';
 import { db } from '@/db';
 
 import { EditProfileForm } from './_components/edit-profile-form';
@@ -61,33 +61,26 @@ const HomeworksCard = async () => {
 	const availableLectures = await query.getAvailableLectures();
 
 	return (
-		<div className="p-8 mx-6 mt-8 bg-white rounded-lg shadow-lg">
-			<h3 className="mb-4 text-xl">Homeworks</h3>
-
-			<div className="flex flex-col gap-y-2">
-				{availableLectures.map((lecture, index) => (
-					<div
-						key={lecture.slug}
-						className="flex items-center p-4 rounded-md bg-primary-100"
-					>
-						<div className="grow">
-							<span className="text-xs text-gray-500">
-								Homework {index + 1}
-							</span>
-							<h4 className="-mt-1">{lecture.homeworkName}</h4>
-						</div>
-
-						<Button
-							size="sm"
-							variant="primary/inverse"
-							iconLeft={{
-								name: 'ArrowRight'
-							}}
-						/>
+		<ListCard
+			items={availableLectures}
+			title="Homeworks"
+			renderItem={(lecture, index) => (
+				<>
+					<div className="grow">
+						<span className="text-xs text-gray-500">Homework {index}</span>
+						<h4 className="-mt-1">{lecture.homeworkName}</h4>
 					</div>
-				))}
-			</div>
-		</div>
+
+					<Button
+						size="sm"
+						variant="primary/inverse"
+						iconLeft={{
+							name: 'ArrowRight'
+						}}
+					/>
+				</>
+			)}
+		/>
 	);
 };
 

@@ -25,23 +25,31 @@ const UserMenuItem = async () => {
 	);
 };
 
-export const Navigation = () => (
-	<header className="sticky top-0 z-20 flex items-center px-10 py-2 mb-8 bg-white border-b gap-x-20">
-		<Image src={MUNI_LOGO} width={100} alt="muni-logo" />
+export const Navigation = async () => {
+	const session = await auth();
 
-		<nav className="grow">
-			<ul className="flex items-center gap-x-10">
-				<NavigationItem href="/">Home</NavigationItem>
-				<NavigationItem href="/lectures">Lectures</NavigationItem>
-				<NavigationItem href="/homeworks">Homeworks</NavigationItem>
-				<NavigationItem href="/project">Project</NavigationItem>
-			</ul>
-		</nav>
+	return (
+		<header className="sticky top-0 z-20 flex items-center px-10 py-2 mb-8 bg-white border-b gap-x-20">
+			<Image src={MUNI_LOGO} width={100} alt="muni-logo" />
 
-		<div className="flex items-center">
-			<UserMenuItem />
-			<NavigationDelimiter className="mr-4" />
-			<LogoutButton />
-		</div>
-	</header>
-);
+			<nav className="grow">
+				<ul className="flex items-center gap-x-10">
+					<NavigationItem href="/">Home</NavigationItem>
+					<NavigationItem href="/lectures">Lectures</NavigationItem>
+					<NavigationItem href="/homeworks">Homeworks</NavigationItem>
+					{session?.user.role === 'lector' ? (
+						<NavigationItem href="/lector">Lector</NavigationItem>
+					) : (
+						<NavigationItem href="/project">Project</NavigationItem>
+					)}
+				</ul>
+			</nav>
+
+			<div className="flex items-center">
+				<UserMenuItem />
+				<NavigationDelimiter className="mr-4" />
+				<LogoutButton />
+			</div>
+		</header>
+	);
+};
