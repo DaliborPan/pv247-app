@@ -15,6 +15,10 @@ export const authOptions = {
 	providers: [GitHub],
 	adapter: CustomDrizzleAdapter,
 
+	pages: {
+		signIn: '/'
+	},
+
 	events: {
 		/**
 		 * At this point, user is already created in the database.
