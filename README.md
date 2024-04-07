@@ -13,7 +13,7 @@ Student:
   - The total number of points earned - broken down by individual tasks.
   - His team members for the team project.
   - ...
-- The user can create a new team project.
+- The user can create/edit a team project.
 
 Teacher:
 
