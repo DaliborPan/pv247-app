@@ -19,7 +19,7 @@ const Page = async () => {
 			<h1 className="mb-6 text-3xl">Home page</h1>
 
 			<section className="flex items-center mb-12 gap-x-8">
-				<div className="px-6 py-4 bg-white border rounded-lg">
+				<div className="w-full px-6 py-4 bg-white border rounded-lg">
 					<div className="flex items-center">
 						<div className="grow">
 							<span className="text-xs text-gray-500">Current lecture</span>

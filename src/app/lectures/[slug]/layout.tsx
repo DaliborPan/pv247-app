@@ -4,9 +4,10 @@ import Link from 'next/link';
 
 import { Button } from '@/components/base/button';
 import { Icon } from '@/components/base/icon';
-import { db, type Lecture } from '@/db';
+import { type Lecture } from '@/db';
 import { lectureSlugSchema } from '@/schema/lecture';
 import { cn } from '@/lib/cn';
+import { query } from '@/db/query';
 
 const LectureNavigationButton = ({
 	type,
@@ -46,18 +47,18 @@ const Layout = async ({
 	children,
 	params
 }: PropsWithChildren<{ params: { slug: string } }>) => {
-	const parsed = lectureSlugSchema.safeParse(params.slug);
+	const parsedSlug = lectureSlugSchema.safeParse(params.slug);
 
-	if (!parsed.success) {
+	if (!parsedSlug.success) {
 		redirect('/lectures');
 	}
 
-	const lectures = await db.query.lectures.findMany({
-		orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)]
-	});
+	const searchParamSlug = parsedSlug.data;
+
+	const lectures = await query.getOrderedLectures();
 
 	const slugLectureIndex = lectures.findIndex(
-		lecture => lecture.slug === params.slug
+		lecture => lecture.slug === searchParamSlug
 	);
 
 	const prevLecture = lectures[slugLectureIndex - 1];

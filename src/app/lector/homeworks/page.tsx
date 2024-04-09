@@ -1,10 +1,14 @@
 import { eq } from 'drizzle-orm';
+import { redirect } from 'next/navigation';
 
 import { auth } from '@/auth';
 import { db } from '@/db';
 import { DataTable } from '@/components/data-table/data-table';
+import { query } from '@/db/query';
+import { homeworkSlugSchema } from '@/schema/homework';
 
 import { columns } from './_components/columns';
+import { HomeworksNavigation } from './_components/homeworks-navigation';
 
 const Page = async ({
 	searchParams
@@ -14,12 +18,19 @@ const Page = async ({
 	};
 }) => {
 	const session = await auth();
-
-	// TODO: redirect if incorrect slug
-
 	if (!session?.user) {
 		return null;
 	}
+
+	const parsedSlug = homeworkSlugSchema.safeParse(
+		searchParams.slug ?? homeworkSlugSchema.options[0]
+	);
+
+	if (!parsedSlug.success) {
+		redirect('/');
+	}
+
+	const searchParamSlug = parsedSlug.data;
 
 	const user = await db.query.users.findFirst({
 		where: users => eq(users.id, session.user.id ?? ''),
@@ -43,23 +54,25 @@ const Page = async ({
 				}
 			});
 
-	const lectures = await db.query.lectures.findMany();
+	const lectures = await query.getOrderedLectures();
 
-	const lectureId = lectures.find(
-		lecture => lecture.homeworkSlug === searchParams.slug
-	)?.id;
+	const lecture = lectures.find(
+		lecture => lecture.homeworkSlug === searchParamSlug
+	);
 
 	return (
 		<div>
 			<h1 className="mb-6 text-3xl">{hasOwnStudents && 'My '}Homeworks</h1>
 
-			<div className="flex mb-4">
-				<h2 className="grow">Homework name</h2>
-
-				<div className="flex gap-x-4">
-					<button>prev</button>
-					<button>next</button>
+			<div className="flex items-center mb-4">
+				<div className="grow">
+					<span className="text-sm text-gray-600">Name</span>
+					<h2 className="-mt-1 text-2xl text-primary">
+						{lecture?.homeworkName}
+					</h2>
 				</div>
+
+				<HomeworksNavigation homeworkSlug={searchParamSlug} />
 			</div>
 
 			<DataTable
@@ -69,7 +82,7 @@ const Page = async ({
 						? ''
 						: `${student.firstName} ${student.lastName}`,
 					points:
-						student.homeworksStudent.find(hw => hw.lectorId === lectureId)
+						student.homeworksStudent.find(hw => hw.lectorId === lecture?.id)
 							?.points ?? ''
 				}))}
 				columns={columns}

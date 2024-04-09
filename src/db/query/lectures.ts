@@ -10,3 +10,11 @@ export const getAvailableLectures = async () => {
 
 	return lectures.filter(getIsAvailable);
 };
+
+export const getOrderedLectures = async () => {
+	const lectures = await db.query.lectures.findMany({
+		orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)]
+	});
+
+	return lectures;
+};

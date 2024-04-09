@@ -1,5 +1,6 @@
-import { getAvailableLectures } from './lectures';
+import { getAvailableLectures, getOrderedLectures } from './lectures';
 
 export const query = {
-	getAvailableLectures
+	getAvailableLectures,
+	getOrderedLectures
 };
