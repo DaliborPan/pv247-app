@@ -25,12 +25,20 @@ const db = drizzle(client, {
 
 export {
 	db,
+
+	// homeworks
 	homeworks,
-	lectures,
-	projects,
-	users,
 	type Homework,
+
+	// lecture
+	lectures,
 	type Lecture,
+
+	// project
+	projects,
 	type Project,
+
+	// users
+	users,
 	type User
 };

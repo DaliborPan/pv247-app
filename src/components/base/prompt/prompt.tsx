@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Slot } from '@radix-ui/react-slot';
 import { useMutation } from '@tanstack/react-query';
 import React, { type ComponentType, useState } from 'react';
 import { type FieldValues, useForm } from 'react-hook-form';
@@ -60,16 +59,9 @@ export const Prompt = <T extends FieldValues>({
 			await onDecision(params)
 	});
 
-	const onSubmit = async () => {
-		const valid = await form.trigger();
-
-		if (!valid) {
-			onFormValidationFailed?.();
-			return;
-		}
-
+	const onSubmit = (data: T) => {
 		decisionMutate(
-			{ confirmed: true, data: form.getValues() },
+			{ confirmed: true, data },
 			{
 				onSuccess: () => handleOpenChange(false),
 				onError
@@ -99,7 +91,7 @@ export const Prompt = <T extends FieldValues>({
 
 			<Dialog.Content showClose={!!title} {...dialogProps}>
 				<Form key={key} {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)}>
+					<form onSubmit={form.handleSubmit(onSubmit, onFormValidationFailed)}>
 						{title && (
 							<Dialog.Header>
 								<Dialog.Title>{title}</Dialog.Title>
@@ -115,13 +107,11 @@ export const Prompt = <T extends FieldValues>({
 								{cancel ?? <Dialog.CancelButton />}
 							</Dialog.Close>
 
-							<Slot onClick={onSubmit}>
-								{confirm ? (
-									confirm({ isError, isLoading })
-								) : (
-									<Dialog.ConfirmButton isLoading={isLoading} />
-								)}
-							</Slot>
+							{confirm ? (
+								confirm({ isError, isLoading })
+							) : (
+								<Dialog.ConfirmButton isLoading={isLoading} />
+							)}
 						</Dialog.Footer>
 					</form>
 				</Form>

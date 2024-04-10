@@ -20,7 +20,6 @@ export const users = sqliteTable('user', {
 
 	// lector
 	lectorId: text('lectorId'),
-	lectorName: text('lectorName'),
 
 	// project
 	projectId: text('projectId'),

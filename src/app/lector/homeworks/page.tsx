@@ -76,15 +76,25 @@ const Page = async ({
 			</div>
 
 			<DataTable
-				data={students.map(student => ({
-					...student,
-					fullName: !student.firstName
-						? ''
-						: `${student.firstName} ${student.lastName}`,
-					points:
-						student.homeworksStudent.find(hw => hw.lectorId === lecture?.id)
-							?.points ?? ''
-				}))}
+				data={students.map(student => {
+					const points = student.homeworksStudent.find(
+						hw => hw.lectureId === lecture?.id
+					)?.points;
+
+					return {
+						...student,
+						fullName: !student.firstName
+							? ''
+							: `${student.firstName} ${student.lastName}`,
+						points,
+						setPoints: {
+							lecture,
+							lectorId: session.user.id,
+							studentId: student.id,
+							points
+						}
+					};
+				})}
 				columns={columns}
 			/>
 		</div>

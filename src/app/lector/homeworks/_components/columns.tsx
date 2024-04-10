@@ -2,7 +2,7 @@
 
 import { type ColumnDef } from '@tanstack/react-table';
 
-import { type User } from '@/db';
+import { Lecture, type User } from '@/db';
 import { DataTableColumnHeader } from '@/components/data-table';
 import { Icon } from '@/components/base/icon';
 
@@ -47,9 +47,18 @@ export const columns: ColumnDef<User, string>[] = [
 		enableSorting: true
 	},
 	{
-		accessorKey: 'id',
+		accessorKey: 'setPoints',
 		header: 'Points',
 		minSize: 100,
-		cell: cell => <SetHomeworkPointsForm studentId={cell.getValue()} />
+		cell: cell => {
+			const defaultValues = cell.getValue() as unknown as {
+				studentId: string;
+				lecture: Lecture;
+				lectorId: string;
+				points?: number;
+			};
+
+			return <SetHomeworkPointsForm {...defaultValues} />;
+		}
 	}
 ];

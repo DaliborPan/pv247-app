@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/cn';
@@ -62,7 +61,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			className,
 			variant,
 			size,
-			asChild = false,
 			isLoading = false,
 			children,
 			iconLeft,
@@ -70,33 +68,29 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			...props
 		},
 		ref
-	) => {
-		const Comp = asChild ? Slot : 'button';
+	) => (
+		<button
+			className={cn(buttonVariants({ variant, size, className }))}
+			ref={ref}
+			{...props}
+		>
+			{iconLeft && (
+				<Icon
+					name={iconLeft.name}
+					className={cn(children && 'mr-2', iconLeft.className)}
+				/>
+			)}
 
-		return (
-			<Comp
-				className={cn(buttonVariants({ variant, size, className }))}
-				ref={ref}
-				{...props}
-			>
-				{iconLeft && (
-					<Icon
-						name={iconLeft.name}
-						className={cn(children && 'mr-2', iconLeft.className)}
-					/>
-				)}
+			{children}
 
-				{children}
-
-				{(!!iconRight || isLoading) && (
-					<Icon
-						name={iconRight?.name ?? 'Loader'}
-						className={cn(children && 'ml-2', iconRight?.className)}
-					/>
-				)}
-			</Comp>
-		);
-	}
+			{(!!iconRight || isLoading) && (
+				<Icon
+					name={iconRight?.name ?? 'Loader'}
+					className={cn(children && 'ml-2', iconRight?.className)}
+				/>
+			)}
+		</button>
+	)
 );
 Button.displayName = 'Button';
 
