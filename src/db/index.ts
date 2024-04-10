@@ -2,7 +2,14 @@ import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
 
 import { homeworks, type Homework } from './schema/homeworks';
-import { lectures, type Lecture } from './schema/lectures';
+import {
+	lectures,
+	lectureSlugSchema,
+	homeworkSlugSchema,
+	type Lecture,
+	type LectureSlug,
+	type HomeworkSlug
+} from './schema/lectures';
 import { projects, type Project } from './schema/projects';
 import { users, type User } from './schema/users';
 import * as relations from './schema/relations';
@@ -32,7 +39,11 @@ export {
 
 	// lecture
 	lectures,
+	lectureSlugSchema,
+	homeworkSlugSchema,
 	type Lecture,
+	type LectureSlug,
+	type HomeworkSlug,
 
 	// project
 	projects,

@@ -19,6 +19,8 @@ export const authOptions = {
 		signIn: '/'
 	},
 
+	trustHost: true,
+
 	events: {
 		/**
 		 * At this point, user is already created in the database.

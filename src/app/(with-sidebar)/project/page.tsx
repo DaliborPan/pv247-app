@@ -72,14 +72,21 @@ const Page = async () => {
 
 	if (!session?.user) return null;
 
-	return session.user.projectId && session.user.projectName ? (
+	const user = await db.query.users.findFirst({
+		where: users => eq(users.id, session.user.id ?? ''),
+		with: {
+			project: true
+		}
+	});
+
+	return user?.project ? (
 		<div>
 			<ProjectHero
-				projectId={session.user.projectId}
-				projectName={session.user.projectName}
+				projectId={user.project.id}
+				projectName={user.project.name}
 			/>
 
-			<ProjectCard projectId={session.user.projectId} />
+			<ProjectCard projectId={user.project.id} />
 		</div>
 	) : (
 		<ProjectForm />

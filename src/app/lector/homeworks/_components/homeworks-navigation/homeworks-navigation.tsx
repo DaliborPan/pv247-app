@@ -1,5 +1,5 @@
 import { query } from '@/db/query';
-import { type HomeworkSlug } from '@/schema/homework';
+import { type HomeworkSlug } from '@/db';
 
 import { HomeworkNavigationLink } from './homework-navigation-link';
 

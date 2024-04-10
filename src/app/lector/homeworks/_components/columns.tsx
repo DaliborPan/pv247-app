@@ -2,7 +2,7 @@
 
 import { type ColumnDef } from '@tanstack/react-table';
 
-import { Lecture, type User } from '@/db';
+import { type Lecture, type User } from '@/db';
 import { DataTableColumnHeader } from '@/components/data-table';
 import { Icon } from '@/components/base/icon';
 

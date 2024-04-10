@@ -159,14 +159,18 @@ const ProjectCard = async () => {
 	const session = await auth();
 
 	const projectUsers = await db.query.users.findMany({
-		where: (users, { eq }) => eq(users.projectId, session?.user.projectId ?? '')
+		where: (users, { eq }) =>
+			eq(users.projectId, session?.user.projectId ?? ''),
+		with: {
+			project: true
+		}
 	});
 
-	if (!projectUsers?.length || !session?.user?.projectName) {
+	const projectName = projectUsers.at(0)?.project?.name;
+
+	if (!projectUsers?.length || !projectName) {
 		return null;
 	}
-
-	const projectName = session.user.projectName;
 
 	return (
 		<div className="py-6 pl-8 pr-6 rounded-lg bg-primary-100">

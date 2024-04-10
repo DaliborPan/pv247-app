@@ -12,7 +12,8 @@ type MdxComponent = ComponentType<{
 
 const lectureMdxComponentsMap: Record<LectureSlug, MdxComponent> = {
 	introduction: IntroductionMdx,
-	react: ReactMdx
+	react: ReactMdx,
+	styling: ReactMdx // TODO
 };
 
 export const getLectureMdxComponent = (slug: LectureSlug) =>

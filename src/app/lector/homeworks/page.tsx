@@ -2,10 +2,9 @@ import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 
 import { auth } from '@/auth';
-import { db } from '@/db';
+import { db, homeworkSlugSchema } from '@/db';
 import { DataTable } from '@/components/data-table/data-table';
 import { query } from '@/db/query';
-import { homeworkSlugSchema } from '@/schema/homework';
 
 import { columns } from './_components/columns';
 import { HomeworksNavigation } from './_components/homeworks-navigation';

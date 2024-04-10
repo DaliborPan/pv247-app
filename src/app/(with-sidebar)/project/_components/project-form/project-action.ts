@@ -23,8 +23,7 @@ export const createProjectAction = async ({
 	await db
 		.update(users)
 		.set({
-			projectId: project.id,
-			projectName: project.name
+			projectId: project.id
 		})
 		.where(inArray(users.id, students))
 		.execute();
@@ -58,8 +57,7 @@ export const updateProjectAction = async ({
 	await db
 		.update(users)
 		.set({
-			projectId: null,
-			projectName: null
+			projectId: null
 		})
 		.where(
 			inArray(
@@ -73,8 +71,7 @@ export const updateProjectAction = async ({
 	await db
 		.update(users)
 		.set({
-			projectId: id,
-			projectName: name
+			projectId: id
 		})
 		.where(inArray(users.id, students))
 		.execute();

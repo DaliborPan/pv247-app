@@ -22,8 +22,7 @@ export const users = sqliteTable('user', {
 	lectorId: text('lectorId'),
 
 	// project
-	projectId: text('projectId'),
-	projectName: text('projectName')
+	projectId: text('projectId')
 });
 
 export type User = typeof users.$inferSelect;
