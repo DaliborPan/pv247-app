@@ -2,10 +2,10 @@ import { eq } from 'drizzle-orm';
 import Link from 'next/link';
 
 import { auth } from '@/auth';
-import { Hero } from '@/components/hero';
 import { db } from '@/db';
 import { Icon } from '@/components/base/icon';
 import { Button } from '@/components/base/button';
+import { Hero } from '@/components/person-detail';
 
 import { ProjectForm } from './_components/project-form';
 

@@ -1,13 +1,13 @@
 import { Badge } from '@/components/base/badge/badge';
 import { Icon } from '@/components/base/icon';
 import { ListCard } from '@/components/person-detail';
-import { type Homework } from '@/db';
+import { type Lecture, type Homework } from '@/db';
 import { query } from '@/db/query';
 
 export const HomeworksCard = async ({
 	studentHomeworks
 }: {
-	studentHomeworks: Homework[];
+	studentHomeworks: (Homework & { lecture: Lecture | null })[];
 }) => {
 	const availableLectures = await query.getAvailableLectures();
 
@@ -35,7 +35,8 @@ export const HomeworksCard = async ({
 							>
 								<Icon name="MonitorCheck" />
 								<span>
-									{studentHomework.points}/{studentHomework.maxPoints}
+									{studentHomework.points}/
+									{studentHomework.lecture?.homeworkMaxPoints}
 								</span>
 							</Badge>
 						) : (

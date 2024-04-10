@@ -10,7 +10,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
 	const student = await db.query.users.findFirst({
 		where: users => eq(users.id, params.id),
 		with: {
-			homeworksStudent: true
+			homeworksStudent: {
+				with: {
+					lecture: true
+				}
+			}
 		}
 	});
 

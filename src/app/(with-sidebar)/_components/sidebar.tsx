@@ -52,7 +52,10 @@ const HomeworksCard = async () => {
 		with: {
 			homeworks: {
 				where: (homeworks, { eq }) =>
-					eq(homeworks.studentId, session?.user.id ?? '0')
+					eq(homeworks.studentId, session?.user.id ?? '0'),
+				with: {
+					lecture: true
+				}
 			}
 		}
 	});
@@ -82,7 +85,7 @@ const HomeworksCard = async () => {
 
 							{homework ? (
 								<span className="text-sm font-medium text-primary">
-									{homework.points}/{homework.maxPoints}
+									{homework.points}/{homework.lecture?.homeworkMaxPoints}
 								</span>
 							) : (
 								<Icon name={isAvailable ? 'ArrowRight' : 'Lock'} />
