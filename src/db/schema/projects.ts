@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 
 import { sql } from 'drizzle-orm';
-import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
 
 /**
@@ -16,6 +16,7 @@ export const projects = sqliteTable('project', {
 	name: text('name').notNull(),
 	description: text('description'),
 	github: text('github'),
+	points: integer('points'),
 
 	status: text('status', { enum: projectStatusSchema.options }).$default(
 		() => 'pending'

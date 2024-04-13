@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { auth } from '@/auth';
 import { Badge } from '@/components/base/badge';
 import { Button } from '@/components/base/button';
@@ -33,12 +35,9 @@ const ProjectCard = ({ project }: ProjectCardProps) => (
 		</TextPreview>
 
 		<div className="flex items-end justify-between mt-6 gap-x-2">
-			{/* TODO: link */}
-			{/* <Link href={`/lectures/${lecture.slug}`}> */}
-			<div className="grow">
+			<Link href={`/lector/projects/${project.id}`} className="grow">
 				<Button size="sm">Open project</Button>
-			</div>
-			{/* </Link> */}
+			</Link>
 
 			<Badge variant="outline" className="text-gray-600">
 				<Icon name="Calendar" className="mr-2" />
