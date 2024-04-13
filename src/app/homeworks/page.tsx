@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Button } from '@/components/base/button';
 import { db, type Lecture } from '@/db';
 import { Icon } from '@/components/base/icon';
-import { LecturePreview } from '@/components/lecture-preview';
+import { LecturePreview } from '@/components/text-preview';
 
 const formatDate = (date: string) => {
 	const d = new Date(date);

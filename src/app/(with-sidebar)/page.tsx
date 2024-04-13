@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { Button } from '@/components/base/button';
-import { LecturePreview } from '@/components/lecture-preview';
+import { TextPreview } from '@/components/text-preview';
 import { query } from '@/db/query';
 
 import GeneralInfo from './_components/general-info.mdx';
@@ -37,7 +37,7 @@ const Page = async () => {
 						</Link>
 					</div>
 
-					<LecturePreview>{currentLecture.preview}</LecturePreview>
+					<TextPreview>{currentLecture.preview}</TextPreview>
 				</div>
 			</section>
 
