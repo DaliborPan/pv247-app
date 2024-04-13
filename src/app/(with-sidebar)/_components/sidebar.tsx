@@ -6,6 +6,7 @@ import { Icon } from '@/components/base/icon';
 import { db, type Lecture } from '@/db';
 import { cn } from '@/lib/cn';
 import { SidebarCard } from '@/components/sidebar-card';
+import { getOverview } from '@/db/service/overview';
 
 const getIsAvailable = (lecture: Lecture) =>
 	new Date(lecture.availableFrom).getTime() < new Date().getTime();
@@ -98,27 +99,11 @@ const HomeworksCard = async () => {
 const OverviewCard = async () => {
 	const session = await auth();
 
-	const lectures = await db.query.lectures.findMany({
-		orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
-		with: {
-			homeworks: {
-				where: (homeworks, { eq }) =>
-					eq(homeworks.studentId, session?.user.id ?? '0')
-			}
-		}
-	});
+	if (!session?.user) return null;
 
-	const availableLength = lectures.filter(getIsAvailable).length;
-
-	const awardedHomeworksLength = lectures.filter(
-		lecture => !!lecture.homeworks.at(0)
-	).length;
-
-	const totalPoints = lectures.reduce((acc, lecture) => {
-		const homework = lecture.homeworks.at(0);
-
-		return acc + (homework?.points ?? 0);
-	}, 0);
+	const { attendance, homeworks, lectures, project } = await getOverview(
+		session.user.id
+	);
 
 	return (
 		<SidebarCard title="Overview">
@@ -126,26 +111,27 @@ const OverviewCard = async () => {
 				<div className="flex items-center">
 					<span className="text-gray-600 grow">Lectures</span>
 					<span className="text-sm font-medium text-primary">
-						{availableLength}/{lectures.length}
+						{lectures.display}
 					</span>
 				</div>
 
 				<div className="flex items-center">
 					<span className="text-gray-600 grow">Homeworks</span>
 					<span className="text-sm font-medium text-primary">
-						{awardedHomeworksLength}/{lectures.length} | {totalPoints}p
+						{homeworks.display}
 					</span>
 				</div>
 
 				<div className="flex items-center">
 					<span className="text-gray-600 grow">Project</span>
-
-					{/* TODO: actual state - accepted/pending/not submitted */}
-					<Icon name="X" className="text-primary" />
+					<span className="text-sm font-medium text-primary">
+						{project.display}
+					</span>
 				</div>
+
 				<div className="flex items-center">
 					<span className="text-gray-600 grow">Attendance</span>
-					<span className="text-sm font-medium text-primary">1/2</span>
+					<span className="text-sm font-medium text-primary">{attendance}</span>
 				</div>
 			</div>
 		</SidebarCard>

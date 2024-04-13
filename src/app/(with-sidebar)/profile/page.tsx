@@ -3,8 +3,10 @@ import Link from 'next/link';
 import { auth } from '@/auth';
 import { query } from '@/db/query';
 import { Button } from '@/components/base/button';
-import { Hero, ListCard } from '@/components/person-detail';
+import { Hero, ListCard, ProfileCard } from '@/components/person-detail';
 import { db } from '@/db';
+import { LabeledValue } from '@/components/labeled-value';
+import { getOverview } from '@/db/service/overview';
 
 import { EditProfileForm } from './_components/edit-profile-form';
 
@@ -20,9 +22,9 @@ const ProjectCard = async () => {
 	if (!project) return null;
 
 	return (
-		<div className="p-8 mx-6 mt-8 bg-white rounded-lg shadow-lg">
-			<div className="flex items-center">
-				<h3 className="mb-4 text-xl grow">Project</h3>
+		<ProfileCard
+			title="Project"
+			actions={
 				<Link href="/project">
 					<Button
 						variant="primary/inverse"
@@ -32,29 +34,27 @@ const ProjectCard = async () => {
 						}}
 					/>
 				</Link>
-			</div>
+			}
+		>
+			<div className="flex flex-col gap-y-3">
+				<LabeledValue label="Project name">{project.name}</LabeledValue>
+				<LabeledValue
+					label="Project description"
+					valueClassName="text-sm font-light leading-6 line-clamp-3 mt-2 pl-4 relative"
+				>
+					<span className="absolute left-0 w-1 h-full bg-primary" />
 
-			<div className="flex flex-col gap-y-2">
-				<div>
-					<span className="text-xs text-gray-500">Project name</span>
-					<h4 className="-mt-1">{project.name}</h4>
-				</div>
-
-				<div>
-					<span className="text-xs text-gray-500">Project description</span>
-					<p className="line-clamp-2">{project.description}</p>
-				</div>
+					{project.description}
+				</LabeledValue>
 			</div>
-		</div>
+		</ProfileCard>
 	);
 };
 
 const AttendanceCard = () => (
-	<div className="p-8 mx-6 mt-8 bg-white rounded-lg shadow-lg">
-		<h3 className="mb-4 text-xl">Attendance</h3>
-
+	<ProfileCard title="Attendance">
 		<div>TBA</div>
-	</div>
+	</ProfileCard>
 );
 
 const HomeworksCard = async () => {
@@ -84,6 +84,26 @@ const HomeworksCard = async () => {
 	);
 };
 
+const OverviewCard = async ({ userId }: { userId: string }) => {
+	const { homeworks, project, totalPoints } = await getOverview(userId);
+
+	return (
+		<ProfileCard title="Overview">
+			<div className="grid grid-cols-3">
+				<LabeledValue label="Homework points">
+					{homeworks.totalPoints} points
+				</LabeledValue>
+				<LabeledValue label="Project points">
+					{project.project?.points
+						? `${project.project.points} points`
+						: 'No points yet'}
+				</LabeledValue>
+				<LabeledValue label="Total points">{totalPoints} points</LabeledValue>
+			</div>
+		</ProfileCard>
+	);
+};
+
 const Page = async () => {
 	const session = await auth();
 
@@ -108,6 +128,8 @@ const Page = async () => {
 					<div className="text-sm text-gray-500">{displayRole}</div>
 				</div>
 			</Hero>
+
+			<OverviewCard userId={session.user.id} />
 
 			<HomeworksCard />
 

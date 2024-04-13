@@ -1,6 +1,6 @@
 import { db, type Lecture } from '..';
 
-const getIsAvailable = (lecture: Lecture) =>
+export const getIsAvailable = (lecture: Lecture) =>
 	new Date(lecture.availableFrom).getTime() < new Date().getTime();
 
 export const getAvailableLectures = async () => {
