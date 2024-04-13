@@ -44,9 +44,16 @@ const ProjectCard = ({ project }: ProjectCardProps) => (
 				{formatDate(project.updatedAt)}
 			</Badge>
 
-			<Badge variant="outline" className="text-gray-600">
-				{project.status}
-			</Badge>
+			{project.status === 'submitted' && project.points ? (
+				<Badge className="flex items-center gap-x-1.5">
+					<Icon name="Check" />
+					{project.points} points
+				</Badge>
+			) : (
+				<Badge variant="outline" className="text-gray-600">
+					{project.status}
+				</Badge>
+			)}
 		</div>
 	</article>
 );
@@ -59,14 +66,33 @@ const Page = async () => {
 
 	const projects = await getProjects();
 
+	const awardedProjects = projects.filter(project => !!project.points);
+	const otherProjects = projects.filter(project => !project.points);
+
 	return (
 		<>
-			<h1 className="mb-6 text-3xl">Projects</h1>
+			<h2 className="mb-6 text-3xl">Awarded projects</h2>
 
 			<div className="grid grid-cols-2 gap-6">
-				{projects.map((project, index) => (
-					<ProjectCard key={project.id} project={project} />
-				))}
+				{awardedProjects.length ? (
+					awardedProjects.map(project => (
+						<ProjectCard key={project.id} project={project} />
+					))
+				) : (
+					<p className="col-span-2 text-gray-500">No awarded projects</p>
+				)}
+			</div>
+
+			<h2 className="mt-12 mb-6 text-3xl">Projects without points</h2>
+
+			<div className="grid grid-cols-2 gap-6">
+				{otherProjects.length ? (
+					otherProjects.map(project => (
+						<ProjectCard key={project.id} project={project} />
+					))
+				) : (
+					<p className="col-span-2 text-gray-500">No projects without points</p>
+				)}
 			</div>
 		</>
 	);
