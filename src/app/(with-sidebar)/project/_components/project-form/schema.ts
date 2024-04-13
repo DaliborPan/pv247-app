@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export const projectFormSchema = z.object({
-	name: z.string(),
-	description: z.string(),
+	name: z.string().min(1),
+	description: z.string().min(1),
 	students: z.array(z.string())
 });
 
