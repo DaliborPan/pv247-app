@@ -35,6 +35,7 @@ export const updateProjectAction = async ({
 	id,
 	students,
 	name,
+	github,
 	description
 }: ProjectFormSchema & {
 	id: string;
@@ -44,7 +45,8 @@ export const updateProjectAction = async ({
 		.update(projects)
 		.set({
 			name,
-			description
+			description,
+			github
 		})
 		.where(eq(projects.id, id))
 		.execute();

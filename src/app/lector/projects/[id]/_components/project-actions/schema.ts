@@ -2,8 +2,10 @@ import { z } from 'zod';
 
 export const setProjectPointsFormSchema = z.object({
 	projectId: z.string(),
-	points: z.number(),
+	points: z.coerce.number(),
 	comment: z.string()
 });
 
-export type SetProjectPointsForm = z.infer<typeof setProjectPointsFormSchema>;
+export type SetProjectPointsFormSchema = z.infer<
+	typeof setProjectPointsFormSchema
+>;

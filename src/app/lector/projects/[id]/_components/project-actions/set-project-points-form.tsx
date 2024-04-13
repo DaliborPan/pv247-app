@@ -1,44 +1,48 @@
 'use client';
 
+import { type PropsWithChildren } from 'react';
+import { type DefaultValues } from 'react-hook-form';
+
 import { Prompt } from '@/components/base/prompt';
 import { FormInput } from '@/components/form/form-fields';
-import { Button } from '@/components/base/button';
 
-import { setProjectPointsFormSchema } from './schema';
-import { setProjectPointsAction } from './actions';
+import {
+	type SetProjectPointsFormSchema,
+	setProjectPointsFormSchema
+} from './schema';
+import { useSetProjectPointsMutation } from './mutation';
 
 export const SetProjectPointsForm = ({
 	projectId,
-	points
-}: {
+	defaultValues,
+	children
+}: PropsWithChildren<{
 	projectId: string;
-	points: number | null;
-}) => (
-	<Prompt
-		title="Set points"
-		formSchema={setProjectPointsFormSchema}
-		defaultValues={{
-			projectId,
-			points: points ?? undefined
-		}}
-		content={
-			<div className="flex flex-col pt-2 gap-y-3">
-				<FormInput type="number" name="points" label="Points" />
-			</div>
-		}
-		onDecision={async ({ confirmed, data }) => {
-			if (!confirmed) return;
+	defaultValues?: DefaultValues<SetProjectPointsFormSchema>;
+}>) => {
+	const mutation = useSetProjectPointsMutation();
 
-			await setProjectPointsAction(data);
-		}}
-	>
-		<Button
-			size="sm"
-			iconLeft={{
-				name: 'SquareArrowOutUpRight'
+	return (
+		<Prompt<SetProjectPointsFormSchema>
+			title="Set points"
+			formSchema={setProjectPointsFormSchema}
+			defaultValues={{
+				...defaultValues,
+				projectId
+			}}
+			content={
+				<div className="flex flex-col pt-2 gap-y-3">
+					<FormInput type="number" name="points" label="Points" />
+					<FormInput name="comment" label="Comment" />
+				</div>
+			}
+			onDecision={async ({ confirmed, data }) => {
+				if (!confirmed) return;
+
+				await mutation.mutateAsync(data);
 			}}
 		>
-			Set points
-		</Button>
-	</Prompt>
-);
+			{children}
+		</Prompt>
+	);
+};

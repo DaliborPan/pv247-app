@@ -28,6 +28,7 @@ const Page = async () => {
 				id: project.id,
 				name: project.name,
 				description: project.description ?? '',
+				github: project.github ?? '',
 				students: project.users
 					.filter(user => user.id !== session.user.id)
 					.map(user => user.id)

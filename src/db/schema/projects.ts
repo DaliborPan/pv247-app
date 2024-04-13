@@ -17,6 +17,7 @@ export const projects = sqliteTable('project', {
 	description: text('description'),
 	github: text('github'),
 	points: integer('points'),
+	comment: text('comment'),
 
 	status: text('status', { enum: projectStatusSchema.options }).$default(
 		() => 'pending'

@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 
 import { db, type Project, projects } from '@/db';
 
-import { type SetProjectPointsForm } from './schema';
+import { type SetProjectPointsFormSchema } from './schema';
 
 export const confirmProjectAction = async ({
 	project
@@ -22,6 +22,15 @@ export const confirmProjectAction = async ({
 	revalidatePath('/lector/projects', 'layout');
 };
 
-export const setProjectPointsAction = async (data: SetProjectPointsForm) => {
-	console.log(data);
+export const setProjectPointsAction = async (
+	data: SetProjectPointsFormSchema
+) => {
+	await db
+		.update(projects)
+		.set({
+			...data
+		})
+		.where(eq(projects.id, data.projectId));
+
+	revalidatePath('/lector/projects', 'layout');
 };
