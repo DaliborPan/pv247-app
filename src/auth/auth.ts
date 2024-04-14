@@ -2,8 +2,9 @@ import NextAuth, { type NextAuthConfig } from 'next-auth';
 import GitHub from 'next-auth/providers/github';
 import { eq } from 'drizzle-orm';
 
-import { db } from '../db';
-import { users } from '../db/schema/users';
+import { getNewStudentLectorId } from '@/db/query/lector';
+import { db } from '@/db';
+import { users } from '@/db/schema/users';
 
 import { CustomDrizzleAdapter } from './adapter';
 
@@ -32,10 +33,15 @@ export const authOptions = {
 			}
 
 			try {
+				const role = LECTOR_EMAILS.includes(user.email) ? 'lector' : 'student';
+				const lectorId =
+					role === 'student' ? await getNewStudentLectorId() : undefined;
+
 				await db
 					.update(users)
 					.set({
-						role: LECTOR_EMAILS.includes(user.email) ? 'lector' : 'student'
+						role,
+						lectorId
 					})
 					.where(eq(users.email, user.email));
 			} catch (e) {

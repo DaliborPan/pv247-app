@@ -6,6 +6,7 @@ import { db } from '@/db';
 import { Hero, OverviewCard } from '@/components/person-detail';
 import { LabeledValue } from '@/components/labeled-value';
 import { Icon } from '@/components/base/icon';
+import { cn } from '@/lib/cn';
 
 import { HomeworksCard } from './_components/homeworks';
 
@@ -43,14 +44,17 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
 			<OverviewCard
 				userId={student.id}
-				otherFields={overview => (
+				otherFields={({ project }) => (
 					<LabeledValue label="Project status">
 						<Link
-							className="flex items-center transition-colors duration-200 gap-x-2 hover:text-primary-500"
-							href={`/lector/projects/${overview.project.project?.id ?? ''}`}
+							className={cn(
+								'flex items-center transition-colors duration-200 gap-x-2 hover:text-primary-500',
+								!project.project?.id && 'pointer-events-none'
+							)}
+							href={`/lector/projects/${project.project?.id ?? ''}`}
 						>
-							<span className="block">{overview.project.display}</span>
-							<Icon name="ExternalLink" />
+							<span className="block">{project.display}</span>
+							{project.project?.id && <Icon name="ExternalLink" />}
 						</Link>
 					</LabeledValue>
 				)}
