@@ -82,7 +82,7 @@ export const StudentCombobox = ({ options }: { options: ComboboxOption[] }) => {
 			</div>
 
 			{students.length > 0 ? (
-				<div className="flex flex-col mt-4">
+				<div className="flex flex-col gap-y-2 mt-4">
 					{students.map(s => (
 						<StudentSelectedComboboxItem
 							key={s}
