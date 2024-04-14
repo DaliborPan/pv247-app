@@ -55,7 +55,7 @@ const Layout = async ({
 
 	const searchParamSlug = parsedSlug.data;
 
-	const lectures = await query.getOrderedLectures();
+	const lectures = await query.lectures.getOrderedLectures();
 
 	const slugLectureIndex = lectures.findIndex(
 		lecture => lecture.slug === searchParamSlug

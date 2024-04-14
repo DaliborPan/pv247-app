@@ -8,7 +8,7 @@ export const HomeworksNavigation = async ({
 }: {
 	homeworkSlug: HomeworkSlug;
 }) => {
-	const lectures = await query.getOrderedLectures();
+	const lectures = await query.lectures.getOrderedLectures();
 
 	const slugLectureIndex = lectures.findIndex(
 		lecture => lecture.homeworkSlug === homeworkSlug

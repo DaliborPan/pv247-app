@@ -4,27 +4,16 @@ import { auth } from '@/auth';
 import { db } from '@/db';
 import { DataTable } from '@/components/data-table/data-table';
 import { TabsContent } from '@/components/base/tabs';
+import { query, type GetStudentWithHomeworksResult } from '@/db/query';
 
 import { LectorTabsTable } from '../_components/lector-tabs-table';
 
 import { columns } from './_components/columns';
 
-const getStudentsWithHomeworks = () =>
-	db.query.users.findMany({
-		where: users => eq(users.role, 'student'),
-		with: {
-			homeworksStudent: true
-		}
-	});
-
-type StudentsWithHomeworks = Awaited<
-	ReturnType<typeof getStudentsWithHomeworks>
->;
-
 const StudentDataTable = ({
 	students
 }: {
-	students: StudentsWithHomeworks;
+	students: GetStudentWithHomeworksResult;
 }) => (
 	<DataTable
 		data={students.map(student => ({
@@ -82,7 +71,9 @@ const Page = async () => {
 			contents={
 				<>
 					<TabsContent value="all">
-						<StudentDataTable students={await getStudentsWithHomeworks()} />
+						<StudentDataTable
+							students={await query.student.getStudentsWithHomeworks()}
+						/>
 					</TabsContent>
 					<TabsContent value="own">
 						<StudentDataTable students={user?.students ?? []} />

@@ -9,7 +9,7 @@ export const HomeworksCard = async ({
 }: {
 	studentHomeworks: (Homework & { lecture: Lecture | null })[];
 }) => {
-	const availableLectures = await query.getAvailableLectures();
+	const availableLectures = await query.lectures.getAvailableLectures();
 
 	return (
 		<ListCard

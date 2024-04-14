@@ -7,7 +7,7 @@ import { query } from '@/db/query';
 import GeneralInfo from './_components/general-info.mdx';
 
 const Page = async () => {
-	const availableLectures = await query.getAvailableLectures();
+	const availableLectures = await query.lectures.getAvailableLectures();
 	const currentLecture = availableLectures.pop();
 
 	if (!currentLecture) {

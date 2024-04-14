@@ -60,7 +60,7 @@ const AttendanceCard = () => (
 );
 
 const HomeworksCard = async () => {
-	const availableLectures = await query.getAvailableLectures();
+	const availableLectures = await query.lectures.getAvailableLectures();
 
 	return (
 		<ListCard
