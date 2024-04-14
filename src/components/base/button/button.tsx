@@ -77,7 +77,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			{iconLeft && (
 				<Icon
 					name={iconLeft.name}
-					className={cn(children && 'mr-2', iconLeft.className)}
+					className={cn(
+						children && 'mr-2',
+						iconLeft.className,
+						size === 'lg' && 'size-5'
+					)}
 				/>
 			)}
 

@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { Button } from '@/components/base/button';
 import { SignIn } from '@/components/sign-in';
 
@@ -14,15 +16,25 @@ const Page = () => (
 				your journey with a GitHub sign-up.
 			</p>
 
-			<SignIn>
+			<div className="flex items-center gap-x-4">
 				<Button
+					variant="outline/primary"
 					iconLeft={{
-						name: 'Github'
+						name: 'Book'
 					}}
 				>
-					Sign in
+					<Link href="/lectures">Start Learning</Link>
 				</Button>
-			</SignIn>
+				<SignIn>
+					<Button
+						iconLeft={{
+							name: 'Github'
+						}}
+					>
+						Sign in with GitHub
+					</Button>
+				</SignIn>
+			</div>
 		</div>
 	</main>
 );
