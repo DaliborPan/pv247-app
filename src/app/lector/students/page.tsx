@@ -1,15 +1,11 @@
 import { eq } from 'drizzle-orm';
-import Link from 'next/link';
 
 import { auth } from '@/auth';
 import { db } from '@/db';
 import { DataTable } from '@/components/data-table/data-table';
-import {
-	Tabs,
-	TabsList,
-	TabsTrigger,
-	TabsContent
-} from '@/components/base/tabs';
+import { TabsContent } from '@/components/base/tabs';
+
+import { LectorTabsTable } from '../_components/lector-tabs-table';
 
 import { columns } from './_components/columns';
 
@@ -47,13 +43,8 @@ const StudentDataTable = ({
 	/>
 );
 
-const Page = async ({
-	searchParams
-}: {
-	searchParams: Record<string, string>;
-}) => {
+const Page = async () => {
 	const session = await auth();
-	const viewType = searchParams.type ?? 'all';
 
 	if (!session?.user) {
 		return null;
@@ -73,29 +64,32 @@ const Page = async ({
 	const hasOwnStudents = !!user?.students.length;
 
 	return (
-		<Tabs defaultValue={viewType}>
-			<div className="flex items-center mb-6 gap-x-2">
-				<h1 className="text-3xl grow">Students</h1>
-
-				{hasOwnStudents && (
-					<TabsList>
-						<TabsTrigger asChild value="all">
-							<Link href="/lector/students?type=all">All students</Link>
-						</TabsTrigger>
-						<TabsTrigger asChild value="own">
-							<Link href="/lector/students?type=own">Own students</Link>
-						</TabsTrigger>
-					</TabsList>
-				)}
-			</div>
-
-			<TabsContent value="all">
-				<StudentDataTable students={await getStudentsWithHomeworks()} />
-			</TabsContent>
-			<TabsContent value="own">
-				<StudentDataTable students={user?.students ?? []} />
-			</TabsContent>
-		</Tabs>
+		<LectorTabsTable
+			title="Students"
+			tabsHidden={!hasOwnStudents}
+			triggers={[
+				{
+					href: '/lector/students?type=all',
+					label: 'All students',
+					value: 'all'
+				},
+				{
+					href: '/lector/students?type=own',
+					label: 'Own students',
+					value: 'own'
+				}
+			]}
+			contents={
+				<>
+					<TabsContent value="all">
+						<StudentDataTable students={await getStudentsWithHomeworks()} />
+					</TabsContent>
+					<TabsContent value="own">
+						<StudentDataTable students={user?.students ?? []} />
+					</TabsContent>
+				</>
+			}
+		/>
 	);
 };
 

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Button } from '@/components/base/button';
 import { db, type Lecture } from '@/db';
 import { Icon } from '@/components/base/icon';
-import { LecturePreview } from '@/components/text-preview';
+import { TextPreview } from '@/components/text-preview';
 
 const formatDate = (date: string) => {
 	const d = new Date(date);
@@ -23,9 +23,9 @@ const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => (
 
 		<h2 className="text-xl font-medium">{lecture.homeworkName}</h2>
 
-		<LecturePreview className="mt-3 line-clamp-4">
+		<TextPreview className="mt-3 line-clamp-4">
 			{lecture.homeworkPreview}
-		</LecturePreview>
+		</TextPreview>
 
 		<div className="flex items-end justify-between mt-6">
 			<Link href={`/lectures/${lecture.slug}`}>
