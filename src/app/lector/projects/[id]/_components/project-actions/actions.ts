@@ -20,6 +20,7 @@ export const confirmProjectAction = async ({
 		.where(eq(projects.id, project.id));
 
 	revalidatePath('/lector/projects', 'layout');
+	revalidatePath('/lector/student-detail/[id]', 'page');
 };
 
 export const setProjectPointsAction = async (

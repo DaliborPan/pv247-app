@@ -6,7 +6,6 @@ export const LabeledValue = ({
 	children,
 	label,
 	labelClassName,
-	valueClassName,
 	wrapperClassName
 }: PropsWithChildren<{
 	label: string;
@@ -16,6 +15,6 @@ export const LabeledValue = ({
 }>) => (
 	<div className={cn('flex flex-col', wrapperClassName)}>
 		<span className={cn('text-xs text-gray-500', labelClassName)}>{label}</span>
-		<span className={valueClassName}>{children}</span>
+		{children}
 	</div>
 );

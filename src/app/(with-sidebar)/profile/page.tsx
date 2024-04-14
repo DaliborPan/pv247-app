@@ -3,10 +3,14 @@ import Link from 'next/link';
 import { auth } from '@/auth';
 import { query } from '@/db/query';
 import { Button } from '@/components/base/button';
-import { Hero, ListCard, ProfileCard } from '@/components/person-detail';
+import {
+	Hero,
+	ListCard,
+	OverviewCard,
+	ProfileCard
+} from '@/components/person-detail';
 import { db } from '@/db';
 import { LabeledValue } from '@/components/labeled-value';
-import { getOverview } from '@/db/service/overview';
 
 import { EditProfileForm } from './_components/edit-profile-form';
 
@@ -38,13 +42,11 @@ const ProjectCard = async () => {
 		>
 			<div className="flex flex-col gap-y-3">
 				<LabeledValue label="Project name">{project.name}</LabeledValue>
-				<LabeledValue
-					label="Project description"
-					valueClassName="text-sm font-light leading-6 line-clamp-3 mt-2 pl-4 relative"
-				>
-					<span className="absolute left-0 w-1 h-full bg-primary" />
-
-					{project.description}
+				<LabeledValue label="Project description">
+					<p className="relative pl-4 mt-2 text-sm font-light leading-6 line-clamp-3">
+						<span className="absolute left-0 w-1 h-full bg-primary" />
+						{project.description}
+					</p>
 				</LabeledValue>
 			</div>
 		</ProfileCard>
@@ -81,26 +83,6 @@ const HomeworksCard = async () => {
 				</>
 			)}
 		/>
-	);
-};
-
-const OverviewCard = async ({ userId }: { userId: string }) => {
-	const { homeworks, project, totalPoints } = await getOverview(userId);
-
-	return (
-		<ProfileCard title="Overview">
-			<div className="grid grid-cols-3">
-				<LabeledValue label="Homework points">
-					{homeworks.totalPoints} points
-				</LabeledValue>
-				<LabeledValue label="Project points">
-					{project.project?.points
-						? `${project.project.points} points`
-						: 'No points yet'}
-				</LabeledValue>
-				<LabeledValue label="Total points">{totalPoints} points</LabeledValue>
-			</div>
-		</ProfileCard>
 	);
 };
 
