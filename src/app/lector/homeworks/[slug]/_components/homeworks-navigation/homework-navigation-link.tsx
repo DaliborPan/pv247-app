@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 import { Button } from '@/components/base/button';
 import { type Lecture } from '@/db';
@@ -14,10 +15,13 @@ export const HomeworkNavigationLink = ({
 	type: 'previous' | 'next';
 	lecture: Lecture;
 }) => {
+	const searchParams = useSearchParams();
+	const viewType = searchParams.get('type') ?? 'all';
+
 	const iconName = type === 'previous' ? 'ChevronLeft' : 'ChevronRight';
 
 	return (
-		<Link href={`/lector/homeworks?slug=${lecture.homeworkSlug}`}>
+		<Link href={`/lector/homeworks/${lecture.homeworkSlug}?type=${viewType}`}>
 			<Button
 				variant="ghost"
 				className="flex flex-col items-start h-auto font-normal hover:bg-white hover:shadow"
