@@ -1,7 +1,7 @@
 import { type ComponentType } from 'react';
 import { type MDXComponents } from 'mdx/types';
 
-import { type LectureSlug } from '@/schema/lecture';
+import { type LectureSlug } from '@/db';
 
 import { IntroductionMdx } from './introduction';
 import { ReactMdx } from './react';

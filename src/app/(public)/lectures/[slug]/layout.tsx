@@ -4,8 +4,7 @@ import Link from 'next/link';
 
 import { Button } from '@/components/base/button';
 import { Icon } from '@/components/base/icon';
-import { type Lecture } from '@/db';
-import { lectureSlugSchema } from '@/schema/lecture';
+import { lectureSlugSchema, type Lecture } from '@/db';
 import { cn } from '@/lib/cn';
 import { query } from '@/db/query';
 
@@ -65,7 +64,7 @@ const Layout = async ({
 	const nextLecture = lectures[slugLectureIndex + 1];
 
 	return (
-		<div>
+		<>
 			<div className="flex justify-between">
 				<div>
 					{prevLecture && (
@@ -81,7 +80,7 @@ const Layout = async ({
 			</div>
 
 			<main className="max-w-4xl mx-auto -mt-10">{children}</main>
-		</div>
+		</>
 	);
 };
 

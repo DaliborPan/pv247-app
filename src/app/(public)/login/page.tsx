@@ -1,6 +1,7 @@
-import { SignInButton } from './sign-in-button';
+import { Button } from '@/components/base/button';
+import { SignIn } from '@/components/sign-in';
 
-export const SignInHero = () => (
+const Page = () => (
 	<main className="grid place-items-center grow">
 		<div className="flex flex-col items-center gap-y-8">
 			<h1 className="text-6xl font-medium leading-none text-center text-balance">
@@ -13,7 +14,17 @@ export const SignInHero = () => (
 				your journey with a GitHub sign-up.
 			</p>
 
-			<SignInButton />
+			<SignIn>
+				<Button
+					iconLeft={{
+						name: 'Github'
+					}}
+				>
+					Sign in
+				</Button>
+			</SignIn>
 		</div>
 	</main>
 );
+
+export default Page;

@@ -1,21 +1,24 @@
 import { redirect } from 'next/navigation';
 
-import { lectureSlugSchema } from '@/schema/lecture';
+import { lectureSlugSchema, type LectureSlug } from '@/db';
 
 import { getLectureMdxComponent } from './_components';
 
-export const generateStaticParams = async () => {
+type Params = {
+	slug: LectureSlug;
+};
+
+export const generateStaticParams = (): Params[] => {
 	const lectures = lectureSlugSchema.options;
 
 	return lectures.map(slug => ({
-		params: {
-			slug
-		}
+		slug
 	}));
 };
 
-const Page = ({ params }: { params: { slug: string } }) => {
+const Page = ({ params }: { params: Params }) => {
 	const parsed = lectureSlugSchema.safeParse(params.slug);
+	console.log('RUNNING PAGE - ', params.slug);
 
 	if (!parsed.success) {
 		redirect('/lectures');
