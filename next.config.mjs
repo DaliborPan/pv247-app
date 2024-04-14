@@ -5,7 +5,12 @@ const withMDX = nextMDX({
 	redirects: () => [
 		{
 			source: '/lector',
-			destination: '/lector/students',
+			destination: '/lector/students?type=all',
+			permanent: true
+		},
+		{
+			source: '/lector/students',
+			destination: '/lector/students?type=all',
 			permanent: true
 		}
 	],

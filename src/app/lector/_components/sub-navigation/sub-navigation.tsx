@@ -15,7 +15,7 @@ const NavigationItem = ({
 	const isActive = pathname.startsWith(href);
 
 	return (
-		<li className={cn('px-3 py-1 rounded-lg', isActive && 'bg-primary-200')}>
+		<li className={cn('px-3 py-1 rounded-sm', isActive && 'bg-primary-200')}>
 			<Link href={href}>{children}</Link>
 		</li>
 	);
