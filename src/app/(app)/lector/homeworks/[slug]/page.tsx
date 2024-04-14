@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import { type User } from 'next-auth';
 
-import { auth } from '@/auth';
+import { getSessionUser } from '@/auth';
 import { db, homeworkSlugSchema, type Lecture } from '@/db';
 import { DataTable } from '@/components/data-table/data-table';
 import { type GetStudentWithHomeworksResult, query } from '@/db/query';
@@ -54,10 +54,7 @@ const Page = async ({
 		slug: string;
 	};
 }) => {
-	const session = await auth();
-	if (!session?.user) {
-		return null;
-	}
+	const sessionUser = await getSessionUser();
 
 	const parsedSlug = homeworkSlugSchema.safeParse(
 		params.slug ?? homeworkSlugSchema.options[0]
@@ -70,7 +67,7 @@ const Page = async ({
 	const paramSlug = parsedSlug.data;
 
 	const user = await db.query.users.findFirst({
-		where: users => eq(users.id, session.user.id ?? ''),
+		where: users => eq(users.id, sessionUser.id ?? ''),
 		with: {
 			students: {
 				with: {
@@ -119,14 +116,14 @@ const Page = async ({
 						<StudentDataTable
 							students={await query.student.getStudentsWithHomeworks()}
 							lecture={lecture}
-							sessionUser={session.user}
+							sessionUser={sessionUser}
 						/>
 					</TabsContent>
 					<TabsContent value="own">
 						<StudentDataTable
 							students={user?.students ?? []}
 							lecture={lecture}
-							sessionUser={session.user}
+							sessionUser={sessionUser}
 						/>
 					</TabsContent>
 				</>

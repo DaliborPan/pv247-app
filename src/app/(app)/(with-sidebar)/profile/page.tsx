@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { auth } from '@/auth';
+import { getSessionUser } from '@/auth';
 import { query } from '@/db/query';
 import { Button } from '@/components/base/button';
 import {
@@ -15,12 +15,10 @@ import { LabeledValue } from '@/components/labeled-value';
 import { EditProfileForm } from './_components/edit-profile-form';
 
 const ProjectCard = async () => {
-	const session = await auth();
-
-	if (!session?.user) return null;
+	const user = await getSessionUser();
 
 	const project = await db.query.projects.findFirst({
-		where: (project, { eq }) => eq(project.id, session.user.projectId ?? '')
+		where: (project, { eq }) => eq(project.id, user.projectId ?? '')
 	});
 
 	if (!project) return null;
@@ -87,21 +85,19 @@ const HomeworksCard = async () => {
 };
 
 const Page = async () => {
-	const session = await auth();
-
-	if (!session) return null;
+	const user = await getSessionUser();
 
 	const displayName =
-		session.user.firstName && session.user.lastName
-			? `${session.user.firstName} ${session.user.lastName}`
-			: session.user.name;
+		user.firstName && user.lastName
+			? `${user.firstName} ${user.lastName}`
+			: user.name;
 
 	const displayRole =
-		session.user.role === 'student' ? 'Course Student' : 'Course Teacher';
+		user.role === 'student' ? 'Course Student' : 'Course Teacher';
 
 	return (
 		<>
-			<Hero actions={<EditProfileForm userId={session.user.id} />}>
+			<Hero actions={<EditProfileForm userId={user.id} />}>
 				<div className="rounded-full shadow size-20 bg-gradient-to-tr from-primary-100 to-primary-300" />
 				<div>
 					<div className="text-2xl font-medium text-slate-900">
@@ -111,7 +107,7 @@ const Page = async () => {
 				</div>
 			</Hero>
 
-			<OverviewCard userId={session.user.id} />
+			<OverviewCard userId={user.id} />
 
 			<HomeworksCard />
 

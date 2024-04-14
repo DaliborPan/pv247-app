@@ -1,15 +1,15 @@
 import { redirect } from 'next/navigation';
 import { eq } from 'drizzle-orm';
 
-import { auth } from '@/auth';
+import { getSessionUser } from '@/auth';
 import { db } from '@/db';
 
 import { ProjectForm } from '../_components/project-form';
 
 const Page = async () => {
-	const session = await auth();
+	const user = await getSessionUser();
 
-	const projectId = session?.user?.projectId;
+	const projectId = user.projectId;
 
 	if (!projectId) return redirect('/project');
 
@@ -30,7 +30,7 @@ const Page = async () => {
 				description: project.description ?? '',
 				github: project.github ?? '',
 				students: project.users
-					.filter(user => user.id !== session.user.id)
+					.filter(user => user.id !== user.id)
 					.map(user => user.id)
 			}}
 		/>

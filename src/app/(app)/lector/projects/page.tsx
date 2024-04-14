@@ -1,6 +1,5 @@
 import Link from 'next/link';
 
-import { auth } from '@/auth';
 import { Badge } from '@/components/base/badge';
 import { Button } from '@/components/base/button';
 import { Icon } from '@/components/base/icon';
@@ -59,11 +58,6 @@ const ProjectCard = ({ project }: ProjectCardProps) => (
 );
 
 const Page = async () => {
-	const session = await auth();
-	if (!session?.user) {
-		return null;
-	}
-
 	const projects = await getProjects();
 
 	const awardedProjects = projects.filter(project => !!project.points);

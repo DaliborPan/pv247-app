@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 
-import { auth } from '@/auth';
+import { getSessionUser } from '@/auth';
 import { db } from '@/db';
 import { DataTable } from '@/components/data-table/data-table';
 import { TabsContent } from '@/components/base/tabs';
@@ -33,14 +33,10 @@ const StudentDataTable = ({
 );
 
 const Page = async () => {
-	const session = await auth();
-
-	if (!session?.user) {
-		return null;
-	}
+	const sessionUser = await getSessionUser();
 
 	const user = await db.query.users.findFirst({
-		where: users => eq(users.id, session.user.id ?? ''),
+		where: users => eq(users.id, sessionUser.id),
 		with: {
 			students: {
 				with: {

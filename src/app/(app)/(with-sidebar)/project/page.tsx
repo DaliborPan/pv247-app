@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import Link from 'next/link';
 
-import { auth } from '@/auth';
+import { getSessionUser } from '@/auth';
 import { db, type Project, type User } from '@/db';
 import { Icon } from '@/components/base/icon';
 import { Button } from '@/components/base/button';
@@ -122,12 +122,10 @@ const SubmitProjectCard = ({ project }: { project: Project }) => {
 };
 
 const Page = async () => {
-	const session = await auth();
-
-	if (!session?.user) return null;
+	const sessionUser = await getSessionUser();
 
 	const user = await db.query.users.findFirst({
-		where: users => eq(users.id, session.user.id ?? ''),
+		where: users => eq(users.id, sessionUser.id),
 		with: {
 			project: {
 				with: {

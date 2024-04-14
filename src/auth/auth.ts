@@ -1,6 +1,7 @@
 import NextAuth, { type NextAuthConfig } from 'next-auth';
 import GitHub from 'next-auth/providers/github';
 import { eq } from 'drizzle-orm';
+import { unstable_noStore } from 'next/cache';
 
 import { getNewStudentLectorId } from '@/db/query/lector';
 import { db } from '@/db';
@@ -75,3 +76,16 @@ export const authOptions = {
 } satisfies NextAuthConfig;
 
 export const { handlers, auth, signOut } = NextAuth(authOptions);
+
+export const getSessionUser = async () => {
+	unstable_noStore();
+	const session = await auth();
+
+	if (!session?.user) {
+		throw new Error(
+			'getSessionUser must be called from authenticated pages/components only!'
+		);
+	}
+
+	return JSON.parse(JSON.stringify(session.user));
+};

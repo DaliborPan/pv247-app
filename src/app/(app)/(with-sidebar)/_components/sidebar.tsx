@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { auth } from '@/auth';
+import { getSessionUser } from '@/auth';
 import { Button } from '@/components/base/button';
 import { Icon } from '@/components/base/icon';
 import { db, type Lecture } from '@/db';
@@ -45,14 +45,13 @@ const LecturesCard = async () => {
 };
 
 const HomeworksCard = async () => {
-	const session = await auth();
+	const user = await getSessionUser();
 
 	const lectures = await db.query.lectures.findMany({
 		orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
 		with: {
 			homeworks: {
-				where: (homeworks, { eq }) =>
-					eq(homeworks.studentId, session?.user.id ?? '0'),
+				where: (homeworks, { eq }) => eq(homeworks.studentId, user.id),
 				with: {
 					lecture: true
 				}
@@ -97,12 +96,10 @@ const HomeworksCard = async () => {
 };
 
 const OverviewCard = async () => {
-	const session = await auth();
-
-	if (!session?.user) return null;
+	const user = await getSessionUser();
 
 	const { attendance, homeworks, lectures, project } = await getOverview(
-		session.user.id
+		user.id
 	);
 
 	return (
@@ -139,11 +136,10 @@ const OverviewCard = async () => {
 };
 
 const ProjectCard = async () => {
-	const session = await auth();
+	const user = await getSessionUser();
 
 	const projectUsers = await db.query.users.findMany({
-		where: (users, { eq }) =>
-			eq(users.projectId, session?.user.projectId ?? ''),
+		where: (users, { eq }) => eq(users.projectId, user.projectId ?? ''),
 		with: {
 			project: true
 		}
@@ -194,7 +190,7 @@ const ProjectCard = async () => {
 	);
 };
 
-export const Sidebar = async () => (
+export const Sidebar = () => (
 	<aside className="fixed top-[100px] h-[calc(100vh-132px)] w-[18rem] overflow-y-auto flex flex-col gap-y-8">
 		{/* Overview */}
 		<OverviewCard />
