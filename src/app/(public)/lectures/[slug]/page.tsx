@@ -18,7 +18,6 @@ export const generateStaticParams = (): Params[] => {
 
 const Page = ({ params }: { params: Params }) => {
 	const parsed = lectureSlugSchema.safeParse(params.slug);
-	console.log('RUNNING PAGE - ', params.slug);
 
 	if (!parsed.success) {
 		redirect('/lectures');

@@ -1,12 +1,23 @@
-import { randomUUID } from 'crypto';
-
+import { v4 as uuid } from 'uuid';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
 
 /**
  * Lecture slug
  */
-export const lectureSlugSchema = z.enum(['introduction', 'react', 'styling']);
+export const lectureSlugSchema = z.enum([
+	'introduction',
+	'react',
+	'styling',
+	// new
+	'hooks',
+	'other-hooks-refs-tables',
+	'async-forms',
+	'nextjs',
+	'suspense-streaming-rsc',
+	'api-routes-configs-caching-server-actions-database',
+	'authentication-metadata-deployment'
+]);
 
 export type LectureSlug = z.infer<typeof lectureSlugSchema>;
 
@@ -15,8 +26,17 @@ export type LectureSlug = z.infer<typeof lectureSlugSchema>;
  */
 export const homeworkSlugSchema = z.enum([
 	'typescript',
-	'react',
-	'tailwindcss'
+	'react-basic',
+	'styling',
+	'state',
+	'table-memo',
+	'forms-async',
+	'nextjs-basic',
+	'rsc-forms',
+	'api-actions-database',
+
+	// does not exist yet
+	'auth-meta-deploy'
 ]);
 
 export type HomeworkSlug = z.infer<typeof homeworkSlugSchema>;
@@ -25,7 +45,7 @@ export type HomeworkSlug = z.infer<typeof homeworkSlugSchema>;
  * Lectures
  */
 export const lectures = sqliteTable('lecture', {
-	id: text('id').notNull().primaryKey().$defaultFn(randomUUID),
+	id: text('id').notNull().primaryKey().$defaultFn(uuid),
 	name: text('name').notNull(),
 	availableFrom: text('availableFrom').notNull(),
 	slug: text('slug', { enum: lectureSlugSchema.options }).notNull(),
