@@ -1,3 +1,5 @@
+import { Comment } from './comment';
+
 # Next.js - API routes, caching & revalidation, server actions, database
 
 In this lesson, we'll look at Next.js again in more depth. Specifically, we'll discuss the ability to create custom API endpoints. We'll learn what route segment configs are and discuss caching and revalidation options
@@ -23,7 +25,7 @@ export const GET = () => {
 };
 ```
 
-Of course, the route handler code runs on the Server where our Next.js application is running. This code is not executed on the Client (for example, in a browser), nor is this code sent to the Client. This is very similar to React Server Components, which are also executed on the Server, and only the result of the function is sent to the Client. In the case of the route handler, the result must be the `Response` function. It is not possible for a route handler to return nothing or to return something other than a response.
+Of course, the route handler code runs on the Server where our Next.js application is running. This code is **not** executed on the Client (for example, in a browser), nor is this code sent to the Client. This is very similar to React Server Components, which are also executed on the Server, and only the result of the function is sent to the Client. In the case of the route handler, the result must be the `Response` function. It is not possible for a route handler to return nothing or to return something other than a response.
 
 Next.js also prepared wrappers over the web Request and Response types and named them `NextRequest` and `NetxResponse`, respectively, for more straightforward and more advanced usage.
 
@@ -67,7 +69,12 @@ export const ServerText = async () => {
 
 ```
 
-> This is an inappropriate way to use the GET route handler. Like the RSC code, the route handler code runs on the server. In this case, it is useless to call the actual API endpoint to execute code that will execute on the same server from which the endpoint is called.
+<Comment>
+	This is an inappropriate way to use the GET route handler. Like the RSC code,
+	the route handler code runs on the server. In this case, it is useless to call
+	the actual API endpoint to execute code that will execute on the same server
+	from which the endpoint is called.
+</Comment>
 
 ```ts
 // app/api/route.ts
@@ -97,7 +104,12 @@ export const ServerText = async () => {
 };
 ```
 
-> Instead of calling the route handler to execute code that must run on the server, we can call this code (specifically the `getMessage` function) directly in the RSC. The route handler would only be necessary if we needed to call this code from the client component.
+<Comment>
+	Instead of calling the route handler to execute code that must run on the
+	server, we can call this code (specifically the `getMessage` function)
+	directly in the RSC. The route handler would only be necessary if we needed to
+	call this code from the client component.
+</Comment>
 
 ### Submitting data via API routes
 
@@ -126,7 +138,14 @@ export const POST = async (request: Request) => {
 };
 ```
 
-> This is what a POST route handler might look like, which creates a new `event` based on the data that came in the request. Just as we validated the data from the backend to the client using `zod`, we need to validate the data from the client to the server. The `createEventSchema` takes care of this, which defines the valid shape of the object we expect from the client. We can then directly access the database and thus create a new event.
+<Comment>
+	This is what a POST route handler might look like, which creates a new `event`
+	based on the data that came in the request. Just as we validated the data from
+	the backend to the client using `zod`, we need to validate the data from the
+	client to the server. The `createEventSchema` takes care of this, which
+	defines the valid shape of the object we expect from the client. We can then
+	directly access the database and thus create a new event.
+</Comment>
 
 ### Route resolution
 
@@ -187,8 +206,12 @@ Route (app)                              Size     First Load JS
 ○  (Static)   prerendered as static content
 ```
 
-> This is how the build log of our application might look like. Route `/api` is marked as static, meaning its result will be cached and returned every time the endpoint is called.
-> This behavior may not be desirable in all cases, and we can easily change it.
+<Comment>
+	This is how the build log of our application might look like. Route `/api` is
+	marked as static, meaning its result will be cached and returned every time
+	the endpoint is called. This behavior may not be desirable in all cases, and
+	we can easily change it.
+</Comment>
 
 ### Cookies and headers
 
@@ -242,7 +265,12 @@ export const GET = (request: NextRequest) => {
 // http://localhost:3000/api?color=black
 ```
 
-> In this case, we add the `color` parameter to the URL query search, which will affect the route handler's result. Again, since this is a dynamic parameter, it is not possible to cache this route handler, and therefore, it will be executed every time the endpoint is called.
+<Comment>
+	In this case, we add the `color` parameter to the URL query search, which will
+	affect the route handler's result. Again, since this is a dynamic parameter,
+	it is not possible to cache this route handler, and therefore, it will be
+	executed every time the endpoint is called.
+</Comment>
 
 ## Route segment config
 
@@ -272,7 +300,13 @@ Some of the most essential configurations are `revalidate` and `dynamic`. Next.j
 
 If we set `export const dynamic = "force-dynamic"` in `app/page.tsx`, it means that every time we access route `/`, Next.js will always re-render the page on-demand on the server.
 
-> This behavior is proper if we access the page directly, i.e. via a URL. If we access our application first on, for example, the `/users` page, and navigate to `/` from that page, the first time we access `/` the page will be rendered on-demand, but any subsequent moves in our application will leave the page cached due to Router caching, which we will learn about later in this lesson.
+<Comment className="mt-6 mb-10">
+	This behavior is proper if we access the page directly, i.e. via a URL. If we
+	access our application first on, for example, the `/users` page, and navigate
+	to `/` from that page, the first time we access `/` the page will be rendered
+	on-demand, but any subsequent moves in our application will leave the page
+	cached due to Router caching, which we will learn about later in this lesson.
+</Comment>
 
 Route segment `revalidate` allows us to generate the page statically on the server at build time and also specify the time when it must be revalidated at the latest. This means that if we set `export const revalidate = 3600` on the `app/page.tsx` page, it means that if we build the application and make it available in production mode, all users who access `/` will be served a statically generated page for at least one hour. If someone accesses the `/` page after more than one hour, the page will be generated on the server on that request, updated in the cache, and the same generated page will be served again for another hour.
 
@@ -408,7 +442,11 @@ export const SubmitFormButton = () => {
 }
 ```
 
-> In this case we have the server action extracted into its own file, which is marked as `use server`, which means that this code will safely run only on the server and not even sent to the client.
+<Comment>
+	In this case we have the server action extracted into its own file, which is
+	marked as `use server`, which means that this code will safely run only on the
+	server and not even sent to the client.
+</Comment>
 
 ```ts
 import { revalidatePath } from 'next/cache';
@@ -442,7 +480,10 @@ export default async function Page() {
 
 ```
 
-> In this case, we have a server action defined directly within the component where the form that invokes the action occurs.
+<Comment>
+	In this case, we have a server action defined directly within the component
+	where the form that invokes the action occurs.
+</Comment>
 
 ### Type safety
 
@@ -624,7 +665,16 @@ export default function Page() {
 
 ```
 
-> In this case the custom `fetch` is executed only once, inside the `Parent` component. Because of this, we will see a `Loading` fallback that is defined inside `Page`. Once `Parent` gets the data from the API, it starts rendering, where it finds the `Child` component, which is also asynchronous. Therefore, it first starts rendering the `Child loading...` fallback, which is hardly noticeable on the page since the `Child` component, although asynchronous, occupies the same `fetch` as `Parent` and thus gets the data almost immediately from the cache.
+<Comment>
+	In this case the custom `fetch` is executed only once, inside the `Parent`
+	component. Because of this, we will see a `Loading` fallback that is defined
+	inside `Page`. Once `Parent` gets the data from the API, it starts rendering,
+	where it finds the `Child` component, which is also asynchronous. Therefore,
+	it first starts rendering the `Child loading...` fallback, which is hardly
+	noticeable on the page since the `Child` component, although asynchronous,
+	occupies the same `fetch` as `Parent` and thus gets the data almost
+	immediately from the cache.
+</Comment>
 
 A few rules apply to make request memoization work properly:
 
@@ -675,7 +725,7 @@ npm i drizzle-orm @libsql/client
 npm i -D drizzle-kit
 ```
 
-> We will use SQLite, and it is recommended for your projects. It's a quick and easy way to get started with prism and databases. In case you eventually need a different database, prisma makes it easy to achieve this by changing only the configuration.
+We will use SQLite, and it is recommended for your projects. It's a quick and easy way to get started with prism and databases. In case you eventually need a different database, prisma makes it easy to achieve this by changing only the configuration.
 
 We will need one instance of the database that we can use throughout the application. We can create this instance, for example, in `src/db/index.ts`
 
@@ -708,7 +758,12 @@ export const users = sqliteTable('users', {
 });
 ```
 
-> In this way we create tables that we will then use within our application. For more information about all the possible data types supported in SQlite, we recommend [drizzle documentation](https://orm.drizzle.team/docs/column-types/sqlite).
+<Comment>
+	In this way we create tables that we will then use within our application. For
+	more information about all the possible data types supported in SQlite, we
+	recommend [drizzle
+	documentation](https://orm.drizzle.team/docs/column-types/sqlite).
+</Comment>
 
 ### Turso
 
