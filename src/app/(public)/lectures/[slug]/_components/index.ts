@@ -5,6 +5,7 @@ import { type LectureSlug } from '@/db';
 
 import { IntroductionMdx } from './introduction';
 import { ReactMdx } from './react';
+import { ApiConfigsServerActionsDatabaseMdx } from './api-configs-server-actions-database';
 
 type MdxComponent = ComponentType<{
 	readonly components?: MDXComponents | undefined;
@@ -20,7 +21,7 @@ const lectureMdxComponentsMap: Record<LectureSlug, MdxComponent> = {
 	'async-forms': ReactMdx,
 	'nextjs': ReactMdx,
 	'suspense-streaming-rsc': ReactMdx,
-	'api-routes-configs-caching-server-actions-database': ReactMdx,
+	'api-configs-server-actions-database': ApiConfigsServerActionsDatabaseMdx,
 	'authentication-metadata-deployment': ReactMdx
 };
 

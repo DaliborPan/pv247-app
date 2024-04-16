@@ -15,7 +15,7 @@ export const lectureSlugSchema = z.enum([
 	'async-forms',
 	'nextjs',
 	'suspense-streaming-rsc',
-	'api-routes-configs-caching-server-actions-database',
+	'api-configs-server-actions-database',
 	'authentication-metadata-deployment'
 ]);
 

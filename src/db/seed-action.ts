@@ -143,9 +143,9 @@ export const seed = async () => {
 			homeworkSlug: 'rsc-forms'
 		},
 		{
-			id: 'api-routes-configs-caching-server-actions-database',
+			id: 'api-configs-server-actions-database',
 			name: 'API routes, configs, caching, server actions, database',
-			slug: 'api-routes-configs-caching-server-actions-database',
+			slug: 'api-configs-server-actions-database',
 			preview:
 				'API routes, configs, caching, server actions, database preview lecture',
 			availableFrom: '2021-10-10T10:00:00',

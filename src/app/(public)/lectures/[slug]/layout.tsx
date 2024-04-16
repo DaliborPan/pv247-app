@@ -48,6 +48,8 @@ const Layout = async ({
 }: PropsWithChildren<{ params: { slug: string } }>) => {
 	const parsedSlug = lectureSlugSchema.safeParse(params.slug);
 
+	console.log(params.slug);
+
 	if (!parsedSlug.success) {
 		redirect('/lectures');
 	}

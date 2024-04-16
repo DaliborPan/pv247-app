@@ -1,0 +1,835 @@
+# Next.js - API routes, caching & revalidation, server actions, database
+
+In this lesson, we'll look at Next.js again in more depth. Specifically, we'll discuss the ability to create custom API endpoints. We'll learn what route segment configs are and discuss caching and revalidation options
+for individual cache layers. We'll introduce the possibility of completely avoiding writing API routes and, thus, how to use server actions. Finally, we'll look at the options for working with the database in Typescript.
+
+## API routes
+
+In addition to the defined files named `page`, `loading`, `error` and so on, there is a special file named `route` which is used to define the API endpoint. Specifically, in this file, we can create a request handler that works with Web [Request](https://developer.mozilla.org/en-US/docs/Web/API/Request) and [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response) objects.
+We call these handlers `Route Handler`, where we can define the HTTP method the handler should handle.
+
+We must declare these `route.ts` files inside the `app` directory, as we did with other `page` and similar files. We conventionally put these files in the `app/api/*` directory to separate our defined `api` endpoints from the classic application pages. We then call these endpoints at the URL `<domain>/api/*`.
+
+The most common HTTP methods are `GET`, `POST`, `PUT`, `DELETE` and `PATCH`. Other supported methods are `HEAD` and `OPTIONS`. The given route handler will throw us the HTTP status `405 Method Not Allowed` for an unsupported method.
+
+```ts
+// app/api/route.ts
+
+export const GET = () => {
+	return Response.json(
+		{ message: 'Hello world from GET request' },
+		{ status: 200 }
+	);
+};
+```
+
+Of course, the route handler code runs on the Server where our Next.js application is running. This code is not executed on the Client (for example, in a browser), nor is this code sent to the Client. This is very similar to React Server Components, which are also executed on the Server, and only the result of the function is sent to the Client. In the case of the route handler, the result must be the `Response` function. It is not possible for a route handler to return nothing or to return something other than a response.
+
+Next.js also prepared wrappers over the web Request and Response types and named them `NextRequest` and `NetxResponse`, respectively, for more straightforward and more advanced usage.
+
+In pure React, we typically apply the application architecture as Server/Client, with the Client fetching data typically via API endpoints that the Server exposes. In the case of Next.js, which allows us to retrieve data directly on the Server using the React Server Component, it is **not necessary or even correct** to call from the RSC API endpoint to retrieve data.
+
+> If our Next.js application communicates with an external API, it is of course fine to call that API endpoint from RSC. It is wrong to call API endpoints that are defined within the same Next.js application.
+
+```ts
+// app/api/route.ts
+
+import { getMessage } from '@src/server';
+
+export const GET = async () => {
+	const text = await getMessage();
+
+	return Response.json({ message: text }, { status: 200 });
+};
+```
+
+```ts
+// src/server/index.ts
+
+import { promises as fs } from 'node:fs';
+
+export const getMessage = async () => {
+	const text = await fs.readFile('src/server/text.txt', 'utf-8');
+
+	return text;
+};
+```
+
+```ts
+// src/components/server-text.tsx
+
+export const ServerText = async () => {
+  const response = await fetch('http://localhost:3000/api');
+  const json = await response.json();
+
+  return <div>{json.message}</div>;
+};
+
+```
+
+> This is an inappropriate way to use the GET route handler. Like the RSC code, the route handler code runs on the server. In this case, it is useless to call the actual API endpoint to execute code that will execute on the same server from which the endpoint is called.
+
+```ts
+// app/api/route.ts
+
+// ❌ no need to define extra route handler
+```
+
+```ts
+// src/server/index.ts
+import { promises as fs } from 'node:fs';
+
+export const getMessage = async () => {
+	const text = await fs.readFile('src/server/text.txt', 'utf-8');
+
+	return text;
+};
+```
+
+```ts
+// src/components/server-text.tsx
+import { getMessage } from '../server';
+
+export const ServerText = async () => {
+  const message = await getMessage();
+
+  return <div>{message}</div>;
+};
+```
+
+> Instead of calling the route handler to execute code that must run on the server, we can call this code (specifically the `getMessage` function) directly in the RSC. The route handler would only be necessary if we needed to call this code from the client component.
+
+### Submitting data via API routes
+
+Until recently, the only way to create, edit or delete data in a database or other data source was by using the HTTP methods `POST`, `PUT`, `DELETE` and `PATCH` that we defined in the route handler. In the case of creating new data, we typically need to get individual information from the Client about the entity we want to create later. This code cannot run on the Server since the user enters this data through the Client, for example, a form in a browser.
+
+```ts
+// app/api/event/route.ts
+
+export const POST = async (request: Request) => {
+	const body = await request.json();
+
+	try {
+		const data = createEventSchema.parse(body);
+		const event = await database.event.create(data);
+
+		return Response.json(
+			{
+				message: 'Event created successfully',
+				data: event
+			},
+			{ status: 201 }
+		);
+	} catch (e) {
+		return Response.json({ message: 'Something went wrong' }, { status: 500 });
+	}
+};
+```
+
+> This is what a POST route handler might look like, which creates a new `event` based on the data that came in the request. Just as we validated the data from the backend to the client using `zod`, we need to validate the data from the client to the server. The `createEventSchema` takes care of this, which defines the valid shape of the object we expect from the client. We can then directly access the database and thus create a new event.
+
+### Route resolution
+
+For route handlers, the same rules apply as far as the directory structure is concerned. If we want to create a route handler on the url `POST /api/events`, we need to create a `route.ts` file in the `app/api/events` directory and create a route handler `POST` in it.
+
+#### Dynamic route segment
+
+To create a dynamic route segment, i.e., a route handler that can take a dynamic `slug` in a URL, the same convention applies to creating dynamic pages.
+
+```ts
+// app/api/event/[slug]/route.ts
+
+type Params = {
+	slug: string;
+};
+
+export const GET = (_request: Request, { params }: { params: Params }) => {
+	const slug = params.slug;
+
+	return Response.json({
+		message: `Called with slug ${slug}`
+	});
+};
+```
+
+### Route handlers caching
+
+Next.js caches our API endpoints by default. Specifically, this means that once we build and run our application in production mode, our defined API endpoint will return the same result every time. The `GET` function was run during the build, and its result was cached. It will be returned every time the endpoint is called. This behavior is the default and is intended to reduce server load.
+
+```ts
+export const GET = () => {
+	return Response.json({
+		time: new Date().toISOString()
+	});
+};
+
+// This will always return the same date, anytime this route handler is called.
+```
+
+```js
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+ ✓ Linting and checking validity of types
+ ✓ Collecting page data
+ ✓ Generating static pages (2/2)
+ ✓ Collecting build traces
+ ✓ Finalizing page optimization
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    137 B          84.3 kB
+├ ○ /api                                 0 B                0 B
++ First Load JS shared by all            84.2 kB
+  ├ chunks/625-81c4c6b2dd2ff566.js       28.9 kB
+  ├ chunks/b9b32b16-e4bf812aff9e0cd7.js  53.4 kB
+  └ other shared chunks (total)          1.86 kB
+
+
+○  (Static)   prerendered as static content
+```
+
+> This is how the build log of our application might look like. Route `/api` is marked as static, meaning its result will be cached and returned every time the endpoint is called.
+> This behavior may not be desirable in all cases, and we can easily change it.
+
+### Cookies and headers
+
+One possibility is to use the so-called dynamic functions `cookies` and `headers`. These two functions can be called from route handlers or RSCs and, relatively logically, are only available when the application is running, and their result varies based on what the request looks like. Therefore, it is impossible to cache these route handlers and treat them as static. For this reason, these route handlers will be executed every time the endpoint is called.
+
+```ts
+import { cookies } from 'next/headers';
+
+export const GET = () => {
+	const cookiesValues = cookies();
+
+	return Response.json({
+		time: new Date().toISOString()
+	});
+};
+
+// This route handler will run every time endpoint is called.
+```
+
+```ts
+import { headers } from 'next/headers';
+
+export const GET = () => {
+	const headersList = headers();
+	const referer = headersList.get('referer');
+
+	return (
+		Response.json({ message: 'Hello from the API' }), { headers: { referer } }
+	);
+};
+```
+
+### URL Query Parameters
+
+In some cases, it is appropriate to use URL query search parameters. This is the case, for example, when we want to explicitly insert a parameter into the URL that will affect the result of the route handler.
+
+```ts
+// app/api/route.ts
+
+import { type NextRequest } from 'next/server';
+
+export const GET = (request: NextRequest) => {
+	const searchParams = request.nextUrl.searchParams;
+	const color = searchParams.get('color');
+
+	return Response.json({
+		message: `Called with color: ${color}`
+	});
+};
+
+// http://localhost:3000/api?color=black
+```
+
+> In this case, we add the `color` parameter to the URL query search, which will affect the route handler's result. Again, since this is a dynamic parameter, it is not possible to cache this route handler, and therefore, it will be executed every time the endpoint is called.
+
+## Route segment config
+
+The Route Segment options allows you configure the behavior of a `page`, `layout` or `route`. These configs are available:
+
+```ts
+export const dynamic = "auto" | "force-dynamic" | "error" | "force-static";
+export const dynamicParams = true | false;
+export const revalidate = false | "force-cache" | 0 | number;
+export const fetchCache =
+  "auto" |
+  "default-cache" |
+  "only-cache" |
+  "force-cache" |
+  "force-no-store" |
+  "default-no-store" |
+  "only-no-store";
+
+export const runtime = "nodejs" | "edge";
+export const preferredRegion = "auto" | "global" | "home" | string | string[];
+export const maxDuration = number;
+```
+
+### dynamic & revalidate
+
+Some of the most essential configurations are `revalidate` and `dynamic`. Next.js is generally very aggressive about caching, and all `page`, `layout`, and `route` are cached by default. This is not often desired in a typical dynamic application, so it is possible to change this configuration.
+
+If we set `export const dynamic = "force-dynamic"` in `app/page.tsx`, it means that every time we access route `/`, Next.js will always re-render the page on-demand on the server.
+
+> This behavior is proper if we access the page directly, i.e. via a URL. If we access our application first on, for example, the `/users` page, and navigate to `/` from that page, the first time we access `/` the page will be rendered on-demand, but any subsequent moves in our application will leave the page cached due to Router caching, which we will learn about later in this lesson.
+
+Route segment `revalidate` allows us to generate the page statically on the server at build time and also specify the time when it must be revalidated at the latest. This means that if we set `export const revalidate = 3600` on the `app/page.tsx` page, it means that if we build the application and make it available in production mode, all users who access `/` will be served a statically generated page for at least one hour. If someone accesses the `/` page after more than one hour, the page will be generated on the server on that request, updated in the cache, and the same generated page will be served again for another hour.
+
+This approach is called `Incremental Static Regeneration (ISR)` and was already available in Next.js version 12. Later, there was a way to generate an on-demand page based on an action, which can be much more practical in several ways.
+
+A typical example might be a statically generated page that lists all users. New users are not often added, so this page can be statically generated, which also optimizes database usage. However, we can re-generate this page on demand if a new user is added.
+
+## fetch
+
+With the release of Next.js v13, we don't have to manage this revalidation or caching at the page level, but at the level of individual API, endpoint calls via the `fetch` function. Next.js has extended the capabilities of the native web function `fetch` to allow you to control caching behavior directly at the request level.
+
+### options.cache
+
+The `cache` is not a new property added by the Nect team. This property is available in the native `fetch` web function. These two basic settings are available:
+
+- `force-cache` - this endpoint will only be called once, at application build time, and will never be called while the application is running.
+
+- `no-store` - this endpoint is never maintained and is always called directly on the server. This is a similar setting to the route segment `dynamic = "force-dynamic"`.
+
+```ts
+export default async function Page() {
+  const staticData = await fetch('https://api.example.com', {
+    cache: "force-cache",
+  });
+
+  const dynamicData = await fetch('https://api.example.com', {
+    cache: "no-store",
+  });
+
+  return (
+    ...
+  );
+}
+
+```
+
+### options.next
+
+Next.js adds the `next` option, to which it adds two options, namely `revalidate` and `tags`. The `revalidate` option is virtually identical to what the `revalidate` route segment offers, except we allow it at the individual request level.
+
+The `tags` option is used to allow us to assign a unique identifier to a request for possible on-demand revalidation.
+
+```ts
+export default async function Page() {
+  const response = fetch('https://api.example.com', {
+    next: { revalidate: 3600, tags: ['api', 'example'] },
+  });
+
+  return (
+    ...
+  );
+}
+
+```
+
+## Server actions
+
+One of the newest principles that Next.js is developing is server actions. It's a way we can call a function from the client that will run on the server, but we don't need to create a route handler to do it. We can even create forms this way, where we can use server actions to send all the data that the user fills in to the server, where the server function is run and then the result is returned to the client.
+
+### Differentiation from the traditional endpoint API
+
+Using server actions is quite different from the traditional way of calling the classic POST/PUT/DELETE API endpoint in the `onSubmit` event handler of the `<form>` tag.
+
+#### API POST route handler
+
+Let's take an example of a POST API endpoint to create a new event. The user fills out a form on the client and clicks a button that invokes this POST API endpoint. Code is executed inside the route handler, a new event is created, and the newly created object is typically returned in the response. However, now the user needs to provide new data where all events are shown, for example. Therefore, the client (browser) has to send another request to the server to get the updated list of events, where in the response this list is returned to the client and can be rendered on the screen.
+
+#### POST server action
+
+The beginning is practically the same - the user fills in the form and clicks the button to create a new event. This triggers a POST request to the server again, sending the data that the user has filled in. This request, however, executes the server action we defined. The code to add the new event is executed, and because we are in a server action, it is possible to call a special function to revalidate either the entire page or just an endpoint. This allows the page to be re-rendered and prepared on the server with the new data already in it - the new event list, including the newly added and reverted original POST request, returns a response that already contains the new UI for the client, which just displays it on the screen. No need to perform another extra request to the server to get the new data.
+
+### Get started - forms
+
+When using server action, we must use `action`, which is defined on the `<form>` tag. As `action,` we pass a function that takes the formData as its parameter, which is part of the form that is being submitted. This `action` can either be in a separate file, or defined within the same component where the form resides. The function must be marked as `use server`.
+
+```ts
+// src/app/server-action/page.tsx
+
+import { addTodoAction } from '@src/server-actions';
+import { readTodos } from '@src/server';
+import { SubmitFormButton } from './submit-form-button';
+
+export default async function Page() {
+  const data = await readTodos();
+
+  return (
+    <div>
+      <h1>Home</h1>
+      <ul>
+        {data.map((todo) => (
+          <li key={todo.id}>{todo.title}</li>
+        ))}
+      </ul>
+      <form action={addTodoAction}>
+        <SubmitFormButton />
+      </form>
+    </div>
+  );
+}
+
+```
+
+```ts
+// src/server-actions/index.ts
+
+'use server';
+
+import { revalidatePath } from 'next/cache';
+import { addTodo } from '../server';
+
+export addTodoAction = async () => {
+	await addTodo();
+
+	revalidatePath('/server-action');
+}
+```
+
+```ts
+// src/app/server-action/submit-form-button.tsx
+
+'use client';
+
+import { useFormStatus } from 'react-dom';
+
+export const SubmitFormButton = () => {
+  const formStatus = useFormStatus();
+
+  return (
+    <button type="submit">
+      {formStatus.pending ? 'Adding todo...' : 'Add todo'}
+    </button>
+  );
+}
+```
+
+> In this case we have the server action extracted into its own file, which is marked as `use server`, which means that this code will safely run only on the server and not even sent to the client.
+
+```ts
+import { revalidatePath } from 'next/cache';
+import { addTodo, readTodos } from '@src/server';
+import { SubmitFormButton } from './submit-form-button';
+
+export default async function Page() {
+  const data = await readTodos();
+
+  const addTodoAction = async () => {
+    'use server';
+
+    await addTodo();
+    revalidatePath('/server-action');
+  };
+
+  return (
+    <div>
+      <h1>Home</h1>
+      <ul>
+        {data.map((todo) => (
+          <li key={todo.id}>{todo.title}</li>
+        ))}
+      </ul>
+      <form action={addTodoAction}>
+        <SubmitFormButton />
+      </form>
+    </div>
+  );
+}
+
+```
+
+> In this case, we have a server action defined directly within the component where the form that invokes the action occurs.
+
+### Type safety
+
+One of the drawbacks of server actions is that the `formData` that are implicitly sent to the server action is not typed, and we have to validate this data ourselves, for example, using `zod`.
+
+## Revalidation
+
+We can notice that within the server action we not only create a new `todo`, but we call the `revalidatePath` function. This function makes sure that if the page we pass to the function (in the previous example, the `/server-action` page) has an asynchronous component that is getting data, that component will be revalidated. This goes against the principle of never revalidating from RSC, which is still preserved. By calling `revalidatePath`, we guarantee that the action server will deliver not only the result of the action itself but also the new UI for the specified page.
+
+In the traditional server/client approach, without using server actions when creating new data, this data flow was typical:
+
+- A POST request is sent to create a new `todo`
+- The result is returned in response of this request
+- If the creation was successful and the entity list on the screen needs to be updated with the newly created entity. Here it depends if the component that renders the entity list is RSC or not.
+  - If it is an RSC and it is getting this entity list on the server, it cannot call `revalidatePath` to get the new state of the component with the new data. The only option is to call `router.refresh()`.
+  - If the component is getting client-side data, for example, using a tanstack query, then we basically have two options:
+    - It can take the POST request response where the newly created entity may be located and add it to the screen. This only happens on the client side and we can theoretically break consistency by doing this.
+    - More typically, after the successful creation of a new entity, a second request will be called to get a new entity list that includes the newly created entity. In the context of tanstack query, this is `query.invalidate`, the case of `query.refetch`.
+
+### Server action vs POST request
+
+So now we have two options to create, update and delete data from the client. We will mention the two main differences in the two approaches:
+
+**Need for JavaScript**
+
+- The server action does not need JavaScript on the client to execute. In other words, the server action is triggered by a POST request that is invoked by submitting a form. The server action code itself is then executed on the server.
+
+- When using traditional POST requests to create a new entity, the client needs javascript to invoke the POST request with the correct data to the correct endpoint.
+
+**Revalidation**
+
+- When using server actions in combination with RSCs, we can call `revalidatePath` to guarantee that RSCs that get data on the server are revalidated. In other words, with a single POST request that invokes a server action, we can both create the entity itself, but in response to that POST request, we get not only the result of the server action itself but also a new UI for the page that we pass to `revalidatePath.`
+
+- When using a classic POST request to create an entity, we must first send this request to create it and then, if this request is successful, invoke a second request to get the new RSC state, which renders the entity list to see the newly created entity. We need to invoke this second request using `router.refresh()`, or in case the data is retrieved on the client using tanstack query, using `query.invalidate`/`query.refetch`.
+
+> The latter approach is how the vast majority of applications work today. Server actions is an entirely new pattern that is gradually gaining popularity.
+
+## Server actions called from client
+
+So far, we have been working with server actions being called from the form via `action.` However, we can also call server actions from the client component, by default from the form's `onSubmit` event handler. Thus, We can guarantee the benefits of server actions, such as RSC revalidation in the server action and type checking the parameters we send to the action. At the same time, the whole code can be made slightly clearer, as we don't need to define extra POST route handlers, we can just define an asynchronous function that will be a server action from any file that is marked as `use server`.
+
+```ts
+// src/app/server-action/page.tsx
+
+import { readTodos } from '@src/server';
+import { AddTodoForm } from '../components/add-todo-form';
+
+export default async function Page() {
+  const data = await readTodos();
+
+  return (
+    <div>
+      <h1>Home</h1>
+      <ul>
+        {data.map((todo) => (
+          <li key={todo.id}>{todo.title}</li>
+        ))}
+      </ul>
+      <AddTodoForm />
+    </div>
+  );
+}
+
+```
+
+```ts
+// use client;
+
+import { useState } from 'react';
+import { addTodoFromClientAction } from '@src/server-actions';
+
+export function AddTodoForm() {
+  const [name, setName] = useState('');
+
+  return (
+    <form onSubmit={async (e) => {
+      e.preventDefault();
+      await addTodoFromClientAction({ name });
+      setName('');
+    }}>
+      <input
+        name="name"
+        onChange={(e) => setName(e.target.value)}
+        type="text"
+        value={name}
+      />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+
+```
+
+```ts
+// use server;
+
+import { revalidatePath } from 'next/cache';
+import { addTodo } from '../server';
+
+export async function addTodoFromClientAction(input: { name: string }) {
+	// NOTE: There should still be input validation, for example via zod
+	await addTodo(input.name);
+
+	revalidatePath('/server-action-client');
+}
+```
+
+The library [next-safe-action](https://next-safe-action.dev/docs/getting-started) may be of interest for using this approach.
+
+For more information and an explanation of all possible uses of server actions, we recommend [this video](https://www.youtube.com/watch?v=cY2SpxhEdyE).
+
+## Caching
+
+Next.js has a very aggressive caching model that tries to reduce costs and improve the performance of our application. Caching occurs on several layers and you can say that this model is very complex to understand. Most of the caching mechanisms can be opt out. This means that if we want to turn off a cache layer, we can do so.
+
+> What adds even more difficulty to understanding how caching works in Next.js is the fact that most caching is not visible in the development environment. It only manifests itself when the application is run in production mode, which makes it much harder to debug.
+
+![](/assets/lecture9/lecture9-cache-diagram.png)
+
+### Request Memoization
+
+As we've discussed in this lesson, Next.js extends the behavior of the native `fetch` function with several options. Among other things, it makes sure that all `fetch` requests that are called on the server with the same URL or the same associated `tag` are memoized. In practice, this means that if a `Parent` component needs to fetch data and calls the appropriate `fetch` in the RSC, then any nested `Child` component that needs the same data can call that fetch again. Still, in reality the `fetch` is no longer executed, but the cached data is provided.
+
+```ts
+import { Suspense } from 'react';
+import { z } from 'zod';
+
+export const dynamic = 'force-dynamic';
+const url = 'https://api-example.com/users';
+
+async function fetchData() {
+  const response = await fetch(url);
+  const data = z
+    .array(z.object({ id: z.string() }))
+    .parse(await response.json());
+
+  return data;
+}
+
+async function Child() {
+  const data = await fetchData();
+  const first = data[0];
+
+  if (!first) {
+    return null;
+  }
+
+  return (
+    <div>
+      <h1>This is first ID: {first.id}</h1>
+    </div>
+  );
+}
+
+async function Parent() {
+  const data = await fetchData();
+
+  return (
+    <div>
+      <div className="flex gap-x-2">
+        {data.slice(0, 2).map((user) => (
+          <div key={user.id}>{user.id}</div>
+        ))}
+      </div>
+      <Suspense fallback={<div>Child loading...</div>}>
+        <Child />
+      </Suspense>
+    </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Parent />
+    </Suspense>
+  );
+}
+
+```
+
+> In this case the custom `fetch` is executed only once, inside the `Parent` component. Because of this, we will see a `Loading` fallback that is defined inside `Page`. Once `Parent` gets the data from the API, it starts rendering, where it finds the `Child` component, which is also asynchronous. Therefore, it first starts rendering the `Child loading...` fallback, which is hardly noticeable on the page since the `Child` component, although asynchronous, occupies the same `fetch` as `Parent` and thus gets the data almost immediately from the cache.
+
+A few rules apply to make request memoization work properly:
+
+- Only apply to `fetch` with the `GET` method.
+
+- Applies only to React Component Tree. This means that requests are memoized inside all components within the React Component Tree, which means, for example, that requests called in the route handler will not be memoized.
+
+- In many cases we want to communicate directly with the database, in which case we can't use `fetch`. A `cache` function is implemented directly in React to memoize direct database queries. Next.js is working on its own version of this function, currently available as `unstable_cache` as of version 14.0. Next.js again adds options to revalidate and add a custom tag.
+
+### Data cache
+
+Data cache is again related to `fetch` request, where we can specify how the requests will be cached. By default, Next.js caches all `fetch` requests, which is something we very likely don't want. Typically, we have a site where you need to get the most recent data. Suppose we leave the default behavior when we build the application. In that case, Next.js will call these `fetch` requests and generate a component with the correct data already, expecting all clients to be provided with this result. This means that if the data changes, it will only change at the next build of the application.
+
+We use the aforementioned `cache` and `next.revalidate` options to modify this behavior.
+
+- When using `cache: "no-store"`, new data will be retrieved each time. At the same time, at the request memoization level, fetch requests will still be deduplicated within a single React Component Tree.
+
+- Setting `export const dynamic = "force-dynamic"` will also guarantee that new data will be fetched each time.
+
+### Full route cache
+
+Next.js tries to render each page statically at build time so it doesn't have to render at runtime. Of course, this doesn't work for all pages needing actual data retrieved at runtime or request time. Despite this, Next.js renders everything static on the server, and then this static is served to the client, with dynamic content being fetched at runtime. This dynamic content is called a React Server Component Payload, a special form of JSON sent to the client, which can process this payload and modify the DOM. Once this RSC Payload is processed on the client, it is cached in what is called the Router cache. If we leave to another page within the application and then come back, Next.js will detect that this RSC Payload is already in the Router cache, and therefore, there is no need to send a request to the server. This behavior can cause problems because if the RSC Payload may have changed (for example, a new entity was created), we will be shown the old RSC Payload. Therefore, it is necessary to use `revalidatePath` or `revalidateTag` to prevent this cache from being used.
+
+### Router cache
+
+This cache is purely client-side. The difference from Full Route Cache is that Full Route Cache stores RSC Payload and HTML on the server and serves all users of our application. The router cache is purely for a single user. If a user moves within the application, all retrieved RSC Payloads are stored in the Router cache. If the user returns to a page that has already been visited, the RSC Payload is retrieved from the Router cache, and there is no need to send a request to the server.
+
+This cache can only be invalidated in two ways:
+
+- `revalidatePath` and `revalidateTag` - this is called during a server action to guarantee that the RSC Payload for the page is retrieved and updated. Furthermore, using dynamic functions such as `cookies` also invalidates the Router cache.
+
+- `router.refresh()` - this function is called on the client to guarantee that the RSC Payload for the page is retrieved and updated. This throws away the entire Router cache and sends the request to the server, which is not always optimal.
+
+## Database
+
+Since Next.js is [(by default)](https://nextjs.org/docs/app/building-your-application/rendering/edge-and-nodejs-runtimes) running fully fledged Node.js environment in the server code, it can server your app as a complete backend. One of the things that backends usually take care of is a database access. Just like with any other feature, there are multiple options to pick from in javascript, that allow you to easily access your database and many of them even provide amazing tools that let you infer types from tables and use optimized type safe functions instead of writing raw SQL.
+
+### Drizzle
+
+Drizzle is an Object-Relational Mapping (ORM) library designed for use with TypeScript and environments like Next.js. ORM tools are crucial in the development process as they provide an efficient way to interact with databases by mapping database tables to objects in code, making database operations more intuitive and reducing the amount of SQL code developers need to write and maintain.
+
+Nowadays, prisma is a trendy technology. However, we have chosen Drizzle for this course as there is no need to learn a specific prisma language. We only need TypeScript to use Drizzle.
+
+At the same time, we will be using `Turso`, which is a database provider that provides a free tier for creating a database. Therefore, we also recommend it for your final project. It also includes good support for ORMs like Drizzle.
+
+```ts
+npm i drizzle-orm @libsql/client
+npm i -D drizzle-kit
+```
+
+> We will use SQLite, and it is recommended for your projects. It's a quick and easy way to get started with prism and databases. In case you eventually need a different database, prisma makes it easy to achieve this by changing only the configuration.
+
+We will need one instance of the database that we can use throughout the application. We can create this instance, for example, in `src/db/index.ts`
+
+```ts
+// src/db/index.ts
+
+import { drizzle } from 'drizzle-orm/libsql';
+import { createClient } from '@libsql/client';
+
+const client = createClient({
+	url: process.env.DATABASE_URL!,
+	authToken: process.env.AUTH_TOKEN
+});
+
+export const db = drizzle(client);
+```
+
+The `db` instance represents a drizzle client communicating with our database and acting simply as an ORM.
+
+To work with the database, we need to define our tables (models, schemas). We can create these in `src/db/schema/*` files, where we define one file for each model.
+
+```ts
+// src/db/schema/users.ts
+
+import { text, integer, sqliteTable } from 'drizzle-orm/sqlite-core';
+
+export const users = sqliteTable('users', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	name: text('name')
+});
+```
+
+> In this way we create tables that we will then use within our application. For more information about all the possible data types supported in SQlite, we recommend [drizzle documentation](https://orm.drizzle.team/docs/column-types/sqlite).
+
+### Turso
+
+Turso is a database provider that provides a free database creation tier. To create a database, you need to create an account on their site and then create a database. After making the database, we get a `DATABASE_URL` which we can use in our application.
+
+We recommend [Turso documentation](https://docs.turso.tech/quickstart) for basic Turso setup.
+
+- To generate a token for our database, we use `turso db tokens create <db_name> -e none`.
+
+- We store both **DATABASE_URL** and **AUTH_TOKEN** in the `.env` file.
+
+#### Local development
+
+It is not necessary to interact with the actual database during development. Still, because we use SQlite, Turso allows you to create your local database via CLI and work with it during development. Once we want to use the deployed, actual database, we just need to change the `DATABASE_URL` in the `.env` file.
+
+- We set the `DATABASE_URL` to `http://localhost:8080` for development. Turso starts the database on this port by default.
+
+- To start the local version of the database, we use the CLI `turso dev --db-file dev.db`.
+
+#### Migrations
+
+To apply the schemas we have created, we need to create migrations. Drizzle provides us with a `drizzle-kit` tool that we can use to enter schema changes into the database.
+
+To start, we need to create a `drizzle.config.ts` file where we define the path to our schemas and migrations. This file must exist in the root directory of our application (next to `package.json` for example).
+
+```ts
+// drizzle.config.ts
+
+import type { Config } from 'drizzle-kit';
+
+export default {
+	schema: './src/db/schema',
+	driver: 'turso',
+	dbCredentials: {
+		url: process.env.DATABASE_URL!,
+		authToken: process.env.AUTH_TOKEN
+	},
+	out: '.drizzle'
+} satisfies Config;
+```
+
+Then we can create the first migration using the CLI `npx drizzle-kit push:sqlite`. To create it, we need to have the database running, of course.
+
+Any time we change the schema, we have to call this CLI command again otherwise the changes will not be reflected in the database.
+
+## Complete example - server actions, database
+
+Now we have all the means to create a CRUD application, that is, to define an entity that we can create, delete, edit, and display. For the sake of demonstration, we will only show the acquisition and creation of a new user.
+
+```ts
+import { db } from '@src/db';
+import { users } from '@src/db/schema';
+import { AddPersonForm } from '../components/add-person-form';
+
+export default async function Page() {
+  const data = await db.select().from(users).all();
+
+  return (
+    <div>
+      {data.map((user) => (
+        <div key={user.id}>{user.name}</div>
+      ))}
+      <AddPersonForm />
+    </div>
+  );
+}
+
+```
+
+```ts
+'use client';
+
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { addPerson } from '@src/server-actions';
+
+const formSchema = z.object({
+  name: z.string(),
+});
+
+type FormSchema = z.infer<typeof formSchema>;
+
+export function AddPersonForm() {
+  const form = useForm<FormSchema>({
+    resolver: zodResolver(formSchema),
+  });
+
+  const onSubmit = async (values: FormSchema) => {
+    await addPerson(values);
+    form.reset();
+  };
+
+  return (
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      <input {...form.register('name')} type="text" />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+
+```
+
+```ts
+'use server';
+
+import { revalidatePath } from 'next/cache';
+import { db } from '@src/db';
+import { users } from '@src/db/schema/users';
+
+export async function addPerson({ name }: { name: string }) {
+	await db.insert(users).values({ name });
+
+	revalidatePath('/server-action-client-person');
+}
+```
+
+## Next lecture
+
+TBA
+
+## Assignment
+
+TBA

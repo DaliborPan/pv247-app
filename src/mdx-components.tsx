@@ -5,7 +5,9 @@ import { MdxCodeBlock } from './components/mdx-code-block';
 
 export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
 	// headings
-	h1: ({ children }) => <h1 className="mt-20 mb-8 text-5xl">{children}</h1>,
+	h1: ({ children }) => (
+		<h1 className="mt-20 mb-8 text-5xl leading-tight">{children}</h1>
+	),
 	h2: ({ children }) => <h2 className="mt-12 mb-6 text-3xl">{children}</h2>,
 	h3: ({ children }) => (
 		<h3 className="mt-10 mb-4 text-xl font-medium text-primary">{children}</h3>
