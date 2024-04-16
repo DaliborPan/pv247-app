@@ -23,7 +23,7 @@ const Layout = ({ children }: PropsWithChildren) => (
 	<>
 		<LecturesNavigation />
 
-		<div className="container">{children}</div>
+		<div className="container mb-10">{children}</div>
 	</>
 );
 
