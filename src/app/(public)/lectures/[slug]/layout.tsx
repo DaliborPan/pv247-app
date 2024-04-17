@@ -24,17 +24,20 @@ const LectureNavigationButton = ({
 				className="flex flex-col items-start h-auto py-4 font-normal hover:bg-white hover:shadow"
 			>
 				<span
-					className={cn('text-sm text-gray-600', type === 'previous' && 'pl-6')}
+					className={cn(
+						'text-sm text-gray-600',
+						type === 'previous' && 'md:pl-6'
+					)}
 				>
 					{type === 'previous' ? 'Previous' : 'Next'}
 				</span>
 				<div
 					className={cn(
-						'flex items-center font-medium gap-x-2',
+						'flex items-center font-medium md:gap-x-2',
 						type === 'next' && 'flex-row-reverse'
 					)}
 				>
-					<Icon name={iconName} />
+					<Icon name={iconName} className="hidden md:block" />
 					<span>{lecture?.name}</span>
 				</div>
 			</Button>
@@ -47,8 +50,6 @@ const Layout = async ({
 	params
 }: PropsWithChildren<{ params: { slug: string } }>) => {
 	const parsedSlug = lectureSlugSchema.safeParse(params.slug);
-
-	console.log(params.slug);
 
 	if (!parsedSlug.success) {
 		redirect('/lectures');
@@ -67,7 +68,7 @@ const Layout = async ({
 
 	return (
 		<>
-			<div className="flex justify-between">
+			<div className="flex flex-col justify-between md:flex-row">
 				<div>
 					{prevLecture && (
 						<LectureNavigationButton type="previous" lecture={prevLecture} />
