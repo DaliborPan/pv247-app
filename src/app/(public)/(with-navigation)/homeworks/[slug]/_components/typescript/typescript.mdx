@@ -1,1 +1,262 @@
-# Typescript
+import { HomeworkGeneralInfo } from './homework-general-info';
+
+# Task 01 - Typescript
+
+In the first task, we will not be focusing on the frontend yet, but on typescript and writing clean and quality code. We have prepared an npm project in which we have included all the necessary dependencies, which include, among others, typecript, eslint and prettier. Your task will be to add several types and implement four functions.
+
+{/* If any of you are wondering how you can set up the same environment, check out [this reference](TODO:_Link). */}
+
+### Maximum points: 10
+
+<HomeworkGeneralInfo slug="typescript" />
+
+## Project Overview
+
+In the project you will find the following important files:
+
+- `src/types.ts` - a file that contains all the types you will need. This file also describes what each type represents. So there is no need to add any extra type (but it is not forbidden).
+
+- `src/index.ts` - the file in which you will implement all the functions. The description of each function can be found in the file, each function is annotated with a description of the functionality.
+
+- `src/data.ts` - the file that contains the data you will be working with. There is a `jobs` list and a `people` list. Lastly, the `db` object is used to simulate the database, using the data in the `index.ts` file.
+
+## Tasks
+
+- Start by defining the types in the `src/types.ts` file according to the individual descriptions or according to the data in the `src/data.ts` file or from the attached function call output.
+- Implement the functions in the `src/index.ts` file according to the individual descriptions. Do not change the typing of parameters and return values.
+- Use `npm run build` to run the `src/index.ts` file. The output in the terminal must match the attached output.
+- Finally, verify that your code meets all linter requirements. The `npm run lint` command can be used to do this.
+
+### Desired output
+
+```json
+- getOpenJobs(db)
+
+[
+  {
+    "jobId": 101,
+    "title": "Fix Issue #1",
+    "description": "...",
+    "state": {
+      "stateType": "open"
+    }
+  },
+  {
+    "jobId": 102,
+    "title": "Fix Issue #2",
+    "description": "...",
+    "state": {
+      "stateType": "open"
+    }
+  },
+  {
+    "jobId": 103,
+    "title": "Fix Issue #3",
+    "description": "...",
+    "state": {
+      "stateType": "open"
+    }
+  }
+]
+------------
+
+
+- getUnassignedJobPersonPair(db)
+
+[
+  {
+    "id": 2,
+    "name": "Eve",
+    "role": "employee",
+    "jobs": []
+  },
+  {
+    "jobId": 103,
+    "title": "Fix Issue #3",
+    "description": "...",
+    "state": {
+      "stateType": "open"
+    }
+  }
+]
+------------
+
+
+- getEmployeeWithoutManager(db)
+
+{
+  "id": 4,
+  "name": "Mallory",
+  "role": "employee",
+  "jobs": []
+}
+------------
+
+
+- getAssignedJobs(db)
+
+[
+  {
+    "jobId": 101,
+    "assignedPerson": {
+      "id": 1,
+      "name": "Alice",
+      "role": "employee",
+      "jobs": [
+        {
+          "jobId": 101,
+          "title": "Fix Issue #1",
+          "description": "...",
+          "state": {
+            "stateType": "open"
+          }
+        },
+        {
+          "jobId": 102,
+          "title": "Fix Issue #2",
+          "description": "...",
+          "state": {
+            "stateType": "open"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "jobId": 102,
+    "assignedPerson": {
+      "id": 1,
+      "name": "Alice",
+      "role": "employee",
+      "jobs": [
+        {
+          "jobId": 101,
+          "title": "Fix Issue #1",
+          "description": "...",
+          "state": {
+            "stateType": "open"
+          }
+        },
+        {
+          "jobId": 102,
+          "title": "Fix Issue #2",
+          "description": "...",
+          "state": {
+            "stateType": "open"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "jobId": 103
+  },
+  {
+    "jobId": 104,
+    "assignedPerson": {
+      "id": 3,
+      "name": "Bob",
+      "role": "manager",
+      "jobs": [
+        {
+          "jobId": 104,
+          "title": "Fixing issue #4...",
+          "description": "...",
+          "state": {
+            "stateType": "inProgress",
+            "startedDate": "2024-02-09T23:00:00.000Z"
+          }
+        },
+        {
+          "jobId": 105,
+          "title": "Fixing issue #5...",
+          "description": "...",
+          "state": {
+            "stateType": "inProgress",
+            "startedDate": "2024-02-10T23:00:00.000Z"
+          }
+        }
+      ],
+      "employees": [
+        1,
+        2
+      ]
+    },
+    "possibleEmployees": [
+      {
+        "id": 2,
+        "name": "Eve",
+        "role": "employee",
+        "jobs": []
+      }
+    ]
+  },
+  {
+    "jobId": 105,
+    "assignedPerson": {
+      "id": 3,
+      "name": "Bob",
+      "role": "manager",
+      "jobs": [
+        {
+          "jobId": 104,
+          "title": "Fixing issue #4...",
+          "description": "...",
+          "state": {
+            "stateType": "inProgress",
+            "startedDate": "2024-02-09T23:00:00.000Z"
+          }
+        },
+        {
+          "jobId": 105,
+          "title": "Fixing issue #5...",
+          "description": "...",
+          "state": {
+            "stateType": "inProgress",
+            "startedDate": "2024-02-10T23:00:00.000Z"
+          }
+        }
+      ],
+      "employees": [
+        1,
+        2
+      ]
+    },
+    "possibleEmployees": [
+      {
+        "id": 2,
+        "name": "Eve",
+        "role": "employee",
+        "jobs": []
+      }
+    ]
+  },
+  {
+    "jobId": 106
+  },
+  {
+    "jobId": 107
+  }
+]
+------------
+```
+
+### Deadline
+
+- Tuesday's group: 26.2. 23:59
+- Wednesday's group: 27.2. 23:59
+
+## Submission
+
+There should be created a pull request called "Feedback" immediately after accepting the github classroom assignment.
+
+**If you have a Feedback pull request**
+
+You can push your solution straight to `main`. You will then see the diff against main in the pull request feedback. Once you have the solution in main, mark the Feedback PR as submitted.
+
+**If you don't have a Feedback pull request**
+
+It may be that it will be created later, or it may not be created at all... Therefore, as a precaution, create a new branch `solution` from main as soon as you accept the assignment, and then push your solution to it.
+
+- If the Feedback PR does not appear, make a pull request from your `solution` branch to mainu and mark this PR as submitted.
+- If the Feedback PR does appear, merge your branch `solution` into main, then mark the Feedback PR as submitted.
