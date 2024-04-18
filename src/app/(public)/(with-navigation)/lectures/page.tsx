@@ -48,13 +48,9 @@ const Page = async () => {
 
 	return (
 		<>
-			<h1 className="mb-6 text-3xl">Lectures</h1>
-
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-				{lectures.map((lecture, index) => (
-					<LectureCard key={lecture.slug} lecture={lecture} index={index} />
-				))}
-			</div>
+			{lectures.map((lecture, index) => (
+				<LectureCard key={lecture.slug} lecture={lecture} index={index} />
+			))}
 		</>
 	);
 };

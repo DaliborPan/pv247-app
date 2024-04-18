@@ -28,7 +28,7 @@ const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => (
 		</TextPreview>
 
 		<div className="flex items-end justify-between mt-6">
-			<Link href={`/lectures/${lecture.slug}`}>
+			<Link href={`/homeworks/${lecture.homeworkSlug}`}>
 				<Button size="sm">Open details</Button>
 			</Link>
 
@@ -52,13 +52,9 @@ const Page = async () => {
 
 	return (
 		<>
-			<h1 className="mb-6 text-3xl">Homeworks</h1>
-
-			<div className="grid grid-cols-2 gap-6">
-				{lectures.map((lecture, index) => (
-					<HomeworkCard key={lecture.slug} lecture={lecture} index={index} />
-				))}
-			</div>
+			{lectures.map((lecture, index) => (
+				<HomeworkCard key={lecture.slug} lecture={lecture} index={index} />
+			))}
 		</>
 	);
 };

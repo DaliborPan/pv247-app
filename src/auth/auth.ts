@@ -11,8 +11,10 @@ import { CustomDrizzleAdapter } from './adapter';
 
 const LECTOR_EMAILS = process.env.LECTOR_EMAILS?.split(';') ?? [];
 
+const PUBLIC_ROUTES = ['/login', '/lectures'];
+
 const getIsProtectedPath = (path: string) =>
-	path !== '/login' && !path.startsWith('/lectures');
+	!PUBLIC_ROUTES.some(route => path.startsWith(route));
 
 export const authOptions = {
 	providers: [GitHub],
