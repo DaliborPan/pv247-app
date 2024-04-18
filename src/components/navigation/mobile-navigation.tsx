@@ -1,7 +1,6 @@
 import Link, { type LinkProps } from 'next/link';
 import { type PropsWithChildren } from 'react';
 import { type User } from 'next-auth';
-import { signOut } from 'next-auth/react';
 
 import { Button } from '../base/button';
 import {
@@ -12,6 +11,8 @@ import {
 	DropdownMenuTrigger
 } from '../base/dropdown';
 import { SignIn } from '../sign-in';
+
+import { Logout } from './logout';
 
 const DropdownMenuLinkItem = ({
 	children,
@@ -34,8 +35,7 @@ export const MobileNavigation = ({
 
 		{isUserLoading || user ? null : (
 			<SignIn>
-				{/* Temporary: disabled */}
-				<Button disabled size="sm" variant="outline/primary">
+				<Button size="sm" variant="outline/primary">
 					Sign in
 				</Button>
 			</SignIn>
@@ -67,11 +67,9 @@ export const MobileNavigation = ({
 					<>
 						<DropdownMenuSeparator />
 						<DropdownMenuLinkItem href="/profile">Profile</DropdownMenuLinkItem>
-						<DropdownMenuItem asChild>
-							<button onClick={() => signOut()} className="">
-								Logout
-							</button>
-						</DropdownMenuItem>
+						<Logout>
+							<DropdownMenuItem>Logout</DropdownMenuItem>
+						</Logout>
 					</>
 				)}
 			</DropdownMenuContent>

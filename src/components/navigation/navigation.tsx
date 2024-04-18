@@ -9,8 +9,8 @@ import MUNI_LOGO from '../../../public/muni-logo.png';
 import { SignIn } from '../sign-in';
 
 import { NavigationItem } from './navigation-item';
-import { LogoutButton } from './logout-button';
 import { MobileNavigation } from './mobile-navigation';
+import { Logout } from './logout';
 
 const NavigationDelimiter = ({ className }: { className?: string }) => (
 	<div className={cn('mx-6 h-5 w-[2px] bg-[#B9BBC6]', className)} />
@@ -55,13 +55,19 @@ export const Navigation = ({
 				<div className="flex items-center">
 					<UserMenuItem user={user} />
 					<NavigationDelimiter className="mr-4" />
-					<LogoutButton />
+					<Logout>
+						<Button
+							iconLeft={{
+								name: 'LogOut'
+							}}
+							variant="ghost"
+							size="sm"
+						/>
+					</Logout>
 				</div>
 			) : (
 				<SignIn>
 					<Button
-						// Temporary
-						disabled
 						size="sm"
 						variant="outline/primary"
 						iconLeft={{
