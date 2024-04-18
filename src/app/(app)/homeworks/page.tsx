@@ -46,7 +46,9 @@ const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => (
 );
 
 const Page = async () => {
-	const lectures = await db.query.lectures.findMany();
+	const lectures = await db.query.lectures.findMany({
+		where: (table, { eq, not }) => not(eq(table.homeworkSlug, ''))
+	});
 
 	return (
 		<>

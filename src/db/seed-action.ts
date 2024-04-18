@@ -161,11 +161,13 @@ export const seed = async () => {
 			slug: 'authentication-metadata-deployment',
 			preview: 'Authentication, metadata, deployment preview lecture',
 			availableFrom: '2024-04-22T10:00:00',
+
+			// No homework for last lesson
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 0,
 			homeworkName: '',
 			homeworkPreview: '',
-			homeworkSlug: 'auth-meta-deploy'
+			homeworkSlug: ''
 		}
 	];
 

@@ -35,8 +35,8 @@ export const homeworkSlugSchema = z.enum([
 	'rsc-forms',
 	'api-actions-database',
 
-	// does not exist yet
-	'auth-meta-deploy'
+	// Last lesson does not have a homework
+	''
 ]);
 
 export type HomeworkSlug = z.infer<typeof homeworkSlugSchema>;
