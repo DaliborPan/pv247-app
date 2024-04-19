@@ -3,18 +3,13 @@
 import { useSession } from 'next-auth/react';
 
 import { type Lecture } from '@/db';
+import { formatDate } from '@/lib/date';
 
 export const PersonHomeworkDeadline = ({ lecture }: { lecture: Lecture }) => {
 	const session = useSession();
+	console.log(session.data?.user);
 
-	// Determine deadline for the lecture
+	// Determine deadline for the logged in user for the lecture (+- one day?)
 
-	return (
-		<>
-			<div>{session.data?.user?.name}</div>
-
-			{/* TODO: Add homework deadline to database */}
-			<div>{lecture.availableFrom}</div>
-		</>
-	);
+	return <div>{formatDate(lecture.homeworkDeadline)}</div>;
 };

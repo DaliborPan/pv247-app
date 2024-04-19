@@ -56,7 +56,8 @@ export const seed = async () => {
 			homeworkMaxPoints: 10,
 			homeworkName: 'TypeScript',
 			homeworkPreview: 'TypeScript homework preivew',
-			homeworkSlug: 'typescript'
+			homeworkSlug: 'typescript',
+			homeworkDeadline: '2024-02-26T10:00:00'
 		},
 		{
 			id: 'react',
@@ -68,7 +69,8 @@ export const seed = async () => {
 			homeworkMaxPoints: 10,
 			homeworkName: 'React basics',
 			homeworkPreview: 'React homework preivew',
-			homeworkSlug: 'react-basic'
+			homeworkSlug: 'react-basic',
+			homeworkDeadline: '2024-03-04T10:00:00'
 		},
 		{
 			id: 'styling',
@@ -80,7 +82,8 @@ export const seed = async () => {
 			homeworkMaxPoints: 30,
 			homeworkName: 'Styling - tailwindcss',
 			homeworkPreview: 'Tailwindcss homework preivew',
-			homeworkSlug: 'styling'
+			homeworkSlug: 'styling',
+			homeworkDeadline: '2024-03-11T10:00:00'
 		},
 		{
 			id: 'hooks',
@@ -92,7 +95,8 @@ export const seed = async () => {
 			homeworkMaxPoints: 10,
 			homeworkName: 'React state',
 			homeworkPreview: 'React state homework preivew',
-			homeworkSlug: 'state'
+			homeworkSlug: 'state',
+			homeworkDeadline: '2024-03-18T10:00:00'
 		},
 		{
 			id: 'other-hooks-refs-tables',
@@ -104,7 +108,8 @@ export const seed = async () => {
 			homeworkMaxPoints: 20,
 			homeworkName: 'Table, ref, memo',
 			homeworkPreview: 'Table, ref, memo homework preivew',
-			homeworkSlug: 'table-memo'
+			homeworkSlug: 'table-memo',
+			homeworkDeadline: '2024-03-25T10:00:00'
 		},
 		{
 			id: 'async-forms',
@@ -116,7 +121,8 @@ export const seed = async () => {
 			homeworkMaxPoints: 40,
 			homeworkName: 'Forms, working with async data',
 			homeworkPreview: 'Forms, working with async data homework preivew',
-			homeworkSlug: 'forms-async'
+			homeworkSlug: 'forms-async',
+			homeworkDeadline: '2024-04-01T10:00:00'
 		},
 		{
 			id: 'nextjs',
@@ -128,7 +134,8 @@ export const seed = async () => {
 			homeworkMaxPoints: 20,
 			homeworkName: 'Next.js basics, routing',
 			homeworkPreview: 'Next.js basics homework preivew',
-			homeworkSlug: 'nextjs-basic'
+			homeworkSlug: 'nextjs-basic',
+			homeworkDeadline: '2024-04-08T10:00:00'
 		},
 		{
 			id: 'suspense-streaming-rsc',
@@ -140,7 +147,8 @@ export const seed = async () => {
 			homeworkMaxPoints: 30,
 			homeworkName: 'Suspense, React Server Components',
 			homeworkPreview: 'Suspense, React Server Components homework preivew',
-			homeworkSlug: 'rsc-forms'
+			homeworkSlug: 'rsc-forms',
+			homeworkDeadline: '2024-04-15T10:00:00'
 		},
 		{
 			id: 'api-configs-server-actions-database',
@@ -153,7 +161,8 @@ export const seed = async () => {
 			homeworkMaxPoints: 40,
 			homeworkName: 'API, server actions, database',
 			homeworkPreview: 'API, server actions, database homework preivew',
-			homeworkSlug: 'api-actions-database'
+			homeworkSlug: 'api-actions-database',
+			homeworkDeadline: '2024-04-22T10:00:00'
 		},
 		{
 			id: 'authentication-metadata-deployment',
@@ -167,7 +176,8 @@ export const seed = async () => {
 			homeworkMaxPoints: 0,
 			homeworkName: '',
 			homeworkPreview: '',
-			homeworkSlug: ''
+			homeworkSlug: '',
+			homeworkDeadline: ''
 		}
 	];
 
