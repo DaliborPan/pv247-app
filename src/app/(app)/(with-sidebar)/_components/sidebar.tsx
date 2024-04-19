@@ -72,7 +72,7 @@ const HomeworksCard = async () => {
 						<Link
 							key={lecture.slug}
 							// TODO: usePathname as fallback
-							href={isAvailable ? `/homeworks/${lecture.slug}` : '/'}
+							href={isAvailable ? `/homeworks/${lecture.homeworkSlug}` : '/'}
 							className={cn(
 								'flex items-center text-sm',
 								!isAvailable && 'opacity-50 cursor-not-allowed'
