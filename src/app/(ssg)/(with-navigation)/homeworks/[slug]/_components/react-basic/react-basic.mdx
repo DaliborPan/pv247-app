@@ -1,0 +1,54 @@
+import { HomeworkGeneralInfo } from '../_homework-general-info';
+
+import TASK_DESIRED_RESULT from './task-02-desired-result.png';
+
+# Task 02 - React basic
+
+This week, your task is implementing a simple page showing GitHub repositories from the "database" and a form to "add" a new repository.
+There is a skeleton, the Next.js framework. However, there is no need to use any Nextjs specific features this week.
+
+<HomeworkGeneralInfo slug="react-basic" />
+
+## Requirements
+
+- Implement the `GithubRepositoryForm` form component. It contains three input fields - name, description, and number of stars. The number of stars must be a number. All input fields must have their label.
+
+  - Implement a `LabeledInput` component that will take care of rendering the label and input field. Arrange that the `LabeledInput` component can accept all parameters an `<input />` element can get. Assign an `id` to each input - use `name,` `description`, and `starsCount.`
+  - Submitting the form should display an `alert` with the values from the input fields.
+
+- Implement the `GithubRepositoryList` component to display the list of repositories. This component gets the repositories from the `database` and shows them.
+
+  - Also implement the `GithubRepositoryItem` component to display a single repository. In addition to the name, description, and number of stars, add:
+    - A "Not popular at all" line if the repository has 0 stars.
+    - A line "The most popular" indicates if the repository has the most stars of all repositories in the database.
+
+- On the `/` page, add the `GithubRepositoryForm` and `GithubRepositoryList` components.
+
+This is what the result might look like:
+
+<MdxImage src={TASK_DESIRED_RESULT} />
+
+## Tips:
+
+- To get the values of the input fields in the `onSubmit` function of the form, use `event,` which gets the `onSubmit` function as its parameter. We have typed this parameter as `GithubRepositoryFormEvent.`
+
+- You will need to implement a function that finds the one with the most stars out of all the repositories in the database.
+
+- What is displayed on the `/` page is defined in `src/app/page.tsx.` This is the way pages are defined in the Nextjs application. We will learn more later in the semester.
+
+- The provided screenshot does not contain any components or HTML tag styling. It is not required in this assignment. However, if you want, you can style the page freely.
+
+## Submission
+
+There should be created a pull request called "Feedback" immediately after accepting the github classroom assignment.
+
+**If you have a Feedback pull request**
+
+You can push your solution straight to `main`. You will then see the diff against main in the pull request feedback. Once you have the solution in main, mark the Feedback PR as submitted.
+
+**If you don't have a Feedback pull request**
+
+It may be that it will be created later, or it may not be created at all... Therefore, as a precaution, create a new branch `solution` from main as soon as you accept the assignment, and then push your solution to it.
+
+- If the Feedback PR does not appear, make a pull request from your `solution` branch to mainu and mark this PR as submitted.
+- If the Feedback PR does appear, merge your branch `solution` into main, then mark the Feedback PR as submitted.../\_homework-general-info/homework-general-info../../../../../../../components/mdx-image

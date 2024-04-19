@@ -1,7 +1,8 @@
 import type { MDXComponents } from 'mdx/types';
-import Image from 'next/image';
+import Image, { type ImageProps } from 'next/image';
 
 import { MdxCodeBlock } from './components/mdx-code-block';
+import { MdxImage } from './components/mdx-image';
 
 export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
 	// headings
@@ -66,6 +67,8 @@ export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
 
 	// other
 	hr: () => <hr className="my-8 border-t border-gray-200" />,
+
+	MdxImage: (props: ImageProps) => <MdxImage {...props} alt={props.alt} />,
 
 	...components
 });
