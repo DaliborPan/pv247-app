@@ -9,11 +9,13 @@ type Params = {
 };
 
 export const generateStaticParams = (): Params[] => {
-	const lectures = homeworkSlugSchema.options;
+	const slugs = homeworkSlugSchema.options;
 
-	return lectures.map(slug => ({
-		slug
-	}));
+	return slugs
+		.filter(slug => slug !== '')
+		.map(slug => ({
+			slug
+		}));
 };
 
 const Page = ({ params }: { params: Params }) => {
