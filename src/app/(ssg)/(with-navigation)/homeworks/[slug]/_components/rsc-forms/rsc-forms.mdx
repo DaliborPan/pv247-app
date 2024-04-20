@@ -1,0 +1,69 @@
+import { HomeworkGeneralInfo } from '../_homework-general-info';
+
+# Task 08 - Next.js - RSC, Forms
+
+This week your task is to implement an application that will allow CRUD operations over a movie database. The retrieval of movie data will be exclusively via asynchronous RSC. Create, update, and delete will be via the API by default.
+
+<HomeworkGeneralInfo slug="rsc-forms" />
+
+## Description
+
+Your task is to implement simple Nextjs application with three pages:
+
+- Home page `/`
+- Movies list page `/movies`
+- Movie edit page `/movie/:id`
+
+### Home page `/`
+
+- This page contains just a form with two fields. Form is specified below. After submitting the form (creating new movie), user should be redirected to the movies list page `/movies`.
+
+### Movies list page `/movies`
+
+- This page must be RSC component. You must get movies from file `movies.json` and display them. Each movie must have two actions - Edit and Delete.
+  - Edit button redirects user to `/movie/:id` page
+  - Delete button deletes movie from `movies.json` file and redirects user to `/` page
+
+### Movie edit page `/movies/:id`
+
+- This page contains the same form as `/`, but with prefilled values. After submitting, user is redirected to `/movies`.
+
+## Requirements
+
+- Form - use `React Hook Form` library and `Zod` validation.
+  - Name field - text field.
+  - Type field - select field. In root of the project, there's `movie-types.json` file. All types from this file must be listed as options in the select field. You must get these types from a file using RSC. You are required to create a loading state while getting movie types from the file.
+- There are three API routes:
+  - `POST /api/movie` - creates new movie
+  - `PUT /api/movie/:id` - updates movie with given `id`
+  - `DELETE /api/movie/:id` - deletes movie with given `id`
+- For working with API routes, use `tanstack query` library.
+- There is a prepared function `readMovies` to get movies from `movies.json` file. You can find it in `src/server/movie.ts` file. This function can only run in RSC. You must use it to get movies in `/movies` and `/movie/:id` page.
+- For `/` and `/movie/:id`, create a loading page, since both pages are async RSC.
+
+## Video
+
+[Click here to see the video](https://drive.google.com/file/d/18Zq6vpgq3T8AtwB2eIHer60GHODCnsoM/view?usp=sharing)
+
+## Hints
+
+- See `src/components` folder, what is already implemented for you.
+- While developing, you can lower `sleep` function.
+- In `src/schema`, you can find zod schema for movie.
+- Use `Suspense` around the component, that gets data from `movie-types.json` file.
+- In `/movie/:id` page, you can get movie data using async RSC and function `readMovies` and filter by `id`.
+
+## Submission
+
+There should be created a pull request called "Feedback" immediately after accepting the github classroom assignment.
+
+**If you have a Feedback pull request**
+
+You can push your solution straight to `main`. You will then see the diff against main in the pull request feedback. Once you have the solution in main, mark the Feedback PR as submitted.
+
+**If you don't have a Feedback pull request**
+
+It may be that it will be created later, or it may not be created at all... Therefore, as a precaution, create a new branch `solution` from main as soon as you accept the assignment, and then push your solution to it.
+
+- If the Feedback PR does not appear, make a pull request from your `solution` branch to mainu and mark this PR as submitted.
+- If the Feedback PR does appear, merge your branch `solution` into main, then mark the Feedback PR as submitted.
