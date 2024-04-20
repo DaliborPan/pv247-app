@@ -1,0 +1,36 @@
+import { HomeworkGeneralInfo } from '../_homework-general-info';
+
+# Task 04 - React state
+
+This week your task is to create an interactive single page application called **Task manager**. The application will display a list of tasks it retrieves from a "database," and you will be able to filter them based on a label, delete them, and add a new task.
+
+The application will allow the user to revert to the initial state, where only the tasks from the "original database" will be displayed without filters. I.e. if the user has removed a task or added one, it will be possible to display all tasks from the original database again (only those) via the "reset" button.
+
+<HomeworkGeneralInfo slug="state" />
+
+## Requierments
+
+- Create an application that meets all the functional requirements presented in the attached video.
+- The application will allow you to add a new task, delete a task and filter the tasks based on the label.
+- The application will allow the user to revert to the initial state where only tasks from the "original database" will be displayed without filters.
+- To "retrieve tasks from the database" you must use only the `useInitialTasks()` hook. It is not actually hook, it does not use any other hook inside, but pretend we're getting data from real database, for which we would need to use hook. It is not allowed to access `database` directly in any component.
+- The application does not need to be responsive.
+
+## Video
+
+[Click to see the video](https://drive.google.com/file/d/1Eooq62QFz7kutCvN_ZGTjNwwb2QTA-LZ/view?usp=sharing)
+
+## Submission
+
+There should be created a pull request called "Feedback" immediately after accepting the github classroom assignment.
+
+**If you have a Feedback pull request**
+
+You can push your solution straight to `main`. You will then see the diff against main in the pull request feedback. Once you have the solution in main, mark the Feedback PR as submitted.
+
+**If you don't have a Feedback pull request**
+
+It may be that it will be created later, or it may not be created at all... Therefore, as a precaution, create a new branch `solution` from main as soon as you accept the assignment, and then push your solution to it.
+
+- If the Feedback PR does not appear, make a pull request from your `solution` branch to mainu and mark this PR as submitted.
+- If the Feedback PR does appear, merge your branch `solution` into main, then mark the Feedback PR as submitted.
