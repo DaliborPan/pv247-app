@@ -1,6 +1,11 @@
 import { IncorrectUsageOfKeys } from './incorrect-usage-of-keys';
 import { CorrectUsageOfKeys } from './correct-usage-of-keys';
 
+import MUI_COMPONENTS from './lecture2-components.png';
+import SPA_MPA from './lecture2-spa:mpa.png';
+import DATA_FLOW from './lecture2-data-flow.png';
+import DOM from './lecture2-dom.png';
+
 # What's React?
 
 In today's lesson, we'll explore the React library. We'll learn how it works and its fundamental principles, explain the components and learn how to work with them. We'll further connect it to typescript and learn the basic constructs when defining a user interface using TSX.
@@ -9,13 +14,13 @@ In today's lesson, we'll explore the React library. We'll learn how it works and
 
 React is a JavaScript library for building user interfaces. UI consists of small, elementary elements such as buttons, text, or images. Using React, we can create small, reusable UI parts called _components_ to build a complex and maintainable web interface. These components serve as the building blocks of our application, enabling us to assemble complex user interfaces quickly. The true power of React lies in its component-based architecture, which promotes code reusability and better organization.
 
-![](/assets/lecture2/lecture2-components.png)
+<MdxImage src={MUI_COMPONENTS} />
 
 ## Single Page Application (SPA)
 
 A Single Page Application (SPA) is a type of web application or website that interacts with the user by dynamically rewriting the current page rather than loading entire new pages from the server. All necessary HTML, JS, and CSS code is either retrieved with a single page load (initial load), or some resources are dynamically loaded and added to the page as necessary, usually in response to user actions. The page does not reload at any time; content (DOM) is dynamically changed using JS.
 
-![](/assets/lecture2/lecture2-spa:mpa.png)
+<MdxImage src={SPA_MPA} />
 
 **User Experience** - SPA allows smooth transitions and great interactivity. Every time the user does some action, the page does not refresh; it just renders something else.
 
@@ -39,7 +44,7 @@ Single Page Application approach has its use cases. We can mention information s
 
 The resulting UI, composed of components, is organized in a hierarchical tree structure in React. This structure ensures data flows in only one direction through the props. The child Component inside the tree cannot modify the data it has received from its parent. If we need a Child component to be able to modify the data or state of its parent, the parent must provide a function for the child to call to modify the data. Each component defines what will be displayed on the screen where the component is placed or called based on its state and the props received.
 
-![](/assets/lecture2/lecture2-data-flow.png)
+<MdxImage src={DATA_FLOW} />
 
 ```ts
 type ChildComponentProps = {
@@ -63,7 +68,7 @@ function ParentComponent() {
 
 The React component tree plays a vital role in updating the user interface. If a component changes state or gets new props, it must be re-rendered to the screen, and at the same time, all children of that component must be re-rendered as well. This is where the advantage of the tree structure comes in, where it is easy to see which components on the screen need to be updated. At the same time, React uses the VDOM, where it compares its in-memory stored DOM of the current and previous version, and then when it detects that the component has changed not only its state or its props but also its actual UI, it updates it's in the browser DOM.
 
-![](/assets/lecture2/lecture2-dom.png)
+<MdxImage src={DOM} />
 
 ## React component
 
