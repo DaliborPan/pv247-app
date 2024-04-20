@@ -11,13 +11,13 @@ import { TableMemoMdx } from './table-memo';
 import { FormsAsyncMdx } from './forms-async';
 import { NextjsBasicMdx } from './nextjs-basic';
 import { RscFormsMdx } from './rsc-forms';
+import { ApiActionsDatabaseMdx } from './api-actions-database';
 
 type MdxComponent = ComponentType<{
 	readonly components?: MDXComponents | undefined;
 }>;
 
 const homeworkMdxComponentsMap: Record<HomeworkSlug, MdxComponent> = {
-	// TODO
 	'typescript': TypescriptMdx,
 	'react-basic': ReactBasictMdx,
 	'styling': StylingMdx,
@@ -26,10 +26,10 @@ const homeworkMdxComponentsMap: Record<HomeworkSlug, MdxComponent> = {
 	'forms-async': FormsAsyncMdx,
 	'nextjs-basic': NextjsBasicMdx,
 	'rsc-forms': RscFormsMdx,
-	'api-actions-database': TypescriptMdx,
+	'api-actions-database': ApiActionsDatabaseMdx,
 
 	// Not used
-	'': TypescriptMdx
+	'': () => null
 };
 
 export const getHomeworkMdxComponent = (slug: HomeworkSlug) =>

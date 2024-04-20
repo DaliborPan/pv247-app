@@ -6,6 +6,12 @@ import { query } from '@/db/query';
 
 import { NavigationButtonLink } from '../../_components/navigation-button-link';
 
+const getLecturesWithHomework = async () => {
+	const lectures = await query.lectures.getOrderedLectures();
+
+	return lectures.filter(lecture => !!lecture.homeworkSlug);
+};
+
 const Layout = async ({
 	children,
 	params
@@ -18,7 +24,7 @@ const Layout = async ({
 
 	const pageParamSlug = parsedSlug.data;
 
-	const lectures = await query.lectures.getOrderedLectures();
+	const lectures = await getLecturesWithHomework();
 
 	const slugLectureIndex = lectures.findIndex(
 		lecture => lecture.homeworkSlug === pageParamSlug
