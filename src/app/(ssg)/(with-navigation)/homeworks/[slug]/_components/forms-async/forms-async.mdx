@@ -1,0 +1,215 @@
+import { HomeworkGeneralInfo } from '../_homework-general-info';
+
+# Task 06 - Forms, Async
+
+This week, we'll look at forms and asynchronous operations, specifically getting and sending data to the API. You'll be given a project again, in which you'll have a freer hand this time. Create an application that will have a total of 4 pages. The routing is handled for you; focus on the page implementation.
+
+We have prepared API endpoints and specifications for you. If you prefer to look directly at the code for these endpoints, you can find them in `src/app/api`.
+
+<HomeworkGeneralInfo slug="forms-async" />
+
+## Page Specifications
+
+### Page `/`
+
+No modifications are needed on this page. On this page you will find buttons to navigate to the rest of the application.
+
+### Page `/profile`
+
+This page will display content based on whether the user is logged in.
+
+- The login form (username and password) will be displayed if the user is not logged in.
+
+  - Use the `/api/login` endpoint to log in.
+  - After a successful login, you need to save the user that was returned to you from the API to the application state so that it is available on other pages.
+  - It is okay that after refreshing the page the user is logged out.
+
+- If the user is logged in, information about the user is displayed, as well as the number of gifts that belong to the user.
+  - The gift belongs to the user if `createdBy` is the user's `id`.
+  - The number of gifts will only be displayed if logged in with the `user` role.
+
+### Page `/list`
+
+This page displays all gifts from the database. Based on who is logged in, the UI will be slightly different.
+
+- Use the endpoint `/api/gift/list` to get all the gifts from the database.
+  - If no one is logged in, only all gifts will be displayed without the possibility of any action.
+- If a user with the role `santa` is logged in, each gift will have the option to mark the gift as `delivered`. To update the `delivered` status, use `PATCH /api/gift/:id`. If the gift is already in `delivered` status, it is possible to mark it as undelivered by setting `delivered: false`. Use the same endpoint.
+- If the logged-in user is a `user` role, all gifts created by the logged-in user will be marked as belonging to the logged-in user in some way. At the same time, the user does not have the option to mark any gift as `delivered`.
+
+### Page `/create`
+
+This page allows users with the `user` role to create a new gift.
+
+- If a user with the role `user` is logged in, the form for creating a gift is displayed, which contains 3 fields - `name`, `description` and `price`. A special validation of this form must take place, namely:
+  - The `name` must be a string of at least 3 characters.
+  - The `description` must be a string with a maximum length of 25 characters. It is also possible not to fill in description at all.
+  - The `price` must be at most equal to the length of the `description` string. If description is not filled in, then the length of the `name` string.
+- Use the endpoint `POST /api/gift` to create.
+
+- If a user with the role `santa` is logged in, you will get a message that Santa cannot create gifts.
+
+## Video
+
+[Click to see the video](https://drive.google.com/file/d/1FuWjz4T5Uifx_f9tb4pOJeyyXkOIhkGL/view?usp=sharing)
+
+## Requirements
+
+- To work with the API you need to use `tanstack-query`.
+- To work with forms you must use `react-hook-form`.
+- For data validation, use `zod`.
+
+## Tips
+
+- To edit the database directly, you can edit `gifts.json` and `users.json` directly.
+- You should reate a Context to store logged in user. You can place `Context.Provider` inside `app/(app)/providers.tsx` file.
+- You should edit pages, that are located in `/app/(app)/create/page.tsx`, `/app/(app)/list/page.tsx`, `/app/(app)/profile/page.tsx`.
+- Separate the logic for query/mutation outside the components.
+- Think of suitable folder structure for your application.
+
+## APIs
+
+Here's a list of available APIs.
+
+### POST /api/login
+
+Endpoint for getting a user by username and password. API sends back an instance of the user.
+
+Example call:
+
+```js
+const response = await fetch('/api/login', {
+	method: 'POST',
+	headers: {
+		'Content-Type': 'application/json'
+	},
+	body: JSON.stringify({ username: 'santa', password: 'santa123' })
+});
+```
+
+**Response**
+
+200 OK
+
+```json
+{
+  "id": string,
+  "name": string,
+  "username": string,
+  "password": string,
+  "role": "santa" | "user"
+}
+```
+
+401 Unauthorized
+
+```json
+{
+	"error": "Invalid username or password"
+}
+```
+
+### GET /api/gift/list
+
+Returns a list of all gifts in the database.
+
+Example call:
+
+```js
+const response = fetch('/api/gift/list', {
+	method: 'GET'
+});
+```
+
+**Response**
+
+200 OK
+
+```json
+{
+	"id": string,
+	"name": string,
+	"description": string | undefined,
+	"price": number,
+	"createdBy": string,
+	"delivered": boolean
+}
+```
+
+### POST /gift
+
+Endpoint to create new gift. Only user with role "user" are allowed to create new gift via this API!
+`userId` stands for the user's `id`, who is creating a gift. API sends back the created gift.
+
+Example call:
+
+```js
+const response = await fetch('/api/gift', {
+	method: 'POST',
+	headers: {
+		'Content-Type': 'application/json'
+	},
+	body: JSON.stringify({
+		gift: {
+			name: 'New car',
+			description: 'I really want a new car',
+			price: 20
+		},
+		userId: '1'
+	})
+});
+```
+
+**Response**
+
+201 Created
+
+```json
+{
+  "name": string,
+  "description": string | undefined,
+  "price": number,
+  "id": string,
+  "createdBy": string,
+  "delivered": boolean
+}
+```
+
+### PATCH /api/gift/:id
+
+Endpoint to update a gift's delivered status. Only user with role "santa" are allowed to update the gift's status via this API!
+
+Example call:
+
+```js
+const response = await fetch(`/api/gift/${id}`, {
+	method: 'PATCH',
+	headers: {
+		'Content-Type': 'application/json'
+	},
+	body: JSON.stringify({ delivered: true })
+});
+```
+
+**Response**
+
+200 OK
+
+```json
+{
+  "name": string,
+  "description": string | undefined,
+  "price": number,
+  "id": string,
+  "createdBy": string,
+  "delivered": boolean
+}
+```
+
+404 Not found
+
+```json
+{
+	"error": "Gift does not exist."
+}
+```

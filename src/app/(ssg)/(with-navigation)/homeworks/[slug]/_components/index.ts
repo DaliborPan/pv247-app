@@ -8,6 +8,7 @@ import { ReactBasictMdx } from './react-basic';
 import { StylingMdx } from './styling';
 import { StateMdx } from './state';
 import { TableMemoMdx } from './table-memo';
+import { FormsAsyncMdx } from './forms-async';
 
 type MdxComponent = ComponentType<{
 	readonly components?: MDXComponents | undefined;
@@ -20,7 +21,7 @@ const homeworkMdxComponentsMap: Record<HomeworkSlug, MdxComponent> = {
 	'styling': StylingMdx,
 	'state': StateMdx,
 	'table-memo': TableMemoMdx,
-	'forms-async': TypescriptMdx,
+	'forms-async': FormsAsyncMdx,
 	'nextjs-basic': TypescriptMdx,
 	'rsc-forms': TypescriptMdx,
 	'api-actions-database': TypescriptMdx,
