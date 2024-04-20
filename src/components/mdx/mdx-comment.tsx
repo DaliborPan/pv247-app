@@ -2,7 +2,7 @@ import { type PropsWithChildren } from 'react';
 
 import { cn } from '@/lib/cn';
 
-export const Comment = ({
+export const MdxComment = ({
 	children,
 	className
 }: PropsWithChildren<{ className?: string }>) => (

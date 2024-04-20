@@ -4,7 +4,7 @@ import { type PropsWithChildren, useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/cn';
 
-import { Button } from './base/button';
+import { Button } from '../base/button';
 
 export const MdxCodeBlock = ({ children }: PropsWithChildren<object>) => {
 	const [expanded, setExpanded] = useState(false);

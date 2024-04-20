@@ -1,0 +1,478 @@
+import { DaisyUiButton } from './daisyui-button';
+import { TailwindCardExample } from './tailwind-card-example';
+
+import BEM from './lecture3-bem.png';
+import CSS from './lecture3-css.png';
+import MATERIAL_UI from './lecture3-materialui.png';
+import SEMANTIC_TAGS from './lecture3-semantic-tags.png';
+import TAILWIND_VS_INLINE from './lecture3-tailwind-vs-inline.png';
+
+# Styling your app, Tailwindcss, Accessibility.
+
+Styling is an essential element of any web application, dramatically influencing the user experience. Whether you're building a SaaS product or another basic information system, design is crucial in determining how users perceive and interact with your application. A well-thought-out design can impact user satisfaction and even influence their choice between your service and competitors. Effective styling isn't just about aesthetics; it's also about providing an intuitive user interface. Even if your application has excellent functionality, users need help understanding how to navigate and interact with it to make it more useful.
+
+These are common approaches to styling your web application:
+
+- Traditional CSS
+- Sass/Less
+- CSS-in-JS
+
+Traditional CSS, Sass/Less, CSS-in-JS, and Utility-first approach are suitable for projects that do not rely on any JavaScript framework.
+
+- CSS modules
+- Component library
+- Headless libraries
+- Utility-first
+
+## Traditional css
+
+<MdxImage src={CSS} />
+
+Traditional CSS, or Cascading Style Sheets, is the foundational approach to styling web applications. With CSS, developers have the ability to define and control the visual presentation of HTML elements, from fonts and colors to layouts and animations. It offers a level of customization that allows developers to craft unique and tailored user interfaces.
+
+**WHY IT'S NOT A GOOD DEVELOPER EXPERIENCE**
+
+Although it's mighty, traditional CSS can become unwieldy in larger projects, as maintaining consistency and avoiding conflicts can be challenging. Also, thinking about suitable class names is HARD. There are some standards that developers can follow, for example, [BEM](https://getbem.com/).
+
+<MdxImage src={BEM} />
+
+Nonetheless, it continues to be a foundational skill for web developers, and interestingly, all the other styling approaches ultimately rely on traditional CSS, as it is the only language browsers can interpret and render.
+
+## Sass/Less
+
+Sass is a dynamic stylesheet preprocessor that introduces powerful features such as variables, nesting, mixins, and functions. It enables more efficient and maintainable CSS code by allowing developers to reuse styles, create modular stylesheets, and apply logic within their stylesheets. Sass files have a `.scss` or `.sass` extension, and they must be compiled into standard CSS for web browsers to interpret them correctly.
+
+## CSS-in-JS
+
+CSS-in-JS, unlike previous approaches, integrates CSS directly within JavaScript code. With CSS-in-JS libraries like styled components and Emotion, developers can define styles using JavaScript syntax, allowing for dynamic and responsive design. This approach encapsulates styles within components, reducing the risk of conflicts.
+
+```tsx
+const Input = styled.input<{ inputColor?: string }>`
+	padding: 0.5em;
+	margin: 0.5em;
+	color: ${props => props.inputColor || '#B4F474'};
+	background: papayawhip;
+	border: none;
+	border-radius: 3px;
+`;
+
+// Render a styled text input with the standard input color,
+// and one with a custom input color
+render(
+	<div>
+		<Input defaultValue="QprobabLlyup" type="text" />
+		<Input defaultValue="Ggeelen" type="text" inputColor="rebeccapurple" />
+	</div>
+);
+```
+
+<MdxComment>
+	Note: There is demonstrated usage of class component in this example. We don't
+	recommend using class components in your projects! This example comes from
+	[documentation](https://styled-components.com/docs/basics#how-do-styled-components-work-within-a-component)
+	of styled-components.
+</MdxComment>
+
+```tsx
+import React from 'react';
+import styled from 'styled-components';
+
+const StyledCounter = styled.div`
+	/* ... */
+`;
+const Paragraph = styled.p`
+	/* ... */
+`;
+const Button = styled.button`
+	/* ... */
+`;
+
+export default class Counter extends React.Component {
+	state = { count: 0 };
+
+	increment = () => this.setState({ count: this.state.count + 1 });
+	decrement = () => this.setState({ count: this.state.count - 1 });
+
+	render() {
+		return (
+			<StyledCounter>
+				<Paragraph>{this.state.count}</Paragraph>
+				<Button onClick={this.increment}>+</Button>
+				<Button onClick={this.decrement}>-</Button>
+			</StyledCounter>
+		);
+	}
+}
+```
+
+## CSS modules
+
+CSS Modules aims to solve some of the challenges associated with traditional CSS. With CSS Modules, styles are scoped to specific components, preventing global scope pollution and potential style conflicts. Each CSS Module is a standalone file that encapsulates styles for a particular component. Developers can import and use these styles in their JavaScript or TypeScript files, ensuring a tight coupling between styles and components. Additionally, it supports features like local scoping and composition, allowing for creating modular and reusable styles. This approach (should) improve maintainability and reduce the chance of unintended style side effects.
+
+```tsx
+import React from 'react';
+import styles from './styles.css';
+
+export default class Counter extends React.Component {
+	state = { count: 0 };
+
+	increment = () => this.setState({ count: this.state.count + 1 });
+	decrement = () => this.setState({ count: this.state.count - 1 });
+
+	render() {
+		return (
+			<div className={styles.counter}>
+				<p className={styles.paragraph}>{this.state.count}</p>
+				<button className={styles.button} onClick={this.increment}>
+					+
+				</button>
+				<button className={styles.button} onClick={this.decrement}>
+					-
+				</button>
+			</div>
+		);
+	}
+}
+```
+
+## Component library
+
+A component library in React is a collection of pre-designed and reusable user interface elements (components) that can be easily integrated into your React application. These components are created to maintain consistency in design and functionality across the application, saving development time and ensuring a cohesive user experience. Developers can use these pre-built components to develop user interfaces more efficiently and maintain design consistency throughout their applications, simplifying the development process.
+
+To most popular component libraries belong [Material-ui](https://mui.com/), [Ant design](https://ant.design/) or [Chakra UI](https://chakra-ui.com/)
+
+<MdxImage src={MATERIAL_UI} />
+
+### Advantages of using component libraries
+
+**Faster development**
+
+If you're satisfied with the majority of what a specific component library offers and require minimal customization, your development speed is likely to increase. You may not need to create any new components, whether small or complex. Depending on your preference, you could receive fully prepared UI components and connect them while adding the necessary functionality.
+
+**Don't worry about styling at all**
+
+Thanks to its pre-designed and well-tested components, You can bypass the need to worry about styling. Libraries follow established design principles and best practices, offering a consistent and visually appealing user interface out of the box. This eliminates the time-consuming and error-prone process of manually crafting styles.
+
+**Consistency, Reusability, Efficiency**
+
+Using a library brings consistency, reusability, and efficiency to your web development projects. Pre-designed components ensure a consistent and uniform look and feel throughout your application, aligning with established design principles. These components are also highly reusable, reducing the need to recreate similar elements, which saves development time and minimizes code duplication. Furthermore, components come with extensive documentation, simplifying the integration process. In contrast, when creating custom components, you would need to design and document their interfaces, which can be time-consuming.
+
+### Disadvantages of using component libraries
+
+**Customization**
+
+If you're not building your own personal project, where you don't mind your design that much, you can decide to use the pre-designed component library you like the most. At work, you often end up being forced to follow the design that your designer created in Figma. For some projects, it is necessary to follow specific style advice or rules. Then, it may be hard to customize the styling of the pre-designed component library to fit your requirements.
+
+**Dependencies, Complexity**
+
+Component libraries come with a set of pre-designed components and styles, which can contribute to a larger bundle size. This can impact page load times, especially for users with slower internet connections or on mobile devices. Overall, almost 100 % of you'll add unused code to your project when introducing the component library.
+
+You also must manage the library's dependencies, updates, and potential conflicts, which can add complexity to your project's maintenance.
+
+## Headless library
+
+A headless React component library is a collection of reusable user interface (UI) components. What sets these libraries apart is that the components are "headless," meaning they are stripped of predefined styles. Instead, they provide the essential logic and functionality while leaving the visual styling entirely to the developer.
+
+Headless React component libraries offer a high degree of flexibility and customization, allowing developers to integrate these components into their projects and apply their styling and design. For styling, developers may use any approach they want.
+
+**Accessibility**: One of the standout features of Headless libraries is their strong focus on accessibility. It provides accessible building blocks for standard UI components, ensuring that your web application is usable by everyone, including individuals with disabilities. This can save significant time that would otherwise be spent implementing and testing accessibility features.
+
+Examples: [HeadlessUI](https://headlessui.com/), [RadixUI](https://www.radix-ui.com/)
+
+## Utility first approach - Tailwindcss
+
+<MdxComment className="mb-8">
+	Rapidly build modern websites without ever leaving your HTML.
+</MdxComment>
+
+[Here is a perfect description of utility-first approach](https://tailwindcss.com/docs/utility-first)
+
+A utility-first CSS framework provides a variety of predefined CSS classes that you can utilize to construct your own components. These classes look like `flex mt-2 rounded-full shadow whitespace-nowrap` etc. Many developers consider creating new applications with a tailwind as the fastest approach. The essential advantage lies in eliminating the need to navigate between numerous CSS files, enabling immediate visual feedback as you make changes.
+
+```tsx
+<div class="flex font-sans">
+	<div class="relative flex-none w-48">
+		<img
+			src="/classic-utility-jacket.jpg"
+			alt=""
+			class="absolute inset-0 object-cover w-full h-full"
+			loading="lazy"
+		/>
+	</div>
+	<form class="flex-auto p-6">
+		<div class="flex flex-wrap">
+			<h1 class="flex-auto text-lg font-semibold text-slate-900">
+				Utility Jacket
+			</h1>
+			<div class="text-lg font-semibold text-slate-500">$110.00</div>
+			<div class="flex-none w-full mt-2 text-sm font-medium text-slate-700">
+				In stock
+			</div>
+		</div>
+		<div class="flex items-baseline pb-6 mt-4 mb-6 border-b border-slate-200">
+			<div class="flex space-x-2 text-sm">
+				<label>
+					<input
+						class="sr-only peer"
+						name="size"
+						type="radio"
+						value="xs"
+						checked
+					/>
+					<div class="flex items-center justify-center rounded-lg w-9 h-9 text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+						XS
+					</div>
+				</label>
+				<label>
+					<input class="sr-only peer" name="size" type="radio" value="s" />
+					<div class="flex items-center justify-center rounded-lg w-9 h-9 text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+						S
+					</div>
+				</label>
+				<label>
+					<input class="sr-only peer" name="size" type="radio" value="m" />
+					<div class="flex items-center justify-center rounded-lg w-9 h-9 text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+						M
+					</div>
+				</label>
+				<label>
+					<input class="sr-only peer" name="size" type="radio" value="l" />
+					<div class="flex items-center justify-center rounded-lg w-9 h-9 text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+						L
+					</div>
+				</label>
+				<label>
+					<input class="sr-only peer" name="size" type="radio" value="xl" />
+					<div class="flex items-center justify-center rounded-lg w-9 h-9 text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+						XL
+					</div>
+				</label>
+			</div>
+		</div>
+		<div class="flex mb-6 space-x-4 text-sm font-medium">
+			<div class="flex flex-auto space-x-4">
+				<button
+					class="h-10 px-6 font-semibold text-white bg-black rounded-md"
+					type="submit"
+				>
+					Buy now
+				</button>
+				<button
+					class="h-10 px-6 font-semibold border rounded-md border-slate-200 text-slate-900"
+					type="button"
+				>
+					Add to bag
+				</button>
+			</div>
+			<button
+				class="flex items-center justify-center flex-none border rounded-md w-9 h-9 text-slate-300 border-slate-200"
+				type="button"
+				aria-label="Like"
+			>
+				<svg width="20" height="20" fill="currentColor" aria-hidden="true">
+					<path
+						fill-rule="evenodd"
+						clip-rule="evenodd"
+						d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+					/>
+				</svg>
+			</button>
+		</div>
+		<p class="text-sm text-slate-700">
+			Free shipping on all continental US orders.
+		</p>
+	</form>
+</div>
+```
+
+<TailwindCardExample />
+
+With the utility-first approach, you have the flexibility to create basically any design you desire without being limited to a single predefined stylesheet. Tailwind has predefined classes for the most fundamental styling elements. However, a prerequisite is a basic **understanding of CSS**. The advantage is that you don't need to recall the exact CSS syntax.
+
+For instance, if you want to add a subtle shadow to an element, you only need to remember that Tailwind offers the shadow class with different "sizes," such as `shadow-sm shadow shadow-md shadow-lg.` In contrast, using plain CSS would require you to remember a syntax like `box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);`
+
+Here's another benefit: Tailwind CSS has established its classes according to industry standards and best practices. Consequently, you won't encounter unconventional values like `margin-top: 19.5px`. Your task is effectively utilizing these classes while considering the predefined rules for spacing, font sizes, font weights, and other styling elements.
+
+**PERFORMANCE - IT'S TINY ON PRODUCTION**
+
+When using Sass or even plain CSS, it's common to accumulate unused CSS classes and encounter duplicated styling over time. Similarly, when working with a component library, it often comes with extensive styling, much of which may be outside of your project. While tailwind may seem even worse because it provides an insane amount of predefined classes, you never need them all.
+
+Tailwind CSS features a JIT (Just-in-Time) compiler. During the project build process, Tailwind scans your source files to identify the classes you've actually used. It then generates only those necessary classes for your final CSS bundle, effectively reducing the amount of unused CSS to nearly zero.
+
+**RESPONSIVE**
+
+More than half of users prefer accessing the web via mobile devices. Tailwind CSS simplifies the task of achieving responsiveness compared to other approaches. It offers well-established predefined screen sizes, allowing you to apply different classes based on these screen sizes.
+
+A typical example is arranging elements side by side on desktop screens while stacking them vertically on mobile screens. Achieving this is as straightforward as using `<div className="flex flex-col lg:flex-row">{children}</div>.`
+
+By default, the `flex-direction` is set to `column,` but once the screen size exceeds the `lg` breakpoint, it seamlessly switches to a `row direction,` all while utilizing standard CSS media queries to accomplish this responsive behavior.
+
+**HOVER, FOCUS and more**
+
+With modifiers like `hover:` `focus:` `disabled:` and others, you can achieve even better UX when interacting with all your elements. To see all possibilities, take a look at tailwind's documentation: https://tailwindcss.com/docs/hover-focus-and-other-states
+
+**WHY NOT INLINE STYLES?**
+
+<MdxImage src={TAILWIND_VS_INLINE} />
+
+A frequent response to the utility-first approach is questioning whether it's essentially equivalent to inline styles. In certain respects, it resembles inline styles because you're directly applying styles to elements instead of creating a class and styling it separately.
+
+Few important advantages
+
+**Consistent design, no magic number\***
+
+Using inline styles, every value is a magic number. With tailwindcss you use predefined utilities leading to consistent design. However, you can create your own utility class if you need, even you can inline magic value `bg-[#ffffff]`
+
+**Responsive design & hover, focus, and other states**
+
+You can't do media queries in inline styles or define different states.
+
+<MdxComment>
+	If you want to learn more about differences, see [this blog
+	post](https://arindam1729.hashnode.dev/tailwind-css-vs-inline-css-are-they-the-same).
+</MdxComment>
+
+## DaisyUI - a component library based on tailwindcss
+
+Component libraries based on tailwindcss aim to make development even faster. Again, the prerequisite is that you must not be tied to a very specific design, so you probably shouldn't use any component library and go for a Headless library with some styling approach. But if you can use any design you want among various projects, it might be a very good choice to pick some of the component libraries based on tailwindcss.
+
+These types of libraries do not provide you with pre-built components that you need to import, such as
+
+```ts
+import { Button } from 'library.';
+```
+
+DaisyUI specifically provides, similarly to tailwind, utility classes that you can apply directly to HTML tags.
+
+For example, styling a button to have it look like a DaisyUI button looks like this:
+
+```tsx
+<button className="bg-indigo-600 px-4 py-3 text-center text-sm font-semibold inline-block text-white cursor-pointer uppercase transition duration-200 ease-in-out rounded-md hover:bg-indigo-700 focus:visible:outline-none focus:visible:ring-2 focus:visible:ring-indigo-600 focus:visible:ring-offset-2 active:scale-95">
+	Tailwind Button
+</button>
+```
+
+<DaisyUiButton />
+
+DaisyUI has created a utility classes for button, such as `btn btn-primary btn-outline btn-disabled` so it is enough to assign just few utility classes and have your HTML cleaner.
+
+Installation of this library is straightforward. First, you need to have tailwind already installed. Then you add DaisyUI as a dev dependency to your npm project and then add it as a plugin in `tailwind.config.js.` See https://daisyui.com/docs/install/.
+
+## Shadcn/ui
+
+<MdxComment className="mb-8">
+	Beautifully designed components that you can copy and paste into your apps.
+	Accessible. Customizable. Open Source.
+</MdxComment>
+
+Shadcn UI is a collection of beautifully designed and accessible UI components that developers can easily integrate into their applications. It's built on top of **Tailwind CSS** and **Radix UI** and supports various frameworks including Next.js. It is **not** a component library, but a set of components that you can copy and paste into your application. You don't need to install a package to use these components. You need to copy and paste components that you really need a customize them directly in their source code.
+
+The idea behind this is to give you ownership and control over the code, allowing you to decide how the components are built and styled.
+
+It has been so far the best approach we have already tried and we recommend using it in your projects. When copy pasting components, they are pre-styled, but you can easily change the styling by modifying the tailwind classes directly in the source code.
+
+# Accessibility
+
+Accessibility is an important part of web development that is often glanced over. It would help if you thought about it from the start for many good reasons.
+
+1. **Inclusivity:** Accessibility ensures that everyone, regardless of disabilities, can use your app.
+1. **Better User Experience:** Accessibility features improve overall user satisfaction.
+1. **SEO Benefits:** Accessible websites tend to rank better on search engines.
+1. **Future-Proofing:** Building accessibility from the start saves time and resources.
+1. **Legal Compliance:** When working on public-facing sites like government websites, accessibility features may even be required by law.
+
+Thankfully, modern HTML has many accessibility features built right into the elements websites are built from that browsers and accessibility tools understand and can work with.
+
+## Semantic elements
+
+While you can build your whole website out of `div` elements that are styled and hooked up with JS to do whatever you need, this approach is far from optimal. It's better to use correct HTML tags for the purposes they were made for. Let's take this awful HTML snippet as an example:
+
+```tsx
+<span style="font-size: 3em">My heading</span> <br /><br />
+This is the first section of my document.
+<br /><br />
+I'll add another paragraph here too.
+<br /><br />
+1. Here is
+<br /><br />
+2. a list for
+<br /><br />
+3. you to read
+<br /><br />
+<span style="font-size: 2.5em">My subheading</span>
+<br /><br />
+This is the first subsection of my document. I'd love people to be able to find this content!
+<br /><br />
+<span style="font-size: 2.5em">My 2nd subheading</span>
+<br /><br />
+This is the second subsection of my content. I think is more interesting than the last one.
+```
+
+While this page may look fine when you look at it in your browser, any visually impaired user would need help trying to understand the information contained within. Another place where this snippet would perform poorly is SEO since search engines wouldn't know how to parse and index this content. Now compare it to semantically correct markup:
+
+```tsx
+<h1>My heading</h1>
+
+<p>This is the first section of my document.</p>
+
+<p>I'll add another paragraph here too.</p>
+
+<ol>
+  <li>Here is</li>
+  <li>a list for</li>
+  <li>you to read</li>
+</ol>
+
+<h2>My subheading</h2>
+
+<p>
+  This is the first subsection of my document. I'd love people to be able to find this content!
+</p>
+
+<h2>My 2nd subheading</h2>
+
+<p>
+  This is the second subsection of my content, which I think is more interesting than the last one.
+</p>
+
+```
+
+You can clearly see the title of this page; you can also see it has two sub-sections, an ordered list with three items, and some paragraphs. This is the most fundamental difference between correct and incorrect usage of HTML elements.
+
+### Most important elements
+
+#### `<header>`, `<main>` and `<footer>`
+
+These three tags define the top-level structure of your website. The header usually contains a common website name, general navigation, or logged-in user info. Not all sites require a footer, but you should expect to find contact info, terms and conditions links, business opening hours, or other helpful links. The main tag then wraps the actual content of the given page you are currently on.
+
+<MdxImage src={SEMANTIC_TAGS} />
+
+A good practice is also to add a [Skip to Content link](https://css-tricks.com/how-to-create-a-skip-to-content-link/) that allows keyboard users to skip over header navigation directly into the main section of your page.
+
+#### `<h1>`, `<h2>`, `<h3>`
+
+Heading tags are most valuable for a proper SEO of your page. There should always be only one `h1` tag, followed by `h2` tags, which can also have `h3` tags. You shouldn't skip from `h1` directly to `h3.` Lower heading tags should also be used sparingly since overly structuring your content may make it harder to follow.
+
+#### `<nav>`
+
+Navigation should contain a list of links used to navigate your website. Usually, the main navigation is inside the `header,` but you can also have other nav elements that handle navigation within separate subparts of your website. You can use `ul`and`li` elements to semantically structure the links as a list for screen readers that you can then style any way you want for general users.
+
+#### `<button>` and `<a>`
+
+While you can style any element to look like a button and add JavaScript event handlers, screen readers won't be able to detect that it's intractable. That's why you should always prefer to use a `button` element for interactable parts of your website and an `a` tag for any links that trigger navigation.
+
+## Role attribute
+
+The abovementioned elements work out of the box because of the `role` attribute they have all defined. While these can cover many common use cases, there are a lot more roles that website elements can have. For example, different inputs have roles like `radio` or `combobox,` or you can use more specific roles like `tab` or `menu` instead of generic `button.`
+
+## WAI-ARIA
+
+The role attribute is a part of the Accessible Rich Internet Applications (ARIA) set of rules that help make the web more accessible. ARIA also defines how to use attributes other than the role that can describe the current state of various interactable elements like dialogs, draggable elements, etc. This is why often using existing UI libraries is advantageous because they should have all these accessibility features covered.
+
+## Next lecture
+
+In the next lesson, we'll look at the interactivity of a React application. We will explain hooks, lifecycle and component state. We will discuss the basic rules to follow when working with state.
+
+## Assignment
+
+This week we will practice styling using tailwindcss. Your task is to create and style a single page displaying a simple description of a GitHub repository.
