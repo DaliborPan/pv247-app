@@ -1,0 +1,39 @@
+import { HomeworkGeneralInfo } from '../_homework-general-info';
+
+# Task 05 - Table, Memo, Dialog, Ref
+
+This week, we will work with tables, dialogs, memoization, and references. Your task is to implement a user table using the pre-made components. The user can also add a new user to the table using a pre-made and functional form. As for the form, you must add a Dialog component from the `shadcn` library and implement a form confirmation button. The table must dynamically display the currently added user when adding a user. All buttons on the screen must be implemented using a single shared `components/button.tsx` button.
+
+The user table is not very optimized, and you will encounter performance issues when typing text into a field in the form. Your task is to optimize this component using memoization. Finally, add the ability to sort by all columns, i.e., ID, name, and age.
+
+All functionality is shown in the sample video.
+
+<HomeworkGeneralInfo slug="table-memo" />
+
+## Requirements
+
+- You're not allowed to change the `form-context` file.
+- Install the dialog component from the `shadcn` library and use it to confirm the form submission. You don't need to do any extra styling on the form; the default look provided by Shadcn will do. I recommend adjusting the colors only.
+- All buttons must be implemented using one shared `components/button.tsx` button.
+- The table must be optimized using memoization.
+- The table must be able to sort by all columns.
+- The new user must be dynamically displayed in the table.
+
+## Video
+
+[Click to see the video](https://drive.google.com/file/d/1lS9ZFCCmA0ilngCNM4iqkCUSEeqgjIiY/view?usp=sharing)
+
+## Submission
+
+There should be created a pull request called "Feedback" immediately after accepting the github classroom assignment.
+
+**If you have a Feedback pull request**
+
+You can push your solution straight to `main`. You will then see the diff against main in the pull request feedback. Once you have the solution in main, mark the Feedback PR as submitted.
+
+**If you don't have a Feedback pull request**
+
+It may be that it will be created later, or it may not be created at all... Therefore, as a precaution, create a new branch `solution` from main as soon as you accept the assignment, and then push your solution to it.
+
+- If the Feedback PR does not appear, make a pull request from your `solution` branch to mainu and mark this PR as submitted.
+- If the Feedback PR does appear, merge your branch `solution` into main, then mark the Feedback PR as submitted.
