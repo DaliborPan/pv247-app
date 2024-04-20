@@ -68,6 +68,8 @@ export const Navigation = ({
 			) : (
 				<SignIn>
 					<Button
+						// Temporary
+						disabled
 						size="sm"
 						variant="outline/primary"
 						iconLeft={{
