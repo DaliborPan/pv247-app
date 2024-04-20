@@ -1,0 +1,72 @@
+import { HomeworkGeneralInfo } from '../_homework-general-info';
+
+# Task 07 - Next.js basic
+
+This week, your task is to create the correct routing for a simple TODO application. Most of the UI is implemented for you; your task is mainly to ensure proper routing and handling of loading, error, and not-found states.
+
+<HomeworkGeneralInfo slug="nextjs-basic" />
+
+## Description
+
+This application should contain the following pages:
+
+- `/`
+- `/list`
+- `/last-todo`
+- `/:id`
+- `/new`
+
+## Pages specification:
+
+### Home `/`
+
+- No changes required on this page. It must include just a heading.
+
+### List `/list`
+
+- this page shows list of all todos and is already implemented - no changes are required. This page is `async`! The only thing you need to worry about this fact is that you need to implement `loading` page for this route, since loading this page takes some time. This page may throw an error, imagine that DB can contain bad data. For this case, you need to implement `error` page.
+
+### New `/new`
+
+- this page should only contain button `Add todo`. This button is already prepared for you in `components` folder.
+
+### Todo detail `/:id`
+
+- this page should show details of particular todo. It also must provide link to next todo. You can use `NextTodoLink` component.
+- this page also displays `TodoNotes` (prepared component for you), where user can add some notes while navigating among todos using "Next todo" link. Notes must stay persisted when chaning routes among todo details. You're not allowed to use context for this purpose.
+
+### Last todo `/last-todo`
+
+- this page shows last todo from the list. Note that this page does not display `TodoNotes` component.
+
+## Requirements
+
+- Implement Navigation, which you should put into root layout, since navigation should be available in all routes. Do NOT prefetch `/list` route.
+- Active link in navigation must be highlited.
+- There must be implemented `loading` and `error` page for `/list` route.
+- Routes `/:id` and `/last-todo` must have the same layout - see attached screen recording. You're not allowed to create separate component (something like `TodoItemLayout`) and wrap both routes in this layout. You need to use Next.js' layout page.
+
+## Video
+
+[Click here to see the video](https://drive.google.com/file/d/1zc0zmNAfBj9cYDpsdPEFVjw2K_Jshkjp/view?usp=sharing)
+
+## Tips:
+
+- For development, you can disable possibility to error by adding `?error=false` to url, eg. `http://localhost:3000/list?error=false`, or simply delete throw in `/app/list/page.tsx`.
+- For shared layout between `/:id` and `/last-todo` you should use **route groups**, where you can define shared layout without affecting url. Keep in mind that layouts persist state between route changes, therefore you should create route group also for `/:id`, where you can render `TodoNotes`.
+- If you need, you can delete your todos from `./data.json`
+
+## Submission
+
+There should be created a pull request called "Feedback" immediately after accepting the github classroom assignment.
+
+**If you have a Feedback pull request**
+
+You can push your solution straight to `main`. You will then see the diff against main in the pull request feedback. Once you have the solution in main, mark the Feedback PR as submitted.
+
+**If you don't have a Feedback pull request**
+
+It may be that it will be created later, or it may not be created at all... Therefore, as a precaution, create a new branch `solution` from main as soon as you accept the assignment, and then push your solution to it.
+
+- If the Feedback PR does not appear, make a pull request from your `solution` branch to mainu and mark this PR as submitted.
+- If the Feedback PR does appear, merge your branch `solution` into main, then mark the Feedback PR as submitted.
