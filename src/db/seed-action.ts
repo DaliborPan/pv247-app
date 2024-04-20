@@ -50,12 +50,14 @@ export const seed = async () => {
 			id: 'intro',
 			name: 'Introduction',
 			slug: 'introduction',
-			preview: 'Introduction preview',
+			preview:
+				'"PV247 Modern Web Development" at Masaryk University is a comprehensive course that teaches students to build full-stack applications using React and Next.js. Guided by expert developers, participants learn through practical assignments and complete a project at the end.',
 			availableFrom: '2024-02-19T10:00:00',
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 10,
 			homeworkName: 'TypeScript',
-			homeworkPreview: 'TypeScript homework preivew',
+			homeworkPreview:
+				"This week's TypeScript assignment involves enhancing an npm project by defining types and implementing four functions. Follow the descriptions in the project files, ensure your code passes linter checks, and matches the provided output.",
 			homeworkSlug: 'typescript',
 			homeworkDeadline: '2024-02-26T10:00:00'
 		},
@@ -63,12 +65,14 @@ export const seed = async () => {
 			id: 'react',
 			name: 'React',
 			slug: 'react',
-			preview: 'React preview',
+			preview:
+				"Today's lecture introduces React, highlighting its role in developing dynamic Single Page Applications (SPAs) and efficient data management through the component tree for streamlined user interfaces.",
 			availableFrom: '2024-02-26T10:00:00',
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 10,
 			homeworkName: 'React basics',
-			homeworkPreview: 'React homework preivew',
+			homeworkPreview:
+				'This week, create a React page in Next.js to display and add GitHub repositories. Build a form for new entries and a list to show existing ones, with validation and conditional messages.',
 			homeworkSlug: 'react-basic',
 			homeworkDeadline: '2024-03-04T10:00:00'
 		},
@@ -76,12 +80,14 @@ export const seed = async () => {
 			id: 'styling',
 			name: 'Styling',
 			slug: 'styling',
-			preview: 'Styling preview',
+			preview:
+				"Today's lecture covers various styling methods for web applications, including CSS, Sass, CSS-in-JS, and TailwindCSS. We'll discuss how these techniques enhance user experience and streamline development. Additionally, we'll emphasize the importance of accessibility in web design.",
 			availableFrom: '2024-03-04T10:00:00',
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 30,
 			homeworkName: 'Styling - tailwindcss',
-			homeworkPreview: 'Tailwindcss homework preivew',
+			homeworkPreview:
+				'This week, style a responsive page using TailwindCSS to display a GitHub repository description. The layout should include fixed top navigation, sidebars, and main content. Ensure responsiveness and basic accessibility.',
 			homeworkSlug: 'styling',
 			homeworkDeadline: '2024-03-11T10:00:00'
 		},
@@ -89,7 +95,8 @@ export const seed = async () => {
 			id: 'hooks',
 			name: 'React hooks, state',
 			slug: 'hooks',
-			preview: 'React hooks, state preview',
+			preview:
+				'This week, build a Task Manager SPA where you can display, add, filter, and delete tasks, with a "reset" button to revert to the original state. Use the useInitialTasks() hook for data operations, avoiding direct database access. Focus on functionality; responsiveness is not required.',
 			availableFrom: '2024-03-11T10:00:00',
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 10,
@@ -107,7 +114,8 @@ export const seed = async () => {
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 20,
 			homeworkName: 'Table, ref, memo',
-			homeworkPreview: 'Table, ref, memo homework preivew',
+			homeworkPreview:
+				'This week, implement a user management application that dynamically updates a table when adding users via a dialog-based form. Optimize performance using memoization, enable sorting for all table columns. Integrate a dialog component from the shadcn library for form submissions',
 			homeworkSlug: 'table-memo',
 			homeworkDeadline: '2024-03-25T10:00:00'
 		},
@@ -120,7 +128,8 @@ export const seed = async () => {
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 40,
 			homeworkName: 'Forms, working with async data',
-			homeworkPreview: 'Forms, working with async data homework preivew',
+			homeworkPreview:
+				"This week, develop a 4-page application that handles user authentication, displays gifts, and allows gift creation via API interactions. Utilize tanstack-query, react-hook-form, and zod. Focus on role-specific functionalities: 'santa' can update gift statuses, while 'user' can add new gifts.",
 			homeworkSlug: 'forms-async',
 			homeworkDeadline: '2024-04-01T10:00:00'
 		},
@@ -133,7 +142,8 @@ export const seed = async () => {
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 20,
 			homeworkName: 'Next.js basics, routing',
-			homeworkPreview: 'Next.js basics homework preivew',
+			homeworkPreview:
+				'This week, set up routing for a TODO application in Next.js, focusing on handling loading, error, and navigation across pages like /list and /new. Ensure consistent layouts for the todo detail pages using Next.js route groups.',
 			homeworkSlug: 'nextjs-basic',
 			homeworkDeadline: '2024-04-08T10:00:00'
 		},
@@ -146,7 +156,8 @@ export const seed = async () => {
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 30,
 			homeworkName: 'Suspense, React Server Components',
-			homeworkPreview: 'Suspense, React Server Components homework preivew',
+			homeworkPreview:
+				'This week, create a Next.js app for CRUD operations on a movie database. Implement pages for adding movies, listing all movies with edit and delete options using React Server Components, and editing movie details. Use React Hook Form, Zod for validation, and tanstack query for API management.',
 			homeworkSlug: 'rsc-forms',
 			homeworkDeadline: '2024-04-15T10:00:00'
 		},
@@ -155,12 +166,13 @@ export const seed = async () => {
 			name: 'API routes, configs, caching, server actions, database',
 			slug: 'api-configs-server-actions-database',
 			preview:
-				'API routes, configs, caching, server actions, database preview lecture',
+				"This lecture, we'll be focusing on custom API endpoints, route segment configs, caching, and revalidation options for cache layers. We'll explore server actions that allow for server-side processing without the need for API routes and discuss how to interact with databases using TypeScript.",
 			availableFrom: '2024-04-15T10:00:00',
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 40,
 			homeworkName: 'API, server actions, database',
-			homeworkPreview: 'API, server actions, database homework preivew',
+			homeworkPreview:
+				'This week, modify the 6th task to use server actions and React Server Components for data management, ensuring persistent user sessions with server-side storage. Replace API calls with server actions, and manage data using a local sqlite database via Drizzle ORM.',
 			homeworkSlug: 'api-actions-database',
 			homeworkDeadline: '2024-04-22T10:00:00'
 		},
@@ -168,7 +180,8 @@ export const seed = async () => {
 			id: 'authentication-metadata-deployment',
 			name: 'Authentication, metadata, deployment',
 			slug: 'authentication-metadata-deployment',
-			preview: 'Authentication, metadata, deployment preview lecture',
+			preview:
+				"This final lesson, we'll delve into user authentication, leveraging metadata for better visibility, and explore simple deployment options with Vercel. We'll also demonstrate practical authentication implementation using the next-auth library with GitHub.",
 			availableFrom: '2024-04-22T10:00:00',
 
 			// No homework for last lesson

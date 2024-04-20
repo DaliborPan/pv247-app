@@ -16,14 +16,14 @@ const formatDate = (date: string) => {
 };
 
 const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => (
-	<article className="p-6 bg-white rounded-lg shadow">
+	<article className="flex flex-col p-6 bg-white rounded-lg shadow">
 		<span className="flex items-center mb-1 text-xs text-gray-500">
 			from {formatDate(lecture.availableFrom)}
 		</span>
 
 		<h2 className="text-xl font-medium">{lecture.homeworkName}</h2>
 
-		<TextPreview className="mt-3 line-clamp-4">
+		<TextPreview className="mt-3 line-clamp-5 grow">
 			{lecture.homeworkPreview}
 		</TextPreview>
 

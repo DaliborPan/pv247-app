@@ -21,14 +21,16 @@ const LectureCard = ({
 	lecture: Lecture;
 	index: number;
 }) => (
-	<article className="p-6 bg-white rounded-lg shadow">
+	<article className="flex flex-col p-6 bg-white rounded-lg shadow">
 		<span className="flex items-center mb-1 text-xs text-gray-500">
 			from {formatDate(lecture.availableFrom)}
 		</span>
 
 		<h2 className="text-xl font-medium">{lecture.name}</h2>
 
-		<TextPreview className="mt-3 line-clamp-4">{lecture.preview}</TextPreview>
+		<TextPreview className="mt-3 line-clamp-5 grow">
+			{lecture.preview}
+		</TextPreview>
 
 		<div className="flex items-end justify-between mt-6">
 			<Link href={`/lectures/${lecture.slug}`}>
