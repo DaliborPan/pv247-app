@@ -37,7 +37,7 @@ The `Clock` component accepts `time` as its property. Consider that this propert
 
 ## Hooks
 
-> Hooks are specials functions that are only available while React is rendering. They let you "hook into" different React features.
+Hooks are specials functions that are only available while React is rendering. They let you "hook into" different React features.
 
 There are a few rules we must follow when using hooks:
 
@@ -63,7 +63,11 @@ function PersonDetail({ id }: { id?: string }) {
 }
 ```
 
-> In the example, this is a bad use of hook. The eslint rule can already point out this case - React Hook "usePerson" is called conditionally. React Hooks must be called in the exact same order in every component render.
+<MdxComment>
+	In the example, this is a bad use of hook. The eslint rule can already point
+	out this case - React Hook "usePerson" is called conditionally. React Hooks
+	must be called in the exact same order in every component render.
+</MdxComment>
 
 ## Hooks and SSR
 
@@ -113,7 +117,12 @@ function PersonForm() {
 
 </IncorrectState>
 
-> This updates the local variable `name.` Between re-renders, local variables are not kept. In addition, changing a local variable does not trigger a re-render of the component. If we want to display the new state each time the component changes state, we must use the `useState` hook.
+<MdxComment className="mt-2">
+	This updates the local variable `name.` Between re-renders, local variables
+	are not kept. In addition, changing a local variable does not trigger a
+	re-render of the component. If we want to display the new state each time the
+	component changes state, we must use the `useState` hook.
+</MdxComment>
 
 <CorrectState>
 
@@ -138,7 +147,13 @@ function PersonForm() {
 
 </CorrectState>
 
-The function (hook) `useState` result returns a pair - value and state setter. A naming convention is introduced. The setter always starts with the word `set.` In this case, we have named our state `name,` so the state setter will be `setName.` At the same time, it is customary to use destructuring so that we can access the value and setter directly.
+<MdxComment className="mt-2">
+	The function (hook) `useState` result returns a pair - value and state setter.
+	A naming convention is introduced. The setter always starts with the word
+	`set.` In this case, we have named our state `name,` so the state setter will
+	be `setName.` At the same time, it is customary to use destructuring so that
+	we can access the value and setter directly.
+</MdxComment>
 
 ### How updating works
 
@@ -190,7 +205,12 @@ function Counter() {
 }
 ```
 
-> This example won't work and is the wrong way to update the state. React works on the principle that it has some counter state defined in the rendering phase and creates local variables or functions with that state. After the initial state is set, the `Counter` component will look like this:
+<MdxComment>
+	This example won't work and is the wrong way to update the state. React works
+	on the principle that it has some counter state defined in the rendering phase
+	and creates local variables or functions with that state. After the initial
+	state is set, the `Counter` component will look like this:
+</MdxComment>
 
 ```tsx
 function Counter() {
@@ -254,7 +274,11 @@ function Counter() {
 }
 ```
 
-> We added a second state that serves as a bool flag whether to add two or one. This is the same principle as in the previous example, and the result will be the same and, therefore, wrong.
+<MdxComment>
+	We added a second state that serves as a bool flag whether to add two or one.
+	This is the same principle as in the previous example, and the result will be
+	the same and, therefore, wrong.
+</MdxComment>
 
 To fix the code, we have two options:
 
@@ -307,7 +331,7 @@ function Counter() {
 }
 ```
 
-> The `currentCount` parameter will always be the most recent set value, even within the same function. React will still not rerender after each such setter function call.
+The `currentCount` parameter will always be the most recent set value, even within the same function. React will still not rerender after each such setter function call.
 
 This behavior is called **batching**, making React applications very fast. It also takes away the so-called half states, where the user would see an incomplete state because the function in which the setter was called has not yet finished.
 
@@ -716,7 +740,11 @@ function Page() {
 }
 ```
 
-> `status` is not only of type `Status.` Typescript derives the return type of the `useStateStatus` function so that it is an array of either setters or statuses.
+<MdxComment>
+	`status` is not only of type `Status.` Typescript derives the return type of
+	the `useStateStatus` function so that it is an array of either setters or
+	statuses.
+</MdxComment>
 
 If we want typescript to derive the return type as `StatusState,` we must use the `as const` directive:
 
@@ -789,7 +817,12 @@ function Page() {
 }
 ```
 
-> The code reaches an infinite loop; the application will not work. Since the second useEffect hook is executed every time the status changes, and the status is constantly changing in this hook, this hook will be run continuously.
+<MdxComment>
+	The code reaches an infinite loop; the application will not work. Since the
+	second useEffect hook is executed every time the status changes, and the
+	status is constantly changing in this hook, this hook will be run
+	continuously.
+</MdxComment>
 
 ```tsx
 function Page() {
@@ -825,7 +858,12 @@ function Page() {
 }
 ```
 
-> In the case above, not only do we use states that directly depend on each other, but we set one state in the event handler of the button, and in response to the state change, we set a second state using the useEffect, which triggers the call to the next useEffect. This can be simplified as follows:
+<MdxComment>
+	In the case above, not only do we use states that directly depend on each
+	other, but we set one state in the event handler of the button, and in
+	response to the state change, we set a second state using the useEffect, which
+	triggers the call to the next useEffect. This can be simplified as follows:
+</MdxComment>
 
 ```tsx
 function Page() {

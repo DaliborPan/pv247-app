@@ -9,6 +9,7 @@ import { ApiConfigsServerActionsDatabaseMdx } from './api-configs-server-actions
 import { AuthenticationMetadataDeploymentMdx } from './authentication-metadata-deployment';
 import { StylingMdx } from './styling';
 import { HooksMdx } from './hooks';
+import { OtherHooksRefsTablesMdx } from './other-hooks-refs-tables';
 
 type MdxComponent = ComponentType<{
 	readonly components?: MDXComponents | undefined;
@@ -19,8 +20,8 @@ const lectureMdxComponentsMap: Record<LectureSlug, MdxComponent> = {
 	'react': ReactMdx,
 	'styling': StylingMdx,
 	'hooks': HooksMdx,
+	'other-hooks-refs-tables': OtherHooksRefsTablesMdx,
 	// TODO
-	'other-hooks-refs-tables': ReactMdx,
 	'async-forms': ReactMdx,
 	'nextjs': ReactMdx,
 	'suspense-streaming-rsc': ReactMdx,
