@@ -8,6 +8,7 @@ import { ReactMdx } from './react';
 import { ApiConfigsServerActionsDatabaseMdx } from './api-configs-server-actions-database';
 import { AuthenticationMetadataDeploymentMdx } from './authentication-metadata-deployment';
 import { StylingMdx } from './styling';
+import { HooksMdx } from './hooks';
 
 type MdxComponent = ComponentType<{
 	readonly components?: MDXComponents | undefined;
@@ -17,8 +18,8 @@ const lectureMdxComponentsMap: Record<LectureSlug, MdxComponent> = {
 	'introduction': IntroductionMdx,
 	'react': ReactMdx,
 	'styling': StylingMdx,
+	'hooks': HooksMdx,
 	// TODO
-	'hooks': ReactMdx,
 	'other-hooks-refs-tables': ReactMdx,
 	'async-forms': ReactMdx,
 	'nextjs': ReactMdx,

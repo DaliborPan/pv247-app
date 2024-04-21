@@ -1,0 +1,861 @@
+import { IncorrectState } from './incorrect-state';
+import { CorrectState } from './correct-state';
+
+# Component lifecycle, working with state
+
+In this lesson, we will cover the topic of interactivity in our application. Until now, we have implemented mostly static components that failed to change the UI dynamically based on external or internal events. A modern web application implemented with React benefits precisely from being able to respond quickly to user input. First, we'll look at the basic concept of the component lifecycle, discuss hooks and their usage rules, take a detailed look at defining and updating state, and look at the most used hooks you're very likely to encounter in practice. Some of them are also used to optimize application performance. Finally, we will show how to create a custom hook.
+
+## Component lifecycle
+
+A component goes through its lifecycle from when it is first rendered to the screen. A component has to go through its lifecycle in practically two cases:
+
+- the initial render
+- when the state of the component or its parent changes
+
+The lifecycle of a component consists of three phases:
+
+1. **Trigger** - when the state or props of the component changes
+2. **Render** - when the `render` method is called.
+3. **Commit** - when the DOM is changed
+
+The trigger is just triggered by a change of state or props. The render phase in React is meant by calling the component function. This call should be "pure" - i.e., it should not change the application state. If the component that is currently executing renders other components, these components are also called. If this is the initial render, React creates all DOM elements such as `<h1>`, `<section>,` etc. If it is a state change, React compares the old and new states and modifies the DOM based on that.
+
+At the commit stage, what needs to be changed in the DOM is already clear. If it is an initial render, all elements are added using the DOM API, specifically `appendChild().` If it is a state change, React has figured out in the Render phase what specific elements need to be changed and makes those changes in the commit phase.
+
+```tsx
+function Clock({ time }: { time: string }) {
+	return (
+		<>
+			<h1>{time}</h1>
+			<input />
+		</>
+	);
+}
+```
+
+The `Clock` component accepts `time` as its property. Consider that this property changes every second, so the `Clock` component is rendered every second over and over again. In the DOM itself, only the value of the text in `<h1>` changes each time, `<input>` remains unchanged by the state or property of the `Clock` component. Therefore, the input remains the same all the time. This example shows us that React can only effectively update the parts of the DOM that have changed.
+
+## Hooks
+
+> Hooks are specials functions that are only available while React is rendering. They let you "hook into" different React features.
+
+There are a few rules we must follow when using hooks:
+
+- **Can only be called at the top of your component** - So you can't call conditionals, loops, or other nested functions. To reduce bugs, there is a convention that all hooks start with the word `use.`
+
+- **Cannot be called from a regular function** - That is, cannot be called from a regular function that is not a component or other hook.
+
+```tsx
+function PersonDetail({ id }: { id?: string }) {
+	if (!id) {
+		return null;
+	}
+
+	const person = usePerson(id);
+	// person type is inferred: { name: string; age: number; }
+
+	return (
+		<div>
+			<span>{person.name}</span>
+			<span>{person.age}</span>
+		</div>
+	);
+}
+```
+
+> In the example, this is a bad use of hook. The eslint rule can already point out this case - React Hook "usePerson" is called conditionally. React Hooks must be called in the exact same order in every component render.
+
+## Hooks and SSR
+
+Although we have yet to talk about Nextjs, it's important to mention that hooks cannot be called in server code. In Nextjs, all components are rendered exclusively on the server by default, preventing the use of any hooks solely intended to enable client-side interactivity. If we want to specify in Nextjs that a component be rendered client-side, we need to use the "use client" directive on the first line in the file. We will learn more details about Nextjs in the following lessons.
+
+```tsx
+'use client';
+
+import { useState } from 'react';
+
+function PersonForm() {
+	const [person, setPerson] = useState();
+
+	return <form>...</form>;
+}
+```
+
+## State
+
+Without the hook, we wouldn't be able to dynamically change the UI and maintain the component's state in React.
+
+<IncorrectState>
+
+```tsx
+function PersonForm() {
+	let name = '';
+
+	const onNameChange = (newName: string) => {
+		name = newName;
+	};
+
+	return (
+		<form>
+			<span>form</span>
+			<input
+				onChange={e => {
+					onNameChange(e.target.value);
+				}}
+				type="text"
+			/>
+			<span>name</span>
+			<span>{name}</span>
+		</form>
+	);
+}
+```
+
+</IncorrectState>
+
+> This updates the local variable `name.` Between re-renders, local variables are not kept. In addition, changing a local variable does not trigger a re-render of the component. If we want to display the new state each time the component changes state, we must use the `useState` hook.
+
+<CorrectState>
+
+```tsx
+function PersonForm() {
+	const [name, setName] = useState('');
+
+	const onNameChange = (newName: string) => {
+		setName(newName);
+	};
+
+	return (
+		<form>
+			<span>form</span>
+			<input onChange={e => onNameChange(e.target.value)} type="text" />
+			<span>name</span>
+			<span>{name}</span>
+		</form>
+	);
+}
+```
+
+</CorrectState>
+
+The function (hook) `useState` result returns a pair - value and state setter. A naming convention is introduced. The setter always starts with the word `set.` In this case, we have named our state `name,` so the state setter will be `setName.` At the same time, it is customary to use destructuring so that we can access the value and setter directly.
+
+### How updating works
+
+The initial component render takes the passed default value and creates a new state. This state is stored in memory, creating a new state whenever the component is changed. This new state is compared to the previous one; if it differs, the component is re-rendered. It is important to note that React does not update the state immediately after the setter is called but only after the entire function in which the setter is called has been completed.
+
+Let's use an example where we have a `Counter` component with a button that increments the value by 1. This example will show us how React behaves when the state changes.
+
+```tsx
+function Counter() {
+	const [count, setCount] = useState(0);
+
+	const onClick = () => {
+		setCount(count + 1);
+	};
+
+	return (
+		<div>
+			<span>{count}</span>
+			<button onClick={onClick}>+</button>
+		</div>
+	);
+}
+```
+
+The component sets the initial value of the state to 0. Each time the button is clicked, the value is incremented by 1. The screen immediately displays the new value.
+
+Let's take a slightly more complex example where we want to increment by one and then by 2.
+
+```tsx
+function Counter() {
+	const [count, setCount] = useState(0);
+
+	const onAddOneClick = () => {
+		setCount(count + 1);
+	};
+
+	const onAddTwoClick = () => {
+		onAddOneClick();
+		onAddOneClick();
+	};
+
+	return (
+		<div>
+			<span>{count}</span>
+			<button onClick={onAddOneClick}>Add one</button>
+			<button onClick={onAddTwoClick}>Add two</button>
+		</div>
+	);
+}
+```
+
+> This example won't work and is the wrong way to update the state. React works on the principle that it has some counter state defined in the rendering phase and creates local variables or functions with that state. After the initial state is set, the `Counter` component will look like this:
+
+```tsx
+function Counter() {
+  const [0, setCount] = useState(0);
+
+  const onAddOneClick = () => {
+    setCount(0 + 1);
+  };
+
+  const onAddTwoClick = () => {
+    onAddOneClick();
+    onAddOneClick();
+  };
+
+  return (
+    ...
+  );
+}
+```
+
+And let's keep only `onAddTwoClick` for even more simplicity:
+
+```tsx
+function Counter() {
+  const [0, setCount] = useState(0);
+
+  const onAddTwoClick = () => {
+    setCount(0 + 1);
+    setCount(0 + 1);
+  };
+
+  return (
+    ...
+  );
+}
+```
+
+As we can see, the same function is called twice with the same parameter, i.e., 1. So the result will be the same as if we called it only once. React does not set a state immediately after the first call to the setter function but waits for the function to complete (unless it is an asynchronous function).
+
+Typically, erroneous code also looks something like this:
+
+```tsx
+function Counter() {
+	const [count, setCount] = useState(0);
+	const [isDouble, setIsDouble] = useState(false);
+
+	const onClick = () => {
+		setCount(count + 1);
+		if (isDouble) {
+			setCount(count + 1);
+		}
+	};
+
+	return (
+		<div>
+			<span>{count}</span>
+			<button onClick={onClick}>Add to counter</button>
+			<input type="checkbox" onChange={e => setIsDouble(e.target.checked)} />
+		</div>
+	);
+}
+```
+
+> We added a second state that serves as a bool flag whether to add two or one. This is the same principle as in the previous example, and the result will be the same and, therefore, wrong.
+
+To fix the code, we have two options:
+
+- First, decide how much we need to add and then call the state setter.
+- Use the callback function to give us the current state and update the state based on that.
+
+The first option would look like this:
+
+```tsx
+function Counter() {
+	const [count, setCount] = useState(0);
+	const [isDouble, setIsDouble] = useState(false);
+
+	const onClick = () => {
+		const newCount = isDouble ? count + 2 : count + 1;
+		setCount(newCount);
+	};
+
+	return (
+		<div>
+			<span>{count}</span>
+			<button onClick={onClick}>Add to counter</button>
+			<input type="checkbox" onChange={e => setIsDouble(e.target.checked)} />
+		</div>
+	);
+}
+```
+
+The second option is to use the callback function as a parameter of the state setter. If we look at the definition of the `setCount` function, we see that we can either pass the value directly or pass a function whose parameter is the current state and return the new state.
+
+```tsx
+function Counter() {
+	const [count, setCount] = useState(0);
+	const [isDouble, setIsDouble] = useState(false);
+
+	const onClick = () => {
+		setCount(currentCount => currentCount + 1);
+		if (isDouble) {
+			setCount(currentCount => currentCount + 1);
+		}
+	};
+
+	return (
+		<div>
+			<span>{count}</span>
+			<button onClick={onClick}>Add to counter</button>
+			<input type="checkbox" onChange={e => setIsDouble(e.target.checked)} />
+		</div>
+	);
+}
+```
+
+> The `currentCount` parameter will always be the most recent set value, even within the same function. React will still not rerender after each such setter function call.
+
+This behavior is called **batching**, making React applications very fast. It also takes away the so-called half states, where the user would see an incomplete state because the function in which the setter was called has not yet finished.
+
+### State is private
+
+Each component instance manages its own state; it does not share it with anyone. For example, we can have two instances of the `Counter` component on our page.
+
+```tsx
+function Counter() {
+	const [count, setCount] = useState(0);
+
+	const onClick = () => {
+		setCount(count + 1);
+	};
+
+	return (
+		<div>
+			<span>{count}</span>
+			<button onClick={onClick}>Add to counter</button>
+		</div>
+	);
+}
+
+function Page() {
+	return (
+		<>
+			<Counter />
+			<Counter />
+		</>
+	);
+}
+```
+
+**What would we need to do to make both counter components share the same state?**
+
+We would have to move the state to the nearest common parent in the component tree. In our case, this is the "Page" component. This approach is called "lifting state up".
+
+```tsx
+type CounterProps = {
+	counterState: [number, (count: number) => void];
+};
+
+function Counter({ counterState: [count, setCount] }: CounterProps) {
+	const onClick = () => {
+		setCount(count + 1);
+	};
+
+	return (
+		<div>
+			<span>{count}</span>
+			<button onClick={onClick}>Add to counter</button>
+		</div>
+	);
+}
+
+function Page() {
+	const [count, setCount] = useState(0);
+
+	return (
+		<>
+			<Counter counterState={[count, setCount]} />
+			<Counter counterState={[count, setCount]} />
+		</>
+	);
+}
+```
+
+### Working with objects in state
+
+If we need to maintain a more complex state structure, we must use objects. And in many cases, that's a good idea. If we have multiple elements on the screen whose state is connected, it's better to have all of those states in one object.
+
+**Mutability**
+
+Basic (primitive) types in JS are immutable. What does it mean? For example, if we have a number 5 and assign it to another variable, a new instance of 5 is created. So, in the same way, when setting a state, if we have `const [x, setX] = useState(0)` and somewhere in the code, we call the setter `setX(5)`, a new instance of the number 5 is created. The primitive types include numbers, strings, booleans, undefined, and null.
+
+On the other hand, objects and arrays are mutable. If we have an object and assign it to another variable, a new instance of the object is not created, only a reference to it. This means that if we change a value in an object, it will change wherever that object is referenced.
+
+In the context of a state, let's have `const [person, setPerson] = useState({ name: "John" })`. Technically, it is possible to modify `name` directly:
+
+```ts
+person.name = 'Jane';
+```
+
+However, when we work with an object as a state, it is necessary to look at it as an immutable structure. If we want to change the value of an object in a state, we must again use the state setter and create a new instance of the object.
+
+```ts
+setPerson({ name: 'Jane' });
+```
+
+Modifying the object is technically no problem. The important thing is to treat the object correctly when modifying the state. The following two codes are equivalent, with the latter being the preferred method.
+
+```tsx
+function Counter() {
+  const [person, setPerson] = useState({ name: 'John' });
+
+  const onClick = () => {
+    const newPerson = {};
+    newPerson.name = 'Jane';
+    setPerson(newPerson);
+  };
+
+  // ...
+
+  return (
+    // JSX
+  );
+}
+```
+
+```tsx
+function Counter() {
+  const [person, setPerson] = useState({ name: 'John' });
+
+  const onClick = () => {
+    setPerson({ name: 'Jane' }); // This overwrites the entire person object
+  };
+
+  // ...
+
+  return (
+    // JSX
+  );
+}
+```
+
+When we use an object in a state, it is common that the object does not contain only one key, like our example with `person.` Often, however, we will want to update only part of the values in our object, in which case we need to assign all the other values that remain unchanged to the new object instance.
+
+```tsx
+function Counter() {
+  const [person, setPerson] = useState({ name: 'John', age: 25, gender: "male" });
+
+  const onNameChange = (name: string) => {
+    setPerson({
+      ...person, // Copy the old person fields
+      name       // assign new name
+    });
+  };
+
+  return (
+    // ...
+  );
+}
+
+```
+
+Such a function can be made original for all keys that the object can contain.
+
+```tsx
+function PersonFields() {
+	const [person, setPerson] = useState({
+		name: 'John',
+		age: 25,
+		gender: 'male'
+	});
+
+	const onChange = (fieldName: string, value: string | number) => {
+		setPerson({
+			...person,
+			[fieldName]: value
+		});
+	};
+
+	return (
+		<div>
+			<input type="text" onChange={e => onChange('name', e.target.value)} />
+			<input type="number" onChange={e => onChange('age', e.target.value)} />
+		</div>
+	);
+}
+```
+
+If the situation requires that we work with more complex types and we want to ensure that the `onChange` function is called with the correct parameters, i.e., key-value pairs that are type correct, we can type the function as follows:
+
+```tsx
+type OnPersonChangeFn = (
+	params:
+		| { fieldName: 'name' | 'gender'; value: string }
+		| { fieldName: 'age'; value: number }
+) => void;
+
+function Counter() {
+	const [person, setPerson] = useState({
+		name: 'John',
+		age: 25,
+		gender: 'male'
+	});
+
+	const onChange: OnPersonChangeFn = ({ fieldName, value }) => {
+		setPerson({
+			...person,
+			[fieldName]: value
+		});
+	};
+
+	return (
+		<div>
+			<input
+				type="text"
+				onChange={e =>
+					onChange({
+						fieldName: 'name',
+						value: e.target.value
+					})
+				}
+			/>
+			<input
+				type="number"
+				onChange={e =>
+					onChange({
+						fieldName: 'age',
+						value: Number(e.target.value)
+					})
+				}
+			/>
+		</div>
+	);
+}
+```
+
+A similar principle must be applied when updating an object that contains nested objects or arrays. In this case, we must ensure that all nested objects and fields are new instances.
+
+```tsx
+function Counter() {
+  const [person, setPerson] = useState({
+    name: {
+      firstname: 'John',
+      lastname: 'Doe',
+    },
+    age: 25,
+    gender: 'male',
+  });
+
+  const onFirstnameChange = (value: string) => {
+    setPerson({
+      ...person,
+      name: {
+        ...person.name,
+        firstname: value,
+      },
+    });
+  };
+
+  // ...
+
+  return (
+    // JSX
+  );
+}
+```
+
+### Working with arrays in state
+
+The use of a value sheet is also common in the component state. It is usually a list of items that can be added, deleted, or edited. In React, you must look at the list as an immutable structure. If we want to modify a list, we need to create a new instance of the list.
+
+A list has several methods defined in JS, some modifying existing fields and some creating new fields.
+
+Here's a list of methods that are best avoided when working with the state:
+
+- `push` - adds a new element to the end of the array
+- `pop` - removes the last element of the array
+- `shift` - removes the first element of the array
+- `unshift` - adds a new element to the beginning of the array
+- `splice` - modifies the array based on the index
+- `sort` - sorts the array
+- `reverse` - reverses the order of elements in the array
+
+List of methods that create a new array:
+
+- `concat` - connects an array
+- `slice` - creates a new array based on indexes
+- `map` - creates a new array based on element transformation
+- `filter` - creates a new array based on element filtering
+
+Below we have an example of working with an array, where we have defined the `people` state and the functions for adding a new person and editing a person based on id.
+
+```tsx
+function People() {
+  const [people, setPeople] = useState([
+    { id: 1, name: 'John Doe', age: 30 },
+    { id: 2, name: 'Jane Doe', age: 25 },
+  ]);
+
+  const onAddPerson = () => {
+    setPeople([...people, { id: 3, name: 'New Person', age: 20 }]);
+  };
+
+  const onEditPerson = (id: number, age: number) => {
+    const editedPeople = people.map((person) =>
+      person.id === id ? { ...person, age } : person,
+    );
+    setPeople(editedPeople);
+  };
+
+  return (
+    // ...
+  );
+}
+```
+
+### How to choose the ideal state structure
+
+There are some basic principles to follow when working with a state in a React component. Some of these rules are:
+
+- **Related states should be together** - If we often need to update two states simultaneously, it is better to put the data into one.
+
+- **Avoid redundant state** - If we can compute something from the props or an existing state of the component, it is neither necessary nor advisable to store it in the state.
+
+- **Reduce duplication** - If two states repeat the same information, it is hard to maintain synchronization between them.
+
+- **Avoid deeply nested state** - Multiple nested structures become opaque for updates and reads.
+
+- **Avoid impossible states** - If you have two related states that could contradict each other, it is better to have them in one state.
+
+  - Typical examples are two states - `isSedning` and `isSent,` or `isError` and `isSuccess.` Impossible state could be `isSuccess == true` && `isError == true`. In this case, it is better to have a single `status` with a value of `sending,` `sent,` `error`, or `success.` If we still want to have the naming convention `isError`, etc, we can create derived variables, not states:
+
+```tsx
+type Status = 'idle' | 'sending' | 'error' | 'success';
+
+function useStatus() {
+	const [status, setStatus] = useState<Status>('idle');
+
+	// ...
+
+	return {
+		isSuccess: status === 'success',
+		isSending: status === 'sending',
+		isError: status === 'error'
+	};
+}
+```
+
+### Advanced state structure with useReducer
+
+If you have a more complex state structure consisting of related values, it is advisable to use `useReducer`. The `useReducer` is a hook that allows us to work with more complex states and update them. It is useful to use `useReducer` when we have more complex logic that updates the state based on some action.
+
+In the example, we see the `useReducer` hook, which accepts as its first parameter a function that decides what should happen to the state based on what action. The second parameter is the initial state.
+
+```tsx
+function counterReducer(
+	state: number,
+	action: { type: 'increment' | 'decrement'; value: number }
+) {
+	switch (action.type) {
+		case 'increment':
+			return state + action.value;
+		case 'decrement':
+			return state - action.value;
+	}
+}
+
+function Counter() {
+	const [count, dispatch] = useReducer(counterReducer, 0);
+
+	const onIncrement = (amount: number) => {
+		dispatch({ type: 'increment', value: amount });
+	};
+
+	const onDecrement = (amount: number) => {
+		dispatch({ type: 'decrement', value: amount });
+	};
+
+	return (
+		<div>
+			<p>Count: {count}</p>
+			<button onClick={() => onIncrement(5)}>Add 5 to counter</button>
+			<button onClick={() => onDecrement(5)}>Remove 5 from counter</button>
+		</div>
+	);
+}
+```
+
+## Custom hooks
+
+A custom hook is a function that starts with the word `use` and that may contain other hooks. Custom hooks are useful for sharing logic between components. If we have some logic that is repeated in several components, it is useful to extract that logic into a custom hook.
+
+For example, let's show a custom hook that creates a state. We extracted this hook because we need to calculate the initial value of the state in a more complex way, which should no longer be the responsibility of the component that uses this hook. We also need to use this hook in multiple components. We define the custom hook as a standard function or as an arrow function. We will use the `useStatus` function from one of the previous examples:
+
+```tsx
+type Status = 'idle' | 'sending' | 'success' | 'error';
+
+function useStatus(options: Options) {
+	// some logic to determine initial status based on options
+	const initialStatus = 'idle';
+
+	const [status, setStatus] = useState<Status>(initialStatus);
+
+	return { status, setStatus };
+}
+```
+
+If we wanted to keep the same return type format as the `useState` hook, we would run into a problem with the typescript:
+
+```tsx
+function useStatusState(options: Options) {
+	// some logic to determine initial status based on options
+	const initialStatus = 'idle';
+
+	const [status, setStatus] = useState<Status>(initialStatus);
+
+	return [status, setStatus];
+}
+
+function Page() {
+	const [status, setStatus] = useStatusState({});
+	//       ^-- Status | Dispatch<SetStateAction<Status>> | undefined
+}
+```
+
+> `status` is not only of type `Status.` Typescript derives the return type of the `useStateStatus` function so that it is an array of either setters or statuses.
+
+If we want typescript to derive the return type as `StatusState,` we must use the `as const` directive:
+
+```tsx
+// some logic to determine initial status based on options
+function useStatusState(options: Options) {
+	const initialStatus = 'idle';
+
+	const [status, setStatus] = useState<Status>(initialStatus);
+
+	return [status, setStatus] as const;
+}
+
+function Page() {
+	const [status, setStatus] = useStatusState({});
+	//      ^-- Status  ^-- Dispatch<SetStateAction<Status>>
+}
+```
+
+Custom hooks can contain any other built-in hooks or our own, and it's a standard way of extracting logic away from a component.
+
+## useEffect
+
+A hook that allows you to perform side effects, which can be operations to retrieve data from an API or other storage or I/O. As developers, we specify at what point the effect should be executed using a dependency array, where we specify the variables that, when changed, will execute the effect. If the dependency array is empty, the effect is only executed once during the initial render.
+
+```ts
+useEffect(() => {
+	console.log('I run every time component is rendered');
+
+	// This is something you won't likely want 99 % of the time!
+});
+```
+
+If we want the effect to execute only once during the initial render, we need to use an empty dependency array:
+
+```ts
+useEffect(() => {
+	console.log('I run only once');
+}, []);
+```
+
+If we want the effect to take place only when a variable is changed, we need to specify this variable in a dependency array:
+
+```ts
+useEffect(() => {
+	console.log('I run only when name changes');
+}, [name]);
+```
+
+useEffect may be necessary in some specific cases, but generally, the fewer side effects our code has, the better. Let's take a particular example of a wrong use of useEffect.
+
+```tsx
+function Page() {
+	const [status, setStatus] = useState<Status>('idle');
+
+	useEffect(() => {
+		setStatus('sending');
+	}, []);
+
+	useEffect(() => {
+		setStatus(status === 'sending' ? 'success' : 'sending');
+	}, [status]);
+
+	return (
+		<div>
+			<h1>Page</h1>
+			<p>Status: {status}</p>
+		</div>
+	);
+}
+```
+
+> The code reaches an infinite loop; the application will not work. Since the second useEffect hook is executed every time the status changes, and the status is constantly changing in this hook, this hook will be run continuously.
+
+```tsx
+function Page() {
+	const [status, setStatus] = useState<Status>('idle');
+	const [clicked, setClicked] = useState(false);
+
+	useEffect(() => {
+		if (clicked) {
+			setStatus('sending');
+		}
+	}, [clicked]);
+
+	useEffect(() => {
+		if (status === 'sending') {
+			setTimeout(() => {
+				setStatus('idle');
+				setClicked(false);
+			}, 2000);
+		}
+	}, [status]);
+
+	return (
+		<div>
+			<button
+				className={`${clicked && 'text-red-700'}`}
+				onClick={() => setClicked(true)}
+			>
+				Click me
+			</button>
+			<p>Status: {status}</p>
+		</div>
+	);
+}
+```
+
+> In the case above, not only do we use states that directly depend on each other, but we set one state in the event handler of the button, and in response to the state change, we set a second state using the useEffect, which triggers the call to the next useEffect. This can be simplified as follows:
+
+```tsx
+function Page() {
+	const [status, setStatus] = useState<Status>('idle');
+
+	return (
+		<div>
+			<button
+				className={`${status === 'sending' && 'text-red-700'}`}
+				onClick={() => {
+					setStatus('sending');
+					setTimeout(() => {
+						setStatus('idle');
+					}, 2000);
+				}}
+			>
+				Click me
+			</button>
+			<p>Status: {status}</p>
+		</div>
+	);
+}
+```
+
+In many cases, even if it doesn't seem like it at first glance, we don't need useEffect at all. It's best to invoke all actions directly in the event handler, not in response to a state change.
+
+## Next lecture
+
+In the next lesson, we will look at other hooks that are used to optimize the application and improve performance. We will explain the `ref` principle and the main topic will also be the implementation of the table.
+
+## Assignment
+
+This week your task is to create an interactive single page application called **Task manager**. The application will display a list of tasks it retrieves from a "database," and you will be able to filter them based on a label, delete them, and add a new task
