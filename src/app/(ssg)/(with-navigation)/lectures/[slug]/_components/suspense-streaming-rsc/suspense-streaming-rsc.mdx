@@ -1,0 +1,599 @@
+import CSR_GRAPH from './lecture8-CSR-graph.png';
+import LOADING_UI from './lecture8-loading-ui.png';
+import MULTIPLE_SUSPENSE_GRAPH from './lecture8-multiple-suspense-graph.png';
+import SERVER_COUNTER_BASE from './lecture8-server-counter-base.png';
+import SERVER_COUNTER_FINAL_GRAPH from './lecture8-server-counter-final-graph.png';
+import SERVER_COUNTER_WITH_BORDER from './lecture8-server-counter-with-border.png';
+import SSR_GRAPH from './lecture8-SSR-graph.png';
+import SUSPENDED_COMPONENTS_GRAPH from './lecture8-suspended-components-graph.png';
+
+# Next.js Suspense and Loading UI, Streaming, React Server Components
+
+In this lesson, we'll continue with more topics around Next.js. This framework has mechanisms set up not only for routing, which we introduced last week, but also for loading and error states, handling access to pages that don't exist, and a built-in mechanism for creating custom API endpoints. Besides, Next.js takes advantage of the latest React capability as a library, allowing the implementation of so-called React Server Components (RSC).
+
+We will discuss server-side rendering first, then in detail the benefits of RSCs and when it is appropriate to use them. We'll also look at the data streaming capabilities of Next.js.
+
+## Server side rendering
+
+Before we get technical on how RSCs work, let's briefly explain the use of Server-side rendering, which is closely related to RSCs.
+
+### Motivation
+
+Server-side rendering (SSR) is a technique where the content of a page is rendered on the server and then sent to the client. This approach has several advantages, mainly regarding SEO, page load speed, and performance. A typical example relates to e-commerce sites, where it is essential that search engines index the page's content, and it is also crucial that the page loads quickly, as every second of delay can mean a loss of a customer.
+
+### CSR user experience
+
+If we were to use pure client-side rendering (CSR), the final page could be rendered to the user after these basic steps:
+
+- Download HTML, CSS, and JS files
+- Parsing the JS files
+  - These JS files contain code somewhere that takes care of rendering the initial page, typically the loading state. In the background, during this, other JS code takes care of pulling data from the API; in the case of e-commerce, this can be a list of products.
+- The page can finally render the final form once the download has taken place.
+
+The problem with this approach is that it takes a long time, and for the user, it means waiting a relatively long time before they can finally interact with the page.
+
+> To demonstrate this problem, we can take any page developed in React that includes some API calls, the application includes several depenedencies, etc. We can also reduce the internet speed in DevTools to 3G and see how long it takes for the page to load, or how long the user sees a white page.
+
+Server Side Rendering was designed to address this issue and improve the user experience. It basically doesn't work on the SPA principle, where the whole application has to be downloaded, and only after downloading the entire JS boule can the page be rendered. SSR prepares the page already on the server, with the correct data and the document structure already rendered. Once the page arrives at the client, it can be displayed almost immediately, eliminating the phase when we need to let JavaScript get the data from the server and then render it.
+
+### Traditional SSR
+
+In the very traditional SSR approach, the entire page is rendered on the server and sent to the client. This approach has several advantages but also several disadvantages. The advantage is that the page can be displayed instantly, which is great for UX. The downside is that it can be slow if a lot of data needs to be downloaded or if a lot of computation is needed on the server. At that point, the user isn't waiting with a blank page, but they are waiting before they can see anything at all.
+
+This approach is one of many approaches. The page does not have to be created on-demand per request. In the case of e-commerce, we have product data that doesn't change from minute to minute. For this reason, individual product pages can be created in advance with the correct data already in place. When a user inquires about that page, they can be sent an already prepared page without recreating it. This approach is called Static Site Generation (SSG).
+
+## Data fetching
+
+We have two ways we can get data for our application. The first one we discussed in previous lessons, and it is called client-side data fetching.
+
+<MdxImage src={CSR_GRAPH} />
+
+> The first step is for the client (for example, in a browser) to access the URL where the application is running. The server intercepts this request and returns all the files the application needs to run. After the client receives these files, a blank page from the server is presented. Now, it needs to parse the JS files, which can then render something. JS will typically render some loading state initially and send an asynchronous request back to the server to get the data. The server again catches the request, performs database calls, and returns the data. The client processes the data and renders it to the page.
+
+We may notice unnecessary sending of requests back and forth. By simple reasoning, we can figure out that it might be better to move the database call before sending anything to the client. Since we can know what data is on the page, we can get it directly on the server without the need for an API call.
+
+<MdxImage src={SSR_GRAPH} />
+
+> Instead of having the server and client exchange requests back and forth, we do all the work needed for the first render immediately on the server before sending it to the client for the first time. However, this model is only possible with the ability to get the data directly on the server while rendering the React component only on the server. Until recently, this model was the only one regarding SSR capabilities in React.
+
+### getServerSideProps
+
+```tsx
+// This code only runs on the server:
+export async function getServerSideProps() {
+	const data = await database.query('SELECT * FROM products');
+
+	return {
+		props: { data }
+	};
+}
+
+// This code runs on the server + on the client
+export default function Homepage({ data }) {
+	return (
+		<>
+			<h1>Products</h1>
+			{data.map(productItem => (
+				<article key={item.id}>
+					<h2>{item.title}</h2>
+					<p>{item.description}</p>
+				</article>
+			))}
+		</>
+	);
+}
+```
+
+> Specifically in Next.js, SSR is done using getServerSideProps. This function is called on the server and returns data that is then used to render the page. The `getServerSideProps` function runs exclusively on the server; this code is not even sent to the client.
+
+### Problems with getServerSideProps
+
+This was a big step towards SSR and improving SEO and other things in React and Next.js. However, it had a few drawbacks, the main one being the need to wait for all operations to be done on the server. We might have wanted to get server data that is needed for a minor part of the application. This meant that the rest of the application could be delivered to the client immediately, with only the loader displayed for the one minor part of the UI where we wanted to use SSR. This was not possible with `getServerSideProps`. The second problem is that the data we get in `getServerSideProps` is only available in the page component. To get them into the component they belong to, we have to pass them down through the props or use context.
+
+## React Server Components
+
+> React server component runs exlusively on the server.
+
+This is still a new programming concept in React, where we can create asynchronous components that get data from sources that are only available on the server (not on the client), such as a database or file system.
+
+```tsx
+// This code runs exclusively on the server
+export default async function Homepage({ data }) {
+	const data = await database.query('SELECT * FROM products');
+
+	return (
+		<>
+			<h1>Products</h1>
+			{data.map(productItem => (
+				<article key={item.id}>
+					<h2>{item.title}</h2>
+					<p>{item.description}</p>
+				</article>
+			))}
+		</>
+	);
+}
+```
+
+> This approach is dramatically different from what `getServerSideProps` allows. With the React server component, we can retrieve data on the server almost anywhere in our application, so there is no need to download all the data in one place as there was with `getServerSideProps`.
+
+It is essential to note that the server component will never be re-rendered. This component is rendered once on the server and sent to the client, where it will never be changed again due to user interaction, state changes, etc.
+
+- Related to this is that much of the React API is unavailable in RSC! The basic rule is that we must not use any hooks in RSC.
+
+It's a significant change in the mental model when programming React applications. To be able to implement an interactive application, we must, of course, remember to use the classic Client component. We can still use all the React APIs, including hooks like useState etc.
+
+### You can't use React Server Components in pure React
+
+Even though RSCs are directly part of React, it is impossible to "simply" use them without a framework like Next.js. The React documentation explicitly advises against experimenting with using RSCs without using the framework, since their use is closely tied to other things around the framework that the framework handles for us.
+
+### Next.js v13+
+
+As we mentioned in the last lesson, the Next.js framework has a built-in routing system where we define individual routes inside the `app` folder. This has only changed since version 13; before that, it was possible to use the `pages` folder, which also defined the file system, just slightly differently.
+
+Importantly, since version 13, with the advent of the `app` directory, all components have been considered RSC by default! If we want to implement an interactive component using any React API, we must explicitly mark it as a client component.
+
+```tsx
+'use client';
+
+export default function Counter() {
+	const [count, setCount] = useState(0);
+
+	return (
+		<button onClick={() => setCount(count + 1)}>Current value: {count}</button>
+	);
+}
+```
+
+## Server component or client component?
+
+The basic rule of thumb is that if a component can be a server component (i.e., requires no interactivity), it should be a server component. In other words, if we can make a component so that no additional and unnecessary JS code needs to be sent for that component, we should do so. On the other hand, there is no need to be afraid to keep using client components. Until now (without RSC), all components in React were client components. If we need to implement a form or some other interactive component, we can still do it as a client component.
+
+We'll learn about the rules for combining server and client components later in this lesson.
+
+## Loading state
+
+First, we'll look at the motivation for creating a loading state on the screen in the first place, and then we'll show how we can create a loading state in Next.js in combination with RSC.
+
+### Why is it important to show loading states?
+
+Providing an instant loading state, such as a spinner or skeleton UI, is crucial in web development, particularly in frameworks like Next.js, where server-side rendering and dynamic content are common. It ensures a seamless and user-friendly experience by reducing perceived latency. When a page requires time-consuming operations, like fetching data or rendering dynamic content, users might otherwise perceive the page as slow or unresponsive. By displaying an instant loading state, you communicate to users that their request is being processed, keeping them engaged and informed, which in turn enhances the overall user experience. This practice not only makes your application appear faster but also demonstrates a commitment to user-centric design, which is essential for retaining and satisfying your audience.
+
+### Suspense boundaries
+
+Loading states in Next.js are implemented using Suspense boundaries. Suspense boundaries are React components that let you “wait” for some code to load asynchronously. They also allow you to specify the loading UI that should be displayed while the code is loading.
+
+```tsx
+function LoadingComponent() {
+    return (
+        // ...
+    );
+}
+
+async function SomeAsyncComponent() {
+    const data = await // ...;
+
+    return (
+        // ...
+    );
+}
+
+export default function Page() {
+    return (
+        <Suspense fallback={<LoadingComponent />}>
+            <SomeAsyncComponent />
+        </Suspense>
+    );
+}
+
+```
+
+Suspense component accepts `children` as props, similar as layout component. If children suspends while rendering, the Suspense boundary will switch to rendering fallback.
+
+**fallback**
+
+An alternate UI to render in place of the actual UI if it has not finished loading. Any valid ReactNode is accepted, though in practice, a fallback is a lightweight placeholder view, such as a loading spinner or skeleton. Suspense will automatically switch to fallback when children suspends, and back to children when the data is ready. If fallback suspends while rendering, it will activate the closest parent Suspense boundary.
+
+Only Suspense-enabled data sources will activate the Suspense component. They include:
+
+- Server side data fetching (RSC)
+- Lazy-loading component code with `React.lazy`
+- Reading the value of a Promise with `use`
+
+Within a suspense boundary, we have the flexibility to use both server and client components. Even if a client component is available without any waiting, it will only become visible once all components inside the boundary are fully prepared for display. This feature allows you to load different parts of the UI together for a smoother user experience. Nonetheless, it's advisable to maintain the suspense boundary as close as possible to the specific component that truly requires it.
+
+```tsx
+export default function Page() {
+	return (
+		<Suspense fallback={<LoadingComponent />}>
+			<Biography />
+			<Panel>
+				<AlbumsAsyncComponent />
+			</Panel>
+		</Suspense>
+	);
+}
+```
+
+> Components that load data don't have to be the direct child of the `Suspense` boundary. Once React reaches a component that requires server-side data fetching, it will search for the first suspense boundary and display its fallback, if available. In this example, `AlbumsAsyncComponent` is the only async component inside the `Suspense` boundary. Once this component finishes its rendering, the `Suspense` boundary will switch to rendering the actual UI. All of the components inside `Suspense` boundary will be displayed together.
+
+### Nested suspense boundaries
+
+Let's take a similar example, but we'll make the `Bibliography` component a server of the `BibliographyAsyncComponent` component. At the same time, we would like to ensure that we don't have to wait for both components to finish their rendering. Let's take a concrete example:
+
+- Rendering the `BibliographyAsyncComponent` component takes 2s
+- Rendering the `AlbumsAsyncComponent` component takes 3s
+
+```tsx
+function BigLoader() {
+	return <div>Big Loader...</div>;
+}
+
+async function BibliographyAsyncComponent() {
+	await new Promise(resolve => {
+		setTimeout(resolve, 2000);
+	});
+
+	return (
+		<div>
+			<h2>Bibliography</h2>
+			<p>...</p>
+		</div>
+	);
+}
+
+function AlbumsLoader() {
+	return <div>Albums Loader...</div>;
+}
+
+async function AlbumsAsyncComponent() {
+	await new Promise(resolve => {
+		setTimeout(resolve, 3000);
+	});
+
+	return (
+		<div>
+			<h2>Albums</h2>
+			<p>...</p>
+		</div>
+	);
+}
+
+export default function Page() {
+	return (
+		<Suspense fallback={<BigLoader />}>
+			<BibliographyAsyncComponent />
+			<Suspense fallback={<AlbumsLoader />}>
+				<AlbumsAsyncComponent />
+			</Suspense>
+		</Suspense>
+	);
+}
+```
+
+How will the entire `Suspense' boundary be drawn?
+
+- If `BibliographyAsyncComponent` hasn't loaded yet, `BigSpinner` is shown in place of the entire content area.
+- Once `BibliographyAsyncComponent` is ready, `BigSpinner` is replaced with the content.
+- If `AlbumsAsyncComponent` hasn't loaded yet, `AlbumsLoader` is shown in place of the `Albums` component.
+- Once `AlbumsAsyncComponent` is ready, `AlbumsLoader` is replaced with the `Albums` component.
+
+You can easily coordinate with parts of your UI should always "pop in" together at the same time and which parts should progressively stream in as they load.
+
+As a general best practice, it is not recommended to wrap each component with its own suspense boundary. Instead, it's more efficient and organized to define loading states in your application and implement suspense boundaries based on those states.
+
+### Streaming
+
+Let's summarize how a traditional SSR works - one where all the data is loaded before anything is displayed to the user. Then, the user is presented with the complete page without retrieving the client's data.
+
+<MdxImage src={SSR_GRAPH} />
+
+- First, all data for a given page is fetched on the server.
+- The server then renders the HTML for the page (executes React code on server).
+- The HTML, CSS, and JavaScript for the page are sent to the client.
+- A non-interactive user interface is shown using the generated HTML, and CSS.
+- Finally, React hydrates the user interface to make it interactive.
+
+These steps are sequential and blocking, meaning the server can only render the HTML for a page once all the data has been fetched. And, on the client, React can only hydrate the UI once the code for all components in the page has been downloaded.
+
+**STREAMING** allows us to break down the page's HTML into smaller chunks and progressively send those chunks from the server to the client.
+
+<MdxImage src={SUSPENDED_COMPONENTS_GRAPH} />
+
+This enables parts of the page to be displayed sooner, without waiting for all the data to load before any UI can be rendered. Each component can be considered as a separate chunk. Since not all of the components requires data fetching, we can render parts of application immediately, while other components perform their data fetching. Once they finished their job, they render html parts and stream in into the client. This primarily reduce Time To First Byte (TTFB) First Contentful Paint (FCP). On slower devices, it also improves Time to Interactive (TTI).
+
+```tsx
+function ProductBannerLoading() {
+	return <div>Product Loading...</div>;
+}
+
+function getRandomInt(max: number) {
+	return Math.floor(Math.random() * max);
+}
+
+async function ProductBanner() {
+	const waitingTime = getRandomInt(3) * 1000;
+
+	await new Promise(resolve => {
+		setTimeout(resolve, waitingTime);
+	});
+
+	return (
+		<div>
+			<h2>Product banner</h2>
+			<p>Waiting time: {waitingTime}</p>
+		</div>
+	);
+}
+
+export default function Page() {
+	return (
+		<div className="container mx-auto">
+			<nav className="py-4 px-8 bg-gray-200">Navigation</nav>
+
+			<div className="flex">
+				<aside className="w-1/3 bg-gray-300">sidebar</aside>
+
+				<main>
+					<h1 className="text-3xl">Products</h1>
+
+					<Suspense fallback={<ProductBannerLoading />}>
+						<ProductBanner />
+					</Suspense>
+					<Suspense fallback={<ProductBannerLoading />}>
+						<ProductBanner />
+					</Suspense>
+					<Suspense fallback={<ProductBannerLoading />}>
+						<ProductBanner />
+					</Suspense>
+				</main>
+			</div>
+		</div>
+	);
+}
+```
+
+> This is what the code for the above diagram might look like. The individual products may take different lengths of time to load, but anyway, once one product is loaded, it is immediately streamed to the client and displayed. It doesn't wait for the longest one to display all at once.
+
+<MdxImage src={MULTIPLE_SUSPENSE_GRAPH} />
+
+> In this picture, we can see the sequential difference between traditional SSR and streaming components. The first component to appear on the clincher screen is the C component, which is not asynchronous, so it doesn't have to make any calls to the database or any other resource. It just renders the HTML, which it then sends to the client. Meanwhile, components A and B have started their data retrieval process in parallel. Component B finishes after 1s, renders its content, and sends it to the client, where it is dynamically displayed instead of its loading state, defined in `Suspense fallback.` The same thing then happens with component A.
+
+## Client side and server side rendering
+
+Next.js allows us to create hybrid applications, where parts of our code can be rendered exlusively on the server and other on both server and client.
+
+- The **client** refers to the browser on a user's device that sends a request to a server for your application code. It receives the code and renders the UI on the client side.
+
+- The **server** refers to the computer in a data center that stores your application code, receives requests from a client, and sends back an appropriate response.
+
+It used to be necessary to use different languages for client and server code. With frameworks like Next.js, developers can use the same language, which brings a lot of benefits. Developer experience is inarguably better. You can setup your project to easily jump from client side code to server side code, write type safe API routes etc.
+
+## React Server Components
+
+React Server Components allow us to write UI that can be rendered exlusively on the server, and can be optionally cached. There are three common server rendering strategies:
+
+- Static rendering
+- Dynamic rendering
+- Streaming
+
+### Why should we use server components?
+
+There are several reasons why we should use server components:
+
+- **Data Fetching:** Server Components allow you to move data fetching to the server, closer to your data source. This can improve performance by reducing time it takes to fetch data needed for rendering, and the amount of requests the client needs to make.
+
+- **Security:** Server Components allow you to keep sensitive data and logic on the server, such as tokens and API keys, without the risk of exposing them to the client.
+
+- **Caching:** By rendering on the server, the result can be cached and reused on subsequent requests and across users. This can improve performance and reduce cost by reducing the amount of rendering and data fetching done on each request.
+
+- **Bundle Sizes:** Server Components allow you to keep large dependencies that previously would impact the client JavaScript bundle size on the server. This is beneficial for users with slower internet or less powerful devices, as the client does not have to download, parse and execute any JavaScript for Server Components.
+
+- **Initial Page Load and First Contentful Paint (FCP):** On the server, we can generate HTML to allow users to view the page immediately, without waiting for the client to download, parse and execute the JavaScript needed to render the page.
+
+- **Search Engine Optimization and Social Network Shareability:** The rendered HTML can be used by search engine bots to index your pages and social network bots to generate social card previews for your pages.
+
+- **Streaming:** Server Components allow you to split the rendering work into chunks and stream them to the client as they become ready. This allows the user to see parts of the page earlier without having to wait for the entire page to be rendered on the server.
+
+> Once more, in Next.js, all components are considered server components by default. If you want to create an interactive component, you need to explicitly mark it as a client component.
+
+### Static rendering
+
+Before the server components came in, generating the entire page statically, including the correct data, was possible when building the application. This approach is called Static Site Generation (SSG). This approach is suitable for sites that only change occasionally or not at all. In the case of e-commerce, we can have a product list that does not change from minute to minute. Hence, the pages of each product can be created in advance with the correct data already in place, and when a user queries that page, they can send an already prepared page without having to recreate it.
+
+With the advent of RSC, it is possible to implement more granularity and decide which component will be implemented as entirely static without the possibility of changing its content (the only way would be to rebuild the application).
+
+### Dynamic rendering
+
+With Dynamic Rendering, routes are rendered for each user at a request time. Dynamic rendering is useful when a route has a data that is personalized to the user or has an information that can only be known at request time, such as cookies or the URL's search params.
+
+As a developer, you have the possibility to decide how the component or the whole page will behave in terms of caching, by setting the so-called "Route segment config", which we will discuss in the next lesson.
+
+## Client components
+
+To define a client component in Next.js, we must use the `"use client"` directive at the beginning of the component file. We need these components to bring interactivity to our application, which includes form filling, editing or creating data, dynamic UI changes, etc.
+
+> Note: Creating new data or modifying an existing entity nowadays is done without using the client component or the so-called server actions, which we will talk about briefly in the following lessons.
+
+## Server and client components - composition pattern
+
+To use server components in combination with client components, you need to think about them slightly differently. Before the advent of RSC, one could look at components as independent pieces of UI that could be used anywhere in the application. With RSC, we can't look at components that way. Let's explain this with a concrete example.
+
+<MdxImage src={SERVER_COUNTER_BASE} />
+
+> As long as all components are RSC, there is no problem. However, according to the name, we would expect that we would need to have a `Counter` component labeled as `use client` since we need to keep stating the current value of `counter` in it.
+
+```tsx
+import { Counter } from '../components/counter';
+
+const OtherComponent = () => <div />;
+
+export default function Page() {
+	return (
+		<div>
+			<OtherComponent />
+			<Counter />
+		</div>
+	);
+}
+```
+
+```tsx
+'use client';
+
+import { useState } from 'react';
+
+// ✖ You can't import server components in "use client" files
+import { ServerText } from './server-text';
+
+const CounterValue = ({ value }) => <div>{value}</div>;
+
+export const Counter = () => {
+	const [count, setCount] = useState(0);
+
+	return (
+		<div>
+			<ServerText />
+			<CounterValue value={count} />
+		</div>
+	);
+};
+```
+
+```tsx
+import fs from 'node:fs/promises';
+
+export const ServerText = async () => {
+	const text = await fs.readFile('src/components/text.txt', 'utf-8');
+	return <div>{text}</div>;
+};
+```
+
+> This is how the code of the above diagram could look like. If we run the application like this, we will find that running it is impossible. This is because the `Counter` component is marked as a client, and at the same time, this component imports a component that is an asynchronous RSC.
+
+As we already know, if a component changes its state (in this case, the `Counter` component), it must rerender itself, and at the same time, it must rerender all the components that it renders. However, as we have covered in this lesson, RSCs do not render.
+
+<MdxImage src={SERVER_COUNTER_WITH_BORDER} />
+
+> In this diagram, we can see that the `Counter` component indicates the `Client boundary`, i.e., all components that this component will render and its `children` components must be client components.
+
+However, we would need the `ServerText` component to get data from the server, specifically from the file system. This brings us to the principle of how to put server and client components together.
+
+- The rule of thumb is that a Client component cannot import a Server component and render it in its tree as `<ServerComponent />`.
+
+- However, it is also true that the Client component can accept props, which include `children` among others. This prop is typed as `{ children: ReactNode }`. These props can indeed contain any ReactNode, including the Server component.
+- Note: This props does not have to be named only `children`; it can be a props with any name; the important thing is that it is a ReactNode.
+
+<MdxImage src={SERVER_COUNTER_FINAL_GRAPH} />
+
+> In this case, we moved the rendering from the `Counter` component directly to the `Page` component, which is not a Client component and can therefore render Server components. We send the `ServerText` component as a props to the `Counter` component.
+
+Note here that the `ServerText` component is not rerendered when the state of the `Counter` component changes. The `ServerText` is passed as a prop, and, indeed, the rendered props will not be rerendered if the state of the component changes.
+
+```tsx
+// First Code Block
+import { Counter } from '../components/counter';
+import { ServerText } from '../components/server-text';
+
+const OtherComponent = () => <div />;
+
+export default function Page() {
+	return (
+		<div>
+			<OtherComponent />
+			<Counter text={<ServerText />} />
+		</div>
+	);
+}
+```
+
+```tsx
+'use client';
+
+import { useState } from 'react';
+
+const CounterValue = ({ value }: { value: number }) => <div>{value}</div>;
+
+type CounterProps = {
+	text: React.ReactNode;
+};
+
+export const Counter = ({ text }: CounterProps) => {
+	const [count, setCount] = useState(0);
+
+	return (
+		<div>
+			{text}
+			<CounterValue value={count} />
+		</div>
+	);
+};
+```
+
+```tsx
+import fs from 'node:fs/promises';
+
+export const ServerText = async () => {
+	const text = await fs.readFile('src/components/text.txt', 'utf-8');
+	return <div>{text}</div>;
+};
+```
+
+### Providers
+
+It may seem that it is no longer possible to use all the technologies needed for a proper functioning of the React context in combination with RSC. This includes the popular data retrieval library that is `Tanstack query`.
+
+Even though data retrieval is now more preferred on the server using asynchronous RSCs in Next.js, retrieving data from the client as before is possible. For Tanstack query to work correctly, it is necessary to define a `QueryClientProvider` at the top level of the application. Of course, this **doesn't** mean that the entire application will have to be implemented using only Client components. Using the same principle as in the `Counter` component example, we wrap the whole application with all the necessary providers, with the possibility of using RSC components further within the application.
+
+```tsx
+// src/app/providers.tsx
+'use client';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import type { PropsWithChildren } from 'react';
+
+const queryClient = new QueryClient();
+
+export function Providers({ children }: PropsWithChildren) {
+	return (
+		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+	);
+}
+```
+
+```tsx
+// src/app/layout.tsx
+import './globals.css';
+
+import type { Metadata } from 'next';
+import { Poppins } from 'next/font/google';
+import type { PropsWithChildren } from 'react';
+import { Providers } from './providers';
+
+const poppins = Poppins({
+	subsets: ['Latin-ext'],
+	weight: ['400', '500', '600', '700']
+});
+
+export const metadata: Metadata = {
+	title: 'PV247'
+};
+
+export default function RootLayout({ children }: PropsWithChildren<{}>) {
+	return (
+		<html lang="en">
+			<body className={`flex min-h-screen flex-col ${poppins.className}`}>
+				<Providers>{children}</Providers>
+			</body>
+		</html>
+	);
+}
+```
+
+## Next lecture
+
+In the next lesson, we'll look at other things about Next.js. Specifically, the ability to create custom API endpoints in our application. We'll talk about what route segments are used for, explain the complex issue of caching and the possibility of invalidating each caching layer. Finally, we'll look at how to create a database and work with it in Next.js.
+
+## Assignment
+
+TBA

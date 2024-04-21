@@ -12,6 +12,7 @@ import { HooksMdx } from './hooks';
 import { OtherHooksRefsTablesMdx } from './other-hooks-refs-tables';
 import { AsyncFormsMdx } from './async-forms';
 import { NextjsMdx } from './nextjs';
+import { SuspenseStreamingRscMdx } from './suspense-streaming-rsc';
 
 type MdxComponent = ComponentType<{
 	readonly components?: MDXComponents | undefined;
@@ -25,8 +26,7 @@ const lectureMdxComponentsMap: Record<LectureSlug, MdxComponent> = {
 	'other-hooks-refs-tables': OtherHooksRefsTablesMdx,
 	'async-forms': AsyncFormsMdx,
 	'nextjs': NextjsMdx,
-	// TODO
-	'suspense-streaming-rsc': ReactMdx,
+	'suspense-streaming-rsc': SuspenseStreamingRscMdx,
 	'api-configs-server-actions-database': ApiConfigsServerActionsDatabaseMdx,
 	'authentication-metadata-deployment': AuthenticationMetadataDeploymentMdx
 };
