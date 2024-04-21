@@ -109,7 +109,8 @@ export const seed = async () => {
 			id: 'other-hooks-refs-tables',
 			name: 'Hooks, refs, tables',
 			slug: 'other-hooks-refs-tables',
-			preview: 'Hooks, refs, tables preview',
+			preview:
+				'This session covers advanced React hooks like useRef and forwardRef, global state management, and practical use of the tanstack-table library for efficient table handling in React applications.',
 			availableFrom: '2024-03-18T10:00:00',
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 20,
@@ -123,7 +124,8 @@ export const seed = async () => {
 			id: 'async-forms',
 			name: 'Async, forsm',
 			slug: 'async-forms',
-			preview: 'Async, forms preview',
+			preview:
+				'This lesson revisits React Context for global state management, explores asynchronous operations, introduces the Tanstack Query library for data fetching, discusses runtime validation with Zod, and handles forms efficiently with React Hook Form.',
 			availableFrom: '2024-03-25T10:00:00',
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 40,
@@ -137,7 +139,8 @@ export const seed = async () => {
 			id: 'nextjs',
 			name: 'Next.js - the React framework',
 			slug: 'nextjs',
-			preview: 'Next.js preview lecture',
+			preview:
+				"Next.js extends React's capabilities for full-stack web development, featuring server-side rendering and efficient data fetching. It simplifies building web apps with SEO-friendly routing and dynamic content strategies. The next lesson will explore server-side rendering and advanced routing in more detail.",
 			availableFrom: '2024-04-01T10:00:00',
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 20,
@@ -151,7 +154,8 @@ export const seed = async () => {
 			id: 'suspense-streaming-rsc',
 			name: 'Suspense, streaming, RSC',
 			slug: 'suspense-streaming-rsc',
-			preview: 'Suspense, streaming, RSC preview lecture',
+			preview:
+				"This lesson covers Next.js's server-side rendering and React Server Components to enhance SEO and performance. It explains how Next.js uses server components by default and requires explicit client component declarations. Upcoming topics will address custom API endpoints and caching strategies in Next.js.",
 			availableFrom: '2024-04-08T10:00:00',
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 30,
