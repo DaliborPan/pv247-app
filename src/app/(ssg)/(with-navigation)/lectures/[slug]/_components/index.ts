@@ -10,6 +10,7 @@ import { AuthenticationMetadataDeploymentMdx } from './authentication-metadata-d
 import { StylingMdx } from './styling';
 import { HooksMdx } from './hooks';
 import { OtherHooksRefsTablesMdx } from './other-hooks-refs-tables';
+import { AsyncFormsMdx } from './async-forms';
 
 type MdxComponent = ComponentType<{
 	readonly components?: MDXComponents | undefined;
@@ -21,8 +22,8 @@ const lectureMdxComponentsMap: Record<LectureSlug, MdxComponent> = {
 	'styling': StylingMdx,
 	'hooks': HooksMdx,
 	'other-hooks-refs-tables': OtherHooksRefsTablesMdx,
+	'async-forms': AsyncFormsMdx,
 	// TODO
-	'async-forms': ReactMdx,
 	'nextjs': ReactMdx,
 	'suspense-streaming-rsc': ReactMdx,
 	'api-configs-server-actions-database': ApiConfigsServerActionsDatabaseMdx,
