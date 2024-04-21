@@ -101,7 +101,8 @@ export const seed = async () => {
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 10,
 			homeworkName: 'React state',
-			homeworkPreview: 'React state homework preivew',
+			homeworkPreview:
+				"This week's task is to develop an interactive 'Task Manager' SPA that allows users to add, delete, and filter tasks using a provided useInitialTasks() hook. Users can reset the application to display tasks from the 'original database' only, without any applied filters or added tasks. The application does not need to be responsive.",
 			homeworkSlug: 'state',
 			homeworkDeadline: '2024-03-18T10:00:00'
 		},
