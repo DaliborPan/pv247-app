@@ -8,7 +8,7 @@ export const IncorrectUsageOfKeys = ({ children }: PropsWithChildren) => {
 	const [items, setItems] = useState(['Item 1', 'Item 2', 'Item 3']);
 
 	return (
-		<div className="flex gap-x-4">
+		<div className="flex flex-col lg:flex-row gap-x-4">
 			{children}
 
 			<div className="flex justify-center p-4 pt-10 my-6 rounded-lg shadow bg-primary-100 grow">

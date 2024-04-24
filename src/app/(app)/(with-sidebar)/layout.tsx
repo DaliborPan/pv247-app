@@ -6,7 +6,7 @@ const Layout = ({ children }: PropsWithChildren) => (
 	<div className="container pb-8">
 		<Sidebar />
 
-		<div className="pl-[20rem]">{children}</div>
+		<div className="lg:pl-[20rem] pt-10 lg:pt-0">{children}</div>
 	</div>
 );
 

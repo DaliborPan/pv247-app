@@ -1,5 +1,3 @@
-import { redirect } from 'next/navigation';
-
 import { lectureSlugSchema, type LectureSlug } from '@/db';
 
 import { getLectureMdxComponent } from './_components';
@@ -17,13 +15,7 @@ export const generateStaticParams = (): Params[] => {
 };
 
 const Page = ({ params }: { params: Params }) => {
-	const parsed = lectureSlugSchema.safeParse(params.slug);
-
-	if (!parsed.success) {
-		redirect('/lectures');
-	}
-
-	const MdxComponent = getLectureMdxComponent(parsed.data);
+	const MdxComponent = getLectureMdxComponent(params.slug);
 
 	return <MdxComponent />;
 };

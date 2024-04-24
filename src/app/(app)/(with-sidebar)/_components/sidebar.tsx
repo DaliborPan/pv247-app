@@ -5,7 +5,7 @@ import { Button } from '@/components/base/button';
 import { Icon } from '@/components/base/icon';
 import { db, type Lecture } from '@/db';
 import { cn } from '@/lib/cn';
-import { SidebarCard } from '@/components/sidebar-card';
+import { ResponsiveSidebarCard, SidebarCard } from '@/components/sidebar-card';
 import { getOverview } from '@/db/service/overview';
 
 const getIsAvailable = (lecture: Lecture) =>
@@ -19,7 +19,7 @@ const LecturesCard = async () => {
 	const availableLength = lectures.filter(getIsAvailable).length;
 
 	return (
-		<SidebarCard title="Lectures">
+		<SidebarCard title="Lectures" className="hidden lg:block">
 			<div className="flex flex-col gap-y-2">
 				{lectures.slice(0, availableLength + 1).map(lecture => {
 					const isAvailable = getIsAvailable(lecture);
@@ -62,7 +62,7 @@ const HomeworksCard = async () => {
 	const availableLength = lectures.filter(getIsAvailable).length;
 
 	return (
-		<SidebarCard title="Homeworks">
+		<SidebarCard title="Homeworks" className="hidden lg:block">
 			<div className="flex flex-col gap-y-2">
 				{lectures.slice(0, availableLength + 1).map(lecture => {
 					const isAvailable = getIsAvailable(lecture);
@@ -103,7 +103,7 @@ const OverviewCard = async () => {
 	);
 
 	return (
-		<SidebarCard title="Overview">
+		<ResponsiveSidebarCard title="Overview">
 			<div className="flex flex-col gap-y-1">
 				<div className="flex items-center">
 					<span className="text-gray-600 grow">Lectures</span>
@@ -131,7 +131,7 @@ const OverviewCard = async () => {
 					<span className="text-sm font-medium text-primary">{attendance}</span>
 				</div>
 			</div>
-		</SidebarCard>
+		</ResponsiveSidebarCard>
 	);
 };
 
@@ -191,7 +191,7 @@ const ProjectCard = async () => {
 };
 
 export const Sidebar = () => (
-	<aside className="fixed top-[100px] h-[calc(100vh-132px)] w-[18rem] overflow-y-auto flex flex-col gap-y-8">
+	<aside className="lg:fixed lg:top-[100px] lg:h-[calc(100vh-132px)] lg:w-[18rem] lg:overflow-y-auto flex flex-col lg:gap-y-8 gap-y-4">
 		{/* Overview */}
 		<OverviewCard />
 

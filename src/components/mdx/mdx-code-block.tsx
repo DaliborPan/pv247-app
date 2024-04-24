@@ -27,7 +27,7 @@ export const MdxCodeBlock = ({ children }: PropsWithChildren<object>) => {
 			)}
 		>
 			{height > 321 && height !== Infinity && (
-				<div className="absolute font-sans right-4 top-4">
+				<div className="absolute font-sans lg:top-4 bottom-4 right-4 z-20">
 					<Button
 						variant="outline"
 						onClick={() => setExpanded(!expanded)}

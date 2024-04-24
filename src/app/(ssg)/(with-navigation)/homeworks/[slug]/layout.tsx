@@ -1,7 +1,6 @@
 import { type PropsWithChildren } from 'react';
-import { redirect } from 'next/navigation';
 
-import { homeworkSlugSchema } from '@/db';
+import { type HomeworkSlug } from '@/db';
 import { query } from '@/db/query';
 
 import { NavigationButtonLink } from '../../_components/navigation-button-link';
@@ -15,19 +14,11 @@ const getLecturesWithHomework = async () => {
 const Layout = async ({
 	children,
 	params
-}: PropsWithChildren<{ params: { slug: string } }>) => {
-	const parsedSlug = homeworkSlugSchema.safeParse(params.slug);
-
-	if (!parsedSlug.success) {
-		redirect('/homeworks');
-	}
-
-	const pageParamSlug = parsedSlug.data;
-
+}: PropsWithChildren<{ params: { slug: HomeworkSlug } }>) => {
 	const lectures = await getLecturesWithHomework();
 
 	const slugLectureIndex = lectures.findIndex(
-		lecture => lecture.homeworkSlug === pageParamSlug
+		lecture => lecture.homeworkSlug === params.slug
 	);
 
 	const prevLecture = lectures[slugLectureIndex - 1];

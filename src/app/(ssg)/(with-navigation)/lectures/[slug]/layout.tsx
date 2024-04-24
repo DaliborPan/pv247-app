@@ -1,7 +1,6 @@
 import { type PropsWithChildren } from 'react';
-import { redirect } from 'next/navigation';
 
-import { lectureSlugSchema } from '@/db';
+import { type LectureSlug } from '@/db';
 import { query } from '@/db/query';
 
 import { NavigationButtonLink } from '../../_components/navigation-button-link';
@@ -9,19 +8,11 @@ import { NavigationButtonLink } from '../../_components/navigation-button-link';
 const Layout = async ({
 	children,
 	params
-}: PropsWithChildren<{ params: { slug: string } }>) => {
-	const parsedSlug = lectureSlugSchema.safeParse(params.slug);
-
-	if (!parsedSlug.success) {
-		redirect('/lectures');
-	}
-
-	const pageParamSlug = parsedSlug.data;
-
+}: PropsWithChildren<{ params: { slug: LectureSlug } }>) => {
 	const lectures = await query.lectures.getOrderedLectures();
 
 	const slugLectureIndex = lectures.findIndex(
-		lecture => lecture.slug === pageParamSlug
+		lecture => lecture.slug === params.slug
 	);
 
 	const prevLecture = lectures[slugLectureIndex - 1];
@@ -29,8 +20,8 @@ const Layout = async ({
 
 	return (
 		<>
-			<div className="flex flex-col justify-between md:flex-row">
-				<div>
+			<div className="flex flex-col justify-between gap-2 md:flex-row">
+				<div className="w-full md:w-auto">
 					{prevLecture && (
 						<NavigationButtonLink
 							type="previous"
@@ -51,7 +42,7 @@ const Layout = async ({
 				</div>
 			</div>
 
-			<main className="max-w-4xl mx-auto -mt-10">{children}</main>
+			<main className="max-w-4xl mx-auto -mt-4 lg:-mt-10">{children}</main>
 		</>
 	);
 };

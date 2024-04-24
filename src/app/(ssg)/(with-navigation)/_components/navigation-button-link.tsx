@@ -19,25 +19,29 @@ export const NavigationButtonLink = ({
 		<Link href={href}>
 			<Button
 				variant="ghost"
-				className="flex flex-col items-start h-auto py-4 font-normal hover:bg-white hover:shadow"
+				className="flex items-center md:items-start justify-between w-full h-auto py-4 font-normal bg-white hover:bg-white hover:shadow md:bg-transparent md:justify-start"
 			>
-				<span
-					className={cn(
-						'text-sm text-gray-600',
-						type === 'previous' && 'md:pl-6'
-					)}
-				>
-					{type === 'previous' ? 'Previous' : 'Next'}
-				</span>
-				<div
-					className={cn(
-						'flex items-center font-medium md:gap-x-2',
-						type === 'next' && 'flex-row-reverse'
-					)}
-				>
-					<Icon name={iconName} className="hidden md:block" />
-					<span>{name}</span>
+				<div className="flex flex-col items-start">
+					<span
+						className={cn(
+							'text-sm text-gray-600',
+							type === 'previous' && 'md:pl-6'
+						)}
+					>
+						{type === 'previous' ? 'Previous' : 'Next'}
+					</span>
+					<div
+						className={cn(
+							'flex items-center font-medium md:gap-x-2',
+							type === 'next' && 'flex-row-reverse'
+						)}
+					>
+						<Icon name={iconName} className="hidden md:block" />
+						<span>{name}</span>
+					</div>
 				</div>
+
+				<Icon name={iconName} className="md:hidden size-6" />
 			</Button>
 		</Link>
 	);

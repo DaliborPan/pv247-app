@@ -1,5 +1,3 @@
-import { redirect } from 'next/navigation';
-
 import { type HomeworkSlug, homeworkSlugSchema } from '@/db';
 
 import { getHomeworkMdxComponent } from './_components';
@@ -19,13 +17,7 @@ export const generateStaticParams = (): Params[] => {
 };
 
 const Page = ({ params }: { params: Params }) => {
-	const parsed = homeworkSlugSchema.safeParse(params.slug);
-
-	if (!parsed.success) {
-		redirect('/homeworks');
-	}
-
-	const MdxComponent = getHomeworkMdxComponent(parsed.data);
+	const MdxComponent = getHomeworkMdxComponent(params.slug);
 
 	return <MdxComponent />;
 };
