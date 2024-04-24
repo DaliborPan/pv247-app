@@ -13,7 +13,7 @@ import { LabeledItem } from './labeled-item';
 
 const usePersonHomeworkPointsQuery = (lectureId: string, userId?: string) =>
 	useQuery({
-		queryKey: ['homework-points', userId],
+		queryKey: ['homework-points', lectureId, userId],
 		enabled: !!userId,
 		queryFn: async () => {
 			const result = await getHomeworkPointsAction(lectureId);
@@ -45,7 +45,11 @@ export const HomeworkPoints = ({ lecture }: { lecture: Lecture }) => {
 		</div>
 	) : (
 		<LabeledItem label="Earned points">
-			<div>{data?.status === 'pending' ? 'Not scored yet' : data?.points}</div>
+			<div>
+				{data?.status === 'pending'
+					? 'Not scored yet'
+					: `${data?.points} points`}
+			</div>
 		</LabeledItem>
 	);
 };
