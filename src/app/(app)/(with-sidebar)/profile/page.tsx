@@ -11,6 +11,7 @@ import {
 } from '@/components/person-detail';
 import { db } from '@/db';
 import { LabeledValue } from '@/components/labeled-value';
+import { PointsBadge } from '@/components/points-badge';
 
 import { EditProfileForm } from './_components/edit-profile-form';
 
@@ -51,35 +52,50 @@ const ProjectCard = async () => {
 	);
 };
 
-const AttendanceCard = () => (
-	<ProfileCard title="Attendance">
-		<div>TBA</div>
-	</ProfileCard>
-);
-
-const HomeworksCard = async () => {
+const HomeworksCard = async ({ userId }: { userId: string }) => {
 	const availableLectures = await query.lectures.getAvailableLectures();
+	const homeworks = await db.query.homeworks.findMany({
+		where: (table, { eq }) => eq(table.studentId, userId)
+	});
 
 	return (
 		<ListCard
-			items={availableLectures}
+			items={availableLectures.filter(lecture => !!lecture.homeworkSlug)}
 			title="Homeworks"
-			renderItem={(lecture, index) => (
-				<>
-					<div className="grow">
-						<span className="text-xs text-gray-500">Homework {index}</span>
-						<h4 className="-mt-1">{lecture.homeworkName}</h4>
-					</div>
+			renderItem={(lecture, index) => {
+				const homework = homeworks.find(
+					homework => homework.lectureId === lecture.id
+				);
 
-					<Button
-						size="sm"
-						variant="primary/inverse"
-						iconLeft={{
-							name: 'ArrowRight'
-						}}
-					/>
-				</>
-			)}
+				const points = homework?.points ?? null;
+
+				return (
+					<>
+						<div className="grow">
+							<span className="text-xs text-gray-500">
+								Homework {index + 1}
+							</span>
+							<h4 className="-mt-1">{lecture.homeworkName}</h4>
+						</div>
+
+						<PointsBadge
+							points={points}
+							maximumPoints={lecture.homeworkMaxPoints}
+						/>
+
+						<Link href={`/homeworks/${lecture.homeworkSlug}`}>
+							<Button
+								className="ml-4"
+								size="sm"
+								variant="ghost"
+								iconLeft={{
+									name: 'ArrowRight'
+								}}
+							/>
+						</Link>
+					</>
+				);
+			}}
 		/>
 	);
 };
@@ -109,9 +125,7 @@ const Page = async () => {
 
 			<OverviewCard userId={user.id} />
 
-			<HomeworksCard />
-
-			<AttendanceCard />
+			<HomeworksCard userId={user.id} />
 
 			<ProjectCard />
 		</>

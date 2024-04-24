@@ -6,6 +6,8 @@ import { Badge } from '@/components/base/badge';
 import { Icon } from '@/components/base/icon';
 import { TextPreview } from '@/components/text-preview';
 import { formatDate } from '@/lib/date';
+import { getIsAvailable } from '@/db/query/lectures';
+import { cn } from '@/lib/cn';
 
 const getNumberWithOrdinal = (num: number) => {
 	const s = ['th', 'st', 'nd', 'rd'];
@@ -20,30 +22,49 @@ const LectureCard = ({
 }: {
 	lecture: Lecture;
 	index: number;
-}) => (
-	<article className="flex flex-col p-6 bg-white rounded-lg shadow">
-		<span className="flex items-center mb-1 text-xs text-gray-500">
-			from {formatDate(lecture.availableFrom)}
-		</span>
+}) => {
+	const isAvailable = getIsAvailable(lecture);
 
-		<h2 className="text-xl font-medium">{lecture.name}</h2>
+	return (
+		<article className="flex flex-col p-6 bg-white rounded-lg shadow">
+			<span className="flex items-center mb-1 text-xs text-gray-500">
+				from {formatDate(lecture.availableFrom)}
+			</span>
 
-		<TextPreview className="mt-3 line-clamp-5 grow">
-			{lecture.preview}
-		</TextPreview>
+			<h2 className="text-xl font-medium">{lecture.name}</h2>
 
-		<div className="flex items-end justify-between mt-6">
-			<Link href={`/lectures/${lecture.slug}`}>
-				<Button size="sm">Open lecture</Button>
-			</Link>
+			<TextPreview className="mt-3 line-clamp-5 grow">
+				{lecture.preview}
+			</TextPreview>
 
-			<Badge variant="outline" className="text-gray-600">
-				<Icon name="Layers" className="mr-2" />
-				{getNumberWithOrdinal(index + 1)} week
-			</Badge>
-		</div>
-	</article>
-);
+			<div className="flex items-end justify-between mt-6">
+				<Link
+					href={`/lectures/${lecture.slug}`}
+					className={cn(!isAvailable && 'pointer-events-none')}
+				>
+					<Button
+						iconLeft={
+							!isAvailable
+								? {
+										name: 'Lock'
+									}
+								: undefined
+						}
+						disabled={!isAvailable}
+						size="sm"
+					>
+						Open lecture
+					</Button>
+				</Link>
+
+				<Badge variant="outline" className="text-gray-600">
+					<Icon name="Layers" className="mr-2" />
+					{getNumberWithOrdinal(index + 1)} week
+				</Badge>
+			</div>
+		</article>
+	);
+};
 
 const Page = async () => {
 	const lectures = await db.query.lectures.findMany();

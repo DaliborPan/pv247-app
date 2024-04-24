@@ -1,19 +1,7 @@
-import { type PropsWithChildren } from 'react';
-
-import { Badge } from '@/components/base/badge/badge';
-import { Icon } from '@/components/base/icon';
 import { ListCard } from '@/components/person-detail';
+import { PointsBadge } from '@/components/points-badge';
 import { type Lecture, type Homework } from '@/db';
 import { query } from '@/db/query';
-
-const PointsBadge = ({ children }: PropsWithChildren) => (
-	<Badge
-		variant="secondary"
-		className="flex items-center px-3 py-1 text-sm text-black bg-primary-200 gap-x-2 hover:bg-primary-200"
-	>
-		{children}
-	</Badge>
-);
 
 export const HomeworksCard = async ({
 	studentHomeworks
@@ -41,22 +29,14 @@ export const HomeworksCard = async ({
 
 						{studentHomework ? (
 							<div className="flex gap-x-2">
-								<PointsBadge>
-									<Icon name="MonitorCheck" />
-									<span>{studentHomework.points} points</span>
-								</PointsBadge>
+								<PointsBadge points={studentHomework.points} />
 
-								<PointsBadge>
-									<span>
-										Maximum {studentHomework.lecture?.homeworkMaxPoints} points
-									</span>
-								</PointsBadge>
+								<PointsBadge
+									maximumPoints={studentHomework.lecture?.homeworkMaxPoints}
+								/>
 							</div>
 						) : (
-							<PointsBadge>
-								<Icon name="MonitorX" />
-								<span>Not scored yet.</span>
-							</PointsBadge>
+							<PointsBadge points={null} />
 						)}
 					</>
 				);

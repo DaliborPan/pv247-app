@@ -123,11 +123,11 @@ export const seed = async () => {
 		},
 		{
 			id: 'async-forms',
-			name: 'Async, forsm',
+			name: 'Async, forms',
 			slug: 'async-forms',
 			preview:
 				'This lesson revisits React Context for global state management, explores asynchronous operations, introduces the Tanstack Query library for data fetching, discusses runtime validation with Zod, and handles forms efficiently with React Hook Form.',
-			availableFrom: '2024-03-25T10:00:00',
+			availableFrom: '2025-03-25T10:00:00',
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 40,
 			homeworkName: 'Forms, working with async data',
@@ -142,7 +142,7 @@ export const seed = async () => {
 			slug: 'nextjs',
 			preview:
 				"Next.js extends React's capabilities for full-stack web development, featuring server-side rendering and efficient data fetching. It simplifies building web apps with SEO-friendly routing and dynamic content strategies. The next lesson will explore server-side rendering and advanced routing in more detail.",
-			availableFrom: '2024-04-01T10:00:00',
+			availableFrom: '2025-04-01T10:00:00',
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 20,
 			homeworkName: 'Next.js basics, routing',
@@ -157,7 +157,7 @@ export const seed = async () => {
 			slug: 'suspense-streaming-rsc',
 			preview:
 				"This lesson covers Next.js's server-side rendering and React Server Components to enhance SEO and performance. It explains how Next.js uses server components by default and requires explicit client component declarations. Upcoming topics will address custom API endpoints and caching strategies in Next.js.",
-			availableFrom: '2024-04-08T10:00:00',
+			availableFrom: '2025-04-08T10:00:00',
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 30,
 			homeworkName: 'Suspense, React Server Components',
@@ -172,7 +172,7 @@ export const seed = async () => {
 			slug: 'api-configs-server-actions-database',
 			preview:
 				"This lecture, we'll be focusing on custom API endpoints, route segment configs, caching, and revalidation options for cache layers. We'll explore server actions that allow for server-side processing without the need for API routes and discuss how to interact with databases using TypeScript.",
-			availableFrom: '2024-04-15T10:00:00',
+			availableFrom: '2025-04-15T10:00:00',
 			homeworkClassroomLink: '',
 			homeworkMaxPoints: 40,
 			homeworkName: 'API, server actions, database',
@@ -187,7 +187,7 @@ export const seed = async () => {
 			slug: 'authentication-metadata-deployment',
 			preview:
 				"This final lesson, we'll delve into user authentication, leveraging metadata for better visibility, and explore simple deployment options with Vercel. We'll also demonstrate practical authentication implementation using the next-auth library with GitHub.",
-			availableFrom: '2024-04-22T10:00:00',
+			availableFrom: '2025-04-22T10:00:00',
 
 			// No homework for last lesson
 			homeworkClassroomLink: '',

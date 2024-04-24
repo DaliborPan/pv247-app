@@ -4,6 +4,8 @@ import { Button } from '@/components/base/button';
 import { db, type Lecture } from '@/db';
 import { Icon } from '@/components/base/icon';
 import { TextPreview } from '@/components/text-preview';
+import { getIsAvailable } from '@/db/query/lectures';
+import { cn } from '@/lib/cn';
 
 const formatDate = (date: string) => {
 	const d = new Date(date);
@@ -15,35 +17,54 @@ const formatDate = (date: string) => {
 	});
 };
 
-const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => (
-	<article className="flex flex-col p-6 bg-white rounded-lg shadow">
-		<span className="flex items-center mb-1 text-xs text-gray-500">
-			from {formatDate(lecture.availableFrom)}
-		</span>
+const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
+	const isAvailable = getIsAvailable(lecture);
 
-		<h2 className="text-xl font-medium">{lecture.homeworkName}</h2>
+	return (
+		<article className="flex flex-col p-6 bg-white rounded-lg shadow">
+			<span className="flex items-center mb-1 text-xs text-gray-500">
+				from {formatDate(lecture.availableFrom)}
+			</span>
 
-		<TextPreview className="mt-3 line-clamp-5 grow">
-			{lecture.homeworkPreview}
-		</TextPreview>
+			<h2 className="text-xl font-medium">{lecture.homeworkName}</h2>
 
-		<div className="flex items-end justify-between mt-6">
-			<Link href={`/homeworks/${lecture.homeworkSlug}`}>
-				<Button size="sm">Open details</Button>
-			</Link>
+			<TextPreview className="mt-3 line-clamp-5 grow">
+				{lecture.homeworkPreview}
+			</TextPreview>
 
-			<a
-				href={lecture.homeworkClassroomLink}
-				target="_blank"
-				rel="noreferrer"
-				className="flex items-center underline gap-x-2 text-primary underline-offset-2 hover:text-primary-800 hover:no-underline"
-			>
-				<Icon name="ExternalLink" />
-				<span>Github Classroom Link</span>
-			</a>
-		</div>
-	</article>
-);
+			<div className="flex items-end justify-between mt-6">
+				<Link
+					href={`/homeworks/${lecture.homeworkSlug}`}
+					className={cn(!isAvailable && 'pointer-events-none')}
+				>
+					<Button
+						size="sm"
+						iconLeft={
+							!isAvailable
+								? {
+										name: 'Lock'
+									}
+								: undefined
+						}
+						disabled={!isAvailable}
+					>
+						Open details
+					</Button>
+				</Link>
+
+				<a
+					href={lecture.homeworkClassroomLink}
+					target="_blank"
+					rel="noreferrer"
+					className="flex items-center underline gap-x-2 text-primary underline-offset-2 hover:text-primary-800 hover:no-underline"
+				>
+					<Icon name="ExternalLink" />
+					<span>Github Classroom Link</span>
+				</a>
+			</div>
+		</article>
+	);
+};
 
 const Page = async () => {
 	const lectures = await db.query.lectures.findMany({
