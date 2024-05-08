@@ -1,7 +1,7 @@
 import NextAuth, { type NextAuthConfig } from 'next-auth';
 import GitHub from 'next-auth/providers/github';
 import { eq } from 'drizzle-orm';
-import { unstable_noStore } from 'next/cache';
+import React from 'react';
 
 import { getNewStudentLectorId } from '@/db/query/lector';
 import { db } from '@/db';
@@ -104,8 +104,7 @@ export const authOptions = {
 
 export const { handlers, auth, signOut } = NextAuth(authOptions);
 
-export const getSessionUser = async () => {
-	unstable_noStore();
+export const getSessionUser = React.cache(async () => {
 	const session = await auth();
 
 	if (!session?.user) {
@@ -115,4 +114,4 @@ export const getSessionUser = async () => {
 	}
 
 	return JSON.parse(JSON.stringify(session.user)) as User;
-};
+});

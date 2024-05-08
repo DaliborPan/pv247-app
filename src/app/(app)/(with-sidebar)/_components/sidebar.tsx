@@ -6,7 +6,7 @@ import { Icon } from '@/components/base/icon';
 import { db, type Lecture } from '@/db';
 import { cn } from '@/lib/cn';
 import { ResponsiveSidebarCard, SidebarCard } from '@/components/sidebar-card';
-import { getOverview } from '@/db/service/overview';
+import { query } from '@/db/query';
 
 const getIsAvailable = (lecture: Lecture) =>
 	new Date(lecture.availableFrom).getTime() < new Date().getTime();
@@ -96,11 +96,8 @@ const HomeworksCard = async () => {
 };
 
 const OverviewCard = async () => {
-	const user = await getSessionUser();
-
-	const { attendance, homeworks, lectures, project } = await getOverview(
-		user.id
-	);
+	const { homeworks, lectures, project } =
+		await query.overview.getSessionUserOverview();
 
 	return (
 		<ResponsiveSidebarCard title="Overview">
@@ -125,11 +122,6 @@ const OverviewCard = async () => {
 						{project.display}
 					</span>
 				</div>
-
-				{/* <div className="flex items-center">
-					<span className="text-gray-600 grow">Attendance</span>
-					<span className="text-sm font-medium text-primary">{attendance}</span>
-				</div> */}
 			</div>
 		</ResponsiveSidebarCard>
 	);
@@ -192,16 +184,9 @@ const ProjectCard = async () => {
 
 export const Sidebar = () => (
 	<aside className="lg:fixed lg:top-[100px] lg:h-[calc(100vh-132px)] lg:w-[18rem] lg:overflow-y-auto flex flex-col lg:gap-y-8 gap-y-4">
-		{/* Overview */}
 		<OverviewCard />
-
-		{/* Lectures */}
 		<LecturesCard />
-
-		{/* Homeworks */}
 		<HomeworksCard />
-
-		{/* Project */}
 		<ProjectCard />
 	</aside>
 );

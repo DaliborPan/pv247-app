@@ -1,12 +1,16 @@
+import { getSessionUser } from '@/auth';
+
 import { db } from '..';
 import { getIsAvailable } from '../query/lectures';
 
-export const getOverview = async (userId: string) => {
+export const getSessionUserOverview = async () => {
+	const sessionUser = await getSessionUser();
+
 	const lectures = await db.query.lectures.findMany({
 		orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
 		with: {
 			homeworks: {
-				where: (homeworks, { eq }) => eq(homeworks.studentId, userId)
+				where: (homeworks, { eq }) => eq(homeworks.studentId, sessionUser.id)
 			}
 		}
 	});
@@ -24,7 +28,7 @@ export const getOverview = async (userId: string) => {
 	}, 0);
 
 	const userWithProject = await db.query.users.findFirst({
-		where: (user, { eq }) => eq(user.id, userId),
+		where: (user, { eq }) => eq(user.id, sessionUser.id),
 		with: {
 			project: true
 		}
@@ -53,8 +57,6 @@ export const getOverview = async (userId: string) => {
 						: 'Submitted',
 			project
 		},
-		totalPoints: totalPoints + (project?.points ?? 0),
-		// TODO
-		attendance: 'TBA'
+		totalPoints: totalPoints + (project?.points ?? 0)
 	};
 };
