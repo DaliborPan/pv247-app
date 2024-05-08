@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 
 import { getNewStudentLectorId } from '@/db/query/lector';
 import { db } from '@/db';
-import { type User, users } from '@/db/schema/users';
+import { users } from '@/db/schema/users';
 import { query } from '@/db/query';
 
 import { CustomDrizzleAdapter } from './adapter';
@@ -102,17 +102,3 @@ export const authOptions = {
 } satisfies NextAuthConfig;
 
 export const { handlers, auth, signOut } = NextAuth(authOptions);
-
-export const getSessionUser = async () => {
-	console.log('calling for user');
-
-	const session = await auth();
-
-	if (!session?.user) {
-		throw new Error(
-			'getSessionUser must be called from authenticated pages/components only!'
-		);
-	}
-
-	return JSON.parse(JSON.stringify(session.user)) as User;
-};

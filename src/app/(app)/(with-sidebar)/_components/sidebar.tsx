@@ -2,14 +2,13 @@ import Link from 'next/link';
 
 import { Button } from '@/components/base/button';
 import { Icon } from '@/components/base/icon';
-import { db } from '@/db';
 import { cn } from '@/lib/cn';
 import { ResponsiveSidebarCard, SidebarCard } from '@/components/sidebar-card';
-import { getSessionUser } from '@/auth/session-user';
 import { getSessionUserOverview } from '@/db/service/overview';
 import { query } from '@/db/query';
 import { getIsAvailable } from '@/db/query/lectures';
 import { getOrderedLecturesWithHomework } from '@/db/service/lecture';
+import { getProjectWithUsers } from '@/db/service/project';
 
 const LecturesCard = async () => {
 	const lectures = await query.lectures.getOrderedLectures();
@@ -111,22 +110,7 @@ const OverviewCard = async () => {
 };
 
 const ProjectCard = async () => {
-	const user = await getSessionUser();
-
-	const projectUsers = user.projectId
-		? await db.query.users.findMany({
-				where: (users, { eq }) => eq(users.projectId, user.projectId ?? ''),
-				with: {
-					project: true
-				}
-			})
-		: [];
-
-	const projectName = projectUsers.at(0)?.project?.name;
-
-	if (!projectUsers?.length || !projectName) {
-		return null;
-	}
+	const project = await getProjectWithUsers();
 
 	return (
 		<SidebarCard
@@ -139,23 +123,23 @@ const ProjectCard = async () => {
 							variant="primary/inverse"
 							size="sm"
 							iconLeft={{
-								name: projectName ? 'ArrowRight' : 'Plus'
+								name: project?.name ? 'ArrowRight' : 'Plus'
 							}}
 						/>
 					</Link>
 				</div>
 			}
 		>
-			{projectName ? (
+			{project?.name ? (
 				<div className="flex flex-col gap-y-2">
 					<span className="text-sm font-medium text-primary">
-						{projectName}
+						{project.name}
 					</span>
 
 					<div className="flex items-center text-sm text-gray-600">
 						{/* TODO: Icon based on if project is accepted or not */}
 						<Icon name="Users" className="mr-2" />
-						<span className="truncate">{projectUsers.length} students</span>
+						<span className="truncate">{project.users.length} students</span>
 					</div>
 				</div>
 			) : (

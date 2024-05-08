@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { getSessionUser } from '@/auth';
+import { getSessionUser } from '@/auth/session-user';
 import { query } from '@/db/query';
 import { Button } from '@/components/base/button';
 import {
@@ -9,20 +9,19 @@ import {
 	OverviewCard,
 	ProfileCard
 } from '@/components/person-detail';
-import { db } from '@/db';
 import { LabeledValue } from '@/components/labeled-value';
 import { PointsBadge } from '@/components/points-badge';
+import { getProjectWithUsers } from '@/db/service/project';
+import { getHomeworks } from '@/db/service/homework';
 
 import { EditProfileForm } from './_components/edit-profile-form';
 
 const ProjectCard = async () => {
-	const user = await getSessionUser();
+	const project = await getProjectWithUsers();
 
-	const project = await db.query.projects.findFirst({
-		where: (project, { eq }) => eq(project.id, user.projectId ?? '')
-	});
-
-	if (!project) return null;
+	if (!project) {
+		return null;
+	}
 
 	return (
 		<ProfileCard
@@ -52,11 +51,9 @@ const ProjectCard = async () => {
 	);
 };
 
-const HomeworksCard = async ({ userId }: { userId: string }) => {
+const HomeworksCard = async () => {
+	const homeworks = await getHomeworks();
 	const availableLectures = await query.lectures.getAvailableLectures();
-	const homeworks = await db.query.homeworks.findMany({
-		where: (table, { eq }) => eq(table.studentId, userId)
-	});
 
 	return (
 		<ListCard
@@ -100,7 +97,21 @@ const HomeworksCard = async ({ userId }: { userId: string }) => {
 	);
 };
 
-const Page = async () => {
+const EditProfileAction = async () => {
+	const user = await getSessionUser();
+
+	return (
+		<EditProfileForm
+			defaultValues={{
+				id: user.id,
+				firstName: user.firstName ?? undefined,
+				lastName: user.lastName ?? undefined
+			}}
+		/>
+	);
+};
+
+const ProfileHeroContent = async () => {
 	const user = await getSessionUser();
 
 	const displayName =
@@ -113,23 +124,28 @@ const Page = async () => {
 
 	return (
 		<>
-			<Hero actions={<EditProfileForm userId={user.id} />}>
-				<div className="rounded-full shadow size-20 bg-gradient-to-tr from-primary-100 to-primary-300" />
-				<div>
-					<div className="text-2xl font-medium text-slate-900">
-						{displayName}
-					</div>
-					<div className="text-sm text-gray-500">{displayRole}</div>
-				</div>
-			</Hero>
+			<div className="rounded-full shadow size-20 bg-gradient-to-tr from-primary-100 to-primary-300" />
 
-			<OverviewCard />
-
-			<HomeworksCard userId={user.id} />
-
-			<ProjectCard />
+			<div>
+				<div className="text-2xl font-medium text-slate-900">{displayName}</div>
+				<div className="text-sm text-gray-500">{displayRole}</div>
+			</div>
 		</>
 	);
 };
+
+const Page = () => (
+	<>
+		<Hero actions={<EditProfileAction />}>
+			<ProfileHeroContent />
+		</Hero>
+
+		<OverviewCard />
+
+		<HomeworksCard />
+
+		<ProjectCard />
+	</>
+);
 
 export default Page;

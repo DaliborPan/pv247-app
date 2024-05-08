@@ -1,17 +1,21 @@
+import { type DefaultValues } from 'react-hook-form';
+
 import { Prompt } from '@/components/base/prompt';
 import { Button } from '@/components/base/button';
 import { FormInput } from '@/components/form/form-fields';
 
-import { editProfileFormSchema } from './schema';
+import { type EditProfileFormSchema, editProfileFormSchema } from './schema';
 import { editProfileAction } from './edit-profile-action';
 
-export const EditProfileForm = ({ userId }: { userId: string }) => (
-	<Prompt
+export const EditProfileForm = ({
+	defaultValues
+}: {
+	defaultValues: DefaultValues<EditProfileFormSchema>;
+}) => (
+	<Prompt<EditProfileFormSchema>
 		title="Edit profile"
 		formSchema={editProfileFormSchema}
-		defaultValues={{
-			id: userId
-		}}
+		defaultValues={defaultValues}
 		content={
 			<div className="flex flex-col pt-2 gap-y-3">
 				<FormInput name="firstName" label="First name" />
