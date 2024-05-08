@@ -1,19 +1,15 @@
+import { cache } from 'react';
+
 import { getSessionUser } from '@/auth/session-user';
 import { db } from '@/db';
 
 import { getIsAvailable } from '../query/lectures';
 
-export const getSessionUserOverview = async () => {
-	const sessionUser = await getSessionUser();
+import { getAvailableLecturesWithHomework } from './lecture';
 
-	const lectures = await db.query.lectures.findMany({
-		orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
-		with: {
-			homeworks: {
-				where: (homeworks, { eq }) => eq(homeworks.studentId, sessionUser.id)
-			}
-		}
-	});
+export const getSessionUserOverview = cache(async () => {
+	const sessionUser = await getSessionUser();
+	const lectures = await getAvailableLecturesWithHomework();
 
 	const availableLength = lectures.filter(getIsAvailable).length;
 
@@ -59,4 +55,4 @@ export const getSessionUserOverview = async () => {
 		},
 		totalPoints: totalPoints + (project?.points ?? 0)
 	};
-};
+});

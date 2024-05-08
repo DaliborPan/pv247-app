@@ -2,20 +2,17 @@ import Link from 'next/link';
 
 import { Button } from '@/components/base/button';
 import { Icon } from '@/components/base/icon';
-import { db, type Lecture } from '@/db';
+import { db } from '@/db';
 import { cn } from '@/lib/cn';
 import { ResponsiveSidebarCard, SidebarCard } from '@/components/sidebar-card';
 import { getSessionUser } from '@/auth/session-user';
 import { getSessionUserOverview } from '@/db/service/overview';
-
-const getIsAvailable = (lecture: Lecture) =>
-	new Date(lecture.availableFrom).getTime() < new Date().getTime();
+import { query } from '@/db/query';
+import { getIsAvailable } from '@/db/query/lectures';
+import { getAvailableLecturesWithHomework } from '@/db/service/lecture';
 
 const LecturesCard = async () => {
-	const lectures = await db.query.lectures.findMany({
-		orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)]
-	});
-
+	const lectures = await query.lectures.getOrderedLectures();
 	const availableLength = lectures.filter(getIsAvailable).length;
 
 	return (
@@ -45,19 +42,7 @@ const LecturesCard = async () => {
 };
 
 const HomeworksCard = async () => {
-	const user = await getSessionUser();
-
-	const lectures = await db.query.lectures.findMany({
-		orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
-		with: {
-			homeworks: {
-				where: (homeworks, { eq }) => eq(homeworks.studentId, user.id),
-				with: {
-					lecture: true
-				}
-			}
-		}
-	});
+	const lectures = await getAvailableLecturesWithHomework();
 
 	const availableLength = lectures.filter(getIsAvailable).length;
 
@@ -82,7 +67,7 @@ const HomeworksCard = async () => {
 
 							{homework ? (
 								<span className="text-sm font-medium text-primary">
-									{homework.points}/{homework.lecture?.homeworkMaxPoints}
+									{homework.points}/{lecture.homeworkMaxPoints}
 								</span>
 							) : (
 								<Icon name={isAvailable ? 'ArrowRight' : 'Lock'} />
