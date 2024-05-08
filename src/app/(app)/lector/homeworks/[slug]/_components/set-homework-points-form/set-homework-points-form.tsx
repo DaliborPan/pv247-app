@@ -33,7 +33,7 @@ export const SetHomeworkPointsForm = ({
 	});
 
 	const onSubmit = async (data: SetHomeworkPointsFormSchema) => {
-		await setHomeworkPointsAction({ ...data, isCreating: !isEditing });
+		await setHomeworkPointsAction({ ...data, isCreating: !hasPoints });
 
 		setIsEditing(false);
 	};
