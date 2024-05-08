@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import Link from 'next/link';
 
-import { getSessionUser } from '@/auth';
+import { getSessionUser } from '@/auth/session-user';
 import { db, type Project, type User } from '@/db';
 import { Icon } from '@/components/base/icon';
 import { Button } from '@/components/base/button';

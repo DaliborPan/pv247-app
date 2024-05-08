@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { eq } from 'drizzle-orm';
 
-import { getSessionUser } from '@/auth';
+import { getSessionUser } from '@/auth/session-user';
 import { db } from '@/db';
 
 import { ProjectForm } from '../_components/project-form';

@@ -1,22 +1,18 @@
-import { getOverview } from '@/db/service/overview';
 import { cn } from '@/lib/cn';
+import { getSessionUserOverview } from '@/db/service/overview';
 
 import { LabeledValue } from '../labeled-value';
-import { Badge } from '../base/badge';
-import { Icon } from '../base/icon';
 
 import { ProfileCard } from './profile-card';
 
-type GetOverviewResult = Awaited<ReturnType<typeof getOverview>>;
+type GetOverviewResult = Awaited<ReturnType<typeof getSessionUserOverview>>;
 
 export const OverviewCard = async ({
-	userId,
 	otherFields
 }: {
-	userId: string;
 	otherFields?: (overview: GetOverviewResult) => React.ReactNode;
 }) => {
-	const overview = await getOverview(userId);
+	const overview = await getSessionUserOverview();
 	const { homeworks, project, totalPoints } = overview;
 
 	return (

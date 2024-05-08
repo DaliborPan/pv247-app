@@ -123,7 +123,7 @@ const Page = async () => {
 				</div>
 			</Hero>
 
-			<OverviewCard userId={user.id} />
+			<OverviewCard />
 
 			<HomeworksCard userId={user.id} />
 

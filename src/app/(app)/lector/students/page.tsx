@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 
-import { getSessionUser } from '@/auth';
+import { getSessionUser } from '@/auth/session-user';
 import { db } from '@/db';
 import { DataTable } from '@/components/data-table/data-table';
 import { TabsContent } from '@/components/base/tabs';

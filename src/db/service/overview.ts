@@ -1,6 +1,6 @@
-import { getSessionUser } from '@/auth';
+import { getSessionUser } from '@/auth/session-user';
+import { db } from '@/db';
 
-import { db } from '..';
 import { getIsAvailable } from '../query/lectures';
 
 export const getSessionUserOverview = async () => {

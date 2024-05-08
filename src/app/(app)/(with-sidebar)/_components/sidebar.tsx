@@ -1,12 +1,12 @@
 import Link from 'next/link';
 
-import { getSessionUser } from '@/auth';
 import { Button } from '@/components/base/button';
 import { Icon } from '@/components/base/icon';
 import { db, type Lecture } from '@/db';
 import { cn } from '@/lib/cn';
 import { ResponsiveSidebarCard, SidebarCard } from '@/components/sidebar-card';
-import { query } from '@/db/query';
+import { getSessionUser } from '@/auth/session-user';
+import { getSessionUserOverview } from '@/db/service/overview';
 
 const getIsAvailable = (lecture: Lecture) =>
 	new Date(lecture.availableFrom).getTime() < new Date().getTime();
@@ -96,8 +96,7 @@ const HomeworksCard = async () => {
 };
 
 const OverviewCard = async () => {
-	const { homeworks, lectures, project } =
-		await query.overview.getSessionUserOverview();
+	const { homeworks, lectures, project } = await getSessionUserOverview();
 
 	return (
 		<ResponsiveSidebarCard title="Overview">

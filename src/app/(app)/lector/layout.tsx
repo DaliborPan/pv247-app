@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { type PropsWithChildren } from 'react';
 
-import { getSessionUser } from '@/auth';
+import { getSessionUser } from '@/auth/session-user';
 
 import { SubNavigation } from './_components/sub-navigation';
 

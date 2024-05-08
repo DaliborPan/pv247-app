@@ -1,5 +1,3 @@
-import { getSessionUserOverview } from '../service/overview';
-
 import { getAvailableLectures, getOrderedLectures } from './lectures';
 import { getNewStudentLectorId } from './lector';
 import {
@@ -17,9 +15,6 @@ export const query = {
 	},
 	student: {
 		getStudentsWithHomeworks
-	},
-	overview: {
-		getSessionUserOverview
 	}
 };
 

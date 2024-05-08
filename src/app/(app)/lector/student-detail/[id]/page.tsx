@@ -43,7 +43,6 @@ const Page = async ({ params }: { params: { id: string } }) => {
 			</Hero>
 
 			<OverviewCard
-				userId={student.id}
 				otherFields={({ project }) => (
 					<LabeledValue label="Project status">
 						<Link

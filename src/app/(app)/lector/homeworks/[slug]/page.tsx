@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import { type User } from 'next-auth';
 
-import { getSessionUser } from '@/auth';
+import { getSessionUser } from '@/auth/session-user';
 import { db, homeworkSlugSchema, type Lecture } from '@/db';
 import { DataTable } from '@/components/data-table/data-table';
 import { type GetStudentWithHomeworksResult, query } from '@/db/query';

@@ -35,7 +35,7 @@ const Layout = ({ children }: PropsWithChildren) => {
 		<>
 			<PublicNavigation />
 
-			<div className="container mb-10">
+			<div className="container my-8">
 				{!params.slug ? (
 					<>
 						<h1 className="mb-6 text-3xl">{pageTitleMap[pathname]}</h1>
