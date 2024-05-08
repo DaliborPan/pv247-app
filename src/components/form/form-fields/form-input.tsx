@@ -31,13 +31,13 @@ export const FormInput = ({
 			name={name}
 			render={({ field }) => (
 				<FormItem>
-					<FormLabel>{label}</FormLabel>
+					{label && <FormLabel>{label}</FormLabel>}
 
 					<FormControl>
 						<Input {...field} {...inputProps} />
 					</FormControl>
 
-					<FormDescription>{description}</FormDescription>
+					{description && <FormDescription>{description}</FormDescription>}
 					<FormMessage />
 				</FormItem>
 			)}

@@ -61,7 +61,7 @@ const HomeworksCard = async ({ userId }: { userId: string }) => {
 	return (
 		<ListCard
 			items={availableLectures.filter(lecture => !!lecture.homeworkSlug)}
-			title="Homeworks"
+			title="Homework"
 			renderItem={(lecture, index) => {
 				const homework = homeworks.find(
 					homework => homework.lectureId === lecture.id

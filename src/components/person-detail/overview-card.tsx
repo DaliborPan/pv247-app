@@ -2,6 +2,8 @@ import { getOverview } from '@/db/service/overview';
 import { cn } from '@/lib/cn';
 
 import { LabeledValue } from '../labeled-value';
+import { Badge } from '../base/badge';
+import { Icon } from '../base/icon';
 
 import { ProfileCard } from './profile-card';
 
@@ -33,7 +35,16 @@ export const OverviewCard = async ({
 						? `${project.project.points} points`
 						: 'No points yet'}
 				</LabeledValue>
-				<LabeledValue label="Total points">{totalPoints} points</LabeledValue>
+				<LabeledValue label="Total points">
+					<div className="flex items-center gap-x-4">
+						<span>{totalPoints} points</span>
+
+						{/* <Badge className="flex items-center gap-x-2">
+							<Icon name="Check" />
+							<span>Course completed</span>
+						</Badge> */}
+					</div>
+				</LabeledValue>
 
 				{otherFields?.(overview)}
 			</div>

@@ -34,8 +34,7 @@ const StudentDataTable = ({
 				fullName: !student.firstName
 					? ''
 					: `${student.firstName} ${student.lastName}`,
-				points,
-				setPoints: {
+				points: {
 					lecture,
 					lectorId: sessionUser.id,
 					studentId: student.id,
@@ -84,23 +83,23 @@ const Page = async ({
 
 	return (
 		<LectorTabsTable
-			title="Homeworks"
+			title="Homework evaluation"
 			tabsHidden={!hasOwnStudents}
 			triggers={[
 				{
 					href: `/lector/homeworks/${paramSlug}?type=all`,
-					label: 'All homeworks',
+					label: 'All students',
 					value: 'all'
 				},
 				{
 					href: `/lector/homeworks/${paramSlug}?type=own`,
-					label: 'My homeworks',
+					label: 'My students',
 					value: 'own'
 				}
 			]}
 			contents={
 				<>
-					<div className="flex items-center py-2 pl-4 mb-4 rounded-lg shadow-sm">
+					<div className="flex items-center py-2 pl-4 mb-4 rounded-lg shadow bg-gray-50">
 						<div className="grow">
 							<LabeledValue label="Name">
 								<h2 className="text-2xl text-primary">

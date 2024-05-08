@@ -42,14 +42,6 @@ export const columns: ColumnDef<User, string>[] = [
 			<DataTableColumnHeader {...props} title="Homework points" />
 		),
 		minSize: 225,
-		cell: cell => <div>{cell.getValue()}</div>,
-
-		enableSorting: true
-	},
-	{
-		accessorKey: 'setPoints',
-		header: 'Points',
-		minSize: 100,
 		cell: cell => {
 			const defaultValues = cell.getValue() as unknown as {
 				studentId: string;

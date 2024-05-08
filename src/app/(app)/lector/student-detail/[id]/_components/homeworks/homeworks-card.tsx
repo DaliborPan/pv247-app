@@ -12,7 +12,7 @@ export const HomeworksCard = async ({
 
 	return (
 		<ListCard
-			title="Homeworks"
+			title="Homework"
 			items={availableLectures}
 			className="items-end"
 			renderItem={(lecture, index) => {

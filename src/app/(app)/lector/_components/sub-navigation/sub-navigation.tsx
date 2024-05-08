@@ -26,7 +26,7 @@ export const SubNavigation = () => (
 		<nav className="ml-[calc(7.5rem+100px)]">
 			<ul className="flex py-3 gap-x-8">
 				<NavigationItem href="/lector/students">Students</NavigationItem>
-				<NavigationItem href="/lector/homeworks">Homeworks</NavigationItem>
+				<NavigationItem href="/lector/homeworks">Homework</NavigationItem>
 				<NavigationItem href="/lector/projects">Projects</NavigationItem>
 			</ul>
 		</nav>

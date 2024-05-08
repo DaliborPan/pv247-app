@@ -1,52 +1,73 @@
 'use client';
 
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+
 import { Button } from '@/components/base/button';
-import { Prompt } from '@/components/base/prompt';
 import { FormInput } from '@/components/form/form-fields';
 import { type Lecture } from '@/db';
+import { Form } from '@/components/form';
 
-import { setHomeworkPointsFormSchema } from './schema';
+import {
+	type SetHomeworkPointsFormSchema,
+	setHomeworkPointsFormSchema
+} from './schema';
 import { setHomeworkPointsAction } from './set-homework-points-action';
 
 export const SetHomeworkPointsForm = ({
-	lectorId,
-	studentId,
-	lecture,
-	points
+	...defaultValues
 }: {
 	lectorId: string;
 	studentId: string;
 	lecture: Lecture;
 	points?: number;
-}) => (
-	<Prompt
-		title="Set points"
-		formSchema={setHomeworkPointsFormSchema}
-		defaultValues={{
-			lectorId,
-			studentId,
-			lecture,
-			points
-		}}
-		content={
-			<div className="flex flex-col pt-2 gap-y-3">
-				<FormInput type="number" name="points" label="Points" />
-			</div>
-		}
-		onDecision={async ({ confirmed, data }) => {
-			if (!confirmed) return;
+}) => {
+	const hasPoints = defaultValues.points !== undefined;
 
-			await setHomeworkPointsAction({ ...data, isCreating: !points });
-		}}
-	>
-		<Button
-			size="sm"
-			className="text-black bg-primary-200 hover:bg-primary-300"
-			iconLeft={{
-				name: 'SquareArrowOutUpRight'
-			}}
-		>
-			Set points
-		</Button>
-	</Prompt>
-);
+	const [isEditing, setIsEditing] = useState(!hasPoints);
+
+	const form = useForm<SetHomeworkPointsFormSchema>({
+		resolver: zodResolver(setHomeworkPointsFormSchema),
+		defaultValues
+	});
+
+	const onSubmit = async (data: SetHomeworkPointsFormSchema) => {
+		await setHomeworkPointsAction({ ...data, isCreating: !isEditing });
+
+		setIsEditing(false);
+	};
+
+	return isEditing ? (
+		<Form {...form}>
+			<form
+				onSubmit={form.handleSubmit(onSubmit)}
+				className="flex items-center gap-x-2"
+			>
+				<FormInput type="number" name="points" className="h-9" />
+				<Button
+					size="sm"
+					isLoading={form.formState.isSubmitting}
+					type="submit"
+					variant={isEditing ? 'primary' : 'outline/primary'}
+					iconLeft={{
+						name: isEditing ? 'Send' : 'Pencil'
+					}}
+				/>
+			</form>
+		</Form>
+	) : (
+		<div className="flex items-center gap-x-2">
+			<div className="grow">{defaultValues.points} points</div>
+			<Button
+				size="sm"
+				type="button"
+				onClick={() => setIsEditing(true)}
+				variant="outline/primary"
+				iconLeft={{
+					name: 'Pencil'
+				}}
+			/>
+		</div>
+	);
+};

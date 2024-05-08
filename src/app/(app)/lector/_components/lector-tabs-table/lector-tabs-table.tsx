@@ -22,7 +22,7 @@ export const LectorTabsTable = ({
 	return (
 		<Tabs defaultValue={viewType}>
 			<div className="flex items-center mb-6 gap-x-2">
-				<h1 className="text-3xl grow">{title}</h1>
+				<h1 className="text-4xl grow">{title}</h1>
 
 				{!tabsHidden && (
 					<TabsList>

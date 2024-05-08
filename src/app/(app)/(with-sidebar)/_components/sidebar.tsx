@@ -126,10 +126,10 @@ const OverviewCard = async () => {
 					</span>
 				</div>
 
-				<div className="flex items-center">
+				{/* <div className="flex items-center">
 					<span className="text-gray-600 grow">Attendance</span>
 					<span className="text-sm font-medium text-primary">{attendance}</span>
-				</div>
+				</div> */}
 			</div>
 		</ResponsiveSidebarCard>
 	);
