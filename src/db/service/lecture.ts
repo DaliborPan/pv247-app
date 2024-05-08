@@ -3,7 +3,7 @@ import { cache } from 'react';
 import { getSessionUser } from '@/auth/session-user';
 import { db } from '@/db';
 
-export const getAvailableLecturesWithHomework = cache(async () => {
+export const getOrderedLecturesWithHomework = cache(async () => {
 	const sessionUser = await getSessionUser();
 
 	return await db.query.lectures.findMany({

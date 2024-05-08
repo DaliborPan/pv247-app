@@ -5,11 +5,11 @@ import { db } from '@/db';
 
 import { getIsAvailable } from '../query/lectures';
 
-import { getAvailableLecturesWithHomework } from './lecture';
+import { getOrderedLecturesWithHomework } from './lecture';
 
 export const getSessionUserOverview = cache(async () => {
 	const sessionUser = await getSessionUser();
-	const lectures = await getAvailableLecturesWithHomework();
+	const lectures = await getOrderedLecturesWithHomework();
 
 	const availableLength = lectures.filter(getIsAvailable).length;
 

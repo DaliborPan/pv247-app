@@ -9,7 +9,7 @@ import { getSessionUser } from '@/auth/session-user';
 import { getSessionUserOverview } from '@/db/service/overview';
 import { query } from '@/db/query';
 import { getIsAvailable } from '@/db/query/lectures';
-import { getAvailableLecturesWithHomework } from '@/db/service/lecture';
+import { getOrderedLecturesWithHomework } from '@/db/service/lecture';
 
 const LecturesCard = async () => {
 	const lectures = await query.lectures.getOrderedLectures();
@@ -18,8 +18,8 @@ const LecturesCard = async () => {
 	return (
 		<SidebarCard title="Lectures" className="hidden lg:block">
 			<div className="flex flex-col gap-y-2">
-				{lectures.slice(0, availableLength + 1).map(lecture => {
-					const isAvailable = getIsAvailable(lecture);
+				{lectures.slice(0, availableLength + 1).map((lecture, index) => {
+					const isAvailable = index !== availableLength;
 
 					return (
 						<Link
@@ -42,15 +42,14 @@ const LecturesCard = async () => {
 };
 
 const HomeworksCard = async () => {
-	const lectures = await getAvailableLecturesWithHomework();
-
+	const lectures = await getOrderedLecturesWithHomework();
 	const availableLength = lectures.filter(getIsAvailable).length;
 
 	return (
 		<SidebarCard title="Homeworks" className="hidden lg:block">
 			<div className="flex flex-col gap-y-2">
-				{lectures.slice(0, availableLength + 1).map(lecture => {
-					const isAvailable = getIsAvailable(lecture);
+				{lectures.slice(0, availableLength + 1).map((lecture, index) => {
+					const isAvailable = index !== availableLength;
 					const homework = lecture.homeworks.at(0);
 
 					return (
@@ -114,12 +113,14 @@ const OverviewCard = async () => {
 const ProjectCard = async () => {
 	const user = await getSessionUser();
 
-	const projectUsers = await db.query.users.findMany({
-		where: (users, { eq }) => eq(users.projectId, user.projectId ?? ''),
-		with: {
-			project: true
-		}
-	});
+	const projectUsers = user.projectId
+		? await db.query.users.findMany({
+				where: (users, { eq }) => eq(users.projectId, user.projectId ?? ''),
+				with: {
+					project: true
+				}
+			})
+		: [];
 
 	const projectName = projectUsers.at(0)?.project?.name;
 
