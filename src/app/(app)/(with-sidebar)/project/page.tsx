@@ -1,24 +1,20 @@
-import { eq } from 'drizzle-orm';
 import Link from 'next/link';
 
-import { getSessionUser } from '@/auth/session-user';
-import { db, type Project, type User } from '@/db';
 import { Icon } from '@/components/base/icon';
 import { Button } from '@/components/base/button';
 import { Hero } from '@/components/person-detail';
 import { cn } from '@/lib/cn';
+import { getProjectWithUsers } from '@/db/service/project';
 
 import { ProjectForm } from './_components/project-form';
 import { SubmitProjectButton } from './_components/submit-project';
 
-const ProjectHero = async ({
-	project,
-	users
-}: {
-	project: Project;
-	users: User[];
-}) => {
-	const displayUsers = users
+const ProjectHero = async () => {
+	const project = await getProjectWithUsers();
+
+	if (!project) return null;
+
+	const displayUsers = project.users
 		.map(user => `${user.firstName} ${user.lastName}`)
 		.join(', ');
 
@@ -75,15 +71,25 @@ const ProjectHero = async ({
 	);
 };
 
-const ProjectCard = async ({ project }: { project: Project }) => (
-	<div className="p-8 mx-6 mt-8 bg-white rounded-lg shadow-lg">
-		<h3 className="mb-4 text-xl">Description</h3>
+const ProjectCard = async () => {
+	const project = await getProjectWithUsers();
 
-		<p className="font-light leading-8 text-gray-500">{project.description}</p>
-	</div>
-);
+	return (
+		<div className="p-8 mx-6 mt-8 bg-white rounded-lg shadow-lg">
+			<h3 className="mb-4 text-xl">Description</h3>
 
-const SubmitProjectCard = ({ project }: { project: Project }) => {
+			<p className="font-light leading-8 text-gray-500">
+				{project?.description}
+			</p>
+		</div>
+	);
+};
+
+const SubmitProjectCard = async () => {
+	const project = await getProjectWithUsers();
+
+	if (!project) return null;
+
 	const isPending = project.status === 'pending';
 
 	return (
@@ -122,24 +128,13 @@ const SubmitProjectCard = ({ project }: { project: Project }) => {
 };
 
 const Page = async () => {
-	const sessionUser = await getSessionUser();
+	const project = await getProjectWithUsers();
 
-	const user = await db.query.users.findFirst({
-		where: users => eq(users.id, sessionUser.id),
-		with: {
-			project: {
-				with: {
-					users: true
-				}
-			}
-		}
-	});
-
-	return user?.project ? (
+	return project ? (
 		<div>
-			<ProjectHero project={user.project} users={user.project.users} />
-			<ProjectCard project={user.project} />
-			<SubmitProjectCard project={user.project} />
+			<ProjectHero />
+			<ProjectCard />
+			<SubmitProjectCard />
 		</div>
 	) : (
 		<ProjectForm />

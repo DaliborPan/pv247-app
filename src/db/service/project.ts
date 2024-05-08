@@ -13,3 +13,7 @@ export const getProjectWithUsers = cache(async () => {
 		}
 	});
 });
+
+export type GetProjectWithUsersResult = Awaited<
+	ReturnType<typeof getProjectWithUsers>
+>;
