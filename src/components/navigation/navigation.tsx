@@ -31,7 +31,7 @@ export const Navigation = ({
 	user?: User;
 	isUserLoading?: boolean;
 }) => (
-	<header className="sticky top-0 z-20 flex items-center px-4 py-2 mb-8 bg-white border-b md:px-10 gap-x-20">
+	<header className="sticky top-0 z-20 flex items-center px-4 py-2 bg-white border-b md:px-10 gap-x-20">
 		<Image src={MUNI_LOGO} width={100} alt="muni-logo" />
 
 		<MobileNavigation user={user} isUserLoading={isUserLoading} />

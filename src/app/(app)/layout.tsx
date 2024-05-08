@@ -10,7 +10,7 @@ const Layout = async ({ children }: PropsWithChildren) => {
 		<>
 			<Navigation user={user} />
 
-			{children}
+			<div className="my-8">{children}</div>
 		</>
 	);
 };
