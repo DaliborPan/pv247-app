@@ -6,8 +6,8 @@ import { Hero } from '@/components/person-detail';
 import { cn } from '@/lib/cn';
 import { getProjectWithUsers } from '@/db/service/project';
 
-import { ProjectForm } from './_components/project-form';
 import { SubmitProjectButton } from './_components/submit-project';
+import { ProjectForm } from './_components/project-form';
 
 const ProjectHero = async () => {
 	const project = await getProjectWithUsers();

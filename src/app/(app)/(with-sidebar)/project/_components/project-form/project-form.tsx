@@ -1,4 +1,4 @@
-import { and, eq, inArray, isNull, not, or } from 'drizzle-orm';
+import { Suspense } from 'react';
 
 import { FormInput } from '@/components/form/form-fields';
 import { db } from '@/db';
@@ -8,39 +8,51 @@ import { ProjectFormProvider } from './project-form-provider';
 import { StudentCombobox } from './student-combobox';
 import { type ProjectFormSchema } from './schema';
 
-export const ProjectForm = async ({
+const _StudentCombobox = async ({
 	defaultValues
 }: {
-	defaultValues?: Partial<ProjectFormSchema> & { id: string };
+	defaultValues?: Partial<ProjectFormSchema>;
 }) => {
-	const user = await getSessionUser();
+	const sessionUser = await getSessionUser();
 
 	const students = await db.query.users.findMany({
-		where: ({ role, projectId, id }) =>
+		where: (table, { eq, or, and, inArray, isNull, not }) =>
 			or(
-				and(eq(role, 'student'), isNull(projectId), not(eq(id, user.id))),
-				inArray(id, [
-					...(defaultValues?.students?.length ? defaultValues.students : [''])
-				])
+				and(
+					eq(table.role, 'student'),
+					isNull(table.projectId),
+					not(eq(table.id, sessionUser.id))
+				),
+				inArray(table.id, defaultValues?.students ?? [''])
 			)
 	});
 
 	return (
-		<ProjectFormProvider defaultValues={defaultValues}>
-			<FormInput name="name" label="Name" />
-			<FormInput name="github" label="GitHub repository" />
-
-			{/* TODO: To be rich text editor */}
-			<FormInput name="description" label="Description" />
-
-			<div className="mt-2">
-				<StudentCombobox
-					options={students.map(student => ({
-						value: student.id,
-						label: `${student.firstName} ${student.lastName}`
-					}))}
-				/>
-			</div>
-		</ProjectFormProvider>
+		<StudentCombobox
+			options={students.map(user => ({
+				value: user.id,
+				label: `${user.firstName} ${user.lastName}`
+			}))}
+		/>
 	);
 };
+
+export const ProjectForm = async ({
+	defaultValues
+}: {
+	defaultValues?: Partial<ProjectFormSchema>;
+}) => (
+	<ProjectFormProvider defaultValues={defaultValues}>
+		<FormInput name="name" label="Name" />
+		<FormInput name="github" label="GitHub repository" />
+
+		{/* TODO: To be rich text editor */}
+		<FormInput name="description" label="Description" />
+
+		<div className="mt-2">
+			<Suspense>
+				<_StudentCombobox defaultValues={defaultValues} />
+			</Suspense>
+		</div>
+	</ProjectFormProvider>
+);

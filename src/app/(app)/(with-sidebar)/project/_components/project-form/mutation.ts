@@ -5,25 +5,21 @@ import { useRouter } from 'next/navigation';
 import { createProjectAction, updateProjectAction } from './project-action';
 import { type ProjectFormSchema } from './schema';
 
-export const useSubmitProjectFormMutation = ({
-	projectId
-}: {
-	projectId?: string;
-} = {}) => {
+export const useSubmitProjectFormMutation = (
+	{ isCreating } = {
+		isCreating: false
+	}
+) => {
 	const router = useRouter();
 
 	return useMutation({
 		mutationFn: async (data: ProjectFormSchema) => {
-			if (!projectId) {
+			if (isCreating) {
 				await createProjectAction(data);
-
 				return;
 			}
 
-			await updateProjectAction({
-				...data,
-				id: projectId
-			});
+			await updateProjectAction(data);
 		},
 		onSuccess: () => {
 			toast.success('Project updated successfully.');

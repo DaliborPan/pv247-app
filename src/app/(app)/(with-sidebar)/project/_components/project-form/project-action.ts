@@ -37,9 +37,9 @@ export const updateProjectAction = async ({
 	name,
 	github,
 	description
-}: ProjectFormSchema & {
-	id: string;
-}) => {
+}: ProjectFormSchema) => {
+	if (!id) return;
+
 	// Update project
 	await db
 		.update(projects)

@@ -1,40 +1,27 @@
 import { redirect } from 'next/navigation';
-import { eq } from 'drizzle-orm';
 
+import { getProjectWithUsers } from '@/db/service/project';
 import { getSessionUser } from '@/auth/session-user';
-import { db } from '@/db';
 
 import { ProjectForm } from '../_components/project-form';
 
 const Page = async () => {
-	const user = await getSessionUser();
+	const sessionUser = await getSessionUser();
+	const project = await getProjectWithUsers();
 
-	const projectId = user.projectId;
+	if (!project) return redirect('/project');
 
-	if (!projectId) return redirect('/project');
+	const defaultValues = {
+		id: project.id,
+		name: project.name,
+		description: project.description ?? '',
+		github: project.github ?? '',
+		students: project.users
+			.filter(user => user.id !== sessionUser.id)
+			.map(user => user.id)
+	};
 
-	const project = await db.query.projects.findFirst({
-		where: projects => eq(projects.id, projectId),
-		with: {
-			users: true
-		}
-	});
-
-	if (!project) return null;
-
-	return (
-		<ProjectForm
-			defaultValues={{
-				id: project.id,
-				name: project.name,
-				description: project.description ?? '',
-				github: project.github ?? '',
-				students: project.users
-					.filter(user => user.id !== user.id)
-					.map(user => user.id)
-			}}
-		/>
-	);
+	return <ProjectForm defaultValues={defaultValues} />;
 };
 
 export default Page;

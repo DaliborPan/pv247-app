@@ -16,7 +16,7 @@ export const ProjectFormProvider = ({
 	children,
 	defaultValues
 }: PropsWithChildren<{
-	defaultValues?: Partial<ProjectFormSchema> & { id: string };
+	defaultValues?: Partial<ProjectFormSchema>;
 }>) => {
 	const session = useSession();
 
@@ -30,7 +30,7 @@ export const ProjectFormProvider = ({
 	});
 
 	const { mutateAsync } = useSubmitProjectFormMutation({
-		projectId: defaultValues?.id
+		isCreating: !defaultValues?.id
 	});
 
 	const onSubmit = async (data: ProjectFormSchema) => {
