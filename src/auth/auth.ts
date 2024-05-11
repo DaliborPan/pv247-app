@@ -60,7 +60,10 @@ export const authOptions = {
 			return session;
 		},
 		authorized: async ({ auth, request: { nextUrl } }) => {
-			const isLoggedIn = !!auth?.user;
+			// const isLoggedIn = !!auth?.user;
+
+			// Temporary
+			const isLoggedIn = auth?.user.role === 'lector';
 
 			const isProtected = getIsProtectedPath(nextUrl.pathname);
 
