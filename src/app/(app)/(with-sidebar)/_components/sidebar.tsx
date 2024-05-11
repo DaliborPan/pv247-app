@@ -5,13 +5,12 @@ import { Icon } from '@/components/base/icon';
 import { cn } from '@/lib/cn';
 import { ResponsiveSidebarCard, SidebarCard } from '@/components/sidebar-card';
 import { getSessionUserOverview } from '@/db/service/overview';
-import { query } from '@/db/query';
-import { getIsAvailable } from '@/db/query/lectures';
+import { getIsAvailable, getOrderedLectures } from '@/db/query/lectures';
 import { getOrderedLecturesWithHomework } from '@/db/service/lecture';
 import { getProjectWithUsers } from '@/db/service/project';
 
 const LecturesCard = async () => {
-	const lectures = await query.lectures.getOrderedLectures();
+	const lectures = await getOrderedLectures();
 	const availableLength = lectures.filter(getIsAvailable).length;
 
 	return (

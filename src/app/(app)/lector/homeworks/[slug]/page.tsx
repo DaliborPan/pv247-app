@@ -8,6 +8,7 @@ import { DataTable } from '@/components/data-table/data-table';
 import { type GetStudentWithHomeworksResult, query } from '@/db/query';
 import { TabsContent } from '@/components/base/tabs';
 import { LabeledValue } from '@/components/labeled-value';
+import { getOrderedLectures } from '@/db/query/lectures';
 
 import { LectorTabsTable } from '../../_components/lector-tabs-table';
 
@@ -78,7 +79,7 @@ const Page = async ({
 
 	const hasOwnStudents = !!user?.students.length;
 
-	const lectures = await query.lectures.getOrderedLectures();
+	const lectures = await getOrderedLectures();
 	const lecture = lectures.find(lecture => lecture.homeworkSlug === paramSlug);
 
 	return (

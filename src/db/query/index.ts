@@ -1,4 +1,3 @@
-import { getAvailableLectures, getOrderedLectures } from './lectures';
 import { getNewStudentLectorId } from './lector';
 import {
 	getStudentsWithHomeworks,
@@ -6,10 +5,6 @@ import {
 } from './student';
 
 export const query = {
-	lectures: {
-		getAvailableLectures,
-		getOrderedLectures
-	},
 	lector: {
 		getNewStudentLectorId
 	},

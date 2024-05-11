@@ -1,7 +1,7 @@
 import { type PropsWithChildren } from 'react';
 
 import { type LectureSlug } from '@/db';
-import { query } from '@/db/query';
+import { getOrderedLectures } from '@/db/query/lectures';
 
 import { NavigationButtonLink } from '../../_components/navigation-button-link';
 
@@ -9,7 +9,7 @@ const Layout = async ({
 	children,
 	params
 }: PropsWithChildren<{ params: { slug: LectureSlug } }>) => {
-	const lectures = await query.lectures.getOrderedLectures();
+	const lectures = await getOrderedLectures();
 
 	const slugLectureIndex = lectures.findIndex(
 		lecture => lecture.slug === params.slug

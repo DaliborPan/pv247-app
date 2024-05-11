@@ -1,4 +1,7 @@
+import { redirect } from 'next/navigation';
+
 import { type HomeworkSlug, homeworkSlugSchema } from '@/db';
+import { getIsHomeworkAvailable } from '@/db/query/lectures';
 
 import { getHomeworkMdxComponent } from './_components';
 
@@ -16,7 +19,17 @@ export const generateStaticParams = (): Params[] => {
 		}));
 };
 
-const Page = ({ params }: { params: Params }) => {
+const Page = async ({ params }: { params: Params }) => {
+	const isAvailable = await getIsHomeworkAvailable(params.slug);
+
+	console.log(
+		`Revalidating homework ${params.slug} - isAvailable: ${isAvailable}`
+	);
+
+	if (!isAvailable) {
+		redirect('/homeworks');
+	}
+
 	const MdxComponent = getHomeworkMdxComponent(params.slug);
 
 	return <MdxComponent />;

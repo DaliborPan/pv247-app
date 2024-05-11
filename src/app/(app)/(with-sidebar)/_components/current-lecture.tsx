@@ -1,11 +1,11 @@
 import Link from 'next/link';
 
 import { Button } from '@/components/base/button';
-import { query } from '@/db/query';
 import { TextPreview } from '@/components/text-preview';
+import { getAvailableLectures } from '@/db/query/lectures';
 
 export const CurrentLecture = async () => {
-	const availableLectures = await query.lectures.getAvailableLectures();
+	const availableLectures = await getAvailableLectures();
 	const currentLecture = availableLectures.pop();
 
 	if (!currentLecture) {

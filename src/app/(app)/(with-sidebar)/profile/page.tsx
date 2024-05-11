@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
 import { getSessionUser } from '@/auth/session-user';
-import { query } from '@/db/query';
 import { Button } from '@/components/base/button';
 import {
 	Hero,
@@ -13,6 +12,8 @@ import { LabeledValue } from '@/components/labeled-value';
 import { PointsBadge } from '@/components/points-badge';
 import { getProjectWithUsers } from '@/db/service/project';
 import { getHomeworks } from '@/db/service/homework';
+import { getAvailableLectures } from '@/db/query/lectures';
+import { RevalidateLectures } from '@/components/revalidate-lectures';
 
 import { EditProfileForm } from './_components/edit-profile-form';
 
@@ -53,7 +54,7 @@ const ProjectCard = async () => {
 
 const HomeworksCard = async () => {
 	const homeworks = await getHomeworks();
-	const availableLectures = await query.lectures.getAvailableLectures();
+	const availableLectures = await getAvailableLectures();
 
 	return (
 		<ListCard
@@ -134,18 +135,39 @@ const ProfileHeroContent = async () => {
 	);
 };
 
-const Page = () => (
-	<>
-		<Hero actions={<EditProfileAction />}>
-			<ProfileHeroContent />
-		</Hero>
+const RevalidateLecturesSection = async () => {
+	const user = await getSessionUser();
 
-		<OverviewCard />
+	return user.role === 'lector' ? (
+		<div className="mx-6 mt-6">
+			<h2 className="mb-4 text-xl">Revalidate lectures</h2>
+			<RevalidateLectures />
+		</div>
+	) : null;
+};
 
-		<HomeworksCard />
+const Page = async () => {
+	const user = await getSessionUser();
 
-		<ProjectCard />
-	</>
-);
+	const isLector = user.role === 'lector';
+
+	return (
+		<>
+			<Hero actions={<EditProfileAction />}>
+				<ProfileHeroContent />
+			</Hero>
+
+			{!isLector && (
+				<>
+					<OverviewCard />
+					<HomeworksCard />
+					<ProjectCard />
+				</>
+			)}
+
+			<RevalidateLecturesSection />
+		</>
+	);
+};
 
 export default Page;

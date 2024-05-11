@@ -1,12 +1,12 @@
 import { type PropsWithChildren } from 'react';
 
 import { type HomeworkSlug } from '@/db';
-import { query } from '@/db/query';
+import { getOrderedLectures } from '@/db/query/lectures';
 
 import { NavigationButtonLink } from '../../_components/navigation-button-link';
 
 const getLecturesWithHomework = async () => {
-	const lectures = await query.lectures.getOrderedLectures();
+	const lectures = await getOrderedLectures();
 
 	return lectures.filter(lecture => !!lecture.homeworkSlug);
 };

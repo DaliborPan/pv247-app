@@ -1,12 +1,12 @@
 import Link from 'next/link';
 
 import { Button } from '@/components/base/button';
-import { db, type Lecture } from '@/db';
+import { type Lecture } from '@/db';
 import { Badge } from '@/components/base/badge';
 import { Icon } from '@/components/base/icon';
 import { TextPreview } from '@/components/text-preview';
 import { formatDate } from '@/lib/date';
-import { getIsAvailable } from '@/db/query/lectures';
+import { getIsAvailable, getOrderedLectures } from '@/db/query/lectures';
 import { cn } from '@/lib/cn';
 
 const getNumberWithOrdinal = (num: number) => {
@@ -67,7 +67,7 @@ const LectureCard = ({
 };
 
 const Page = async () => {
-	const lectures = await db.query.lectures.findMany();
+	const lectures = await getOrderedLectures();
 
 	return (
 		<>

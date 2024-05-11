@@ -1,14 +1,14 @@
 import { ListCard } from '@/components/person-detail';
 import { PointsBadge } from '@/components/points-badge';
 import { type Lecture, type Homework } from '@/db';
-import { query } from '@/db/query';
+import { getAvailableLectures } from '@/db/query/lectures';
 
 export const HomeworksCard = async ({
 	studentHomeworks
 }: {
 	studentHomeworks: (Homework & { lecture: Lecture | null })[];
 }) => {
-	const availableLectures = await query.lectures.getAvailableLectures();
+	const availableLectures = await getAvailableLectures();
 
 	return (
 		<ListCard

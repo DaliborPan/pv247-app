@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
 import { Button } from '@/components/base/button';
-import { db, type Lecture } from '@/db';
+import { type Lecture } from '@/db';
 import { Icon } from '@/components/base/icon';
 import { TextPreview } from '@/components/text-preview';
-import { getIsAvailable } from '@/db/query/lectures';
+import { getIsAvailable, getOrderedLectures } from '@/db/query/lectures';
 import { cn } from '@/lib/cn';
 
 const formatDate = (date: string) => {
@@ -67,15 +67,15 @@ const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
 };
 
 const Page = async () => {
-	const lectures = await db.query.lectures.findMany({
-		where: (table, { eq, not }) => not(eq(table.homeworkSlug, ''))
-	});
+	const lectures = await getOrderedLectures();
 
 	return (
 		<>
-			{lectures.map((lecture, index) => (
-				<HomeworkCard key={lecture.slug} lecture={lecture} index={index} />
-			))}
+			{lectures
+				.filter(lecture => lecture.homeworkSlug !== '')
+				.map((lecture, index) => (
+					<HomeworkCard key={lecture.slug} lecture={lecture} index={index} />
+				))}
 		</>
 	);
 };

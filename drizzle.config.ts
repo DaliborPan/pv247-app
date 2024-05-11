@@ -1,6 +1,7 @@
-import type { Config } from 'drizzle-kit';
+import { defineConfig } from 'drizzle-kit';
 
-export default {
+export default defineConfig({
+	dialect: 'sqlite',
 	schema: './src/db/schema',
 	driver: 'turso',
 	dbCredentials: {
@@ -8,4 +9,4 @@ export default {
 		authToken: process.env.AUTH_TOKEN
 	},
 	out: '.drizzle'
-} satisfies Config;
+});

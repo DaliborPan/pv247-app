@@ -5,7 +5,6 @@ import { eq } from 'drizzle-orm';
 import { getNewStudentLectorId } from '@/db/query/lector';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { query } from '@/db/query';
 
 import { CustomDrizzleAdapter } from './adapter';
 
@@ -72,29 +71,29 @@ export const authOptions = {
 				return Response.redirect(redirectUrl);
 			}
 
-			if (
-				nextUrl.pathname.startsWith('/homeworks/') ||
-				nextUrl.pathname.startsWith('/lectures/')
-			) {
-				const availableLectures = await query.lectures.getAvailableLectures();
-				const slug = nextUrl.pathname.split('/').pop();
+			// if (
+			// 	nextUrl.pathname.startsWith('/homeworks/') ||
+			// 	nextUrl.pathname.startsWith('/lectures/')
+			// ) {
+			// 	const availableLectures = await action();
+			// 	const slug = nextUrl.pathname.split('/').pop();
 
-				const type = nextUrl.pathname.startsWith('/homeworks')
-					? 'homeworks'
-					: 'lectures';
+			// 	const type = nextUrl.pathname.startsWith('/homeworks')
+			// 		? 'homeworks'
+			// 		: 'lectures';
 
-				const isAvailable = availableLectures.some(lecture =>
-					type === 'homeworks'
-						? lecture.homeworkSlug === slug
-						: lecture.slug === slug
-				);
+			// 	const isAvailable = availableLectures.some(lecture =>
+			// 		type === 'homeworks'
+			// 			? lecture.homeworkSlug === slug
+			// 			: lecture.slug === slug
+			// 	);
 
-				if (!isAvailable) {
-					const redirectUrl = new URL(`/${type}`, nextUrl.origin);
+			// 	if (!isAvailable) {
+			// 		const redirectUrl = new URL(`/${type}`, nextUrl.origin);
 
-					return Response.redirect(redirectUrl);
-				}
-			}
+			// 		return Response.redirect(redirectUrl);
+			// 	}
+			// }
 
 			return true;
 		}
