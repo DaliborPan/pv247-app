@@ -81,20 +81,21 @@ export const getIsHomeworkAvailable = (slug: HomeworkSlug) =>
 
 export const ORDERED_LECTURES_TAG = 'ordered-lectures';
 
-export const getOrderedLectures = () =>
-	unstable_cache(
-		async () => {
-			const lectures = await db.query.lectures.findMany({
-				orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
-				with: {
-					homeworks: true
-				}
-			});
+export const getOrderedLectures = unstable_cache(
+	async () => {
+		console.log('Calling DB for ordered lecture');
 
-			return lectures;
-		},
-		[ORDERED_LECTURES_TAG],
-		{
-			tags: [ORDERED_LECTURES_TAG]
-		}
-	)();
+		const lectures = await db.query.lectures.findMany({
+			orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
+			with: {
+				homeworks: true
+			}
+		});
+
+		return lectures;
+	},
+	[ORDERED_LECTURES_TAG],
+	{
+		tags: [ORDERED_LECTURES_TAG]
+	}
+);
