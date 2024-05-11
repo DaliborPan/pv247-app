@@ -1,5 +1,5 @@
 import { cn } from '@/lib/cn';
-import { getSessionUserOverview } from '@/db/service/overview';
+import { getSessionUserOverview } from '@/db/session-user-service/overview';
 
 import { LabeledValue } from '../labeled-value';
 
@@ -34,11 +34,6 @@ export const OverviewCard = async ({
 				<LabeledValue label="Total points">
 					<div className="flex items-center gap-x-4">
 						<span>{totalPoints} points</span>
-
-						{/* <Badge className="flex items-center gap-x-2">
-							<Icon name="Check" />
-							<span>Course completed</span>
-						</Badge> */}
 					</div>
 				</LabeledValue>
 

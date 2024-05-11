@@ -28,7 +28,7 @@ const Page = () => (
 				<SignIn>
 					<Button
 						// Temporary
-						// disabled
+						disabled
 						iconLeft={{
 							name: 'Github'
 						}}

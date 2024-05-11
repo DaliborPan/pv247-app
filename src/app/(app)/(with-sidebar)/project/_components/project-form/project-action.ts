@@ -1,9 +1,10 @@
 'use server';
 
 import { eq, inArray } from 'drizzle-orm';
-import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 
 import { db, projects, users } from '@/db';
+import { PROJECTS_TAG } from '@/db/query/project';
 
 import { type ProjectFormSchema } from './schema';
 
@@ -28,7 +29,7 @@ export const createProjectAction = async ({
 		.where(inArray(users.id, students))
 		.execute();
 
-	revalidatePath('/project');
+	revalidateTag(PROJECTS_TAG);
 };
 
 export const updateProjectAction = async ({
@@ -78,5 +79,5 @@ export const updateProjectAction = async ({
 		.where(inArray(users.id, students))
 		.execute();
 
-	revalidatePath('/project');
+	revalidateTag(PROJECTS_TAG);
 };

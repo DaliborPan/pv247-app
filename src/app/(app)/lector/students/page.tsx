@@ -1,10 +1,7 @@
-import { eq } from 'drizzle-orm';
-
-import { getSessionUser } from '@/auth/session-user';
-import { db } from '@/db';
 import { DataTable } from '@/components/data-table/data-table';
 import { TabsContent } from '@/components/base/tabs';
 import { query, type GetStudentWithHomeworksResult } from '@/db/query';
+import { getLectorStudents } from '@/db/session-user-service/lector-students';
 
 import { LectorTabsTable } from '../_components/lector-tabs-table';
 
@@ -33,20 +30,8 @@ const StudentDataTable = ({
 );
 
 const Page = async () => {
-	const sessionUser = await getSessionUser();
-
-	const user = await db.query.users.findFirst({
-		where: users => eq(users.id, sessionUser.id),
-		with: {
-			students: {
-				with: {
-					homeworksStudent: true
-				}
-			}
-		}
-	});
-
-	const hasOwnStudents = !!user?.students.length;
+	const lectorStudents = await getLectorStudents();
+	const hasOwnStudents = !!lectorStudents.length;
 
 	return (
 		<LectorTabsTable
@@ -72,7 +57,7 @@ const Page = async () => {
 						/>
 					</TabsContent>
 					<TabsContent value="own">
-						<StudentDataTable students={user?.students ?? []} />
+						<StudentDataTable students={lectorStudents} />
 					</TabsContent>
 				</>
 			}

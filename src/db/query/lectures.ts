@@ -1,36 +1,23 @@
 import { unstable_cache } from 'next/cache';
+import React from 'react';
 
 import { db, type LectureSlug, type Lecture, type HomeworkSlug } from '..';
 
 export const getIsAvailable = (lecture: Lecture) =>
 	new Date(lecture.availableFrom) < new Date();
 
-// export const getAvailableLectures = async () => {
-// 	const lectures = await db.query.lectures.findMany({
-// 		orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)]
-// 	});
+/**
+ * Available lectures
+ */
+export const getAvailableLectures = React.cache(async () => {
+	const lectures = await getOrderedLectures();
 
-// 	return lectures.filter(getIsAvailable);
-// };
-
-export const getAvailableLectures = unstable_cache(
-	async () => {
-		const lectures = await db.query.lectures.findMany({
-			orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)]
-		});
-
-		return lectures.filter(getIsAvailable);
-	},
-	['available-lectures'],
-	{
-		tags: ['available-lectures']
-	}
-);
+	return lectures.filter(getIsAvailable);
+});
 
 /**
  * Is available lecture
  */
-
 export const getIsLectureAvailableTag = (slug: LectureSlug) =>
 	`is-lecture-available_${slug}`;
 
@@ -54,7 +41,6 @@ export const getIsLectureAvailable = (slug: LectureSlug) =>
 /**
  * Is available homework
  */
-
 export const getIsHomeworkAvailableTag = (slug: HomeworkSlug) =>
 	`is-lecture-available_${slug}`;
 
@@ -78,7 +64,6 @@ export const getIsHomeworkAvailable = (slug: HomeworkSlug) =>
 /**
  * Ordered lectures
  */
-
 export const ORDERED_LECTURES_TAG = 'ordered-lectures';
 
 export const getOrderedLectures = unstable_cache(

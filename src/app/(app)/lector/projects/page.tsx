@@ -4,21 +4,10 @@ import { Badge } from '@/components/base/badge';
 import { Button } from '@/components/base/button';
 import { Icon } from '@/components/base/icon';
 import { TextPreview } from '@/components/text-preview';
-import { db } from '@/db';
 import { formatDate } from '@/lib/date';
+import { getProjects, type GetProjectsResult } from '@/db/query/project';
 
-const getProjects = async () =>
-	await db.query.projects.findMany({
-		with: {
-			users: true
-		}
-	});
-
-type ProjectCardProps = {
-	project: Awaited<ReturnType<typeof getProjects>>[number];
-};
-
-const ProjectCard = ({ project }: ProjectCardProps) => (
+const ProjectCard = ({ project }: { project: GetProjectsResult[number] }) => (
 	<article className="p-6 bg-white rounded-lg shadow">
 		<span className="flex items-center mb-1 text-xs text-gray-500 truncate">
 			<Icon name="Users" className="mr-2" />

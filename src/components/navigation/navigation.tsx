@@ -44,7 +44,7 @@ export const Navigation = ({
 					<NavigationItem href="/homeworks">Homeworks</NavigationItem>
 
 					{isUserLoading ? null : user?.role === 'lector' ? (
-						<NavigationItem href="/lector">Lector</NavigationItem>
+						<NavigationItem href="/lector/students">Lector</NavigationItem>
 					) : (
 						<NavigationItem href="/project">Project</NavigationItem>
 					)}

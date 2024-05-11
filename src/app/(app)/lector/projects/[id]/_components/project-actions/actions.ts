@@ -1,9 +1,10 @@
 'use server';
 
 import { eq } from 'drizzle-orm';
-import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 
 import { db, type Project, projects } from '@/db';
+import { PROJECTS_TAG } from '@/db/query/project';
 
 import { type SetProjectPointsFormSchema } from './schema';
 
@@ -19,8 +20,7 @@ export const confirmProjectAction = async ({
 		})
 		.where(eq(projects.id, project.id));
 
-	revalidatePath('/lector/projects', 'layout');
-	revalidatePath('/lector/student-detail/[id]', 'page');
+	revalidateTag(PROJECTS_TAG);
 };
 
 export const setProjectPointsAction = async (
@@ -33,5 +33,5 @@ export const setProjectPointsAction = async (
 		})
 		.where(eq(projects.id, data.projectId));
 
-	revalidatePath('/lector/projects', 'layout');
+	revalidateTag(PROJECTS_TAG);
 };

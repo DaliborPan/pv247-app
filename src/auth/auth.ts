@@ -12,6 +12,8 @@ const LECTOR_EMAILS = process.env.LECTOR_EMAILS?.split(';') ?? [];
 
 const PUBLIC_ROUTES = ['/login', '/lectures', '/homeworks', '/test'];
 
+const LECTOR_PATHS_PREFIX = ['/lector'];
+
 const getIsProtectedPath = (path: string) =>
 	!PUBLIC_ROUTES.some(route => path.startsWith(route));
 
@@ -60,10 +62,7 @@ export const authOptions = {
 			return session;
 		},
 		authorized: async ({ auth, request: { nextUrl } }) => {
-			// const isLoggedIn = !!auth?.user;
-
-			// Temporary
-			const isLoggedIn = auth?.user.role === 'lector';
+			const isLoggedIn = !!auth?.user;
 
 			const isProtected = getIsProtectedPath(nextUrl.pathname);
 
@@ -74,29 +73,16 @@ export const authOptions = {
 				return Response.redirect(redirectUrl);
 			}
 
-			// if (
-			// 	nextUrl.pathname.startsWith('/homeworks/') ||
-			// 	nextUrl.pathname.startsWith('/lectures/')
-			// ) {
-			// 	const availableLectures = await action();
-			// 	const slug = nextUrl.pathname.split('/').pop();
+			const isLector = auth?.user?.role === 'lector';
 
-			// 	const type = nextUrl.pathname.startsWith('/homeworks')
-			// 		? 'homeworks'
-			// 		: 'lectures';
+			if (
+				!isLector &&
+				LECTOR_PATHS_PREFIX.some(prefix => nextUrl.pathname.startsWith(prefix))
+			) {
+				const redirectUrl = new URL('/lectures', nextUrl.origin);
 
-			// 	const isAvailable = availableLectures.some(lecture =>
-			// 		type === 'homeworks'
-			// 			? lecture.homeworkSlug === slug
-			// 			: lecture.slug === slug
-			// 	);
-
-			// 	if (!isAvailable) {
-			// 		const redirectUrl = new URL(`/${type}`, nextUrl.origin);
-
-			// 		return Response.redirect(redirectUrl);
-			// 	}
-			// }
+				return Response.redirect(redirectUrl);
+			}
 
 			return true;
 		}

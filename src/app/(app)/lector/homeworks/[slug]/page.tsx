@@ -1,14 +1,14 @@
-import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import { type User } from 'next-auth';
 
 import { getSessionUser } from '@/auth/session-user';
-import { db, homeworkSlugSchema, type Lecture } from '@/db';
+import { homeworkSlugSchema, type Lecture } from '@/db';
 import { DataTable } from '@/components/data-table/data-table';
 import { type GetStudentWithHomeworksResult, query } from '@/db/query';
 import { TabsContent } from '@/components/base/tabs';
 import { LabeledValue } from '@/components/labeled-value';
 import { getOrderedLectures } from '@/db/query/lectures';
+import { getLectorStudents } from '@/db/session-user-service/lector-students';
 
 import { LectorTabsTable } from '../../_components/lector-tabs-table';
 
@@ -66,18 +66,8 @@ const Page = async ({
 
 	const paramSlug = parsedSlug.data;
 
-	const user = await db.query.users.findFirst({
-		where: users => eq(users.id, sessionUser.id ?? ''),
-		with: {
-			students: {
-				with: {
-					homeworksStudent: true
-				}
-			}
-		}
-	});
-
-	const hasOwnStudents = !!user?.students.length;
+	const lectorStudents = await getLectorStudents();
+	const hasOwnStudents = !!lectorStudents.length;
 
 	const lectures = await getOrderedLectures();
 	const lecture = lectures.find(lecture => lecture.homeworkSlug === paramSlug);
@@ -121,7 +111,7 @@ const Page = async ({
 					</TabsContent>
 					<TabsContent value="own">
 						<StudentDataTable
-							students={user?.students ?? []}
+							students={lectorStudents}
 							lecture={lecture}
 							sessionUser={sessionUser}
 						/>

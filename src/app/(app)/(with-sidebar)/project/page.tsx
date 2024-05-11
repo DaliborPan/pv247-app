@@ -4,7 +4,7 @@ import { Icon } from '@/components/base/icon';
 import { Button } from '@/components/base/button';
 import { Hero } from '@/components/person-detail';
 import { cn } from '@/lib/cn';
-import { getProjectWithUsers } from '@/db/service/project';
+import { getProjectWithUsers } from '@/db/session-user-service/project';
 
 import { SubmitProjectButton } from './_components/submit-project';
 import { ProjectForm } from './_components/project-form';

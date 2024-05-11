@@ -5,9 +5,9 @@ import { cn } from '@/lib/cn';
 import { ResponsiveSidebarCard, SidebarCard } from '@/components/sidebar-card';
 import { getIsAvailable, getOrderedLectures } from '@/db/query/lectures';
 import { Button } from '@/components/base/button';
-import { getOrderedLecturesWithHomework } from '@/db/service/lecture';
-import { getSessionUserOverview } from '@/db/service/overview';
-import { getProjectWithUsers } from '@/db/service/project';
+import { getOrderedLecturesWithHomework } from '@/db/session-user-service/lecture';
+import { getSessionUserOverview } from '@/db/session-user-service/overview';
+import { getProjectWithUsers } from '@/db/session-user-service/project';
 
 const LecturesCard = async () => {
 	const lectures = await getOrderedLectures();

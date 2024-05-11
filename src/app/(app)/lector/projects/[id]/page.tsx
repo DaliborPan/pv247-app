@@ -1,11 +1,11 @@
-import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 
-import { db, type Project } from '@/db';
+import { type Project } from '@/db';
 import { SidebarCard } from '@/components/sidebar-card';
 import { Icon } from '@/components/base/icon';
 import { Button } from '@/components/base/button';
 import { cn } from '@/lib/cn';
+import { getProject } from '@/db/query/project';
 
 import {
 	ProjectApproveButton,
@@ -97,12 +97,7 @@ type Params = {
 const Page = async ({ params }: { params: Params }) => {
 	const { id } = params;
 
-	const project = await db.query.projects.findFirst({
-		where: project => eq(project.id, id),
-		with: {
-			users: true
-		}
-	});
+	const project = await getProject(id);
 
 	if (!project) {
 		redirect('/lector/projects');

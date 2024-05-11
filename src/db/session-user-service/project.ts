@@ -1,17 +1,18 @@
 import { cache } from 'react';
 
-import { db } from '@/db';
 import { getSessionUser } from '@/auth/session-user';
+
+import { getProject } from '../query/project';
 
 export const getProjectWithUsers = cache(async () => {
 	const user = await getSessionUser();
+	const userProjectId = user.projectId;
 
-	return await db.query.projects.findFirst({
-		where: (project, { eq }) => eq(project.id, user.projectId ?? ''),
-		with: {
-			users: true
-		}
-	});
+	if (!userProjectId) {
+		return undefined;
+	}
+
+	return getProject(userProjectId);
 });
 
 export type GetProjectWithUsersResult = Awaited<

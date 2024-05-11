@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-import { getProjectWithUsers } from '@/db/service/project';
+import { getProjectWithUsers } from '@/db/session-user-service/project';
 import { getSessionUser } from '@/auth/session-user';
 
 import { ProjectForm } from '../_components/project-form';

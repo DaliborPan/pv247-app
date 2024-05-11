@@ -1,4 +1,3 @@
-import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 
@@ -12,13 +11,9 @@ import { HomeworksCard } from './_components/homeworks';
 
 const Page = async ({ params }: { params: { id: string } }) => {
 	const student = await db.query.users.findFirst({
-		where: users => eq(users.id, params.id),
+		where: (users, { eq }) => eq(users.id, params.id),
 		with: {
-			homeworksStudent: {
-				with: {
-					lecture: true
-				}
-			}
+			homeworksStudent: true
 		}
 	});
 
@@ -43,23 +38,23 @@ const Page = async ({ params }: { params: { id: string } }) => {
 			</Hero>
 
 			<OverviewCard
-				otherFields={({ project }) => (
+				otherFields={({
+					project: { project, display: projectDisplayName }
+				}) => (
 					<LabeledValue label="Project status">
 						<Link
 							className={cn(
 								'flex items-center transition-colors duration-200 gap-x-2 hover:text-primary-500',
-								!project.project?.id && 'pointer-events-none'
+								!project?.id && 'pointer-events-none'
 							)}
-							href={`/lector/projects/${project.project?.id ?? ''}`}
+							href={`/lector/projects/${project?.id ?? ''}`}
 						>
-							<span className="block">{project.display}</span>
-							{project.project?.id && <Icon name="ExternalLink" />}
+							<span className="block">{projectDisplayName}</span>
+							{project?.id && <Icon name="ExternalLink" />}
 						</Link>
 					</LabeledValue>
 				)}
 			/>
-
-			{/* TODO: Attendance */}
 
 			<HomeworksCard studentHomeworks={student.homeworksStudent} />
 		</div>

@@ -1,12 +1,12 @@
 import { ListCard } from '@/components/person-detail';
 import { PointsBadge } from '@/components/points-badge';
-import { type Lecture, type Homework } from '@/db';
+import { type Homework } from '@/db';
 import { getAvailableLectures } from '@/db/query/lectures';
 
 export const HomeworksCard = async ({
 	studentHomeworks
 }: {
-	studentHomeworks: (Homework & { lecture: Lecture | null })[];
+	studentHomeworks: Homework[];
 }) => {
 	const availableLectures = await getAvailableLectures();
 
@@ -31,9 +31,7 @@ export const HomeworksCard = async ({
 							<div className="flex gap-x-2">
 								<PointsBadge points={studentHomework.points} />
 
-								<PointsBadge
-									maximumPoints={studentHomework.lecture?.homeworkMaxPoints}
-								/>
+								<PointsBadge maximumPoints={lecture.homeworkMaxPoints} />
 							</div>
 						) : (
 							<PointsBadge points={null} />

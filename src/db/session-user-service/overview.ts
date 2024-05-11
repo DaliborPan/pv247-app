@@ -1,9 +1,9 @@
 import { cache } from 'react';
 
 import { getSessionUser } from '@/auth/session-user';
-import { db } from '@/db';
 
 import { getIsAvailable } from '../query/lectures';
+import { getProject } from '../query/project';
 
 import { getOrderedLecturesWithHomework } from './lecture';
 
@@ -23,14 +23,9 @@ export const getSessionUserOverview = cache(async () => {
 		return acc + (homework?.points ?? 0);
 	}, 0);
 
-	const userWithProject = await db.query.users.findFirst({
-		where: (user, { eq }) => eq(user.id, sessionUser.id),
-		with: {
-			project: true
-		}
-	});
-
-	const project = userWithProject?.project;
+	const project = !sessionUser.projectId
+		? undefined
+		: await getProject(sessionUser.projectId);
 
 	return {
 		lectures: {

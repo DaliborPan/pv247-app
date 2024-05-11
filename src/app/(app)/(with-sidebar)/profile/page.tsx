@@ -10,8 +10,7 @@ import {
 } from '@/components/person-detail';
 import { LabeledValue } from '@/components/labeled-value';
 import { PointsBadge } from '@/components/points-badge';
-import { getProjectWithUsers } from '@/db/service/project';
-import { getHomeworks } from '@/db/service/homework';
+import { getProjectWithUsers } from '@/db/session-user-service/project';
 import { getAvailableLectures } from '@/db/query/lectures';
 import { RevalidateLectures } from '@/components/revalidate-lectures';
 
@@ -53,7 +52,7 @@ const ProjectCard = async () => {
 };
 
 const HomeworksCard = async () => {
-	const homeworks = await getHomeworks();
+	const user = await getSessionUser();
 	const availableLectures = await getAvailableLectures();
 
 	return (
@@ -61,8 +60,8 @@ const HomeworksCard = async () => {
 			items={availableLectures.filter(lecture => !!lecture.homeworkSlug)}
 			title="Homework"
 			renderItem={(lecture, index) => {
-				const homework = homeworks.find(
-					homework => homework.lectureId === lecture.id
+				const homework = lecture.homeworks.find(
+					homework => homework.studentId === user.id
 				);
 
 				const points = homework?.points ?? null;
