@@ -1,4 +1,5 @@
 import { unstable_cache } from 'next/cache';
+import React from 'react';
 
 import { db, type LectureSlug, type Lecture, type HomeworkSlug } from '..';
 
@@ -81,19 +82,21 @@ export const getIsHomeworkAvailable = (slug: HomeworkSlug) =>
 
 export const ORDERED_LECTURES_TAG = 'ordered-lectures';
 
-export const getOrderedLectures = unstable_cache(
-	async () => {
-		const lectures = await db.query.lectures.findMany({
-			orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
-			with: {
-				homeworks: true
-			}
-		});
+export const getOrderedLectures = React.cache(
+	unstable_cache(
+		async () => {
+			const lectures = await db.query.lectures.findMany({
+				orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
+				with: {
+					homeworks: true
+				}
+			});
 
-		return lectures;
-	},
-	[ORDERED_LECTURES_TAG],
-	{
-		tags: [ORDERED_LECTURES_TAG]
-	}
+			return lectures;
+		},
+		[ORDERED_LECTURES_TAG],
+		{
+			tags: [ORDERED_LECTURES_TAG]
+		}
+	)
 );

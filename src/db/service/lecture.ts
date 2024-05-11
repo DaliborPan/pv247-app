@@ -1,17 +1,17 @@
 import { cache } from 'react';
 
 import { getSessionUser } from '@/auth/session-user';
-import { db } from '@/db';
+
+import { getOrderedLectures } from '../query/lectures';
 
 export const getOrderedLecturesWithHomework = cache(async () => {
 	const sessionUser = await getSessionUser();
+	const lectures = await getOrderedLectures();
 
-	return await db.query.lectures.findMany({
-		orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
-		with: {
-			homeworks: {
-				where: (homeworks, { eq }) => eq(homeworks.studentId, sessionUser.id)
-			}
-		}
-	});
+	return lectures.map(lecture => ({
+		...lecture,
+		homeworks: lecture.homeworks.filter(
+			homework => homework.studentId === sessionUser.id
+		)
+	}));
 });
