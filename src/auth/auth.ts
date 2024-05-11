@@ -10,7 +10,7 @@ import { CustomDrizzleAdapter } from './adapter';
 
 const LECTOR_EMAILS = process.env.LECTOR_EMAILS?.split(';') ?? [];
 
-const PUBLIC_ROUTES = ['/login', '/lectures', '/homeworks'];
+const PUBLIC_ROUTES = ['/login', '/lectures', '/homeworks', '/test'];
 
 const getIsProtectedPath = (path: string) =>
 	!PUBLIC_ROUTES.some(route => path.startsWith(route));
