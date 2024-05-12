@@ -4,7 +4,7 @@ import { getSessionUser } from '@/auth/session-user';
 
 import { getProject } from '../query/project';
 
-export const getProjectWithUsers = cache(async () => {
+export const getSessionUserProject = cache(async () => {
 	const user = await getSessionUser();
 	const userProjectId = user.projectId;
 
@@ -15,6 +15,6 @@ export const getProjectWithUsers = cache(async () => {
 	return getProject(userProjectId);
 });
 
-export type GetProjectWithUsersResult = Awaited<
-	ReturnType<typeof getProjectWithUsers>
+export type GetSessionUserProjectResult = Awaited<
+	ReturnType<typeof getSessionUserProject>
 >;

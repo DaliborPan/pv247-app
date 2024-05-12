@@ -4,13 +4,13 @@ import { Icon } from '@/components/base/icon';
 import { Button } from '@/components/base/button';
 import { Hero } from '@/components/person-detail';
 import { cn } from '@/lib/cn';
-import { getProjectWithUsers } from '@/db/session-user-service/project';
+import { getSessionUserProject } from '@/db/session-user-service/project';
 
 import { SubmitProjectButton } from './_components/submit-project';
 import { ProjectForm } from './_components/project-form';
 
 const ProjectHero = async () => {
-	const project = await getProjectWithUsers();
+	const project = await getSessionUserProject();
 
 	if (!project) return null;
 
@@ -72,7 +72,7 @@ const ProjectHero = async () => {
 };
 
 const ProjectCard = async () => {
-	const project = await getProjectWithUsers();
+	const project = await getSessionUserProject();
 
 	return (
 		<div className="p-8 mx-6 mt-8 bg-white rounded-lg shadow-lg">
@@ -86,7 +86,7 @@ const ProjectCard = async () => {
 };
 
 const SubmitProjectCard = async () => {
-	const project = await getProjectWithUsers();
+	const project = await getSessionUserProject();
 
 	if (!project) return null;
 
@@ -128,7 +128,7 @@ const SubmitProjectCard = async () => {
 };
 
 const Page = async () => {
-	const project = await getProjectWithUsers();
+	const project = await getSessionUserProject();
 
 	return project ? (
 		<div>

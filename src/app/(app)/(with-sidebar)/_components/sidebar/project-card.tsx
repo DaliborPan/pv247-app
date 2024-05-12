@@ -2,11 +2,11 @@ import Link from 'next/link';
 
 import { Button } from '@/components/base/button';
 import { SidebarCard } from '@/components/sidebar-card';
-import { getProjectWithUsers } from '@/db/session-user-service/project';
+import { getSessionUserProject } from '@/db/session-user-service/project';
 import { Icon } from '@/components/base/icon';
 
 export const ProjectCard = async () => {
-	const project = await getProjectWithUsers();
+	const project = await getSessionUserProject();
 
 	return (
 		<SidebarCard
