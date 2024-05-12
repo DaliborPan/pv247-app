@@ -8,9 +8,7 @@ import { DetailCard } from '@/components/detail-card';
 export const ProjectCard = async () => {
 	const project = await getSessionUserProject();
 
-	if (!project) {
-		return null;
-	}
+	if (!project) return null;
 
 	return (
 		<DetailCard

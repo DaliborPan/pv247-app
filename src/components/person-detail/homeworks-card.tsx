@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import { getUserHomeworks } from '@/db/query/homeworks';
-import { getAvailableLectures } from '@/db/query/lectures';
+import { getOrderedLectures } from '@/db/query/lectures';
+import { getUserOverview } from '@/db/query/overview';
 
 import { Button } from '../base/button';
 
@@ -15,19 +15,24 @@ export const HomeworksCard = async ({
 	userId: string;
 	showHomeworkLink?: boolean;
 }) => {
-	const availableLectures = await getAvailableLectures();
-	const userHomeworks = await getUserHomeworks(userId);
+	const lectures = await getOrderedLectures();
+
+	const {
+		lectures: { userHomeworks, availableLength }
+	} = await getUserOverview({ userId, projectId: null });
 
 	return (
 		<ListCard
 			title="Homework"
-			items={availableLectures.filter(lecture => !!lecture.homeworkSlug)}
+			items={lectures
+				.slice(0, availableLength + 1)
+				.filter(lecture => !!lecture.homeworkSlug)}
 			renderItem={(lecture, index) => {
 				const homework = userHomeworks.find(
 					homework => homework.lectureId === lecture.id
 				);
 
-				const points = homework?.points ?? null;
+				const points = homework?.points;
 
 				return (
 					<>

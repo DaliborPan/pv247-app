@@ -10,7 +10,7 @@ export const getUserOverview = cache(
 		projectId
 	}: {
 		userId: string;
-		projectId: string | null;
+		projectId?: string | null;
 	}) => {
 		const userHomeworks = await getUserHomeworks(userId);
 		const awardedHomeworksLength = userHomeworks.length;
