@@ -10,6 +10,13 @@ export const getStudentsWithHomeworks = () =>
 		}
 	});
 
-export type GetStudentWithHomeworksResult = Awaited<
+export type GetStudentsWithHomeworksResult = Awaited<
 	ReturnType<typeof getStudentsWithHomeworks>
 >;
+
+export const getStudent = (id: string) =>
+	db.query.users.findFirst({
+		where: (users, { eq }) => eq(users.id, id)
+	});
+
+export type GetStudent = Awaited<ReturnType<typeof getStudent>>;

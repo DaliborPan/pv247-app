@@ -40,5 +40,5 @@ export const setHomeworkPointsAction = async ({
 
 	revalidatePath('/lector/homeworks/[slug]', 'page');
 	revalidatePath('/lector/students');
-	revalidatePath('/lector/student-detail/[id]', 'page');
+	revalidatePath(`/lector/student-detail/${studentId}`);
 };
