@@ -1,25 +1,28 @@
 import { cn } from '@/lib/cn';
-import { type getSessionUserOverview } from '@/db/session-user-service/overview';
-import { getUserOverview } from '@/db/query/overview';
+import {
+	getUserOverview,
+	type GetUserOverviewResult
+} from '@/db/query/overview';
 
 import { LabeledValue } from '../labeled-value';
 import { DetailCard } from '../detail-card';
 
-type GetOverviewResult = Awaited<ReturnType<typeof getSessionUserOverview>>;
+type OverviewCardProps = {
+	userId: string;
+	projectId: string | null;
+	otherFields?: (overview: GetUserOverviewResult) => React.ReactNode;
+};
 
 export const OverviewCard = async ({
 	otherFields,
 	userId,
 	projectId
-}: {
-	userId: string;
-	projectId: string | null;
-	otherFields?: (overview: GetOverviewResult) => React.ReactNode;
-}) => {
+}: OverviewCardProps) => {
 	const overview = await getUserOverview({
 		userId,
 		projectId
 	});
+
 	const { homeworks, project, totalPoints } = overview;
 
 	return (

@@ -1,12 +1,12 @@
 import { SidebarCard } from '@/components/sidebar-card';
-import { getAvailableLectures, getOrderedLectures } from '@/db/query/lectures';
+import { getIsAvailable, getOrderedLectures } from '@/db/query/lectures';
 import { Icon } from '@/components/base/icon';
 
 import { SidebarLinkRow } from './sidebar-link-row';
 
 export const LecturesCard = async () => {
 	const lectures = await getOrderedLectures();
-	const availableLectures = await getAvailableLectures();
+	const availableLectures = lectures.filter(getIsAvailable);
 
 	return (
 		<SidebarCard title="Lectures" className="hidden lg:block">

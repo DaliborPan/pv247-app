@@ -29,12 +29,7 @@ export const getUserOverview = cache(
 			lectures: {
 				display: `${availableLength}/${lectures.length}`,
 				availableLength,
-				lectures: lectures.map(lecture => ({
-					...lecture,
-					homeworks: lecture.homeworks.filter(homework =>
-						userHomeworks.some(userHomework => userHomework.id === homework.id)
-					)
-				}))
+				userHomeworks
 			},
 			homeworks: {
 				display: `${awardedHomeworksLength}/${lectures.length} | ${totalPoints}p`,
