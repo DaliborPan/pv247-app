@@ -18,10 +18,7 @@ export const OverviewCard = async ({
 	userId,
 	projectId
 }: OverviewCardProps) => {
-	const overview = await getUserOverview({
-		userId,
-		projectId
-	});
+	const overview = await getUserOverview(userId, projectId);
 
 	const { homeworks, project, totalPoints } = overview;
 

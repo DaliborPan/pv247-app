@@ -17,7 +17,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
 		<div className="mb-8 mx-auto max-w-4xl">
 			<StudentHero student={student} />
 			<StudentOverviewCard student={student} />
-			<HomeworksCard userId={student.id} />
+			<HomeworksCard userId={student.id} projectId={student.projectId} />
 		</div>
 	);
 };

@@ -7,8 +7,5 @@ import { getUserOverview } from '../query/overview';
 export const getSessionUserOverview = cache(async () => {
 	const sessionUser = await getSessionUser();
 
-	return getUserOverview({
-		userId: sessionUser.id,
-		projectId: sessionUser.projectId
-	});
+	return getUserOverview(sessionUser.id, sessionUser.projectId);
 });

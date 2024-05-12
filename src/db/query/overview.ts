@@ -1,17 +1,13 @@
-import { cache } from 'react';
+import React from 'react';
 
 import { getIsAvailable, getOrderedLectures } from './lectures';
 import { getProject } from './project';
 import { getUserHomeworks } from './homeworks';
 
-export const getUserOverview = cache(
-	async ({
-		userId,
-		projectId
-	}: {
-		userId: string;
-		projectId?: string | null;
-	}) => {
+export const getUserOverview = React.cache(
+	async (userId: string, projectId?: string | null) => {
+		console.log('Getting user overview: ', userId, projectId);
+
 		const userHomeworks = await getUserHomeworks(userId);
 		const awardedHomeworksLength = userHomeworks.length;
 

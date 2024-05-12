@@ -22,7 +22,7 @@ const Page = async () => {
 			{user.role !== 'lector' ? (
 				<>
 					<OverviewCard userId={user.id} projectId={user.projectId} />
-					<HomeworksCard userId={user.id} />
+					<HomeworksCard userId={user.id} projectId={user.projectId} />
 					<ProjectCard />
 				</>
 			) : (

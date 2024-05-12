@@ -10,16 +10,18 @@ import { ListCard } from './list-card';
 
 export const HomeworksCard = async ({
 	userId,
+	projectId,
 	showHomeworkLink = false
 }: {
 	userId: string;
+	projectId: string | null;
 	showHomeworkLink?: boolean;
 }) => {
 	const lectures = await getOrderedLectures();
 
 	const {
 		lectures: { userHomeworks, availableLength }
-	} = await getUserOverview({ userId, projectId: null });
+	} = await getUserOverview(userId, projectId);
 
 	return (
 		<ListCard
