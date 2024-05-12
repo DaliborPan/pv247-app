@@ -1,5 +1,6 @@
 import { getSessionUser } from '@/auth/session-user';
-import { OverviewCard, ProfileCard } from '@/components/person-detail';
+import { OverviewCard } from '@/components/person-detail';
+import { DetailCard } from '@/components/detail-card';
 
 import { ProfileHero } from './_components/profile-hero';
 import { HomeworksCard } from './_components/homeworks-card';
@@ -7,9 +8,9 @@ import { ProjectCard } from './_components/project-card';
 import { RevalidateLectures } from './_components/revalidate-lectures';
 
 const RevalidateLecturesSection = () => (
-	<ProfileCard title="Revalidate lectures">
+	<DetailCard title="Revalidate lectures">
 		<RevalidateLectures />
-	</ProfileCard>
+	</DetailCard>
 );
 
 const Page = async () => {

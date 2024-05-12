@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn';
 import { type BaseObject } from '@/schema/base';
 
-import { ProfileCard } from './profile-card';
+import { DetailCard } from '../detail-card';
 
 type ListCardProps<T extends BaseObject> = {
 	title: string;
@@ -17,7 +17,7 @@ export const ListCard = async <T extends BaseObject>({
 	renderItem,
 	className
 }: ListCardProps<T>) => (
-	<ProfileCard title={title}>
+	<DetailCard title={title}>
 		<div className="flex flex-col gap-y-2">
 			{items.map((item, index) => (
 				<div
@@ -31,5 +31,5 @@ export const ListCard = async <T extends BaseObject>({
 				</div>
 			))}
 		</div>
-	</ProfileCard>
+	</DetailCard>
 );

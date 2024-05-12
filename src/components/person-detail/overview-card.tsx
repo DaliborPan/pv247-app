@@ -2,8 +2,7 @@ import { cn } from '@/lib/cn';
 import { getSessionUserOverview } from '@/db/session-user-service/overview';
 
 import { LabeledValue } from '../labeled-value';
-
-import { ProfileCard } from './profile-card';
+import { DetailCard } from '../detail-card';
 
 type GetOverviewResult = Awaited<ReturnType<typeof getSessionUserOverview>>;
 
@@ -16,7 +15,7 @@ export const OverviewCard = async ({
 	const { homeworks, project, totalPoints } = overview;
 
 	return (
-		<ProfileCard title="Overview">
+		<DetailCard title="Overview">
 			<div
 				className={cn(
 					'grid grid-cols-3 gap-4',
@@ -39,6 +38,6 @@ export const OverviewCard = async ({
 
 				{otherFields?.(overview)}
 			</div>
-		</ProfileCard>
+		</DetailCard>
 	);
 };

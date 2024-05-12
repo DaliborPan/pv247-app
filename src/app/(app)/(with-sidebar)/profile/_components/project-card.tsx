@@ -2,8 +2,8 @@ import Link from 'next/link';
 
 import { Button } from '@/components/base/button';
 import { LabeledValue } from '@/components/labeled-value';
-import { ProfileCard } from '@/components/person-detail';
 import { getSessionUserProject } from '@/db/session-user-service/project';
+import { DetailCard } from '@/components/detail-card';
 
 export const ProjectCard = async () => {
 	const project = await getSessionUserProject();
@@ -13,7 +13,7 @@ export const ProjectCard = async () => {
 	}
 
 	return (
-		<ProfileCard
+		<DetailCard
 			title="Project"
 			actions={
 				<Link href="/project">
@@ -36,6 +36,6 @@ export const ProjectCard = async () => {
 					</p>
 				</LabeledValue>
 			</div>
-		</ProfileCard>
+		</DetailCard>
 	);
 };

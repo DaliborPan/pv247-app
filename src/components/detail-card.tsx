@@ -1,6 +1,6 @@
 import { type PropsWithChildren } from 'react';
 
-export const ProfileCard = ({
+export const DetailCard = ({
 	children,
 	title,
 	actions
