@@ -1,13 +1,13 @@
-import { db, type HomeworkSlug } from '@/db';
+import { type HomeworkSlug } from '@/db';
+import { getOrderedLectures } from '@/db/query/lectures';
 
 import { PersonHomeworkDeadline } from './person-homework-deadline';
 import { LabeledItem } from './labeled-item';
 import { HomeworkPoints } from './homework-points';
 
 export const HomeworkGeneralInfo = async ({ slug }: { slug: HomeworkSlug }) => {
-	const lecture = await db.query.lectures.findFirst({
-		where: (table, { eq }) => eq(table.homeworkSlug, slug)
-	});
+	const lectures = await getOrderedLectures();
+	const lecture = lectures.find(lecture => lecture.slug === slug);
 
 	if (!lecture) return null;
 

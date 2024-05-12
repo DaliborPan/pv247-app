@@ -13,5 +13,5 @@ export const getSessionUser = cache(async () => {
 		);
 	}
 
-	return JSON.parse(JSON.stringify(session.user)) as User;
+	return session.user;
 });

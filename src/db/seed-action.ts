@@ -1,5 +1,7 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+
 import { lectures, type Lecture } from './schema/lectures';
 import { users, type User } from './schema/users';
 
@@ -290,4 +292,6 @@ export const seed = async () => {
 	for (const lecture of lecturesData) {
 		await db.insert(lectures).values(lecture);
 	}
+
+	revalidatePath('/', 'layout');
 };

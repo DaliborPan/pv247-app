@@ -1,7 +1,10 @@
 import { DataTable } from '@/components/data-table/data-table';
 import { TabsContent } from '@/components/base/tabs';
-import { query, type GetStudentWithHomeworksResult } from '@/db/query';
 import { getLectorStudents } from '@/db/session-user-service/lector-students';
+import {
+	getStudentsWithHomeworks,
+	type GetStudentsWithHomeworksResult
+} from '@/db/query/student';
 
 import { LectorTabsTable } from '../_components/lector-tabs-table';
 
@@ -10,7 +13,7 @@ import { columns } from './_components/columns';
 const StudentDataTable = ({
 	students
 }: {
-	students: GetStudentWithHomeworksResult;
+	students: GetStudentsWithHomeworksResult;
 }) => (
 	<DataTable
 		data={students.map(student => ({
@@ -55,9 +58,7 @@ const Page = async () => {
 			contents={
 				<>
 					<TabsContent value="all">
-						<StudentDataTable
-							students={await query.student.getStudentsWithHomeworks()}
-						/>
+						<StudentDataTable students={await getStudentsWithHomeworks()} />
 					</TabsContent>
 
 					<TabsContent value="own">

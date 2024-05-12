@@ -3,11 +3,14 @@ import { redirect } from 'next/navigation';
 import { getSessionUser } from '@/auth/session-user';
 import { homeworkSlugSchema, type Lecture } from '@/db';
 import { DataTable } from '@/components/data-table/data-table';
-import { type GetStudentWithHomeworksResult, query } from '@/db/query';
 import { TabsContent } from '@/components/base/tabs';
 import { LabeledValue } from '@/components/labeled-value';
 import { getOrderedLectures } from '@/db/query/lectures';
 import { getLectorStudents } from '@/db/session-user-service/lector-students';
+import {
+	getStudentsWithHomeworks,
+	type GetStudentsWithHomeworksResult
+} from '@/db/query/student';
 
 import { LectorTabsTable } from '../../_components/lector-tabs-table';
 
@@ -19,7 +22,7 @@ const StudentDataTable = async ({
 	students,
 	lecture
 }: {
-	students: GetStudentWithHomeworksResult;
+	students: GetStudentsWithHomeworksResult;
 	lecture?: Lecture;
 }) => {
 	const sessionUser = await getSessionUser();
@@ -107,7 +110,7 @@ const Page = async ({
 
 					<TabsContent value="all">
 						<StudentDataTable
-							students={await query.student.getStudentsWithHomeworks()}
+							students={await getStudentsWithHomeworks()}
 							lecture={lecture}
 						/>
 					</TabsContent>

@@ -1,9 +1,8 @@
 import { cn } from '@/lib/cn';
-import { type BaseObject } from '@/schema/base';
 
 import { DetailCard } from '../detail-card';
 
-type ListCardProps<T extends BaseObject> = {
+type ListCardProps<T extends { id: string }> = {
 	title: string;
 	items: T[];
 	renderItem: (item: T, index: number) => React.ReactNode;
@@ -11,7 +10,7 @@ type ListCardProps<T extends BaseObject> = {
 	className?: string;
 };
 
-export const ListCard = async <T extends BaseObject>({
+export const ListCard = async <T extends { id: string }>({
 	title,
 	items,
 	renderItem,

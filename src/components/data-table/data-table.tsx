@@ -8,14 +8,12 @@ import {
 	useReactTable
 } from '@tanstack/react-table';
 
-import { type BaseObject } from '@/schema/base';
-
-type TableProps<TData extends BaseObject> = {
+type TableProps<TData extends { id: string }> = {
 	data: TData[];
 	columns: ColumnDef<TData, string>[];
 };
 
-export const DataTable = <TData extends BaseObject>({
+export const DataTable = <TData extends { id: string }>({
 	data,
 	columns
 }: TableProps<TData>) => {

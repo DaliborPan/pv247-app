@@ -9,6 +9,6 @@ export const getSessionUserOverview = cache(async () => {
 
 	return getUserOverview({
 		userId: sessionUser.id,
-		projectId: sessionUser.projectId ?? undefined
+		projectId: sessionUser.projectId
 	});
 });
