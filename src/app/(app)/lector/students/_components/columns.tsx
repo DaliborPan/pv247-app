@@ -46,14 +46,14 @@ export const columns: ColumnDef<User, string>[] = [
 
 		enableSorting: true
 	},
-	{
-		accessorKey: 'attendance',
-		header: props => <DataTableColumnHeader {...props} title="Attendance" />,
-		minSize: 175,
-		cell: cell => <div>{cell.getValue()}/10</div>,
+	// {
+	// 	accessorKey: 'attendance',
+	// 	header: props => <DataTableColumnHeader {...props} title="Attendance" />,
+	// 	minSize: 175,
+	// 	cell: cell => <div>{cell.getValue()}/10</div>,
 
-		enableSorting: true
-	},
+	// 	enableSorting: true
+	// },
 	{
 		accessorKey: 'homeworkPoints',
 		header: props => (

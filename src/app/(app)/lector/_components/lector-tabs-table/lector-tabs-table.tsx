@@ -8,13 +8,11 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/base/tabs';
 export const LectorTabsTable = ({
 	contents,
 	title,
-	tabsHidden = false,
 	triggers
 }: {
 	contents: React.ReactNode;
 	triggers: { value: string; label: string; href: string }[];
 	title: string;
-	tabsHidden?: boolean;
 }) => {
 	const searchParams = useSearchParams();
 	const viewType = searchParams.get('type') ?? 'all';
@@ -24,7 +22,7 @@ export const LectorTabsTable = ({
 			<div className="flex items-center mb-6 gap-x-2">
 				<h1 className="text-4xl grow">{title}</h1>
 
-				{!tabsHidden && (
+				{triggers.length !== 0 && (
 					<TabsList>
 						{triggers.map(({ value, label, href }) => (
 							<TabsTrigger key={value} value={value} asChild>

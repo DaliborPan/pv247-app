@@ -19,7 +19,7 @@ const StudentDataTable = ({
 				? ''
 				: `${student.firstName} ${student.lastName}`,
 			// TODO: attendance
-			attendance: 4,
+			// attendance: 4,
 			homeworkPoints: student.homeworksStudent.reduce(
 				(acc, hw) => acc + hw.points,
 				0
@@ -36,19 +36,22 @@ const Page = async () => {
 	return (
 		<LectorTabsTable
 			title="Students"
-			tabsHidden={!hasOwnStudents}
-			triggers={[
-				{
-					href: '/lector/students?type=all',
-					label: 'All students',
-					value: 'all'
-				},
-				{
-					href: '/lector/students?type=own',
-					label: 'Own students',
-					value: 'own'
-				}
-			]}
+			triggers={
+				!hasOwnStudents
+					? []
+					: [
+							{
+								href: '/lector/students?type=all',
+								label: 'All students',
+								value: 'all'
+							},
+							{
+								href: '/lector/students?type=own',
+								label: 'Own students',
+								value: 'own'
+							}
+						]
+			}
 			contents={
 				<>
 					<TabsContent value="all">
@@ -56,6 +59,7 @@ const Page = async () => {
 							students={await query.student.getStudentsWithHomeworks()}
 						/>
 					</TabsContent>
+
 					<TabsContent value="own">
 						<StudentDataTable students={lectorStudents} />
 					</TabsContent>

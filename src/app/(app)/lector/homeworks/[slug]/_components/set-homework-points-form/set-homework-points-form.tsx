@@ -6,7 +6,6 @@ import { useState } from 'react';
 
 import { Button } from '@/components/base/button';
 import { FormInput } from '@/components/form/form-fields';
-import { type Lecture } from '@/db';
 import { Form } from '@/components/form';
 
 import {
@@ -16,14 +15,11 @@ import {
 import { setHomeworkPointsAction } from './set-homework-points-action';
 
 export const SetHomeworkPointsForm = ({
-	...defaultValues
+	defaultValues
 }: {
-	lectorId: string;
-	studentId: string;
-	lecture: Lecture;
-	points?: number;
+	defaultValues?: Partial<SetHomeworkPointsFormSchema>;
 }) => {
-	const hasPoints = defaultValues.points !== undefined;
+	const hasPoints = defaultValues?.points !== undefined;
 
 	const [isEditing, setIsEditing] = useState(!hasPoints);
 
@@ -58,7 +54,7 @@ export const SetHomeworkPointsForm = ({
 		</Form>
 	) : (
 		<div className="flex items-center gap-x-2">
-			<div className="grow">{defaultValues.points} points</div>
+			<div className="grow">{defaultValues?.points} points</div>
 			<Button
 				size="sm"
 				type="button"

@@ -1,5 +1,4 @@
 import { redirect } from 'next/navigation';
-import { type User } from 'next-auth';
 
 import { getSessionUser } from '@/auth/session-user';
 import { homeworkSlugSchema, type Lecture } from '@/db';
@@ -14,38 +13,41 @@ import { LectorTabsTable } from '../../_components/lector-tabs-table';
 
 import { columns } from './_components/columns';
 import { HomeworksNavigation } from './_components/homeworks-navigation';
+import { type SetHomeworkPointsFormSchema } from './_components/set-homework-points-form';
 
-const StudentDataTable = ({
+const StudentDataTable = async ({
 	students,
-	lecture,
-	sessionUser
+	lecture
 }: {
 	students: GetStudentWithHomeworksResult;
 	lecture?: Lecture;
-	sessionUser: User;
-}) => (
-	<DataTable
-		data={students.map(student => {
-			const points = student.homeworksStudent.find(
-				hw => hw.lectureId === lecture?.id
-			)?.points;
+}) => {
+	const sessionUser = await getSessionUser();
 
-			return {
-				...student,
-				fullName: !student.firstName
-					? ''
-					: `${student.firstName} ${student.lastName}`,
-				points: {
+	return (
+		<DataTable
+			data={students.map(student => {
+				const defaultValues: Partial<SetHomeworkPointsFormSchema> = {
 					lecture,
 					lectorId: sessionUser.id,
 					studentId: student.id,
-					points
-				}
-			};
-		})}
-		columns={columns}
-	/>
-);
+					points: student.homeworksStudent.find(
+						hw => hw.lectureId === lecture?.id
+					)?.points
+				};
+
+				return {
+					...student,
+					fullName: !student.firstName
+						? ''
+						: `${student.firstName} ${student.lastName}`,
+					defaultValues
+				};
+			})}
+			columns={columns}
+		/>
+	);
+};
 
 const Page = async ({
 	params
@@ -54,8 +56,6 @@ const Page = async ({
 		slug: string;
 	};
 }) => {
-	const sessionUser = await getSessionUser();
-
 	const parsedSlug = homeworkSlugSchema.safeParse(
 		params.slug ?? homeworkSlugSchema.options[0]
 	);
@@ -75,19 +75,22 @@ const Page = async ({
 	return (
 		<LectorTabsTable
 			title="Homework evaluation"
-			tabsHidden={!hasOwnStudents}
-			triggers={[
-				{
-					href: `/lector/homeworks/${paramSlug}?type=all`,
-					label: 'All students',
-					value: 'all'
-				},
-				{
-					href: `/lector/homeworks/${paramSlug}?type=own`,
-					label: 'My students',
-					value: 'own'
-				}
-			]}
+			triggers={
+				!hasOwnStudents
+					? []
+					: [
+							{
+								href: `/lector/homeworks/${paramSlug}?type=all`,
+								label: 'All students',
+								value: 'all'
+							},
+							{
+								href: `/lector/homeworks/${paramSlug}?type=own`,
+								label: 'My students',
+								value: 'own'
+							}
+						]
+			}
 			contents={
 				<>
 					<div className="flex items-center py-2 pl-4 mb-4 rounded-lg shadow bg-gray-50">
@@ -106,15 +109,11 @@ const Page = async ({
 						<StudentDataTable
 							students={await query.student.getStudentsWithHomeworks()}
 							lecture={lecture}
-							sessionUser={sessionUser}
 						/>
 					</TabsContent>
+
 					<TabsContent value="own">
-						<StudentDataTable
-							students={lectorStudents}
-							lecture={lecture}
-							sessionUser={sessionUser}
-						/>
+						<StudentDataTable students={lectorStudents} lecture={lecture} />
 					</TabsContent>
 				</>
 			}

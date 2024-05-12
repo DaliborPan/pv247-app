@@ -2,13 +2,16 @@
 
 import { type ColumnDef } from '@tanstack/react-table';
 
-import { type Lecture, type User } from '@/db';
+import { type User } from '@/db';
 import { DataTableColumnHeader } from '@/components/data-table';
 import { Icon } from '@/components/base/icon';
 
-import { SetHomeworkPointsForm } from './set-homework-points-form';
+import {
+	SetHomeworkPointsForm,
+	type SetHomeworkPointsFormSchema
+} from './set-homework-points-form';
 
-export const columns: ColumnDef<User, string>[] = [
+export const columns: ColumnDef<User, unknown>[] = [
 	{
 		accessorKey: 'name',
 		header: props => <DataTableColumnHeader {...props} title="GitHub" />,
@@ -22,7 +25,7 @@ export const columns: ColumnDef<User, string>[] = [
 				className="flex items-center font-light gap-x-2 hover:text-primary hover:underline"
 			>
 				<Icon name="ExternalLink" />
-				{cell.getValue()}
+				{cell.getValue() as string}
 			</a>
 		),
 
@@ -32,25 +35,20 @@ export const columns: ColumnDef<User, string>[] = [
 		accessorKey: 'fullName',
 		header: props => <DataTableColumnHeader {...props} title="Full name" />,
 		minSize: 300,
-		cell: cell => <div>{cell.getValue()}</div>,
+		cell: cell => <div>{cell.getValue() as string}</div>,
 
 		enableSorting: true
 	},
 	{
-		accessorKey: 'points',
+		accessorKey: 'defaultValues',
 		header: props => (
 			<DataTableColumnHeader {...props} title="Homework points" />
 		),
 		minSize: 225,
 		cell: cell => {
-			const defaultValues = cell.getValue() as unknown as {
-				studentId: string;
-				lecture: Lecture;
-				lectorId: string;
-				points?: number;
-			};
+			const defaultValues = cell.getValue() as SetHomeworkPointsFormSchema;
 
-			return <SetHomeworkPointsForm {...defaultValues} />;
+			return <SetHomeworkPointsForm defaultValues={defaultValues} />;
 		}
 	}
 ];
