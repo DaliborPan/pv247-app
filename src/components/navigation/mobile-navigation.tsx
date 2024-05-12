@@ -35,8 +35,7 @@ export const MobileNavigation = ({
 
 		{isUserLoading || user ? null : (
 			<SignIn>
-				{/* Temporary */}
-				<Button disabled size="sm" variant="outline/primary">
+				<Button size="sm" variant="outline/primary">
 					Sign in
 				</Button>
 			</SignIn>
