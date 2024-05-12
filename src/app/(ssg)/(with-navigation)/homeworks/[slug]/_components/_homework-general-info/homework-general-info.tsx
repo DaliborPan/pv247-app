@@ -7,7 +7,7 @@ import { HomeworkPoints } from './homework-points';
 
 export const HomeworkGeneralInfo = async ({ slug }: { slug: HomeworkSlug }) => {
 	const lectures = await getOrderedLectures();
-	const lecture = lectures.find(lecture => lecture.slug === slug);
+	const lecture = lectures.find(lecture => lecture.homeworkSlug === slug);
 
 	if (!lecture) return null;
 
