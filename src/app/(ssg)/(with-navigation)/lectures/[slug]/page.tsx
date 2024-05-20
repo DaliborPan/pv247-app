@@ -20,10 +20,6 @@ export const generateStaticParams = (): Params[] => {
 const Page = async ({ params }: { params: Params }) => {
 	const isAvailable = await getIsLectureAvailable(params.slug);
 
-	console.log(
-		`Revalidating lecture ${params.slug} - isAvailable: ${isAvailable}`
-	);
-
 	if (!isAvailable) {
 		redirect('/lectures');
 	}

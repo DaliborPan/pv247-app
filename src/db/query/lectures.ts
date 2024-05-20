@@ -28,8 +28,6 @@ export const getIsLectureAvailable = (slug: LectureSlug) =>
 				where: (table, { eq }) => eq(table.slug, slug)
 			});
 
-			console.log('getIsLectureAvailable', slug);
-
 			return !!lecture && getIsAvailable(lecture);
 		},
 		[getIsLectureAvailableTag(slug)],
@@ -51,8 +49,6 @@ export const getIsHomeworkAvailable = (slug: HomeworkSlug) =>
 				where: (table, { eq }) => eq(table.homeworkSlug, slug)
 			});
 
-			console.log('getIsHomeworkAvailable', slug);
-
 			return !!lecture && getIsAvailable(lecture);
 		},
 		[getIsHomeworkAvailableTag(slug)],
@@ -68,8 +64,6 @@ export const ORDERED_LECTURES_TAG = 'ordered-lectures';
 
 export const getOrderedLectures = unstable_cache(
 	async () => {
-		console.log('Calling DB for ordered lecture');
-
 		const lectures = await db.query.lectures.findMany({
 			orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
 			with: {

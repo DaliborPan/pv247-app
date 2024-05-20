@@ -22,10 +22,6 @@ export const generateStaticParams = (): Params[] => {
 const Page = async ({ params }: { params: Params }) => {
 	const isAvailable = await getIsHomeworkAvailable(params.slug);
 
-	console.log(
-		`Revalidating homework ${params.slug} - isAvailable: ${isAvailable}`
-	);
-
 	if (!isAvailable) {
 		redirect('/homeworks');
 	}

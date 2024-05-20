@@ -10,8 +10,6 @@ import {
 } from '@/db/query/lectures';
 
 export const revalidateLectureAction = async (lecture: Lecture) => {
-	console.log('Revalidating lecture', lecture.slug);
-
 	revalidateTag(getIsLectureAvailableTag(lecture.slug));
 	revalidateTag(getIsHomeworkAvailableTag(lecture.homeworkSlug));
 

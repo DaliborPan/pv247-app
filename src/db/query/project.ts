@@ -6,8 +6,6 @@ export const PROJECTS_TAG = 'projects';
 
 const getProjectsCached = unstable_cache(
 	async () => {
-		console.log('Calling DB for project');
-
 		const projects = await db.query.projects.findMany({
 			with: {
 				users: true

@@ -6,8 +6,6 @@ import { getUserHomeworks } from './homeworks';
 
 export const getUserOverview = React.cache(
 	async (userId: string, projectId?: string | null) => {
-		console.log('Getting user overview: ', userId, projectId);
-
 		const userHomeworks = await getUserHomeworks(userId);
 		const awardedHomeworksLength = userHomeworks.length;
 
