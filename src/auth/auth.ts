@@ -18,7 +18,12 @@ const getIsProtectedPath = (path: string) =>
 	!PUBLIC_ROUTES.some(route => path.startsWith(route));
 
 export const authOptions = {
-	providers: [GitHub],
+	providers: [
+		GitHub({
+			clientId: process.env.AUTH_GITHUB_ID!,
+			clientSecret: process.env.AUTH_GITHUB_SECRET!
+		})
+	],
 	adapter: CustomDrizzleAdapter,
 
 	pages: {
@@ -50,6 +55,7 @@ export const authOptions = {
 					})
 					.where(eq(users.email, user.email));
 			} catch (e) {
+				console.error("ERROR: Couldn't update user role");
 				console.error(e);
 			}
 		}

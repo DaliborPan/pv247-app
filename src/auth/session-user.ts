@@ -1,7 +1,5 @@
 import { cache } from 'react';
 
-import { type User } from '@/db';
-
 import { auth } from './auth';
 
 export const getSessionUser = cache(async () => {

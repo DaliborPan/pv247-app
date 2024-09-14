@@ -15,7 +15,7 @@ import { users, type User } from './schema/users';
 import * as relations from './schema/relations';
 
 const client = createClient({
-	url: process.env.DATABASE_URL ?? '',
+	url: process.env.DATABASE_URL!,
 	authToken: process.env.AUTH_TOKEN
 });
 
