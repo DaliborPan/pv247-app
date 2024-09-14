@@ -17,7 +17,10 @@ export const getNewStudentLectorId = async () => {
 		throw new Error('No lectors found in the database');
 	}
 
-	return lectors.reduce((acc, lector) => {
+	// TODO(dalibor): change only to Mirek and Jakub
+	const reviewers = lectors.filter(lector => lector.email === '');
+
+	return reviewers.reduce((acc, lector) => {
 		if (lector.students.length < acc.students.length) {
 			return lector;
 		}
