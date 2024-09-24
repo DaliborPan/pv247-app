@@ -28,6 +28,7 @@ export const SubNavigation = () => (
 				<NavigationItem href="/lector/students">Students</NavigationItem>
 				<NavigationItem href="/lector/homeworks">Homework</NavigationItem>
 				<NavigationItem href="/lector/projects">Projects</NavigationItem>
+				<NavigationItem href="/lector/lectures">Lectures</NavigationItem>
 			</ul>
 		</nav>
 	</div>

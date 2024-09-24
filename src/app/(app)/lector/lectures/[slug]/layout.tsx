@@ -8,7 +8,7 @@ const Layout = async ({
 	params
 }: PropsWithChildren<{ params: { slug: LectureSlug } }>) => (
 	<>
-		<LectureNavigation lectureSlug={params.slug} />
+		<LectureNavigation lectureSlug={params.slug} baseHref="/lector/lectures" />
 
 		<main className="max-w-4xl mx-auto -mt-4 lg:-mt-10">{children}</main>
 	</>
