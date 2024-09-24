@@ -1,5 +1,3 @@
-import { eq } from 'drizzle-orm';
-
 import { db } from '..';
 
 /**
@@ -7,7 +5,7 @@ import { db } from '..';
  */
 export const getNewStudentLectorId = async () => {
 	const lectors = await db.query.users.findMany({
-		where: users => eq(users.role, 'lector'),
+		where: (users, { eq }) => eq(users.role, 'lector'),
 		with: {
 			students: true
 		}
@@ -17,8 +15,11 @@ export const getNewStudentLectorId = async () => {
 		throw new Error('No lectors found in the database');
 	}
 
-	// TODO(dalibor): change only to Mirek and Jakub
-	const reviewers = lectors.filter(lector => lector.email === '');
+	const reviewers = lectors.filter(
+		lector =>
+			lector.email === 'jakubhonig@gmail.com' ||
+			lector.email === 'janskamirek@seznam.cz'
+	);
 
 	return reviewers.reduce((acc, lector) => {
 		if (lector.students.length < acc.students.length) {
