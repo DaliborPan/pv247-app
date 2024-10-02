@@ -34,7 +34,8 @@ const EditProfileAction = async () => {
 			defaultValues={{
 				id: user.id,
 				firstName: user.firstName ?? undefined,
-				lastName: user.lastName ?? undefined
+				lastName: user.lastName ?? undefined,
+				github: user.github ?? undefined
 			}}
 		/>
 	);
