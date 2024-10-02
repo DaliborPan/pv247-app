@@ -1,4 +1,5 @@
 import { type DefaultValues } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { Prompt } from '@/components/base/prompt';
 import { Button } from '@/components/base/button';
@@ -20,20 +21,17 @@ export const EditProfileForm = ({
 			<div className="flex flex-col pt-2 gap-y-3">
 				<FormInput name="firstName" label="First name" />
 				<FormInput name="lastName" label="Last name" />
+				<FormInput name="github" label="Github nick" />
 			</div>
 		}
 		onDecision={async ({ confirmed, data }) => {
 			if (!confirmed) return;
 
 			await editProfileAction(data);
+
+			toast.success('Profile updated');
 		}}
 	>
-		<Button
-			size="sm"
-			variant="outline"
-			iconLeft={{
-				name: 'Pencil'
-			}}
-		/>
+		<Button size="sm" variant="outline" iconLeft={{ name: 'Pencil' }} />
 	</Prompt>
 );

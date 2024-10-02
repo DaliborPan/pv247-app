@@ -9,6 +9,7 @@ import type { AdapterAccount } from '@auth/core/adapters';
 export const users = sqliteTable('user', {
 	id: text('id').notNull().primaryKey(),
 	name: text('name'),
+	github: text('github'),
 	email: text('email').notNull(),
 	emailVerified: integer('emailVerified', { mode: 'timestamp_ms' }),
 	image: text('image'),

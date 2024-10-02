@@ -15,6 +15,6 @@ export const DialogCancelButton = forwardRef<
 		size="sm"
 		{...props}
 	>
-		{children ?? 'Zrušit'}
+		{children ?? 'Cancel'}
 	</Button>
 ));

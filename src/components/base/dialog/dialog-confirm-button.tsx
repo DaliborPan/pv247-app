@@ -18,6 +18,6 @@ export const DialogConfirmButton = forwardRef<
 		}}
 		{...props}
 	>
-		{children ?? 'Potvrdit'}
+		{children ?? 'Submit'}
 	</Button>
 ));

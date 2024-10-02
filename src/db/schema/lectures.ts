@@ -9,7 +9,6 @@ export const lectureSlugSchema = z.enum([
 	'introduction',
 	'react',
 	'styling',
-	// new
 	'hooks',
 	'other-hooks-refs-tables',
 	'async-forms',
