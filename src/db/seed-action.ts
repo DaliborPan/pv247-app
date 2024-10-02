@@ -12,6 +12,7 @@ export const seed = async () => {
 		{
 			id: '1',
 			name: 'John Doe',
+			github: '',
 			email: 'user1@email.cz',
 			emailVerified: null,
 			firstName: 'John',
@@ -24,6 +25,7 @@ export const seed = async () => {
 		{
 			id: '2',
 			name: 'Jane Smith',
+			github: '',
 			email: 'user2@email.cz',
 			emailVerified: null,
 			firstName: 'Jane',
@@ -36,6 +38,7 @@ export const seed = async () => {
 		{
 			id: '3',
 			name: 'Carlos Rodriguez',
+			github: '',
 			email: 'user3@email.com',
 			emailVerified: null,
 			firstName: 'Carlos',
@@ -48,6 +51,7 @@ export const seed = async () => {
 		{
 			id: '4',
 			name: 'Anna Johnson',
+			github: '',
 			email: 'user4@email.com',
 			emailVerified: null,
 			firstName: 'Anna',
@@ -60,6 +64,7 @@ export const seed = async () => {
 		{
 			id: '5',
 			name: 'Ahmed Khan',
+			github: '',
 			email: 'user5@email.com',
 			emailVerified: null,
 			firstName: 'Ahmed',
@@ -72,6 +77,7 @@ export const seed = async () => {
 		{
 			id: '6',
 			name: 'Maria Garcia',
+			github: '',
 			email: 'user6@email.com',
 			emailVerified: null,
 			firstName: 'Maria',
@@ -84,6 +90,7 @@ export const seed = async () => {
 		{
 			id: '7',
 			name: 'Michael Brown',
+			github: '',
 			email: 'user7@email.com',
 			emailVerified: null,
 			firstName: 'Michael',
@@ -96,6 +103,7 @@ export const seed = async () => {
 		{
 			id: '8',
 			name: 'Lucy Miller',
+			github: '',
 			email: 'user8@email.com',
 			emailVerified: null,
 			firstName: 'Lucy',
@@ -108,6 +116,7 @@ export const seed = async () => {
 		{
 			id: '9',
 			name: 'David Lee',
+			github: '',
 			email: 'user9@email.com',
 			emailVerified: null,
 			firstName: 'David',
@@ -120,6 +129,7 @@ export const seed = async () => {
 		{
 			id: '10',
 			name: 'Sara Wilson',
+			github: '',
 			email: 'user10@email.com',
 			emailVerified: null,
 			firstName: 'Sara',
