@@ -25,7 +25,7 @@ export type LectureSlug = z.infer<typeof lectureSlugSchema>;
  */
 export const homeworkSlugSchema = z.enum([
 	'typescript',
-	'react-basic',
+	'react-basics',
 	'styling',
 	'state',
 	'table-memo',

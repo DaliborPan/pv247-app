@@ -2,7 +2,7 @@ import { type HomeworkSlug } from '@/db';
 
 export const orderedHomeworkSlugs: HomeworkSlug[] = [
 	'typescript',
-	'react-basic',
+	'react-basics',
 	'styling',
 	'state',
 	'table-memo',

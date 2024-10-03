@@ -4,7 +4,7 @@ import { type MDXComponents } from 'mdx/types';
 import { type HomeworkSlug } from '@/db';
 
 import { TypescriptMdx } from './typescript';
-import { ReactBasictMdx } from './react-basic';
+import { ReactBasictMdx } from './react-basics';
 import { StylingMdx } from './styling';
 import { StateMdx } from './state';
 import { TableMemoMdx } from './table-memo';
@@ -19,7 +19,7 @@ type MdxComponent = ComponentType<{
 
 const homeworkMdxComponentsMap: Record<HomeworkSlug, MdxComponent> = {
 	'typescript': TypescriptMdx,
-	'react-basic': ReactBasictMdx,
+	'react-basics': ReactBasictMdx,
 	'styling': StylingMdx,
 	'state': StateMdx,
 	'table-memo': TableMemoMdx,

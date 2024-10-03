@@ -169,7 +169,7 @@ export const seed = async () => {
 			homeworkName: 'React basics',
 			homeworkPreview:
 				'This week, create a React page in Next.js to display and add GitHub repositories. Build a form for new entries and a list to show existing ones, with validation and conditional messages.',
-			homeworkSlug: 'react-basic',
+			homeworkSlug: 'react-basics',
 			homeworkDeadline: '2024-10-07T22:00:00'
 		},
 		{

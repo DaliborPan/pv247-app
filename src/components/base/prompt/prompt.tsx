@@ -47,7 +47,7 @@ export const Prompt = <T extends FieldValues>({
 
 	if (Object.entries(form.formState.errors).length > 0) {
 		console.log('values', form.getValues());
-		console.error('form errors', form.formState.errors);
+		console.log('form errors', form.formState.errors);
 	}
 
 	const {
