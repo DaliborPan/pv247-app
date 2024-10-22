@@ -466,7 +466,7 @@ const FancyButton = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<object>>(
 );
 
 function Home() {
-	const ref = createRef<HTMLButtonElement>();
+	const ref = useRef<HTMLButtonElement>();
 
 	return (
 		<>
