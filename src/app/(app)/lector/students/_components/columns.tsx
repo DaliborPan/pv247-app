@@ -20,7 +20,7 @@ export const columns: ColumnDef<User, string>[] = [
 				className="flex items-center font-light gap-x-2 hover:text-primary hover:underline"
 			>
 				<Icon name="ExternalLink" />
-				{row.original.github}
+				{row.original.github ?? row.original.name ?? row.original.lastName}
 			</a>
 		),
 
