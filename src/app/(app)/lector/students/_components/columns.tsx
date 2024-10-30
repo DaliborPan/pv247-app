@@ -12,15 +12,15 @@ export const columns: ColumnDef<User, string>[] = [
 		accessorKey: 'name',
 		header: props => <DataTableColumnHeader {...props} title="GitHub" />,
 		minSize: 175,
-		cell: cell => (
+		cell: ({ row }) => (
 			<a
-				href={`https://github.com/${cell.getValue()}`}
+				href={`https://github.com/${row.original.github}`}
 				target="_blank"
 				rel="noreferrer"
 				className="flex items-center font-light gap-x-2 hover:text-primary hover:underline"
 			>
 				<Icon name="ExternalLink" />
-				{cell.getValue()}
+				{row.original.github}
 			</a>
 		),
 
