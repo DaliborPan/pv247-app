@@ -3,7 +3,7 @@ import { User } from 'lucide-react';
 
 import { SidebarCard } from '@/components/sidebar-card';
 import { Icon } from '@/components/base/icon';
-import { getProject, type GetProjectResult } from '@/db/query/project';
+import { getProject, type GetProjectResult } from '@/modules/project/server';
 
 import { ProjectStatusCard } from './_components/project-status-card';
 

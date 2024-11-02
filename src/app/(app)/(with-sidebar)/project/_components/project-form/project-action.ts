@@ -4,7 +4,7 @@ import { eq, inArray } from 'drizzle-orm';
 import { revalidateTag } from 'next/cache';
 
 import { db, projects, users } from '@/db';
-import { PROJECTS_TAG } from '@/db/query/project';
+import { PROJECTS_TAG } from '@/modules/project/server';
 
 import { type ProjectFormSchema } from './schema';
 

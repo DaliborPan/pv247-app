@@ -6,7 +6,7 @@ import { Button } from '@/components/base/button';
 import { Icon } from '@/components/base/icon';
 import { TextPreview } from '@/components/text-preview';
 import { formatDate } from '@/lib/date';
-import { getProjects, type GetProjectsResult } from '@/db/query/project';
+import { getProjects, type GetProjectsResult } from '@/modules/project/server';
 
 const ProjectCard = ({ project }: { project: GetProjectsResult[number] }) => (
 	<article className="p-6 bg-white rounded-lg shadow">

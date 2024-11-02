@@ -1,10 +1,15 @@
 import { unstable_cache } from 'next/cache';
 
-import { db } from '..';
+import { db } from '@/db';
 
 export const PROJECTS_TAG = 'projects';
 
-const getProjectsCached = unstable_cache(
+/**
+ * Get all projects
+ *
+ * @cache Next.js cache
+ */
+export const getProjects = unstable_cache(
 	async () => {
 		const projects = await db.query.projects.findMany({
 			with: {
@@ -19,14 +24,17 @@ const getProjectsCached = unstable_cache(
 		tags: [PROJECTS_TAG]
 	}
 );
+export type GetProjectsResult = Awaited<ReturnType<typeof getProjects>>;
 
+/**
+ * Get project by id
+ *
+ * @cache using Next.js cache
+ */
 export const getProject = async (id: string) => {
-	const projects = await getProjectsCached();
+	const projects = await getProjects();
 
 	return projects.find(project => project.id === id);
 };
 
 export type GetProjectResult = Awaited<ReturnType<typeof getProject>>;
-
-export const getProjects = getProjectsCached;
-export type GetProjectsResult = Awaited<ReturnType<typeof getProjects>>;

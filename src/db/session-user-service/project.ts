@@ -1,8 +1,7 @@
 import { cache } from 'react';
 
 import { getSessionUser } from '@/auth/session-user';
-
-import { getProject } from '../query/project';
+import { getProject } from '@/modules/project/server';
 
 export const getSessionUserProject = cache(async () => {
 	const user = await getSessionUser();
