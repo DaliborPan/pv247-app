@@ -1,13 +1,12 @@
 import { redirect } from 'next/navigation';
 
-import { getSessionUserProject } from '@/db/session-user-service/project';
-import { getSessionUser } from '@/auth/session-user';
+import { getMineProject, getSessionUser } from '@/modules/session-user/server';
 
 import { ProjectForm } from '../_components/project-form';
 
 const Page = async () => {
 	const sessionUser = await getSessionUser();
-	const project = await getSessionUserProject();
+	const project = await getMineProject();
 
 	if (!project) return redirect('/project');
 

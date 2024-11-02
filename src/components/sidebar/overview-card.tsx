@@ -1,7 +1,7 @@
 import { type PropsWithChildren } from 'react';
 
 import { ResponsiveSidebarCard } from '@/components/sidebar-card';
-import { getSessionUserOverview } from '@/db/session-user-service/overview';
+import { getMineOverview } from '@/modules/session-user/server';
 
 const OverviewCardRow = ({
 	title,
@@ -14,7 +14,7 @@ const OverviewCardRow = ({
 );
 
 export const OverviewCard = async () => {
-	const { homeworks, lectures, project } = await getSessionUserOverview();
+	const { homeworks, lectures, project } = await getMineOverview();
 
 	return (
 		<ResponsiveSidebarCard title="Overview">

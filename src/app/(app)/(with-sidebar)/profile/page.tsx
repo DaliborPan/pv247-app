@@ -1,6 +1,6 @@
-import { getSessionUser } from '@/auth/session-user';
 import { HomeworksCard, OverviewCard } from '@/components/person-detail';
 import { DetailCard } from '@/components/detail-card';
+import { getSessionUser } from '@/modules/session-user/server';
 
 import { ProfileHero } from './_components/profile-hero';
 import { ProjectCard } from './_components/project-card';

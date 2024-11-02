@@ -1,5 +1,5 @@
 import { Hero } from '@/components/person-detail';
-import { getSessionUser } from '@/auth/session-user';
+import { getSessionUser } from '@/modules/session-user/server';
 
 import { EditProfileForm } from './edit-profile-form';
 

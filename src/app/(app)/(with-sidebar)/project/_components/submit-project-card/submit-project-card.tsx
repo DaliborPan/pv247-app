@@ -3,12 +3,12 @@ import { Pencil } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { DetailCard } from '@/components/detail-card';
-import { getSessionUserProject } from '@/db/session-user-service/project';
+import { getMineProject } from '@/modules/session-user/server';
 
 import { SubmitProjectButton } from './submit-project-button';
 
 export const SubmitProjectCard = async () => {
-	const project = await getSessionUserProject();
+	const project = await getMineProject();
 
 	if (!project) return null;
 

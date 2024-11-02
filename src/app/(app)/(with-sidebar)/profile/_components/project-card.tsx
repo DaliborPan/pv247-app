@@ -3,11 +3,11 @@ import { ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { LabeledValue } from '@/components/labeled-value';
-import { getSessionUserProject } from '@/db/session-user-service/project';
 import { DetailCard } from '@/components/detail-card';
+import { getMineProject } from '@/modules/session-user/server';
 
 export const ProjectCard = async () => {
-	const project = await getSessionUserProject();
+	const project = await getMineProject();
 
 	if (!project) return null;
 

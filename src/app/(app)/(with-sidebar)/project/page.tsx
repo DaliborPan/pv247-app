@@ -1,12 +1,12 @@
-import { getSessionUserProject } from '@/db/session-user-service/project';
 import { DetailCard } from '@/components/detail-card';
+import { getMineProject } from '@/modules/session-user/server';
 
 import { ProjectForm } from './_components/project-form';
 import { ProjectHero } from './_components/project-hero';
 import { SubmitProjectCard } from './_components/submit-project-card';
 
 const ProjectCard = async () => {
-	const project = await getSessionUserProject();
+	const project = await getMineProject();
 
 	return (
 		<DetailCard title="Description">
@@ -18,7 +18,7 @@ const ProjectCard = async () => {
 };
 
 const Page = async () => {
-	const project = await getSessionUserProject();
+	const project = await getMineProject();
 
 	return project ? (
 		<div>

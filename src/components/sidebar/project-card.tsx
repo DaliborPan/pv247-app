@@ -3,11 +3,11 @@ import { ArrowRight, Plus, Users } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { SidebarCard } from '@/components/sidebar-card';
-import { getSessionUserProject } from '@/db/session-user-service/project';
 import { Icon } from '@/components/base/icon';
+import { getMineProject } from '@/modules/session-user/server';
 
 export const ProjectCard = async () => {
-	const project = await getSessionUserProject();
+	const project = await getMineProject();
 
 	return (
 		<SidebarCard

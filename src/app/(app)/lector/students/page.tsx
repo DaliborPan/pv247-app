@@ -1,10 +1,10 @@
 import { DataTable } from '@/components/data-table/data-table';
 import { TabsContent } from '@/components/base/tabs';
-import { getLectorStudents } from '@/db/session-user-service/lector-students';
 import {
 	getStudentsWithHomeworks,
 	type GetStudentsWithHomeworksResult
 } from '@/modules/student/server';
+import { getMineStudents } from '@/modules/session-user/server';
 
 import { LectorTabsTable } from '../_components/lector-tabs-table';
 
@@ -33,7 +33,7 @@ const StudentDataTable = ({
 );
 
 const Page = async () => {
-	const lectorStudents = await getLectorStudents();
+	const lectorStudents = await getMineStudents();
 	const hasOwnStudents = !!lectorStudents.length;
 
 	return (

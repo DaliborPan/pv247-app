@@ -1,16 +1,15 @@
 import { redirect } from 'next/navigation';
 
-import { getSessionUser } from '@/auth/session-user';
 import { homeworkSlugSchema, type Lecture } from '@/db';
 import { DataTable } from '@/components/data-table/data-table';
 import { TabsContent } from '@/components/base/tabs';
 import { LabeledValue } from '@/components/labeled-value';
-import { getLectorStudents } from '@/db/session-user-service/lector-students';
 import { getOrderedLectures } from '@/modules/lecture/server';
 import {
 	getStudentsWithHomeworks,
 	type GetStudentsWithHomeworksResult
 } from '@/modules/student/server';
+import { getMineStudents, getSessionUser } from '@/modules/session-user/server';
 
 import { LectorTabsTable } from '../../_components/lector-tabs-table';
 
@@ -69,7 +68,7 @@ const Page = async ({
 
 	const paramSlug = parsedSlug.data;
 
-	const lectorStudents = await getLectorStudents();
+	const lectorStudents = await getMineStudents();
 	const hasOwnStudents = !!lectorStudents.length;
 
 	const lectures = await getOrderedLectures();

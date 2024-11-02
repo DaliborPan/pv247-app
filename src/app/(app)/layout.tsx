@@ -1,7 +1,7 @@
 import { type PropsWithChildren } from 'react';
 
 import { Navigation } from '@/components/navigation';
-import { getSessionUser } from '@/auth/session-user';
+import { getSessionUser } from '@/modules/session-user/server';
 
 const Layout = async ({ children }: PropsWithChildren) => {
 	const user = await getSessionUser();

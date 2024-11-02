@@ -1,7 +1,13 @@
 import { cache } from 'react';
 
-import { auth } from './auth';
+import { auth } from '@/auth';
 
+/**
+ * Get the current session user.
+ * Must be called from authenticated pages/components only!
+ *
+ * @cache React cache
+ */
 export const getSessionUser = cache(async () => {
 	const session = await auth();
 

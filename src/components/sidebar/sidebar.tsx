@@ -1,4 +1,4 @@
-import { getSessionUser } from '@/auth/session-user';
+import { getSessionUser } from '@/modules/session-user/server';
 
 import { HomeworksCard } from './homeworks-card';
 import { LecturesCard } from './lectures-card';
