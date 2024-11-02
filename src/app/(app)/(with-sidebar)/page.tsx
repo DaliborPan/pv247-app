@@ -1,6 +1,6 @@
 import { CurrentLectureCard } from '@/modules/lecture/components';
 
-import GeneralInfo from './general-info.mdx';
+import { GeneralInfo } from './_components';
 
 const Page = () => (
 	<>
