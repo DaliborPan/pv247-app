@@ -1,10 +1,11 @@
-import { eq } from 'drizzle-orm';
+import { db } from '@/db';
 
-import { db } from '..';
-
+/**
+ * Get all students with their homeworks
+ */
 export const getStudentsWithHomeworks = () =>
 	db.query.users.findMany({
-		where: users => eq(users.role, 'student'),
+		where: (users, { eq }) => eq(users.role, 'student'),
 		with: {
 			homeworksStudent: true
 		}
@@ -14,6 +15,9 @@ export type GetStudentsWithHomeworksResult = Awaited<
 	ReturnType<typeof getStudentsWithHomeworks>
 >;
 
+/**
+ * Get student by id
+ */
 export const getStudent = (id: string) =>
 	db.query.users.findFirst({
 		where: (users, { eq }) => eq(users.id, id)

@@ -4,7 +4,7 @@ import { getLectorStudents } from '@/db/session-user-service/lector-students';
 import {
 	getStudentsWithHomeworks,
 	type GetStudentsWithHomeworksResult
-} from '@/db/query/student';
+} from '@/modules/student/server';
 
 import { LectorTabsTable } from '../_components/lector-tabs-table';
 

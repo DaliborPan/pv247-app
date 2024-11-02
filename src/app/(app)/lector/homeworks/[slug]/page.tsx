@@ -6,11 +6,11 @@ import { DataTable } from '@/components/data-table/data-table';
 import { TabsContent } from '@/components/base/tabs';
 import { LabeledValue } from '@/components/labeled-value';
 import { getLectorStudents } from '@/db/session-user-service/lector-students';
+import { getOrderedLectures } from '@/modules/lecture/server';
 import {
 	getStudentsWithHomeworks,
 	type GetStudentsWithHomeworksResult
-} from '@/db/query/student';
-import { getOrderedLectures } from '@/modules/lecture/server';
+} from '@/modules/student/server';
 
 import { LectorTabsTable } from '../../_components/lector-tabs-table';
 
