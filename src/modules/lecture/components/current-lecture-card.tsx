@@ -5,7 +5,7 @@ import { Button } from '@/components/base/button';
 import { TextPreview } from '@/components/text-preview';
 import { getAvailableLectures } from '@/db/query/lectures';
 
-export const CurrentLecture = async () => {
+export const CurrentLectureCard = async () => {
 	const availableLectures = await getAvailableLectures();
 	const currentLecture = availableLectures.pop();
 

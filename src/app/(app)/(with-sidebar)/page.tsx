@@ -1,12 +1,13 @@
-import GeneralInfo from './_components/general-info.mdx';
-import { CurrentLecture } from './_components/current-lecture';
+import { CurrentLectureCard } from '@/modules/lecture/components';
+
+import GeneralInfo from './general-info.mdx';
 
 const Page = () => (
 	<>
 		<h1 className="mb-6 text-3xl">Home page</h1>
 
 		<section className="mb-12">
-			<CurrentLecture />
+			<CurrentLectureCard />
 		</section>
 
 		<main>
