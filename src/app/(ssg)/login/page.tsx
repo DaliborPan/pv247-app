@@ -18,22 +18,12 @@ const Page = () => (
 			</p>
 
 			<div className="flex flex-col-reverse items-center gap-2 mt-2 lg:gap-4 lg:mt-0 md:flex-row">
-				<Button
-					variant="outline/primary"
-					iconLeft={{
-						icon: <Book />
-					}}
-				>
+				<Button variant="outline/primary" iconLeft={{ icon: <Book /> }}>
 					<Link href="/lectures">Start Learning</Link>
 				</Button>
+
 				<SignIn>
-					<Button
-						iconLeft={{
-							icon: <Github />
-						}}
-					>
-						Sign in with GitHub
-					</Button>
+					<Button iconLeft={{ icon: <Github /> }}>Sign in with GitHub</Button>
 				</SignIn>
 			</div>
 		</div>

@@ -41,13 +41,7 @@ export const LectureCard = ({
 		<div className="flex items-end justify-between mt-6">
 			<Link href={href} className={cn(!isAvailable && 'pointer-events-none')}>
 				<Button
-					iconLeft={
-						!isAvailable
-							? {
-									icon: <Lock />
-								}
-							: undefined
-					}
+					iconLeft={!isAvailable ? { icon: <Lock /> } : undefined}
 					disabled={!isAvailable}
 					size="sm"
 				>

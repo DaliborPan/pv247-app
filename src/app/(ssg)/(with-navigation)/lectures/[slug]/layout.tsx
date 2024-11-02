@@ -3,7 +3,7 @@ import { type PropsWithChildren } from 'react';
 import { type LectureSlug } from '@/db';
 import { LectureNavigation } from '@/modules/lecture/components';
 
-const Layout = async ({
+const Layout = ({
 	children,
 	params
 }: PropsWithChildren<{ params: { slug: LectureSlug } }>) => (

@@ -11,9 +11,7 @@ type Params = {
 export const generateStaticParams = (): Params[] => {
 	const lectures = lectureSlugSchema.options;
 
-	return lectures.map(slug => ({
-		slug
-	}));
+	return lectures.map(slug => ({ slug }));
 };
 
 const Page = async ({ params }: { params: Params }) => {

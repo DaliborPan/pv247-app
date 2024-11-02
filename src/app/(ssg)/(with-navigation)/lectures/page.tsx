@@ -7,18 +7,14 @@ const Page = async () => {
 
 	return (
 		<>
-			{lectures.map((lecture, index) => {
-				const isAvailable = getIsAvailable(lecture);
-
-				return (
-					<LectureCard
-						key={lecture.slug}
-						lecture={lecture}
-						index={index}
-						isAvailable={isAvailable}
-					/>
-				);
-			})}
+			{lectures.map((lecture, index) => (
+				<LectureCard
+					key={lecture.slug}
+					lecture={lecture}
+					index={index}
+					isAvailable={getIsAvailable(lecture)}
+				/>
+			))}
 		</>
 	);
 };

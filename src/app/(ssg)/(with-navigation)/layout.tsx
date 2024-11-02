@@ -14,7 +14,7 @@ const pageTitleMap: Record<Page, string> = {
 };
 
 /**
- * We need to get user client side here in order to generate lectures statically
+ * We need to get user client-side here in order to generate lectures statically
  */
 const PublicNavigation = () => {
 	const session = useSession();
