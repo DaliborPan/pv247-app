@@ -6,6 +6,7 @@ import { type PropsWithChildren } from 'react';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
 import { Send } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 import { Form } from '@/components/form';
 import { Button } from '@/components/base/button';
@@ -20,6 +21,7 @@ export const ProjectFormProvider = ({
 	defaultValues?: Partial<ProjectFormSchema>;
 }>) => {
 	const session = useSession();
+	const router = useRouter();
 
 	const form = useForm<ProjectFormSchema>({
 		resolver: zodResolver(projectFormSchema),
@@ -30,7 +32,7 @@ export const ProjectFormProvider = ({
 		}
 	});
 
-	const { mutateAsync } = useSubmitProjectFormMutation({
+	const mutation = useSubmitProjectFormMutation({
 		isCreating: !defaultValues?.id
 	});
 
@@ -46,10 +48,21 @@ export const ProjectFormProvider = ({
 			return;
 		}
 
-		await mutateAsync({
-			...data,
-			students: [...data.students, session.data.user.id]
-		});
+		mutation.mutate(
+			{
+				...data,
+				students: [...data.students, session.data.user.id]
+			},
+			{
+				onSuccess: () => {
+					toast.success('Project updated successfully.');
+					router.replace('/project');
+				},
+				onError: () => {
+					toast.error('An error occurred while updating the project.');
+				}
+			}
+		);
 	};
 
 	return (

@@ -4,8 +4,7 @@ import { Pencil } from 'lucide-react';
 import { Button } from '@/components/base/button';
 import { DetailCard } from '@/components/detail-card';
 import { getMineProject } from '@/modules/session-user/server';
-
-import { SubmitProjectButton } from './submit-project-button';
+import { SubmitProjectAction } from '@/modules/project/components/submit-project-action';
 
 export const SubmitProjectCard = async () => {
 	const project = await getMineProject();
@@ -39,7 +38,7 @@ export const SubmitProjectCard = async () => {
 			}
 		>
 			{isPending ? null : project.github ? (
-				<SubmitProjectButton project={project} />
+				<SubmitProjectAction project={project} />
 			) : (
 				<p className="text-sm text-gray-600">
 					You need to set github link first.
