@@ -30,6 +30,17 @@ export const getOrderedLectures = unstable_cache(
 );
 
 /**
+ * Get all lectures with homework (filter away last lecture)
+ *
+ * @cache using Next.js cache
+ */
+export const getLecturesWithHomework = async () => {
+	const lectures = await getOrderedLectures();
+
+	return lectures.filter(lecture => !!lecture.homeworkSlug);
+};
+
+/**
  * Get all available lectures
  *
  * @cache React cache

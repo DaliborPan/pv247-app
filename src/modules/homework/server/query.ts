@@ -11,3 +11,18 @@ export const getUserHomeworks = (userId: string) =>
 export type GetUserHomeworksResult = Awaited<
 	ReturnType<typeof getUserHomeworks>
 >;
+
+/**
+ * Get homework by userId and lectureId
+ */
+export const getUserHomework = async ({
+	userId,
+	lectureId
+}: {
+	userId: string;
+	lectureId: string;
+}) =>
+	db.query.homeworks.findFirst({
+		where: (table, { eq, and }) =>
+			and(eq(table.lectureId, lectureId), eq(table.studentId, userId))
+	});

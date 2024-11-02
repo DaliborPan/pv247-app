@@ -1,7 +1,8 @@
 'use server';
 
 import { auth } from '@/auth';
-import { db } from '@/db';
+
+import { getUserHomework } from '../../server';
 
 export const getHomeworkPointsAction = async (lectureId: string) => {
 	const session = await auth();
@@ -13,12 +14,12 @@ export const getHomeworkPointsAction = async (lectureId: string) => {
 		} as const;
 	}
 
-	const row = await db.query.homeworks.findFirst({
-		where: (table, { eq, and }) =>
-			and(eq(table.lectureId, lectureId), eq(table.studentId, session.user.id))
+	const userHomework = await getUserHomework({
+		lectureId,
+		userId: session.user.id
 	});
 
-	if (!row) {
+	if (!userHomework) {
 		return {
 			status: 'pending',
 			points: 0
@@ -27,6 +28,6 @@ export const getHomeworkPointsAction = async (lectureId: string) => {
 
 	return {
 		status: 'scored',
-		points: row.points
+		points: userHomework.points
 	} as const;
 };

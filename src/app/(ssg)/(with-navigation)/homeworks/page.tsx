@@ -6,18 +6,9 @@ import { type Lecture } from '@/db';
 import { Icon } from '@/components/base/icon';
 import { TextPreview } from '@/components/text-preview';
 import { cn } from '@/lib/cn';
-import { getOrderedLectures } from '@/modules/lecture/server';
+import { getLecturesWithHomework } from '@/modules/lecture/server';
 import { getIsAvailable } from '@/modules/lecture/utils';
-
-const formatDate = (date: string) => {
-	const d = new Date(date);
-
-	return d.toLocaleDateString('en-US', {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric'
-	});
-};
+import { formatDate } from '@/lib/date';
 
 const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
 	const isAvailable = getIsAvailable(lecture);
@@ -41,13 +32,7 @@ const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
 				>
 					<Button
 						size="sm"
-						iconLeft={
-							!isAvailable
-								? {
-										icon: <Lock />
-									}
-								: undefined
-						}
+						iconLeft={!isAvailable ? { icon: <Lock /> } : undefined}
 						disabled={!isAvailable}
 					>
 						Open details
@@ -69,15 +54,13 @@ const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
 };
 
 const Page = async () => {
-	const lectures = await getOrderedLectures();
+	const lectures = await getLecturesWithHomework();
 
 	return (
 		<>
-			{lectures
-				.filter(lecture => lecture.homeworkSlug !== '')
-				.map((lecture, index) => (
-					<HomeworkCard key={lecture.slug} lecture={lecture} index={index} />
-				))}
+			{lectures.map((lecture, index) => (
+				<HomeworkCard key={lecture.slug} lecture={lecture} index={index} />
+			))}
 		</>
 	);
 };

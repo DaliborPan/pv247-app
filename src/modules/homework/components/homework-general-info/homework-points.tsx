@@ -8,9 +8,12 @@ import Link from 'next/link';
 import { type Lecture } from '@/db';
 import { Button } from '@/components/base/button';
 
-import { getHomeworkPointsAction } from './get-homework-points-action';
+import { getHomeworkPointsAction } from './action';
 import { LabeledItem } from './labeled-item';
 
+/**
+ * Using useQuery because we need to be able to prerender SSG
+ */
 const usePersonHomeworkPointsQuery = (lectureId: string, userId?: string) =>
 	useQuery({
 		queryKey: ['homework-points', lectureId, userId],

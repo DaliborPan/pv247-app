@@ -2,8 +2,7 @@ import { redirect } from 'next/navigation';
 
 import { type HomeworkSlug, homeworkSlugSchema } from '@/db';
 import { getIsHomeworkAvailable } from '@/modules/lecture/server';
-
-import { getHomeworkMdxComponent } from './_components';
+import { getHomeworkMdxComponent } from '@/modules/homework/mdx';
 
 type Params = {
 	slug: HomeworkSlug;
@@ -12,11 +11,7 @@ type Params = {
 export const generateStaticParams = (): Params[] => {
 	const slugs = homeworkSlugSchema.options;
 
-	return slugs
-		.filter(slug => slug !== '')
-		.map(slug => ({
-			slug
-		}));
+	return slugs.filter(slug => slug !== '').map(slug => ({ slug }));
 };
 
 const Page = async ({ params }: { params: Params }) => {

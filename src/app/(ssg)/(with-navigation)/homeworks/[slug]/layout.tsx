@@ -2,13 +2,7 @@ import { type PropsWithChildren } from 'react';
 
 import { type HomeworkSlug } from '@/db';
 import { NavigationButtonLink } from '@/components/navigation-button-link';
-import { getOrderedLectures } from '@/modules/lecture/server';
-
-const getLecturesWithHomework = async () => {
-	const lectures = await getOrderedLectures();
-
-	return lectures.filter(lecture => !!lecture.homeworkSlug);
-};
+import { getLecturesWithHomework } from '@/modules/lecture/server';
 
 const Layout = async ({
 	children,
