@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
+import { Pencil, Send } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { FormInput } from '@/components/form/form-fields';
@@ -46,9 +47,7 @@ export const SetHomeworkPointsForm = ({
 					isLoading={form.formState.isSubmitting}
 					type="submit"
 					variant={isEditing ? 'primary' : 'outline/primary'}
-					iconLeft={{
-						name: isEditing ? 'Send' : 'Pencil'
-					}}
+					iconLeft={{ icon: isEditing ? <Send /> : <Pencil /> }}
 				/>
 			</form>
 		</Form>
@@ -60,9 +59,7 @@ export const SetHomeworkPointsForm = ({
 				type="button"
 				onClick={() => setIsEditing(true)}
 				variant="outline/primary"
-				iconLeft={{
-					name: 'Pencil'
-				}}
+				iconLeft={{ icon: <Pencil /> }}
 			/>
 		</div>
 	);

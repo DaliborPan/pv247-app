@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Github, Pencil, Users } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { Hero } from '@/components/person-detail';
@@ -16,9 +17,7 @@ const GithubLink = ({ href }: { href?: string | null }) => (
 		<Button
 			size="sm"
 			variant="outline"
-			iconLeft={{
-				name: 'Github'
-			}}
+			iconLeft={{ icon: <Github /> }}
 			disabled={!href}
 		/>
 	</a>
@@ -30,9 +29,7 @@ const EditLink = ({ disabled }: { disabled: boolean }) => (
 			disabled={disabled}
 			size="sm"
 			variant="outline"
-			iconLeft={{
-				name: 'Pencil'
-			}}
+			iconLeft={{ icon: <Pencil /> }}
 		/>
 	</Link>
 );
@@ -62,7 +59,7 @@ export const ProjectHero = async () => {
 					{project.name}
 				</div>
 				<div className="flex items-center mt-1 gap-x-2">
-					<Icon name="Users" />
+					<Icon icon={<Users />} />
 					<div className="text-sm text-gray-500">{displayUsers}</div>
 				</div>
 			</div>

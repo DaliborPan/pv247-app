@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ExternalLink } from 'lucide-react';
 
 import { LabeledValue } from '@/components/labeled-value';
 import { OverviewCard } from '@/components/person-detail';
@@ -21,7 +22,7 @@ export const StudentOverviewCard = ({ student }: { student: User }) => (
 				>
 					<span className="block">{projectDisplayName}</span>
 
-					{project?.id && <Icon name="ExternalLink" />}
+					{project?.id && <Icon icon={<ExternalLink />} />}
 				</Link>
 			</LabeledValue>
 		)}

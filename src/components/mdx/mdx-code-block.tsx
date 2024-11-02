@@ -1,6 +1,7 @@
 'use client';
 
 import { type PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { ArrowDownFromLine, ArrowUpFromLine } from 'lucide-react';
 
 import { cn } from '@/lib/cn';
 
@@ -33,7 +34,7 @@ export const MdxCodeBlock = ({ children }: PropsWithChildren<object>) => {
 						onClick={() => setExpanded(!expanded)}
 						size="sm"
 						iconLeft={{
-							name: expanded ? 'ArrowUpFromLine' : 'ArrowDownFromLine'
+							icon: expanded ? <ArrowUpFromLine /> : <ArrowDownFromLine />
 						}}
 					>
 						{expanded ? 'Collapse' : 'Expand'}

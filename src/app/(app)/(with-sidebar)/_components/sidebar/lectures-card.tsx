@@ -1,3 +1,5 @@
+import { ArrowRight, Lock } from 'lucide-react';
+
 import { SidebarCard } from '@/components/sidebar-card';
 import { getIsAvailable, getOrderedLectures } from '@/db/query/lectures';
 import { Icon } from '@/components/base/icon';
@@ -23,7 +25,7 @@ export const LecturesCard = async () => {
 								isAvailable={isAvailable}
 							>
 								<span className="text-gray-600 grow">{lecture.name}</span>
-								<Icon name={isAvailable ? 'ArrowRight' : 'Lock'} />
+								<Icon icon={isAvailable ? <ArrowRight /> : <Lock />} />
 							</SidebarLinkRow>
 						);
 					})}

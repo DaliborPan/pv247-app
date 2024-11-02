@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { type User } from 'next-auth';
+import { Github, LogOut } from 'lucide-react';
 
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/base/button';
@@ -56,13 +57,7 @@ export const Navigation = ({
 					<UserMenuItem user={user} />
 					<NavigationDelimiter className="mr-4" />
 					<Logout>
-						<Button
-							iconLeft={{
-								name: 'LogOut'
-							}}
-							variant="ghost"
-							size="sm"
-						/>
+						<Button iconLeft={{ icon: <LogOut /> }} variant="ghost" size="sm" />
 					</Logout>
 				</div>
 			) : (
@@ -72,9 +67,7 @@ export const Navigation = ({
 						disabled
 						size="sm"
 						variant="outline/primary"
-						iconLeft={{
-							name: 'Github'
-						}}
+						iconLeft={{ icon: <Github /> }}
 					>
 						Sign in
 					</Button>

@@ -1,5 +1,7 @@
 'use client';
 
+import { Check } from 'lucide-react';
+
 import { type Project } from '@/db';
 import { Button } from '@/components/base/button';
 
@@ -13,9 +15,7 @@ export const SubmitProjectButton = ({ project }: { project: Project }) => {
 			disabled={project.status === 'submitted'}
 			isLoading={mutation.isPending}
 			size="sm"
-			iconLeft={{
-				name: 'Check'
-			}}
+			iconLeft={{ icon: <Check /> }}
 			onClick={() => mutation.mutate()}
 		>
 			{project.status === 'submitted' ? 'Submitted' : 'Submit project'}

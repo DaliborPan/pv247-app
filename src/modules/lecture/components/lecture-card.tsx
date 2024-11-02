@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Layers, Lock } from 'lucide-react';
 
 import { Badge } from '@/components/base/badge';
 import { Button } from '@/components/base/button';
@@ -43,7 +44,7 @@ export const LectureCard = ({
 					iconLeft={
 						!isAvailable
 							? {
-									name: 'Lock'
+									icon: <Lock />
 								}
 							: undefined
 					}
@@ -55,7 +56,7 @@ export const LectureCard = ({
 			</Link>
 
 			<Badge variant="outline" className="text-gray-600">
-				<Icon name="Layers" className="mr-2" />
+				<Icon icon={<Layers />} className="mr-2" />
 				{getNumberWithOrdinal(index + 1)} week
 			</Badge>
 		</div>

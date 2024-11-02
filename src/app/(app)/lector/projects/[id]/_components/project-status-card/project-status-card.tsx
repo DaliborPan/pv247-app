@@ -1,3 +1,5 @@
+import { Github, Pencil, SquareArrowOutUpRight } from 'lucide-react';
+
 import { Button } from '@/components/base/button';
 import { SidebarCard } from '@/components/sidebar-card';
 import { type Project } from '@/db';
@@ -33,9 +35,7 @@ export const ProjectStatusCard = ({ project }: { project: Project }) => {
 							<Button
 								size="sm"
 								variant="outline/primary"
-								iconLeft={{
-									name: 'Github'
-								}}
+								iconLeft={{ icon: <Github /> }}
 								disabled={!project.github}
 							/>
 						</a>
@@ -57,7 +57,7 @@ export const ProjectStatusCard = ({ project }: { project: Project }) => {
 								{project.points} points
 							</span>
 
-							<Icon name="Pencil" />
+							<Icon icon={<Pencil />} />
 						</button>
 					</SetProjectPointsForm>
 
@@ -69,12 +69,7 @@ export const ProjectStatusCard = ({ project }: { project: Project }) => {
 
 			{status === 'submitted' && !hasPoints && (
 				<SetProjectPointsForm projectId={project.id}>
-					<Button
-						size="sm"
-						iconLeft={{
-							name: 'SquareArrowOutUpRight'
-						}}
-					>
+					<Button size="sm" iconLeft={{ icon: <SquareArrowOutUpRight /> }}>
 						Set points
 					</Button>
 				</SetProjectPointsForm>

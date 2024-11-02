@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { type PropsWithChildren } from 'react';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
+import { Send } from 'lucide-react';
 
 import { Form } from '@/components/form';
 import { Button } from '@/components/base/button';
@@ -59,9 +60,7 @@ export const ProjectFormProvider = ({
 					<Button
 						isLoading={form.formState.isSubmitting}
 						type="submit"
-						iconLeft={{
-							name: 'Send'
-						}}
+						iconLeft={{ icon: <Send /> }}
 					>
 						Submit
 					</Button>

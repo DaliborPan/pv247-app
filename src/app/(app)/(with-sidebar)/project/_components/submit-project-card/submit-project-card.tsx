@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Pencil } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { DetailCard } from '@/components/detail-card';
@@ -29,9 +30,7 @@ export const SubmitProjectCard = async () => {
 						<Button
 							size="sm"
 							variant="outline/primary"
-							iconLeft={{
-								name: 'Pencil'
-							}}
+							iconLeft={{ icon: <Pencil /> }}
 						>
 							Set github link
 						</Button>

@@ -1,5 +1,6 @@
 import { type DefaultValues } from 'react-hook-form';
 import { toast } from 'sonner';
+import { Pencil } from 'lucide-react';
 
 import { Prompt } from '@/components/base/prompt';
 import { Button } from '@/components/base/button';
@@ -32,6 +33,6 @@ export const EditProfileForm = ({
 			toast.success('Profile updated');
 		}}
 	>
-		<Button size="sm" variant="outline" iconLeft={{ name: 'Pencil' }} />
+		<Button size="sm" variant="outline" iconLeft={{ icon: <Pencil /> }} />
 	</Prompt>
 );

@@ -1,3 +1,5 @@
+import { ArrowRight, Lock } from 'lucide-react';
+
 import { Icon } from '@/components/base/icon';
 import { SidebarCard } from '@/components/sidebar-card';
 import { getSessionUserOverview } from '@/db/session-user-service/overview';
@@ -40,7 +42,7 @@ export const HomeworksCard = async () => {
 										{homework.points}/{lecture.homeworkMaxPoints}
 									</span>
 								) : (
-									<Icon name={isAvailable ? 'ArrowRight' : 'Lock'} />
+									<Icon icon={isAvailable ? <ArrowRight /> : <Lock />} />
 								)}
 							</SidebarLinkRow>
 						);

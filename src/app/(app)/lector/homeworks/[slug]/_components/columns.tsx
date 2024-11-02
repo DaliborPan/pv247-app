@@ -1,6 +1,7 @@
 'use client';
 
 import { type ColumnDef } from '@tanstack/react-table';
+import { ExternalLink, X } from 'lucide-react';
 
 import { type Lecture, type User } from '@/db';
 import { DataTableColumnHeader } from '@/components/data-table';
@@ -43,12 +44,12 @@ export const columns: ColumnDef<User, unknown>[] = [
 					rel="noreferrer"
 					className="flex items-center font-light gap-x-2 hover:text-primary hover:underline"
 				>
-					<Icon name="ExternalLink" />
+					<Icon icon={<ExternalLink />} />
 					Link
 				</a>
 			) : (
 				<div className="flex items-center gap-x-2 text-gray-500">
-					<Icon name="X" />
+					<Icon icon={<X />} />
 					No link
 				</div>
 			);

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type PropsWithChildren } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 import { cn } from '@/lib/cn';
 
@@ -53,7 +54,7 @@ export const ResponsiveSidebarCard = ({
 						className="flex items-center lg:hidden p-4"
 					>
 						<Icon
-							name={collapsed ? 'ChevronDown' : 'ChevronUp'}
+							icon={collapsed ? <ChevronDown /> : <ChevronUp />}
 							className="size-6"
 						/>
 					</button>

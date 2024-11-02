@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+import { Check } from 'lucide-react';
 
 import { Button, type ButtonProps } from '../button';
 
@@ -14,7 +15,7 @@ export const DialogConfirmButton = forwardRef<
 		isLoading={isLoading}
 		size="sm"
 		iconLeft={{
-			name: 'Check'
+			icon: <Check />
 		}}
 		{...props}
 	>

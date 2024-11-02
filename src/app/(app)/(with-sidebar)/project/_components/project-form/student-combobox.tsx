@@ -1,7 +1,7 @@
 'use client';
 
 import { useFormContext } from 'react-hook-form';
-import { Plus } from 'lucide-react';
+import { Plus, Trash } from 'lucide-react';
 
 import { Combobox, type ComboboxOption } from '@/components/base/combobox';
 import { Button } from '@/components/base/button';
@@ -32,9 +32,7 @@ const StudentSelectedComboboxItem = ({
 			<Button
 				size="sm"
 				variant="outline/destructive"
-				iconLeft={{
-					name: 'Trash'
-				}}
+				iconLeft={{ icon: <Trash /> }}
 				onClick={() => {
 					formContext.setValue(
 						'students',
@@ -65,9 +63,7 @@ export const StudentCombobox = ({ options }: { options: ComboboxOption[] }) => {
 							<Button
 								variant="outline/primary"
 								size="sm"
-								iconLeft={{
-									name: 'Plus'
-								}}
+								iconLeft={{ icon: <Plus /> }}
 							>
 								Add student
 							</Button>

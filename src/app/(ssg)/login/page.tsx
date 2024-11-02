@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Book, Github } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { SignIn } from '@/components/sign-in';
@@ -20,7 +21,7 @@ const Page = () => (
 				<Button
 					variant="outline/primary"
 					iconLeft={{
-						name: 'Book'
+						icon: <Book />
 					}}
 				>
 					<Link href="/lectures">Start Learning</Link>
@@ -28,7 +29,7 @@ const Page = () => (
 				<SignIn>
 					<Button
 						iconLeft={{
-							name: 'Github'
+							icon: <Github />
 						}}
 					>
 						Sign in with GitHub

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { TextPreview } from '@/components/text-preview';
@@ -24,9 +25,7 @@ export const CurrentLecture = async () => {
 					<Button
 						variant="primary/inverse"
 						size="sm"
-						iconLeft={{
-							name: 'ArrowRight'
-						}}
+						iconLeft={{ icon: <ArrowRight /> }}
 					/>
 				</Link>
 			</div>

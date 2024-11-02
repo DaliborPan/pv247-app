@@ -1,3 +1,5 @@
+import { MonitorCheck, MonitorX } from 'lucide-react';
+
 import { Badge } from '../base/badge';
 import { Icon } from '../base/icon';
 
@@ -8,12 +10,12 @@ export const PointsBadge = ({ points }: { points?: number }) => (
 	>
 		{points === undefined ? (
 			<>
-				<Icon name="MonitorX" />
+				<Icon icon={<MonitorX />} />
 				<span>Not scored yet.</span>
 			</>
 		) : (
 			<>
-				<Icon name="MonitorCheck" />
+				<Icon icon={<MonitorCheck />} />
 				<span>{points} points</span>
 			</>
 		)}

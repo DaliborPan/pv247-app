@@ -2,6 +2,7 @@
 
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { RotateCcw } from 'lucide-react';
 
 import { type Lecture } from '@/db';
 import { Button } from '@/components/base/button';
@@ -28,7 +29,7 @@ export const RevalidateLectureButton = ({ lecture }: { lecture: Lecture }) => {
 				mutation.isPending
 					? undefined
 					: {
-							name: 'RotateCcw'
+							icon: <RotateCcw />
 						}
 			}
 		/>

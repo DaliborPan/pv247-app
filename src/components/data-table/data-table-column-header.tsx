@@ -1,4 +1,5 @@
 import { type Column } from '@tanstack/react-table';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 import { cn } from '@/lib/cn';
 
@@ -36,10 +37,13 @@ export const DataTableColumnHeader = <TData, TValue>({
 			</button>
 
 			{column.getIsSorted() !== false && (
-				<Icon
-					wrapperClassName="mt-0 ml-2 mr-6"
-					name={column.getIsSorted() === 'desc' ? 'ChevronDown' : 'ChevronUp'}
-				/>
+				<div className="mt-0 ml-2 mr-6">
+					<Icon
+						icon={
+							column.getIsSorted() === 'desc' ? <ChevronDown /> : <ChevronUp />
+						}
+					/>
+				</div>
 			)}
 		</div>
 	);

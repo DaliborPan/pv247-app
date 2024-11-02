@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 
 import { getOrderedLectures } from '@/db/query/lectures';
 import { getUserOverview } from '@/db/query/overview';
@@ -58,9 +59,7 @@ export const HomeworksCard = async ({
 									className="ml-4"
 									size="sm"
 									variant="ghost"
-									iconLeft={{
-										name: 'ArrowRight'
-									}}
+									iconLeft={{ icon: <ArrowRight /> }}
 								/>
 							</Link>
 						)}

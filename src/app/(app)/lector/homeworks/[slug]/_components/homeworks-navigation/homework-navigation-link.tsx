@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { type Lecture } from '@/db';
@@ -18,7 +19,7 @@ export const HomeworkNavigationLink = ({
 	const searchParams = useSearchParams();
 	const viewType = searchParams.get('type') ?? 'all';
 
-	const iconName = type === 'previous' ? 'ChevronLeft' : 'ChevronRight';
+	const ChevronIcon = type === 'previous' ? ChevronLeft : ChevronRight;
 
 	return (
 		<Link href={`/lector/homeworks/${lecture.homeworkSlug}?type=${viewType}`}>
@@ -37,7 +38,7 @@ export const HomeworkNavigationLink = ({
 						type === 'next' && 'flex-row-reverse'
 					)}
 				>
-					<Icon name={iconName} />
+					<Icon icon={<ChevronIcon />} />
 					<span>{lecture?.name}</span>
 				</div>
 			</Button>

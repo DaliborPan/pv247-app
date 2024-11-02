@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ArrowRight, Plus, Users } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { SidebarCard } from '@/components/sidebar-card';
@@ -18,9 +19,7 @@ export const ProjectCard = async () => {
 						<Button
 							variant="primary/inverse"
 							size="sm"
-							iconLeft={{
-								name: project?.name ? 'ArrowRight' : 'Plus'
-							}}
+							iconLeft={{ icon: project?.name ? <ArrowRight /> : <Plus /> }}
 						/>
 					</Link>
 				</div>
@@ -34,7 +33,7 @@ export const ProjectCard = async () => {
 
 					<div className="flex items-center text-sm text-gray-600">
 						{/* TODO: Icon based on if project is accepted or not */}
-						<Icon name="Users" className="mr-2" />
+						<Icon icon={<Users />} className="mr-2" />
 						<span className="truncate">{project.users.length} students</span>
 					</div>
 				</div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { type PropsWithChildren, useState } from 'react';
+import { RefreshCcw } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 
@@ -26,7 +27,7 @@ export const IncorrectUsageOfKeys = ({ children }: PropsWithChildren) => {
 							onClick={() => setItems([...items].reverse())}
 							type="button"
 							iconLeft={{
-								name: 'RefreshCcw',
+								icon: <RefreshCcw />,
 								className: 'mr-2'
 							}}
 						>

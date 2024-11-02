@@ -2,6 +2,7 @@
 
 import { type ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
+import { ArrowRight, Check, ExternalLink, X } from 'lucide-react';
 
 import { type User } from '@/db';
 import { DataTableColumnHeader } from '@/components/data-table';
@@ -19,7 +20,7 @@ export const columns: ColumnDef<User, string>[] = [
 				rel="noreferrer"
 				className="flex items-center font-light gap-x-2 hover:text-primary hover:underline"
 			>
-				<Icon name="ExternalLink" />
+				<Icon icon={<ExternalLink />} />
 				{row.original.github ?? row.original.name ?? row.original.lastName}
 			</a>
 		),
@@ -40,7 +41,7 @@ export const columns: ColumnDef<User, string>[] = [
 		minSize: 175,
 		cell: cell => (
 			<div>
-				<Icon name={cell.getValue() ? 'Check' : 'X'} />
+				<Icon icon={cell.getValue() ? <Check /> : <X />} />
 			</div>
 		),
 
@@ -74,7 +75,7 @@ export const columns: ColumnDef<User, string>[] = [
 				className="flex items-center hover:underline gap-x-2 hover:text-primary "
 			>
 				<span>Open</span>
-				<Icon name="ArrowRight" />
+				<Icon icon={<ArrowRight />} />
 			</Link>
 		)
 	}

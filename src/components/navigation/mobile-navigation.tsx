@@ -1,6 +1,7 @@
 import Link, { type LinkProps } from 'next/link';
 import { type PropsWithChildren } from 'react';
 import { type User } from 'next-auth';
+import { Menu } from 'lucide-react';
 
 import { Button } from '../base/button';
 import {
@@ -46,9 +47,7 @@ export const MobileNavigation = ({
 				<Button
 					size="sm"
 					variant="outline/primary"
-					iconLeft={{
-						name: 'Menu'
-					}}
+					iconLeft={{ icon: <Menu /> }}
 				/>
 			</DropdownMenuTrigger>
 

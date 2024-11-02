@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Calendar, Check, Users } from 'lucide-react';
 
 import { Badge } from '@/components/base/badge';
 import { Button } from '@/components/base/button';
@@ -10,7 +11,7 @@ import { getProjects, type GetProjectsResult } from '@/db/query/project';
 const ProjectCard = ({ project }: { project: GetProjectsResult[number] }) => (
 	<article className="p-6 bg-white rounded-lg shadow">
 		<span className="flex items-center mb-1 text-xs text-gray-500 truncate">
-			<Icon name="Users" className="mr-2" />
+			<Icon icon={<Users />} className="mr-2" />
 			{project.users
 				.map(user => `${user.firstName} ${user.lastName}`)
 				.join(', ')}
@@ -28,13 +29,13 @@ const ProjectCard = ({ project }: { project: GetProjectsResult[number] }) => (
 			</Link>
 
 			<Badge variant="outline" className="text-gray-600">
-				<Icon name="Calendar" className="mr-2" />
+				<Icon icon={<Calendar />} className="mr-2" />
 				{formatDate(project.updatedAt)}
 			</Badge>
 
 			{project.status === 'submitted' && project.points ? (
 				<Badge className="flex items-center gap-x-1.5">
-					<Icon name="Check" />
+					<Icon icon={<Check />} />
 					{project.points} points
 				</Badge>
 			) : (

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ExternalLink, Lock } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { type Lecture } from '@/db';
@@ -42,7 +43,7 @@ const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
 						iconLeft={
 							!isAvailable
 								? {
-										name: 'Lock'
+										icon: <Lock />
 									}
 								: undefined
 						}
@@ -58,7 +59,7 @@ const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
 					rel="noreferrer"
 					className="flex items-center underline gap-x-2 text-primary underline-offset-2 hover:text-primary-800 hover:no-underline"
 				>
-					<Icon name="ExternalLink" />
+					<Icon icon={<ExternalLink />} />
 					<span>Github Classroom Link</span>
 				</a>
 			</div>

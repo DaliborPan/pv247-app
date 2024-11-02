@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+import { X } from 'lucide-react';
 
 import { Button, type ButtonProps } from '../button';
 
@@ -10,7 +11,7 @@ export const DialogCancelButton = forwardRef<
 		ref={ref}
 		variant="outline/primary"
 		iconLeft={{
-			name: 'X'
+			icon: <X />
 		}}
 		size="sm"
 		{...props}

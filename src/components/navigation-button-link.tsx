@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { Icon } from '@/components/base/icon';
@@ -13,7 +14,7 @@ export const NavigationButtonLink = ({
 	href: string;
 	name: string;
 }) => {
-	const iconName = type === 'previous' ? 'ChevronLeft' : 'ChevronRight';
+	const ChevronIcon = type === 'previous' ? ChevronLeft : ChevronRight;
 
 	return (
 		<Link href={href}>
@@ -36,12 +37,12 @@ export const NavigationButtonLink = ({
 							type === 'next' && 'flex-row-reverse'
 						)}
 					>
-						<Icon name={iconName} className="hidden md:block" />
+						<Icon icon={<ChevronIcon />} className="hidden md:block" />
 						<span>{name}</span>
 					</div>
 				</div>
 
-				<Icon name={iconName} className="md:hidden size-6" />
+				<Icon icon={<ChevronIcon />} className="md:hidden size-6" />
 			</Button>
 		</Link>
 	);
