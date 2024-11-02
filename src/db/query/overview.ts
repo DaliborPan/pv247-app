@@ -2,9 +2,9 @@ import React from 'react';
 
 import { getOrderedLectures } from '@/modules/lecture/server';
 import { getIsAvailable } from '@/modules/lecture/utils';
+import { getUserHomeworks } from '@/modules/homework/server';
 
 import { getProject } from './project';
-import { getUserHomeworks } from './homeworks';
 
 export const getUserOverview = React.cache(
 	async (userId: string, projectId?: string | null) => {
