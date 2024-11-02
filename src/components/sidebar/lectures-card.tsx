@@ -1,8 +1,9 @@
 import { ArrowRight, Lock } from 'lucide-react';
 
 import { SidebarCard } from '@/components/sidebar-card';
-import { getIsAvailable, getOrderedLectures } from '@/db/query/lectures';
 import { Icon } from '@/components/base/icon';
+import { getOrderedLectures } from '@/modules/lecture/server';
+import { getIsAvailable } from '@/modules/lecture/utils';
 
 import { SidebarLinkRow } from './sidebar-link-row';
 

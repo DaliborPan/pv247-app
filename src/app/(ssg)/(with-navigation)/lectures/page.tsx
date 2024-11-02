@@ -1,5 +1,6 @@
-import { getIsAvailable, getOrderedLectures } from '@/db/query/lectures';
 import { LectureCard } from '@/modules/lecture/components';
+import { getOrderedLectures } from '@/modules/lecture/server';
+import { getIsAvailable } from '@/modules/lecture/utils';
 
 const Page = async () => {
 	const lectures = await getOrderedLectures();

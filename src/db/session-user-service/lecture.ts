@@ -1,8 +1,7 @@
 import { cache } from 'react';
 
 import { getSessionUser } from '@/auth/session-user';
-
-import { getOrderedLectures } from '../query/lectures';
+import { getOrderedLectures } from '@/modules/lecture/server';
 
 export const getOrderedLecturesWithHomework = cache(async () => {
 	const sessionUser = await getSessionUser();

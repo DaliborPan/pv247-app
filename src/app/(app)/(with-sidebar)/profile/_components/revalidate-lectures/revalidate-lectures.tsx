@@ -1,4 +1,4 @@
-import { getOrderedLectures } from '@/db/query/lectures';
+import { getOrderedLectures } from '@/modules/lecture/server';
 
 import { RevalidateLectureButton } from './revalidate-lecture-button';
 

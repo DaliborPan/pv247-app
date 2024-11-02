@@ -5,8 +5,9 @@ import { Button } from '@/components/base/button';
 import { type Lecture } from '@/db';
 import { Icon } from '@/components/base/icon';
 import { TextPreview } from '@/components/text-preview';
-import { getIsAvailable, getOrderedLectures } from '@/db/query/lectures';
 import { cn } from '@/lib/cn';
+import { getOrderedLectures } from '@/modules/lecture/server';
+import { getIsAvailable } from '@/modules/lecture/utils';
 
 const formatDate = (date: string) => {
 	const d = new Date(date);

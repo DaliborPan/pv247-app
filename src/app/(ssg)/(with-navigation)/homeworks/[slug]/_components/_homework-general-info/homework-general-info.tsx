@@ -1,5 +1,5 @@
 import { type HomeworkSlug } from '@/db';
-import { getOrderedLectures } from '@/db/query/lectures';
+import { getOrderedLectures } from '@/modules/lecture/server';
 
 import { PersonHomeworkDeadline } from './person-homework-deadline';
 import { LabeledItem } from './labeled-item';

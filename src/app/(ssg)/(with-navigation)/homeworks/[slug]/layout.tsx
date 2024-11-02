@@ -1,8 +1,8 @@
 import { type PropsWithChildren } from 'react';
 
 import { type HomeworkSlug } from '@/db';
-import { getOrderedLectures } from '@/db/query/lectures';
 import { NavigationButtonLink } from '@/components/navigation-button-link';
+import { getOrderedLectures } from '@/modules/lecture/server';
 
 const getLecturesWithHomework = async () => {
 	const lectures = await getOrderedLectures();

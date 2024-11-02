@@ -7,7 +7,7 @@ import {
 	getIsHomeworkAvailableTag,
 	getIsLectureAvailableTag,
 	ORDERED_LECTURES_TAG
-} from '@/db/query/lectures';
+} from '@/modules/lecture/server';
 
 export const revalidateLectureAction = async (lecture: Lecture) => {
 	revalidateTag(getIsLectureAvailableTag(lecture.slug));

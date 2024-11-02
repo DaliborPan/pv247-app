@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-import { getOrderedLectures } from '@/db/query/lectures';
 import { getUserOverview } from '@/db/query/overview';
+import { getOrderedLectures } from '@/modules/lecture/server';
 
 import { Button } from '../base/button';
 
