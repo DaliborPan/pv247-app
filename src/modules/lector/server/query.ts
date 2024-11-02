@@ -1,7 +1,8 @@
-import { db } from '..';
+import { db } from '@/db';
 
 /**
- * When new student is created, assign it to the lector with the least amount of students.
+ * When new student is created, assign it to the lector
+ * with the least amount of students.
  */
 export const getNewStudentLectorId = async () => {
 	const lectors = await db.query.users.findMany({

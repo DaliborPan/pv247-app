@@ -2,9 +2,9 @@ import NextAuth, { type NextAuthConfig } from 'next-auth';
 import GitHub from 'next-auth/providers/github';
 import { eq } from 'drizzle-orm';
 
-import { getNewStudentLectorId } from '@/db/query/lector';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
+import { getNewStudentLectorId } from '@/modules/lector/server';
 
 import { CustomDrizzleAdapter } from './adapter';
 
