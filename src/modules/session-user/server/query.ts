@@ -2,7 +2,7 @@ import { cache } from 'react';
 
 import { db } from '@/db';
 import { getProject } from '@/modules/project/server';
-import { getUserOverview } from '@/db/query/overview';
+import { getUserOverview } from '@/modules/shared/server/overview';
 
 import { getSessionUser } from './session-user';
 

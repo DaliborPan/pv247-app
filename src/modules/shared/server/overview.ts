@@ -5,6 +5,11 @@ import { getIsAvailable } from '@/modules/lecture/utils';
 import { getUserHomeworks } from '@/modules/homework/server';
 import { getProject } from '@/modules/project/server';
 
+/**
+ * Get overview by userId
+ *
+ * @cache React cache
+ */
 export const getUserOverview = React.cache(
 	async (userId: string, projectId?: string | null) => {
 		const userHomeworks = await getUserHomeworks(userId);

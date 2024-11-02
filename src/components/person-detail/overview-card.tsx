@@ -2,7 +2,7 @@ import { cn } from '@/lib/cn';
 import {
 	getUserOverview,
 	type GetUserOverviewResult
-} from '@/db/query/overview';
+} from '@/modules/shared/server/overview';
 
 import { LabeledValue } from '../labeled-value';
 import { DetailCard } from '../detail-card';
