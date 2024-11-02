@@ -1,4 +1,4 @@
-import { Hero } from '@/components/person-detail';
+import { Hero } from '@/components/base/hero';
 import { type User } from '@/db';
 
 export const StudentHero = ({ student }: { student: User }) => {

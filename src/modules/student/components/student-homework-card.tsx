@@ -3,13 +3,12 @@ import { ArrowRight } from 'lucide-react';
 
 import { getOrderedLectures } from '@/modules/lecture/server';
 import { getUserOverview } from '@/modules/shared/server/overview';
+import { Button } from '@/components/base/button';
 
-import { Button } from '../base/button';
-
-import { PointsBadge } from './points-badge';
 import { ListCard } from './list-card';
+import { PointsBadge } from './points-badge';
 
-export const HomeworksCard = async ({
+export const StudentHomeworkCard = async ({
 	userId,
 	projectId,
 	showHomeworkLink = false

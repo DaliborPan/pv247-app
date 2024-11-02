@@ -6,7 +6,7 @@ import { LabeledValue } from '@/components/labeled-value';
 import { DetailCard } from '@/components/detail-card';
 import { getMineProject } from '@/modules/session-user/server';
 
-export const ProjectCard = async () => {
+export const ProfileProjectCard = async () => {
 	const project = await getMineProject();
 
 	if (!project) return null;

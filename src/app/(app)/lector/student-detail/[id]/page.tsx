@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { HomeworksCard } from '@/components/person-detail';
 import { getStudent } from '@/modules/student/server';
+import { StudentHomeworkCard } from '@/modules/student/components/student-homework-card';
 
 import { StudentOverviewCard } from './_components/student-overview-card';
 import { StudentHero } from './_components/student-hero';
@@ -17,7 +17,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
 		<div className="mb-8 mx-auto max-w-4xl">
 			<StudentHero student={student} />
 			<StudentOverviewCard student={student} />
-			<HomeworksCard userId={student.id} projectId={student.projectId} />
+			<StudentHomeworkCard userId={student.id} projectId={student.projectId} />
 		</div>
 	);
 };

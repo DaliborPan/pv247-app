@@ -1,6 +1,5 @@
+import { DetailCard } from '@/components/detail-card';
 import { cn } from '@/lib/cn';
-
-import { DetailCard } from '../detail-card';
 
 type ListCardProps<T extends { id: string }> = {
 	title: string;

@@ -1,7 +1,6 @@
-import { Hero } from '@/components/person-detail';
 import { getSessionUser } from '@/modules/session-user/server';
-
-import { EditProfileForm } from './edit-profile-form';
+import { Hero } from '@/components/base/hero';
+import { EditProfileAction } from '@/modules/student/components/edit-profile-action';
 
 const ProfileHeroContent = async () => {
 	const user = await getSessionUser();
@@ -26,23 +25,21 @@ const ProfileHeroContent = async () => {
 	);
 };
 
-const EditProfileAction = async () => {
+const getDefaultValues = async () => {
 	const user = await getSessionUser();
 
-	return (
-		<EditProfileForm
-			defaultValues={{
-				id: user.id,
-				firstName: user.firstName ?? undefined,
-				lastName: user.lastName ?? undefined,
-				github: user.github ?? undefined
-			}}
-		/>
-	);
+	return {
+		id: user.id,
+		firstName: user.firstName ?? undefined,
+		lastName: user.lastName ?? undefined,
+		github: user.github ?? undefined
+	};
 };
 
 export const ProfileHero = () => (
-	<Hero actions={<EditProfileAction />}>
+	<Hero
+		actions={<EditProfileAction defaultValuesPromise={getDefaultValues()} />}
+	>
 		<ProfileHeroContent />
 	</Hero>
 );

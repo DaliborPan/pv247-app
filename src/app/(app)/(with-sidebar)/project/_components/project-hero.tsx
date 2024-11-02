@@ -2,10 +2,10 @@ import Link from 'next/link';
 import { Github, Pencil, Users } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
-import { Hero } from '@/components/person-detail';
 import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
 import { getMineProject } from '@/modules/session-user/server';
+import { Hero } from '@/components/base/hero';
 
 const GithubLink = ({ href }: { href?: string | null }) => (
 	<a

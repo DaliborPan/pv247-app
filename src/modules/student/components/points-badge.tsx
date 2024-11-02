@@ -1,7 +1,7 @@
 import { MonitorCheck, MonitorX } from 'lucide-react';
 
-import { Badge } from '../base/badge';
-import { Icon } from '../base/icon';
+import { Badge } from '@/components/base/badge';
+import { Icon } from '@/components/base/icon';
 
 export const PointsBadge = ({ points }: { points?: number }) => (
 	<Badge

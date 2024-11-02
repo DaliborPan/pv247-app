@@ -1,9 +1,8 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { eq } from 'drizzle-orm';
 
-import { db, users } from '@/db';
+import { updateUser } from '../../server';
 
 import { type EditProfileFormSchema } from './schema';
 
@@ -11,7 +10,7 @@ export const editProfileAction = async ({
 	id,
 	...values
 }: EditProfileFormSchema) => {
-	await db.update(users).set(values).where(eq(users.id, id));
+	await updateUser(id, values);
 
 	revalidatePath('/profile');
 };

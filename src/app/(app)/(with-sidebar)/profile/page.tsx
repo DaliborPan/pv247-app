@@ -1,16 +1,14 @@
-import { HomeworksCard, OverviewCard } from '@/components/person-detail';
-import { DetailCard } from '@/components/detail-card';
+import { Suspense } from 'react';
+
 import { getSessionUser } from '@/modules/session-user/server';
+import { StudentOverviewCard } from '@/modules/student/components/student-overview-card';
+import { StudentHomeworkCard } from '@/modules/student/components/student-homework-card';
 
-import { ProfileHero } from './_components/profile-hero';
-import { ProjectCard } from './_components/project-card';
-import { RevalidateLectures } from './_components/revalidate-lectures';
-
-const RevalidateLecturesSection = () => (
-	<DetailCard title="Revalidate lectures">
-		<RevalidateLectures />
-	</DetailCard>
-);
+import {
+	ProfileHero,
+	ProfileProjectCard,
+	RevalidateLecturesSection
+} from './_components';
 
 const Page = async () => {
 	const user = await getSessionUser();
@@ -19,15 +17,17 @@ const Page = async () => {
 		<>
 			<ProfileHero />
 
-			{user.role !== 'lector' ? (
-				<>
-					<OverviewCard userId={user.id} projectId={user.projectId} />
-					<HomeworksCard userId={user.id} projectId={user.projectId} />
-					<ProjectCard />
-				</>
-			) : (
-				<RevalidateLecturesSection />
-			)}
+			<Suspense>
+				{user.role !== 'lector' ? (
+					<>
+						<StudentOverviewCard userId={user.id} projectId={user.projectId} />
+						<StudentHomeworkCard userId={user.id} projectId={user.projectId} />
+						<ProfileProjectCard />
+					</>
+				) : (
+					<RevalidateLecturesSection />
+				)}
+			</Suspense>
 		</>
 	);
 };

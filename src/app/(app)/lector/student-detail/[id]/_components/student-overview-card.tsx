@@ -2,13 +2,13 @@ import Link from 'next/link';
 import { ExternalLink } from 'lucide-react';
 
 import { LabeledValue } from '@/components/labeled-value';
-import { OverviewCard } from '@/components/person-detail';
+import { StudentOverviewCard as _StudentOverviewCard } from '@/modules/student/components/student-overview-card';
 import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
 import { type User } from '@/db';
 
 export const StudentOverviewCard = ({ student }: { student: User }) => (
-	<OverviewCard
+	<_StudentOverviewCard
 		userId={student.id}
 		projectId={student.projectId}
 		otherFields={({ project: { project, display: projectDisplayName } }) => (
