@@ -1,4 +1,4 @@
-import { LectureCard } from '@/modules/lecture/components';
+import { LectureCard } from '@/modules/lecture/components/lecture-card';
 import { getOrderedLectures } from '@/modules/lecture/server';
 
 const Page = async () => {

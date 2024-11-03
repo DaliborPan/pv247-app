@@ -1,5 +1,5 @@
 import { DetailCard } from '@/components/detail-card';
-import { RevalidateLectureAction } from '@/modules/lecture/components';
+import { RevalidateLectureAction } from '@/modules/lecture/components/revalidate-lecture-action';
 import { getOrderedLectures } from '@/modules/lecture/server';
 
 export const RevalidateLecturesSection = async () => {

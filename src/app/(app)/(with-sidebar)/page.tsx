@@ -1,6 +1,4 @@
-import { CurrentLectureCard } from '@/modules/lecture/components';
-
-import { GeneralInfo } from './_components';
+import { CurrentLectureCard, GeneralInfo } from './_components';
 
 const Page = () => (
   <>

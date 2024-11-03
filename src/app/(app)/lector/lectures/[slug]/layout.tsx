@@ -1,7 +1,7 @@
 import { type PropsWithChildren } from 'react';
 
 import { type LectureSlug } from '@/db';
-import { LectureNavigation } from '@/modules/lecture/components';
+import { LectureNavigation } from '@/modules/lecture/components/lecture-navigation';
 
 const Layout = ({
   children,
