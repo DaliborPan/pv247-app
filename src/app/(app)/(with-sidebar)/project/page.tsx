@@ -1,4 +1,4 @@
-import { getMineProject } from '@/modules/session-user/server';
+import { getMineProject } from '@/modules/session-user';
 import { ProjectForm } from '@/modules/project/components/project-form';
 
 import { SubmitProjectCard } from './_components/submit-project-card';

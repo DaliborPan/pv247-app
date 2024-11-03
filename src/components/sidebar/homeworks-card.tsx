@@ -3,7 +3,7 @@ import { ArrowRight, Lock } from 'lucide-react';
 import { Icon } from '@/components/base/icon';
 import { SidebarCard } from '@/components/sidebar-card';
 import { getOrderedLectures } from '@/modules/lecture/server';
-import { getMineOverview } from '@/modules/session-user/server';
+import { getMineOverview } from '@/modules/session-user';
 
 import { SidebarLinkRow } from './sidebar-link-row';
 

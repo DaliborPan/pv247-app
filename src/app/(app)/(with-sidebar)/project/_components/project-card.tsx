@@ -1,5 +1,5 @@
 import { DetailCard } from '@/components/detail-card';
-import { getMineProject } from '@/modules/session-user/server';
+import { getMineProject } from '@/modules/session-user';
 
 export const ProjectCard = async () => {
   const project = await getMineProject();

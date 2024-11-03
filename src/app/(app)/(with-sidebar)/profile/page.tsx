@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { getSessionUser } from '@/modules/session-user/server';
+import { getSessionUser } from '@/modules/session-user';
 import { StudentOverviewCard, StudentHomeworkCard } from '@/modules/student';
 
 import {

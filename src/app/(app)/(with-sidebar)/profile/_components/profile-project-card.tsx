@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/base/button';
 import { LabeledValue } from '@/components/labeled-value';
 import { DetailCard } from '@/components/detail-card';
-import { getMineProject } from '@/modules/session-user/server';
+import { getMineProject } from '@/modules/session-user';
 
 export const ProfileProjectCard = async () => {
   const project = await getMineProject();

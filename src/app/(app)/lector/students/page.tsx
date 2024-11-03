@@ -1,6 +1,6 @@
 import { TabsContent } from '@/components/base/tabs';
 import { getStudentsWithHomeworks } from '@/modules/student';
-import { getMineStudents } from '@/modules/session-user/server';
+import { getMineStudents } from '@/modules/session-user';
 import { StudentsDataTable } from '@/modules/lector/components/students-data-table';
 import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
 

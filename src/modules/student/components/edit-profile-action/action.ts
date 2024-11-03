@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { updateUser } from '../../server';
+import { updateUser } from '../../server/mutation';
 
 import { type EditProfileFormSchema } from './schema';
 

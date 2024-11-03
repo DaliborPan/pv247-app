@@ -1,7 +1,7 @@
 import { type PropsWithChildren } from 'react';
 
 import { ResponsiveSidebarCard } from '@/components/sidebar-card';
-import { getMineOverview } from '@/modules/session-user/server';
+import { getMineOverview } from '@/modules/session-user';
 
 const OverviewCardRow = ({
   title,

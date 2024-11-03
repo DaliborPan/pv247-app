@@ -4,8 +4,8 @@ import { Github, Pencil, Users } from 'lucide-react';
 import { Button } from '@/components/base/button';
 import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
-import { getMineProject } from '@/modules/session-user/server';
 import { Hero } from '@/components/base/hero';
+import { getMineProject } from '@/modules/session-user';
 
 const GithubLink = ({ href }: { href?: string | null }) => (
   <a

@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 
 import { FormInput } from '@/components/form/form-fields';
 import { db } from '@/db';
-import { getSessionUser } from '@/modules/session-user/server';
+import { getSessionUser } from '@/modules/session-user';
 
 import { ProjectFormProvider } from './project-form-provider';
 import { StudentCombobox } from './student-combobox';

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-import { getMineProject, getSessionUser } from '@/modules/session-user/server';
+import { getMineProject, getSessionUser } from '@/modules/session-user';
 import { ProjectForm } from '@/modules/project/components/project-form';
 
 const Page = async () => {

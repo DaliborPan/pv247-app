@@ -1,4 +1,4 @@
-import { getSessionUser } from '@/modules/session-user/server';
+import { getSessionUser } from '@/modules/session-user';
 import { Hero } from '@/components/base/hero';
 import { EditProfileAction } from '@/modules/student';
 
