@@ -15,7 +15,7 @@ export const columns: ColumnDef<
 	string
 >[] = [
 	{
-		id: 'github',
+		id: 'github-link',
 		header: props => <DataTableColumnHeader {...props} title="GitHub" />,
 		minSize: 175,
 		cell: ({ row }) => (

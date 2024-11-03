@@ -14,17 +14,16 @@ import {
 
 export const columns: ColumnDef<
 	GetStudentsWithHomeworksResult[number] & {
-		defaultValues: Partial<SetHomeworkPointsFormSchema>;
+		defaultValues: Partial<SetHomeworkPointsFormSchema> | null;
 	},
 	unknown
 >[] = [
 	{
-		id: 'github',
+		id: 'github-link',
 		header: props => <DataTableColumnHeader {...props} title="GitHub" />,
 		minSize: 175,
 		cell: ({ row }) => {
-			// lecture should always be passed as default value
-			const homeworkSlug = row.original.defaultValues.lecture!.homeworkSlug;
+			const homeworkSlug = row.original.defaultValues?.lecture?.homeworkSlug;
 			const githubName = row.original.github;
 
 			const order = homeworkSlug
@@ -52,9 +51,7 @@ export const columns: ColumnDef<
 					No link
 				</div>
 			);
-		},
-
-		enableSorting: true
+		}
 	},
 	{
 		accessorKey: 'lastName',
@@ -63,17 +60,13 @@ export const columns: ColumnDef<
 		cell: ({ row }) =>
 			row.original.firstName && row.original.lastName
 				? `${row.original.firstName} ${row.original.lastName}`
-				: '',
-
-		enableSorting: true
+				: ''
 	},
 	{
 		accessorKey: 'github',
 		header: props => <DataTableColumnHeader {...props} title="Github nick" />,
 		minSize: 300,
-		cell: cell => <div>{cell.getValue() as string}</div>,
-
-		enableSorting: false
+		cell: ({ row }) => row.original.github
 	},
 	{
 		id: 'defaultValues',
@@ -81,8 +74,9 @@ export const columns: ColumnDef<
 			<DataTableColumnHeader {...props} title="Homework points" />
 		),
 		minSize: 225,
-		cell: ({ row }) => (
-			<SetHomeworkPointsForm defaultValues={row.original.defaultValues} />
-		)
+		cell: ({ row }) =>
+			row.original.defaultValues ? (
+				<SetHomeworkPointsForm defaultValues={row.original.defaultValues} />
+			) : null
 	}
 ];
