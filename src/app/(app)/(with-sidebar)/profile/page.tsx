@@ -1,8 +1,7 @@
 import { Suspense } from 'react';
 
 import { getSessionUser } from '@/modules/session-user/server';
-import { StudentOverviewCard } from '@/modules/student/components/student-overview-card';
-import { StudentHomeworkCard } from '@/modules/student/components/student-homework-card';
+import { StudentOverviewCard, StudentHomeworkCard } from '@/modules/student';
 
 import {
   ProfileHero,

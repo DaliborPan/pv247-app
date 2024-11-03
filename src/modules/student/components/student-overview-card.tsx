@@ -1,10 +1,7 @@
 import { DetailCard } from '@/components/detail-card';
 import { LabeledValue } from '@/components/labeled-value';
 import { cn } from '@/lib/cn';
-import {
-  getUserOverview,
-  type GetUserOverviewResult
-} from '@/modules/shared/server/overview';
+import { getUserOverview, type GetUserOverviewResult } from '@/modules/shared';
 
 type StudentOverviewCardProps = {
   userId: string;
