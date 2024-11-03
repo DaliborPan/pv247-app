@@ -14,7 +14,7 @@ import {
 
 export const columns: ColumnDef<
 	GetStudentsWithHomeworksResult[number] & {
-		defaultValues: Partial<SetHomeworkPointsFormSchema> | null;
+		defaultValues: Partial<SetHomeworkPointsFormSchema>;
 	},
 	unknown
 >[] = [
@@ -74,9 +74,8 @@ export const columns: ColumnDef<
 			<DataTableColumnHeader {...props} title="Homework points" />
 		),
 		minSize: 225,
-		cell: ({ row }) =>
-			row.original.defaultValues ? (
-				<SetHomeworkPointsForm defaultValues={row.original.defaultValues} />
-			) : null
+		cell: ({ row }) => (
+			<SetHomeworkPointsForm defaultValues={row.original.defaultValues} />
+		)
 	}
 ];

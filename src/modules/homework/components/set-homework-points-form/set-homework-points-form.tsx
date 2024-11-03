@@ -10,18 +10,18 @@ import { Button } from '@/components/base/button';
 import { FormInput } from '@/components/form/form-fields';
 import { Form } from '@/components/form';
 
+import { useSetHomeworkPointsMutation } from './mutation';
 import {
 	type SetHomeworkPointsFormSchema,
 	setHomeworkPointsFormSchema
 } from './schema';
-import { useSetHomeworkPointsMutation } from './mutation';
 
 export const SetHomeworkPointsForm = ({
 	defaultValues
 }: {
-	defaultValues?: Partial<SetHomeworkPointsFormSchema>;
+	defaultValues: Partial<SetHomeworkPointsFormSchema>;
 }) => {
-	const hasPoints = defaultValues?.points !== undefined;
+	const hasPoints = defaultValues.points !== undefined;
 
 	const [isEditing, setIsEditing] = useState(!hasPoints);
 
@@ -44,8 +44,6 @@ export const SetHomeworkPointsForm = ({
 				setIsEditing(false);
 			}
 		});
-
-		setIsEditing(false);
 	};
 
 	return isEditing ? (
@@ -57,7 +55,7 @@ export const SetHomeworkPointsForm = ({
 				<FormInput type="number" name="points" className="h-9" />
 				<Button
 					size="sm"
-					isLoading={form.formState.isSubmitting}
+					isLoading={mutation.isPending}
 					type="submit"
 					variant={isEditing ? 'primary' : 'outline/primary'}
 					iconLeft={{ icon: isEditing ? <Send /> : <Pencil /> }}

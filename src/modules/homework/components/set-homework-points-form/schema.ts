@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
-import { homeworkSlugSchema } from '@/db';
+// Need to import from @/db/schema/lectures beucase of circular dep
+import { homeworkSlugSchema } from '@/db/schema/lectures';
 
 export const setHomeworkPointsFormSchema = z.object({
 	studentId: z.string(),

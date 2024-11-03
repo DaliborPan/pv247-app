@@ -5,7 +5,7 @@ import { TabsContent } from '@/components/base/tabs';
 import { LabeledValue } from '@/components/labeled-value';
 import { getOrderedLectures } from '@/modules/lecture/server';
 import { getStudentsWithHomeworks } from '@/modules/student/server';
-import { getMineStudents, getSessionUser } from '@/modules/session-user/server';
+import { getMineStudents } from '@/modules/session-user/server';
 import {
 	HomeworkStudentsDataTable,
 	LectorTabsTable
@@ -35,8 +35,6 @@ const Page = async ({
 
 	const lectures = await getOrderedLectures();
 	const lecture = lectures.find(lecture => lecture.homeworkSlug === paramSlug);
-
-	const sessionUser = await getSessionUser();
 
 	return (
 		<LectorTabsTable
@@ -75,7 +73,6 @@ const Page = async ({
 						<HomeworkStudentsDataTable
 							students={await getStudentsWithHomeworks()}
 							lecture={lecture}
-							lectorId={sessionUser.id}
 						/>
 					</TabsContent>
 
@@ -83,7 +80,6 @@ const Page = async ({
 						<HomeworkStudentsDataTable
 							students={lectorStudents}
 							lecture={lecture}
-							lectorId={sessionUser.id}
 						/>
 					</TabsContent>
 				</>

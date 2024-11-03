@@ -75,7 +75,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			ref={ref}
 			{...props}
 		>
-			{iconLeft && (
+			{iconLeft && !isLoading && (
 				<Icon
 					icon={iconLeft.icon}
 					className={cn(

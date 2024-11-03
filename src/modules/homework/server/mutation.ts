@@ -1,6 +1,6 @@
 import { and, eq } from 'drizzle-orm';
 
-import { db, homeworks, type HomeworkInsert } from '@/db';
+import { db, type HomeworkInsert, homeworks } from '@/db';
 
 export const createHomework = (data: HomeworkInsert) =>
 	db.insert(homeworks).values(data);
