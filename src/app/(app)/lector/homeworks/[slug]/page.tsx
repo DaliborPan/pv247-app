@@ -1,54 +1,17 @@
 import { redirect } from 'next/navigation';
 
-import { homeworkSlugSchema, type Lecture } from '@/db';
-import { DataTable } from '@/components/data-table/data-table';
+import { homeworkSlugSchema } from '@/db';
 import { TabsContent } from '@/components/base/tabs';
 import { LabeledValue } from '@/components/labeled-value';
 import { getOrderedLectures } from '@/modules/lecture/server';
+import { getStudentsWithHomeworks } from '@/modules/student/server';
+import { getMineStudents } from '@/modules/session-user/server';
 import {
-	getStudentsWithHomeworks,
-	type GetStudentsWithHomeworksResult
-} from '@/modules/student/server';
-import { getMineStudents, getSessionUser } from '@/modules/session-user/server';
-import { LectorTabsTable } from '@/modules/lector/components';
+	HomeworkStudentsDataTable,
+	LectorTabsTable
+} from '@/modules/lector/components';
 
-import { columns } from './_components/columns';
-import { HomeworksNavigation } from './_components/homeworks-navigation';
-import { type SetHomeworkPointsFormSchema } from './_components/set-homework-points-form';
-
-const StudentDataTable = async ({
-	students,
-	lecture
-}: {
-	students: GetStudentsWithHomeworksResult;
-	lecture?: Lecture;
-}) => {
-	const sessionUser = await getSessionUser();
-
-	return (
-		<DataTable
-			data={students.map(student => {
-				const defaultValues: Partial<SetHomeworkPointsFormSchema> = {
-					lecture,
-					lectorId: sessionUser.id,
-					studentId: student.id,
-					points: student.homeworksStudent.find(
-						hw => hw.lectureId === lecture?.id
-					)?.points
-				};
-
-				return {
-					...student,
-					fullName: !student.firstName
-						? ''
-						: `${student.firstName} ${student.lastName}`,
-					defaultValues
-				};
-			})}
-			columns={columns}
-		/>
-	);
-};
+import { HomeworksNavigation } from './_components';
 
 const Page = async ({
 	params
@@ -107,14 +70,17 @@ const Page = async ({
 					</div>
 
 					<TabsContent value="all">
-						<StudentDataTable
+						<HomeworkStudentsDataTable
 							students={await getStudentsWithHomeworks()}
 							lecture={lecture}
 						/>
 					</TabsContent>
 
 					<TabsContent value="own">
-						<StudentDataTable students={lectorStudents} lecture={lecture} />
+						<HomeworkStudentsDataTable
+							students={lectorStudents}
+							lecture={lecture}
+						/>
 					</TabsContent>
 				</>
 			}

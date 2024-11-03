@@ -3,28 +3,29 @@
 import { type ColumnDef } from '@tanstack/react-table';
 import { ExternalLink, X } from 'lucide-react';
 
-import { type Lecture, type User } from '@/db';
 import { DataTableColumnHeader } from '@/components/data-table';
 import { Icon } from '@/components/base/icon';
 import { orderedHomeworkSlugs } from '@/modules/lecture/const';
-
+import { type GetStudentsWithHomeworksResult } from '@/modules/student/server';
 import {
 	SetHomeworkPointsForm,
 	type SetHomeworkPointsFormSchema
-} from './set-homework-points-form';
+} from '@/modules/homework/components';
 
-export const columns: ColumnDef<User, unknown>[] = [
+export const columns: ColumnDef<
+	GetStudentsWithHomeworksResult[number] & {
+		defaultValues: Partial<SetHomeworkPointsFormSchema>;
+	},
+	unknown
+>[] = [
 	{
-		accessorKey: 'name',
+		id: 'github',
 		header: props => <DataTableColumnHeader {...props} title="GitHub" />,
 		minSize: 175,
-		cell: cell => {
-			const row = cell.row.original as User & {
-				defaultValues: { lecture?: Lecture };
-			};
-
-			const homeworkSlug = row.defaultValues.lecture?.homeworkSlug;
-			const githubName = row.github;
+		cell: ({ row }) => {
+			// lecture should always be passed as default value
+			const homeworkSlug = row.original.defaultValues.lecture!.homeworkSlug;
+			const githubName = row.original.github;
 
 			const order = homeworkSlug
 				? orderedHomeworkSlugs.indexOf(homeworkSlug) + 1
@@ -34,8 +35,6 @@ export const columns: ColumnDef<User, unknown>[] = [
 				order && githubName
 					? `https://github.com/FI-PV247/t-0${order}-${homeworkSlug}-${githubName}`
 					: undefined;
-
-			// https://github.com/FI-PV247/t-01-typescript-kabourek-p
 
 			return url ? (
 				<a
@@ -58,10 +57,13 @@ export const columns: ColumnDef<User, unknown>[] = [
 		enableSorting: true
 	},
 	{
-		accessorKey: 'fullName',
+		accessorKey: 'lastName',
 		header: props => <DataTableColumnHeader {...props} title="Full name" />,
 		minSize: 300,
-		cell: cell => <div>{cell.getValue() as string}</div>,
+		cell: ({ row }) =>
+			row.original.firstName && row.original.lastName
+				? `${row.original.firstName} ${row.original.lastName}`
+				: '',
 
 		enableSorting: true
 	},
@@ -74,15 +76,13 @@ export const columns: ColumnDef<User, unknown>[] = [
 		enableSorting: false
 	},
 	{
-		accessorKey: 'defaultValues',
+		id: 'defaultValues',
 		header: props => (
 			<DataTableColumnHeader {...props} title="Homework points" />
 		),
 		minSize: 225,
-		cell: cell => {
-			const defaultValues = cell.getValue() as SetHomeworkPointsFormSchema;
-
-			return <SetHomeworkPointsForm defaultValues={defaultValues} />;
-		}
+		cell: ({ row }) => (
+			<SetHomeworkPointsForm defaultValues={row.original.defaultValues} />
+		)
 	}
 ];

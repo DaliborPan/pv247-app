@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { Pencil, Send } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/base/button';
 import { FormInput } from '@/components/form/form-fields';
@@ -13,7 +14,7 @@ import {
 	type SetHomeworkPointsFormSchema,
 	setHomeworkPointsFormSchema
 } from './schema';
-import { setHomeworkPointsAction } from './set-homework-points-action';
+import { useSetHomeworkPointsMutation } from './mutation';
 
 export const SetHomeworkPointsForm = ({
 	defaultValues
@@ -29,8 +30,20 @@ export const SetHomeworkPointsForm = ({
 		defaultValues
 	});
 
-	const onSubmit = async (data: SetHomeworkPointsFormSchema) => {
-		await setHomeworkPointsAction({ ...data, isCreating: !hasPoints });
+	const mutation = useSetHomeworkPointsMutation({ isCreating: !hasPoints });
+
+	const onSubmit = (data: SetHomeworkPointsFormSchema) => {
+		mutation.mutate(data, {
+			onSuccess: () => {
+				toast.success('Points were successfully set');
+			},
+			onError: () => {
+				toast.error('Failed to set points');
+			},
+			onSettled: () => {
+				setIsEditing(false);
+			}
+		});
 
 		setIsEditing(false);
 	};
