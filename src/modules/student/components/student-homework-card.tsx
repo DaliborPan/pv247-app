@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 import { getOrderedLectures } from '@/modules/lecture/server';
-import { getUserOverview } from '@/modules/shared/server/overview';
+import { getUserOverview } from '@/modules/shared';
 import { Button } from '@/components/base/button';
 
 import { ListCard } from './list-card';

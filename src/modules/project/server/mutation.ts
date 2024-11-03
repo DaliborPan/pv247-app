@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 
 import { db, type Project, projects } from '@/db';
-import { assignProject } from '@/modules/student/server';
+import { assignProject } from '@/modules/student';
 
 export const createProject = async (
   data: Pick<Project, 'name' | 'description'>

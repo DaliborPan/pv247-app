@@ -4,7 +4,7 @@ import { homeworkSlugSchema } from '@/db';
 import { TabsContent } from '@/components/base/tabs';
 import { LabeledValue } from '@/components/labeled-value';
 import { getOrderedLectures } from '@/modules/lecture/server';
-import { getStudentsWithHomeworks } from '@/modules/student/server';
+import { getStudentsWithHomeworks } from '@/modules/student';
 import { getMineStudents } from '@/modules/session-user/server';
 import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
 import { HomeworkStudentsDataTable } from '@/modules/lector/components/homework-students-data-table';

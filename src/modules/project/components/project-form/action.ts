@@ -7,7 +7,7 @@ import {
   PROJECTS_TAG,
   updateProject
 } from '@/modules/project/server';
-import { assignProject } from '@/modules/student/server';
+import { assignProject } from '@/modules/student';
 
 import { type ProjectFormSchema } from './schema';
 

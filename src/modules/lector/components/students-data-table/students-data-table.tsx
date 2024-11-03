@@ -1,5 +1,5 @@
 import { DataTable } from '@/components/data-table';
-import { type GetStudentsWithHomeworksResult } from '@/modules/student/server';
+import { type GetStudentsWithHomeworksResult } from '@/modules/student';
 
 import { columns } from './columns';
 

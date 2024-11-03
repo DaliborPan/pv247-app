@@ -1,6 +1,6 @@
 import { DataTable } from '@/components/data-table';
 import { type Lecture } from '@/db';
-import { type GetStudentsWithHomeworksResult } from '@/modules/student/server';
+import { type GetStudentsWithHomeworksResult } from '@/modules/student';
 import { getSessionUser } from '@/modules/session-user/server';
 
 import { columns } from './columns';
