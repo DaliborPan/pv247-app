@@ -6,8 +6,7 @@ import { type Lecture } from '@/db';
 import { Icon } from '@/components/base/icon';
 import { TextPreview } from '@/components/text-preview';
 import { cn } from '@/lib/cn';
-import { getLecturesWithHomework } from '@/modules/lecture/server';
-import { getIsAvailable } from '@/modules/lecture/utils';
+import { getIsAvailable, getLecturesWithHomework } from '@/modules/lecture';
 import { formatDate } from '@/lib/date';
 
 const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {

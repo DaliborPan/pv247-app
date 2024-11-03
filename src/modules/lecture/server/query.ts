@@ -3,7 +3,7 @@ import React from 'react';
 
 import { db, type HomeworkSlug, type LectureSlug } from '@/db';
 
-import { getIsAvailable } from '../utils';
+import { getIsAvailable } from '../utils/get-is-available';
 
 export const ORDERED_LECTURES_TAG = 'ordered-lectures';
 

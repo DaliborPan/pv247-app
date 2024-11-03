@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-import { getOrderedLectures } from '@/modules/lecture/server';
+import { getOrderedLectures } from '@/modules/lecture';
 import { getUserOverview } from '@/modules/shared';
 import { Button } from '@/components/base/button';
 

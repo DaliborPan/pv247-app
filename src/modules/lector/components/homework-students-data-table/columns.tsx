@@ -5,7 +5,7 @@ import { ExternalLink, X } from 'lucide-react';
 
 import { DataTableColumnHeader } from '@/components/data-table';
 import { Icon } from '@/components/base/icon';
-import { orderedHomeworkSlugs } from '@/modules/lecture/const';
+import { orderedHomeworkSlugs } from '@/modules/lecture';
 import { type GetStudentsWithHomeworksResult } from '@/modules/student';
 import {
   SetHomeworkPointsForm,

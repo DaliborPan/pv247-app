@@ -17,6 +17,7 @@ const nextConfig = {
     optimizePackageImports: [
       '@/db',
 
+      '@/modules/lecture',
       '@/modules/project',
       '@/modules/session-user',
       '@/modules/student',

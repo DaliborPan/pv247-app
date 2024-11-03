@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 import { type HomeworkSlug, homeworkSlugSchema } from '@/db';
-import { getIsHomeworkAvailable } from '@/modules/lecture/server';
+import { getIsHomeworkAvailable } from '@/modules/lecture';
 import { getHomeworkMdxComponent } from '@/modules/homework/mdx';
 
 type Params = {

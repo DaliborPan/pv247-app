@@ -1,5 +1,4 @@
-import { LectureCard } from '@/modules/lecture/components/lecture-card';
-import { getOrderedLectures } from '@/modules/lecture/server';
+import { LectureCard, getOrderedLectures } from '@/modules/lecture';
 
 const Page = async () => {
   const lectures = await getOrderedLectures();

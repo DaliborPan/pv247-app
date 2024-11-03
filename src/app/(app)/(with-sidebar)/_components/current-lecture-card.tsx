@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { TextPreview } from '@/components/text-preview';
-import { getAvailableLectures } from '@/modules/lecture/server';
+import { getAvailableLectures } from '@/modules/lecture';
 
 export const CurrentLectureCard = async () => {
   const availableLectures = await getAvailableLectures();

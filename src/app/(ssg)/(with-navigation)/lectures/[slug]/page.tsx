@@ -1,8 +1,10 @@
 import { redirect } from 'next/navigation';
 
 import { lectureSlugSchema, type LectureSlug } from '@/db';
-import { getLectureMdxComponent } from '@/modules/lecture/mdx';
-import { getIsLectureAvailable } from '@/modules/lecture/server';
+import {
+  getLectureMdxComponent,
+  getIsLectureAvailable
+} from '@/modules/lecture/';
 
 type Params = {
   slug: LectureSlug;
