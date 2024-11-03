@@ -1,35 +1,10 @@
-import { DataTable } from '@/components/data-table/data-table';
 import { TabsContent } from '@/components/base/tabs';
-import {
-	getStudentsWithHomeworks,
-	type GetStudentsWithHomeworksResult
-} from '@/modules/student/server';
+import { getStudentsWithHomeworks } from '@/modules/student/server';
 import { getMineStudents } from '@/modules/session-user/server';
-import { LectorTabsTable } from '@/modules/lector/components';
-
-import { columns } from './_components/columns';
-
-const StudentDataTable = ({
-	students
-}: {
-	students: GetStudentsWithHomeworksResult;
-}) => (
-	<DataTable
-		data={students.map(student => ({
-			...student,
-			fullName: !student.firstName
-				? ''
-				: `${student.firstName} ${student.lastName}`,
-			// TODO: attendance
-			// attendance: 4,
-			homeworkPoints: student.homeworksStudent.reduce(
-				(acc, hw) => acc + hw.points,
-				0
-			)
-		}))}
-		columns={columns}
-	/>
-);
+import {
+	LectorTabsTable,
+	StudentsDataTable
+} from '@/modules/lector/components';
 
 const Page = async () => {
 	const lectorStudents = await getMineStudents();
@@ -57,11 +32,11 @@ const Page = async () => {
 			contents={
 				<>
 					<TabsContent value="all">
-						<StudentDataTable students={await getStudentsWithHomeworks()} />
+						<StudentsDataTable students={await getStudentsWithHomeworks()} />
 					</TabsContent>
 
 					<TabsContent value="own">
-						<StudentDataTable students={lectorStudents} />
+						<StudentsDataTable students={lectorStudents} />
 					</TabsContent>
 				</>
 			}
