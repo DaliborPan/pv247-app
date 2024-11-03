@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { getOrderedLectures, getIsAvailable } from '@/modules/lecture';
-import { getUserHomeworks } from '@/modules/homework/server';
+import { getUserHomeworks } from '@/modules/homework';
 import { getProject } from '@/modules/project';
 
 /**

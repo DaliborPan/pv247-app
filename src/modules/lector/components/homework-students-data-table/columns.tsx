@@ -10,7 +10,7 @@ import { type GetStudentsWithHomeworksResult } from '@/modules/student';
 import {
   SetHomeworkPointsForm,
   type SetHomeworkPointsFormSchema
-} from '@/modules/homework/components/set-homework-points-form';
+} from '@/modules/homework';
 
 export const columns: ColumnDef<
   GetStudentsWithHomeworksResult[number] & {

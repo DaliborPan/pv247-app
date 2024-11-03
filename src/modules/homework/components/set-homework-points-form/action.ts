@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { createHomework, updateHomeworkPoints } from '../../server';
+import { createHomework, updateHomeworkPoints } from '../../server/mutation';
 
 import { type SetHomeworkPointsFormSchema } from './schema';
 

@@ -2,7 +2,7 @@
 
 import { auth } from '@/auth';
 
-import { getUserHomework } from '../../server';
+import { getUserHomework } from '../../server/query';
 
 export const getHomeworkPointsAction = async (lectureId: string) => {
   const session = await auth();
