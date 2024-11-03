@@ -5,9 +5,8 @@ import { SidebarCard } from '@/components/sidebar-card';
 import { type Project } from '@/db';
 import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
-
-import { SetProjectPointsForm } from './set-project-points-form';
-import { ProjectApproveButton } from './project-approve-button';
+import { SetProjectPointsAction } from '@/modules/project/components/set-project-points-action';
+import { ApproveProjectButton } from '@/modules/project/components/approve-project-action';
 
 export const ProjectStatusCard = ({ project }: { project: Project }) => {
   const status = project.status;
@@ -45,7 +44,7 @@ export const ProjectStatusCard = ({ project }: { project: Project }) => {
     >
       {hasPoints && (
         <div className="mt-4">
-          <SetProjectPointsForm
+          <SetProjectPointsAction
             projectId={project.id}
             defaultValues={{
               points: project.points ?? undefined,
@@ -59,7 +58,7 @@ export const ProjectStatusCard = ({ project }: { project: Project }) => {
 
               <Icon icon={<Pencil />} />
             </button>
-          </SetProjectPointsForm>
+          </SetProjectPointsAction>
 
           <div className="mt-4 mb-2">Comment</div>
 
@@ -68,14 +67,14 @@ export const ProjectStatusCard = ({ project }: { project: Project }) => {
       )}
 
       {status === 'submitted' && !hasPoints && (
-        <SetProjectPointsForm projectId={project.id}>
+        <SetProjectPointsAction projectId={project.id}>
           <Button size="sm" iconLeft={{ icon: <SquareArrowOutUpRight /> }}>
             Set points
           </Button>
-        </SetProjectPointsForm>
+        </SetProjectPointsAction>
       )}
 
-      {status !== 'submitted' && <ProjectApproveButton project={project} />}
+      {status !== 'submitted' && <ApproveProjectButton project={project} />}
     </SidebarCard>
   );
 };

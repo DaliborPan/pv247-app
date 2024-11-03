@@ -1,7 +1,7 @@
 'use client';
 
 import { type PropsWithChildren } from 'react';
-import { type DefaultValues } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { Prompt } from '@/components/base/prompt';
 import { FormInput } from '@/components/form/form-fields';
@@ -12,13 +12,13 @@ import {
 } from './schema';
 import { useSetProjectPointsMutation } from './mutation';
 
-export const SetProjectPointsForm = ({
+export const SetProjectPointsAction = ({
   projectId,
   defaultValues,
   children
 }: PropsWithChildren<{
   projectId: string;
-  defaultValues?: DefaultValues<SetProjectPointsFormSchema>;
+  defaultValues?: Partial<SetProjectPointsFormSchema>;
 }>) => {
   const mutation = useSetProjectPointsMutation();
 
@@ -39,7 +39,13 @@ export const SetProjectPointsForm = ({
       onDecision={async ({ confirmed, data }) => {
         if (!confirmed) return;
 
-        await mutation.mutateAsync(data);
+        try {
+          await mutation.mutateAsync(data);
+
+          toast.success('Project points updated!');
+        } catch (error) {
+          toast.error('Failed to update project points');
+        }
       }}
     >
       {children}

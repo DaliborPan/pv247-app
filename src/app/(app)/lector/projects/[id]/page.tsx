@@ -1,28 +1,8 @@
 import { redirect } from 'next/navigation';
-import { User } from 'lucide-react';
 
-import { SidebarCard } from '@/components/sidebar-card';
-import { Icon } from '@/components/base/icon';
-import { getProject, type GetProjectResult } from '@/modules/project/server';
+import { getProject } from '@/modules/project/server';
 
-import { ProjectStatusCard } from './_components/project-status-card';
-
-const ProjectUsersCard = ({
-  project
-}: {
-  project: NonNullable<GetProjectResult>;
-}) => (
-  <SidebarCard title="Users">
-    <ul className="text-primary font-medium flex flex-col gap-y-1.5">
-      {project.users.map(user => (
-        <li key={user.id} className="flex items-center gap-x-2">
-          <Icon icon={<User />} />
-          <span>{user.name}</span>
-        </li>
-      ))}
-    </ul>
-  </SidebarCard>
-);
+import { ProjectStatusCard, ProjectUsersCard } from './_components';
 
 const Page = async ({ params: { id } }: { params: { id: string } }) => {
   const project = await getProject(id);
