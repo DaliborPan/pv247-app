@@ -5,8 +5,7 @@ import {
 	type GetStudentsWithHomeworksResult
 } from '@/modules/student/server';
 import { getMineStudents } from '@/modules/session-user/server';
-
-import { LectorTabsTable } from '../_components/lector-tabs-table';
+import { LectorTabsTable } from '@/modules/lector/components';
 
 import { columns } from './_components/columns';
 

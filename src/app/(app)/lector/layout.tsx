@@ -2,7 +2,7 @@ import { type PropsWithChildren } from 'react';
 
 import { SubNavigation } from './_components/sub-navigation';
 
-const Layout = async ({ children }: PropsWithChildren) => (
+const Layout = ({ children }: PropsWithChildren) => (
 	<div className="-mt-8">
 		<SubNavigation />
 
