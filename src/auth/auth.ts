@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { getNewStudentLectorId } from '@/modules/lector/server';
+import { getNewStudentLectorId } from '@/modules/lector';
 
 import { CustomDrizzleAdapter } from './adapter';
 

@@ -6,8 +6,7 @@ import { LabeledValue } from '@/components/labeled-value';
 import { getOrderedLectures } from '@/modules/lecture';
 import { getStudentsWithHomeworks } from '@/modules/student';
 import { getMineStudents } from '@/modules/session-user';
-import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
-import { HomeworkStudentsDataTable } from '@/modules/lector/components/homework-students-data-table';
+import { LectorTabsTable, HomeworkStudentsDataTable } from '@/modules/lector';
 
 import { HomeworksNavigation } from './_components';
 
