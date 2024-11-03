@@ -2,7 +2,7 @@ import { Calendar, Check, Users } from 'lucide-react';
 import Link from 'next/link';
 
 import { Icon } from '@/components/base/icon';
-import { type GetProjectsResult } from '@/modules/project/server';
+import { type GetProjectsResult } from '@/modules/project';
 import { TextPreview } from '@/components/text-preview';
 import { Button } from '@/components/base/button';
 import { Badge } from '@/components/base/badge';

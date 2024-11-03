@@ -5,8 +5,10 @@ import { SidebarCard } from '@/components/sidebar-card';
 import { type Project } from '@/db';
 import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
-import { SetProjectPointsAction } from '@/modules/project/components/set-project-points-action';
-import { ApproveProjectButton } from '@/modules/project/components/approve-project-action';
+import {
+  SetProjectPointsAction,
+  ApproveProjectButton
+} from '@/modules/project';
 
 export const ProjectStatusCard = ({ project }: { project: Project }) => {
   const status = project.status;

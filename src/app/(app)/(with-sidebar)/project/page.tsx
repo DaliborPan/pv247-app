@@ -1,5 +1,5 @@
 import { getMineProject } from '@/modules/session-user';
-import { ProjectForm } from '@/modules/project/components/project-form';
+import { ProjectForm } from '@/modules/project';
 
 import { SubmitProjectCard } from './_components/submit-project-card';
 import { ProjectCard, ProjectHero } from './_components';

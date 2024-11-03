@@ -4,7 +4,7 @@ import { Pencil } from 'lucide-react';
 import { Button } from '@/components/base/button';
 import { DetailCard } from '@/components/detail-card';
 import { getMineProject } from '@/modules/session-user';
-import { SubmitProjectAction } from '@/modules/project/components/submit-project-action';
+import { SubmitProjectAction } from '@/modules/project';
 
 export const SubmitProjectCard = async () => {
   const project = await getMineProject();

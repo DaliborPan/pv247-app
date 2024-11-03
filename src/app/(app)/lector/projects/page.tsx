@@ -1,4 +1,4 @@
-import { getProjects } from '@/modules/project/server';
+import { getProjects } from '@/modules/project';
 
 import { ProjectCard } from './_components';
 

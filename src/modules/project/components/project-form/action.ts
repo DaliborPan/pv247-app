@@ -2,11 +2,7 @@
 
 import { revalidateTag } from 'next/cache';
 
-import {
-  createProject,
-  PROJECTS_TAG,
-  updateProject
-} from '@/modules/project/server';
+import { createProject, PROJECTS_TAG, updateProject } from '@/modules/project';
 import { assignProject } from '@/modules/student';
 
 import { type ProjectFormSchema } from './schema';

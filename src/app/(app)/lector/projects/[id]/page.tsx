@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-import { getProject } from '@/modules/project/server';
+import { getProject } from '@/modules/project';
 
 import { ProjectStatusCard, ProjectUsersCard } from './_components';
 

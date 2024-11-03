@@ -16,9 +16,11 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: [
       '@/db',
-      '@/modules/shared',
+
+      '@/modules/project',
+      '@/modules/session-user',
       '@/modules/student',
-      '@/modules/session-user'
+      '@/modules/shared'
     ]
   }
 };

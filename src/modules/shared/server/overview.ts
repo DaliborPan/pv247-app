@@ -3,7 +3,7 @@ import React from 'react';
 import { getOrderedLectures } from '@/modules/lecture/server';
 import { getIsAvailable } from '@/modules/lecture/utils';
 import { getUserHomeworks } from '@/modules/homework/server';
-import { getProject } from '@/modules/project/server';
+import { getProject } from '@/modules/project';
 
 /**
  * Get overview by userId

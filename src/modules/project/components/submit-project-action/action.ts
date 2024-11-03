@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import { revalidateTag } from 'next/cache';
 
 import { db, type Project, projects } from '@/db';
-import { PROJECTS_TAG } from '@/modules/project/server';
+import { PROJECTS_TAG } from '@/modules/project';
 
 export const submitProjectAction = async ({
   project
