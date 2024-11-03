@@ -146,18 +146,18 @@ You can define new page by creating `page.tsx` file inside some folder in app di
 'use client';
 
 export default function ClientPage() {
-	const { data } = useQuery(/* ... */);
+  const { data } = useQuery(/* ... */);
 
-	return <h1>Hello, {data}</h1>;
+  return <h1>Hello, {data}</h1>;
 }
 ```
 
 ```tsx
 export default async function Page() {
-	const response = await fetch('https://example.com/data');
-	const text = await response.text();
+  const response = await fetch('https://example.com/data');
+  const text = await response.text();
 
-	return <h1>Hello, {text}</h1>;
+  return <h1>Hello, {text}</h1>;
 }
 ```
 
@@ -169,15 +169,15 @@ Layouts can also fetch data, if they are server components (obviously, you can a
 
 ```tsx
 export default function DashboardLayout({
-	children // will be a page or nested layout
+  children // will be a page or nested layout
 }: PropsWithChildren) {
-	return (
-		<section>
-			{/* Include shared UI here e.g. a header or sidebar */}
-			<nav>...</nav>
-			{children}
-		</section>
-	);
+  return (
+    <section>
+      {/* Include shared UI here e.g. a header or sidebar */}
+      <nav>...</nav>
+      {children}
+    </section>
+  );
 }
 ```
 
@@ -198,7 +198,7 @@ It's built-in component that extends the HTML `<a>` tag to provide prefetching a
 import Link from 'next/link';
 
 export default function Page() {
-	return <Link href="/dashboard">Dashboard</Link>;
+  return <Link href="/dashboard">Dashboard</Link>;
 }
 ```
 
@@ -211,27 +211,27 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 export function Navigation() {
-	const pathname = usePathname();
+  const pathname = usePathname();
 
-	return (
-		<nav>
-			<ul>
-				<li>
-					<Link className={`${pathname === '/' ? 'active' : ''}`} href="/">
-						Home
-					</Link>
-				</li>
-				<li>
-					<Link
-						className={`${pathname === '/about' ? 'active' : ''}`}
-						href="/about"
-					>
-						About
-					</Link>
-				</li>
-			</ul>
-		</nav>
-	);
+  return (
+    <nav>
+      <ul>
+        <li>
+          <Link className={`${pathname === '/' ? 'active' : ''}`} href="/">
+            Home
+          </Link>
+        </li>
+        <li>
+          <Link
+            className={`${pathname === '/about' ? 'active' : ''}`}
+            href="/about"
+          >
+            About
+          </Link>
+        </li>
+      </ul>
+    </nav>
+  );
 }
 ```
 
@@ -247,13 +247,13 @@ This hook proves useful in various scenarios. You can use `useRouter` to program
 import { useRouter } from 'next/navigation';
 
 export default function Page() {
-	const router = useRouter();
+  const router = useRouter();
 
-	return (
-		<button type="button" onClick={() => router.push('/dashboard')}>
-			Dashboard
-		</button>
-	);
+  return (
+    <button type="button" onClick={() => router.push('/dashboard')}>
+      Dashboard
+    </button>
+  );
 }
 ```
 
@@ -263,17 +263,17 @@ You can use `redirect` function to redirect user to another page. It is useful f
 
 ```tsx
 export default async function Page() {
-	const user = await getUser();
+  const user = await getUser();
 
-	if (!user) {
-		redirect('/login');
-	}
+  if (!user) {
+    redirect('/login');
+  }
 
-	return (
-		<div>
-			<h1>Welcome, {user.name}</h1>
-		</div>
-	);
+  return (
+    <div>
+      <h1>Welcome, {user.name}</h1>
+    </div>
+  );
 }
 ```
 
@@ -300,21 +300,21 @@ This is a big problem, and many developers are complaining about it. If you visi
 
 ```tsx
 export default async function Page() {
-	const data = await readTodos();
+  const data = await readTodos();
 
-	return (
-		<div>
-			<h1>Home</h1>
+  return (
+    <div>
+      <h1>Home</h1>
 
-			<ul>
-				{data.map(todo => (
-					<li key={todo.id}>{todo.title}</li>
-				))}
-			</ul>
+      <ul>
+        {data.map(todo => (
+          <li key={todo.id}>{todo.title}</li>
+        ))}
+      </ul>
 
-			<Link href="/add-todo">Add todo Link</Link>
-		</div>
-	);
+      <Link href="/add-todo">Add todo Link</Link>
+    </div>
+  );
 }
 ```
 
@@ -322,13 +322,13 @@ export default async function Page() {
 
 ```tsx
 export default function Page() {
-	return (
-		<div>
-			<Link href="/">Back to List of todos</Link>
+  return (
+    <div>
+      <Link href="/">Back to List of todos</Link>
 
-			<AddTodo />
-		</div>
-	);
+      <AddTodo />
+    </div>
+  );
 }
 ```
 
@@ -364,20 +364,20 @@ Think about a blog website. You want a separate page for each blog post. The lay
 
 ```tsx
 type BlogPostPageProps = {
-	params: {
-		slug: string;
-	};
+  params: {
+    slug: string;
+  };
 };
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-	const response = await fetch(`https://example.com/posts/${params.slug}`);
-	const post = await response.json();
+  const response = await fetch(`https://example.com/posts/${params.slug}`);
+  const post = await response.json();
 
-	return (
-		<div>
-			<h1>{post.title}</h1>
-		</div>
-	);
+  return (
+    <div>
+      <h1>{post.title}</h1>
+    </div>
+  );
 }
 ```
 
@@ -389,12 +389,12 @@ In certain situations, you might need to utilize dynamic route segments while ha
 
 ```tsx
 export async function generateStaticParams() {
-	const response = await fetch('https://.../posts');
-	const posts = await response.json();
+  const response = await fetch('https://.../posts');
+  const posts = await response.json();
 
-	return posts.map(post => ({
-		slug: post.slug
-	}));
+  return posts.map(post => ({
+    slug: post.slug
+  }));
 }
 ```
 

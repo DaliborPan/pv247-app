@@ -4,17 +4,17 @@ import { revalidateTag } from 'next/cache';
 
 import { type Lecture } from '@/db';
 import {
-	getIsHomeworkAvailableTag,
-	getIsLectureAvailableTag,
-	ORDERED_LECTURES_TAG
+  getIsHomeworkAvailableTag,
+  getIsLectureAvailableTag,
+  ORDERED_LECTURES_TAG
 } from '@/modules/lecture/server';
 
 export const revalidateLectureAction = async (lecture: Lecture) => {
-	revalidateTag(getIsLectureAvailableTag(lecture.slug));
-	revalidateTag(getIsHomeworkAvailableTag(lecture.homeworkSlug));
+  revalidateTag(getIsLectureAvailableTag(lecture.slug));
+  revalidateTag(getIsHomeworkAvailableTag(lecture.homeworkSlug));
 
-	/**
-	 * TODO: should be changed to only propagate to places where needed
-	 */
-	revalidateTag(ORDERED_LECTURES_TAG);
+  /**
+   * TODO: should be changed to only propagate to places where needed
+   */
+  revalidateTag(ORDERED_LECTURES_TAG);
 };

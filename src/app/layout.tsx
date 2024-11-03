@@ -7,29 +7,29 @@ import { cn } from '@/lib/cn';
 import { Providers } from '@/components/providers';
 
 const poppins = Poppins({
-	subsets: ['latin'],
-	weight: ['300', '400', '500', '600', '700']
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700']
 });
 
 export const metadata: Metadata = {
-	title: 'PV247 app'
+  title: 'PV247 app'
 };
 
 const RootLayout = ({
-	children
+  children
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) => (
-	<html lang="en">
-		<body
-			className={cn(
-				'min-h-screen flex flex-col bg-background',
-				poppins.className
-			)}
-		>
-			<Providers>{children}</Providers>
-		</body>
-	</html>
+  <html lang="en">
+    <body
+      className={cn(
+        'min-h-screen flex flex-col bg-background',
+        poppins.className
+      )}
+    >
+      <Providers>{children}</Providers>
+    </body>
+  </html>
 );
 
 export default RootLayout;

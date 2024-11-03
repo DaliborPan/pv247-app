@@ -48,29 +48,29 @@ CSS-in-JS, unlike previous approaches, integrates CSS directly within JavaScript
 
 ```tsx
 const Input = styled.input<{ inputColor?: string }>`
-	padding: 0.5em;
-	margin: 0.5em;
-	color: ${props => props.inputColor || '#B4F474'};
-	background: papayawhip;
-	border: none;
-	border-radius: 3px;
+  padding: 0.5em;
+  margin: 0.5em;
+  color: ${props => props.inputColor || '#B4F474'};
+  background: papayawhip;
+  border: none;
+  border-radius: 3px;
 `;
 
 // Render a styled text input with the standard input color,
 // and one with a custom input color
 render(
-	<div>
-		<Input defaultValue="QprobabLlyup" type="text" />
-		<Input defaultValue="Ggeelen" type="text" inputColor="rebeccapurple" />
-	</div>
+  <div>
+    <Input defaultValue="QprobabLlyup" type="text" />
+    <Input defaultValue="Ggeelen" type="text" inputColor="rebeccapurple" />
+  </div>
 );
 ```
 
 <MdxComment>
-	Note: There is demonstrated usage of class component in this example. We don't
-	recommend using class components in your projects! This example comes from
-	[documentation](https://styled-components.com/docs/basics#how-do-styled-components-work-within-a-component)
-	of styled-components.
+  Note: There is demonstrated usage of class component in this example. We don't
+  recommend using class components in your projects! This example comes from
+  [documentation](https://styled-components.com/docs/basics#how-do-styled-components-work-within-a-component)
+  of styled-components.
 </MdxComment>
 
 ```tsx
@@ -78,30 +78,30 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledCounter = styled.div`
-	/* ... */
+  /* ... */
 `;
 const Paragraph = styled.p`
-	/* ... */
+  /* ... */
 `;
 const Button = styled.button`
-	/* ... */
+  /* ... */
 `;
 
 export default class Counter extends React.Component {
-	state = { count: 0 };
+  state = { count: 0 };
 
-	increment = () => this.setState({ count: this.state.count + 1 });
-	decrement = () => this.setState({ count: this.state.count - 1 });
+  increment = () => this.setState({ count: this.state.count + 1 });
+  decrement = () => this.setState({ count: this.state.count - 1 });
 
-	render() {
-		return (
-			<StyledCounter>
-				<Paragraph>{this.state.count}</Paragraph>
-				<Button onClick={this.increment}>+</Button>
-				<Button onClick={this.decrement}>-</Button>
-			</StyledCounter>
-		);
-	}
+  render() {
+    return (
+      <StyledCounter>
+        <Paragraph>{this.state.count}</Paragraph>
+        <Button onClick={this.increment}>+</Button>
+        <Button onClick={this.decrement}>-</Button>
+      </StyledCounter>
+    );
+  }
 }
 ```
 
@@ -114,24 +114,24 @@ import React from 'react';
 import styles from './styles.css';
 
 export default class Counter extends React.Component {
-	state = { count: 0 };
+  state = { count: 0 };
 
-	increment = () => this.setState({ count: this.state.count + 1 });
-	decrement = () => this.setState({ count: this.state.count - 1 });
+  increment = () => this.setState({ count: this.state.count + 1 });
+  decrement = () => this.setState({ count: this.state.count - 1 });
 
-	render() {
-		return (
-			<div className={styles.counter}>
-				<p className={styles.paragraph}>{this.state.count}</p>
-				<button className={styles.button} onClick={this.increment}>
-					+
-				</button>
-				<button className={styles.button} onClick={this.decrement}>
-					-
-				</button>
-			</div>
-		);
-	}
+  render() {
+    return (
+      <div className={styles.counter}>
+        <p className={styles.paragraph}>{this.state.count}</p>
+        <button className={styles.button} onClick={this.increment}>
+          +
+        </button>
+        <button className={styles.button} onClick={this.decrement}>
+          -
+        </button>
+      </div>
+    );
+  }
 }
 ```
 
@@ -182,7 +182,7 @@ Examples: [HeadlessUI](https://headlessui.com/), [RadixUI](https://www.radix-ui.
 ## Utility first approach - Tailwindcss
 
 <MdxComment className="mb-8">
-	Rapidly build modern websites without ever leaving your HTML.
+  Rapidly build modern websites without ever leaving your HTML.
 </MdxComment>
 
 [Here is a perfect description of utility-first approach](https://tailwindcss.com/docs/utility-first)
@@ -191,97 +191,97 @@ A utility-first CSS framework provides a variety of predefined CSS classes that 
 
 ```tsx
 <div class="flex font-sans">
-	<div class="relative flex-none w-48">
-		<img
-			src="/classic-utility-jacket.jpg"
-			alt=""
-			class="absolute inset-0 object-cover w-full h-full"
-			loading="lazy"
-		/>
-	</div>
-	<form class="flex-auto p-6">
-		<div class="flex flex-wrap">
-			<h1 class="flex-auto text-lg font-semibold text-slate-900">
-				Utility Jacket
-			</h1>
-			<div class="text-lg font-semibold text-slate-500">$110.00</div>
-			<div class="flex-none w-full mt-2 text-sm font-medium text-slate-700">
-				In stock
-			</div>
-		</div>
-		<div class="flex items-baseline pb-6 mt-4 mb-6 border-b border-slate-200">
-			<div class="flex space-x-2 text-sm">
-				<label>
-					<input
-						class="sr-only peer"
-						name="size"
-						type="radio"
-						value="xs"
-						checked
-					/>
-					<div class="flex items-center justify-center rounded-lg w-9 h-9 text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-						XS
-					</div>
-				</label>
-				<label>
-					<input class="sr-only peer" name="size" type="radio" value="s" />
-					<div class="flex items-center justify-center rounded-lg w-9 h-9 text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-						S
-					</div>
-				</label>
-				<label>
-					<input class="sr-only peer" name="size" type="radio" value="m" />
-					<div class="flex items-center justify-center rounded-lg w-9 h-9 text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-						M
-					</div>
-				</label>
-				<label>
-					<input class="sr-only peer" name="size" type="radio" value="l" />
-					<div class="flex items-center justify-center rounded-lg w-9 h-9 text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-						L
-					</div>
-				</label>
-				<label>
-					<input class="sr-only peer" name="size" type="radio" value="xl" />
-					<div class="flex items-center justify-center rounded-lg w-9 h-9 text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-						XL
-					</div>
-				</label>
-			</div>
-		</div>
-		<div class="flex mb-6 space-x-4 text-sm font-medium">
-			<div class="flex flex-auto space-x-4">
-				<button
-					class="h-10 px-6 font-semibold text-white bg-black rounded-md"
-					type="submit"
-				>
-					Buy now
-				</button>
-				<button
-					class="h-10 px-6 font-semibold border rounded-md border-slate-200 text-slate-900"
-					type="button"
-				>
-					Add to bag
-				</button>
-			</div>
-			<button
-				class="flex items-center justify-center flex-none border rounded-md w-9 h-9 text-slate-300 border-slate-200"
-				type="button"
-				aria-label="Like"
-			>
-				<svg width="20" height="20" fill="currentColor" aria-hidden="true">
-					<path
-						fill-rule="evenodd"
-						clip-rule="evenodd"
-						d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-					/>
-				</svg>
-			</button>
-		</div>
-		<p class="text-sm text-slate-700">
-			Free shipping on all continental US orders.
-		</p>
-	</form>
+  <div class="relative flex-none w-48">
+    <img
+      src="/classic-utility-jacket.jpg"
+      alt=""
+      class="absolute inset-0 object-cover w-full h-full"
+      loading="lazy"
+    />
+  </div>
+  <form class="flex-auto p-6">
+    <div class="flex flex-wrap">
+      <h1 class="flex-auto text-lg font-semibold text-slate-900">
+        Utility Jacket
+      </h1>
+      <div class="text-lg font-semibold text-slate-500">$110.00</div>
+      <div class="flex-none w-full mt-2 text-sm font-medium text-slate-700">
+        In stock
+      </div>
+    </div>
+    <div class="flex items-baseline pb-6 mt-4 mb-6 border-b border-slate-200">
+      <div class="flex space-x-2 text-sm">
+        <label>
+          <input
+            class="sr-only peer"
+            name="size"
+            type="radio"
+            value="xs"
+            checked
+          />
+          <div class="flex items-center justify-center rounded-lg w-9 h-9 text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+            XS
+          </div>
+        </label>
+        <label>
+          <input class="sr-only peer" name="size" type="radio" value="s" />
+          <div class="flex items-center justify-center rounded-lg w-9 h-9 text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+            S
+          </div>
+        </label>
+        <label>
+          <input class="sr-only peer" name="size" type="radio" value="m" />
+          <div class="flex items-center justify-center rounded-lg w-9 h-9 text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+            M
+          </div>
+        </label>
+        <label>
+          <input class="sr-only peer" name="size" type="radio" value="l" />
+          <div class="flex items-center justify-center rounded-lg w-9 h-9 text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+            L
+          </div>
+        </label>
+        <label>
+          <input class="sr-only peer" name="size" type="radio" value="xl" />
+          <div class="flex items-center justify-center rounded-lg w-9 h-9 text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+            XL
+          </div>
+        </label>
+      </div>
+    </div>
+    <div class="flex mb-6 space-x-4 text-sm font-medium">
+      <div class="flex flex-auto space-x-4">
+        <button
+          class="h-10 px-6 font-semibold text-white bg-black rounded-md"
+          type="submit"
+        >
+          Buy now
+        </button>
+        <button
+          class="h-10 px-6 font-semibold border rounded-md border-slate-200 text-slate-900"
+          type="button"
+        >
+          Add to bag
+        </button>
+      </div>
+      <button
+        class="flex items-center justify-center flex-none border rounded-md w-9 h-9 text-slate-300 border-slate-200"
+        type="button"
+        aria-label="Like"
+      >
+        <svg width="20" height="20" fill="currentColor" aria-hidden="true">
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+          />
+        </svg>
+      </button>
+    </div>
+    <p class="text-sm text-slate-700">
+      Free shipping on all continental US orders.
+    </p>
+  </form>
 </div>
 ```
 
@@ -328,8 +328,8 @@ Using inline styles, every value is a magic number. With tailwindcss you use pre
 You can't do media queries in inline styles or define different states.
 
 <MdxComment>
-	If you want to learn more about differences, see [this blog
-	post](https://arindam1729.hashnode.dev/tailwind-css-vs-inline-css-are-they-the-same).
+  If you want to learn more about differences, see [this blog
+  post](https://arindam1729.hashnode.dev/tailwind-css-vs-inline-css-are-they-the-same).
 </MdxComment>
 
 ## DaisyUI - a component library based on tailwindcss
@@ -348,7 +348,7 @@ For example, styling a button to have it look like a DaisyUI button looks like t
 
 ```tsx
 <button className="bg-indigo-600 px-4 py-3 text-center text-sm font-semibold inline-block text-white cursor-pointer uppercase transition duration-200 ease-in-out rounded-md hover:bg-indigo-700 focus:visible:outline-none focus:visible:ring-2 focus:visible:ring-indigo-600 focus:visible:ring-offset-2 active:scale-95">
-	Tailwind Button
+  Tailwind Button
 </button>
 ```
 
@@ -361,8 +361,8 @@ Installation of this library is straightforward. First, you need to have tailwin
 ## Shadcn/ui
 
 <MdxComment className="mb-8">
-	Beautifully designed components that you can copy and paste into your apps.
-	Accessible. Customizable. Open Source.
+  Beautifully designed components that you can copy and paste into your apps.
+  Accessible. Customizable. Open Source.
 </MdxComment>
 
 Shadcn UI is a collection of beautifully designed and accessible UI components that developers can easily integrate into their applications. It's built on top of **Tailwind CSS** and **Radix UI** and supports various frameworks including Next.js. It is **not** a component library, but a set of components that you can copy and paste into your application. You don't need to install a package to use these components. You need to copy and paste components that you really need a customize them directly in their source code.

@@ -11,111 +11,111 @@ import { Dialog } from '../dialog';
 import { type DecisionFn, type PromptProps } from './types';
 
 export const Prompt = <T extends FieldValues>({
-	children,
-	dialogProps = { size: 'm' },
-	content,
-	title,
-	subtitle,
-	cancel,
-	confirm,
-	onDecision,
-	onError,
-	formSchema,
-	defaultValues,
-	onFormValidationFailed,
+  children,
+  dialogProps = { size: 'm' },
+  content,
+  title,
+  subtitle,
+  cancel,
+  confirm,
+  onDecision,
+  onError,
+  formSchema,
+  defaultValues,
+  onFormValidationFailed,
 
-	open: controlledOpen,
-	onOpenChange: onControlledOpenChange
+  open: controlledOpen,
+  onOpenChange: onControlledOpenChange
 }: PromptProps<T> & { Content?: ComponentType }) => {
-	const [isOpen, setIsOpen] = useState(false);
-	const [key, setKey] = useState(() => uuid());
+  const [isOpen, setIsOpen] = useState(false);
+  const [key, setKey] = useState(() => uuid());
 
-	const isControlled = controlledOpen !== undefined;
+  const isControlled = controlledOpen !== undefined;
 
-	const handleOpenChange = (open: boolean) => {
-		if (!isControlled) {
-			setIsOpen(open);
-		}
+  const handleOpenChange = (open: boolean) => {
+    if (!isControlled) {
+      setIsOpen(open);
+    }
 
-		onControlledOpenChange?.(open);
-	};
+    onControlledOpenChange?.(open);
+  };
 
-	const form = useForm({
-		resolver: zodResolver(formSchema),
-		defaultValues
-	});
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues
+  });
 
-	if (Object.entries(form.formState.errors).length > 0) {
-		console.log('values', form.getValues());
-		console.log('form errors', form.formState.errors);
-	}
+  if (Object.entries(form.formState.errors).length > 0) {
+    console.log('values', form.getValues());
+    console.log('form errors', form.formState.errors);
+  }
 
-	const {
-		mutate: decisionMutate,
-		isError,
-		isPending: isLoading
-	} = useMutation({
-		mutationFn: async (params: Parameters<DecisionFn<T>>[0]) =>
-			await onDecision(params)
-	});
+  const {
+    mutate: decisionMutate,
+    isError,
+    isPending: isLoading
+  } = useMutation({
+    mutationFn: async (params: Parameters<DecisionFn<T>>[0]) =>
+      await onDecision(params)
+  });
 
-	const onSubmit = (data: T) => {
-		decisionMutate(
-			{ confirmed: true, data },
-			{
-				onSuccess: () => handleOpenChange(false),
-				onError
-			}
-		);
-	};
+  const onSubmit = (data: T) => {
+    decisionMutate(
+      { confirmed: true, data },
+      {
+        onSuccess: () => handleOpenChange(false),
+        onError
+      }
+    );
+  };
 
-	return (
-		<Dialog
-			open={isControlled ? controlledOpen : isOpen}
-			onOpenChange={newState => {
-				handleOpenChange(newState);
+  return (
+    <Dialog
+      open={isControlled ? controlledOpen : isOpen}
+      onOpenChange={newState => {
+        handleOpenChange(newState);
 
-				if (newState) {
-					// reset form on open
-					form.reset(defaultValues);
-					setKey(uuid());
-				}
+        if (newState) {
+          // reset form on open
+          form.reset(defaultValues);
+          setKey(uuid());
+        }
 
-				if (!newState) {
-					// set decision to false on close
-					decisionMutate({ confirmed: false, data: undefined });
-				}
-			}}
-		>
-			<Dialog.Trigger asChild>{children}</Dialog.Trigger>
+        if (!newState) {
+          // set decision to false on close
+          decisionMutate({ confirmed: false, data: undefined });
+        }
+      }}
+    >
+      <Dialog.Trigger asChild>{children}</Dialog.Trigger>
 
-			<Dialog.Content showClose={!!title} {...dialogProps}>
-				<Form key={key} {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit, onFormValidationFailed)}>
-						{title && (
-							<Dialog.Header>
-								<Dialog.Title>{title}</Dialog.Title>
+      <Dialog.Content showClose={!!title} {...dialogProps}>
+        <Form key={key} {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit, onFormValidationFailed)}>
+            {title && (
+              <Dialog.Header>
+                <Dialog.Title>{title}</Dialog.Title>
 
-								{subtitle && <Dialog.Subtitle>{subtitle}</Dialog.Subtitle>}
-							</Dialog.Header>
-						)}
+                {subtitle && <Dialog.Subtitle>{subtitle}</Dialog.Subtitle>}
+              </Dialog.Header>
+            )}
 
-						{content}
+            {content}
 
-						<Dialog.Footer>
-							<Dialog.Close asChild>
-								{cancel ?? <Dialog.CancelButton />}
-							</Dialog.Close>
+            <Dialog.Footer>
+              <Dialog.Close asChild>
+                {cancel ?? <Dialog.CancelButton />}
+              </Dialog.Close>
 
-							{confirm ? (
-								confirm({ isError, isLoading })
-							) : (
-								<Dialog.ConfirmButton isLoading={isLoading} />
-							)}
-						</Dialog.Footer>
-					</form>
-				</Form>
-			</Dialog.Content>
-		</Dialog>
-	);
+              {confirm ? (
+                confirm({ isError, isLoading })
+              ) : (
+                <Dialog.ConfirmButton isLoading={isLoading} />
+              )}
+            </Dialog.Footer>
+          </form>
+        </Form>
+      </Dialog.Content>
+    </Dialog>
+  );
 };

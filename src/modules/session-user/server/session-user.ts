@@ -9,13 +9,13 @@ import { auth } from '@/auth';
  * @cache React cache
  */
 export const getSessionUser = cache(async () => {
-	const session = await auth();
+  const session = await auth();
 
-	if (!session?.user) {
-		throw new Error(
-			'getSessionUser must be called from authenticated pages/components only!'
-		);
-	}
+  if (!session?.user) {
+    throw new Error(
+      'getSessionUser must be called from authenticated pages/components only!'
+    );
+  }
 
-	return session.user;
+  return session.user;
 });

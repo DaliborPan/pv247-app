@@ -79,11 +79,11 @@ Example call:
 
 ```js
 const response = await fetch('/api/login', {
-	method: 'POST',
-	headers: {
-		'Content-Type': 'application/json'
-	},
-	body: JSON.stringify({ username: 'santa', password: 'santa123' })
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ username: 'santa', password: 'santa123' })
 });
 ```
 
@@ -105,7 +105,7 @@ const response = await fetch('/api/login', {
 
 ```json
 {
-	"error": "Invalid username or password"
+  "error": "Invalid username or password"
 }
 ```
 
@@ -117,7 +117,7 @@ Example call:
 
 ```js
 const response = fetch('/api/gift/list', {
-	method: 'GET'
+  method: 'GET'
 });
 ```
 
@@ -145,18 +145,18 @@ Example call:
 
 ```js
 const response = await fetch('/api/gift', {
-	method: 'POST',
-	headers: {
-		'Content-Type': 'application/json'
-	},
-	body: JSON.stringify({
-		gift: {
-			name: 'New car',
-			description: 'I really want a new car',
-			price: 20
-		},
-		userId: '1'
-	})
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    gift: {
+      name: 'New car',
+      description: 'I really want a new car',
+      price: 20
+    },
+    userId: '1'
+  })
 });
 ```
 
@@ -183,11 +183,11 @@ Example call:
 
 ```js
 const response = await fetch(`/api/gift/${id}`, {
-	method: 'PATCH',
-	headers: {
-		'Content-Type': 'application/json'
-	},
-	body: JSON.stringify({ delivered: true })
+  method: 'PATCH',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ delivered: true })
 });
 ```
 
@@ -210,6 +210,6 @@ const response = await fetch(`/api/gift/${id}`, {
 
 ```json
 {
-	"error": "Gift does not exist."
+  "error": "Gift does not exist."
 }
 ```

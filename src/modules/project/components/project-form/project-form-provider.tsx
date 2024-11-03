@@ -15,72 +15,72 @@ import { projectFormSchema, type ProjectFormSchema } from './schema';
 import { useSubmitProjectFormMutation } from './mutation';
 
 export const ProjectFormProvider = ({
-	children,
-	defaultValues
+  children,
+  defaultValues
 }: PropsWithChildren<{
-	defaultValues?: Partial<ProjectFormSchema>;
+  defaultValues?: Partial<ProjectFormSchema>;
 }>) => {
-	const session = useSession();
-	const router = useRouter();
+  const session = useSession();
+  const router = useRouter();
 
-	const form = useForm<ProjectFormSchema>({
-		resolver: zodResolver(projectFormSchema),
-		defaultValues: defaultValues ?? {
-			name: '',
-			description: '',
-			students: []
-		}
-	});
+  const form = useForm<ProjectFormSchema>({
+    resolver: zodResolver(projectFormSchema),
+    defaultValues: defaultValues ?? {
+      name: '',
+      description: '',
+      students: []
+    }
+  });
 
-	const mutation = useSubmitProjectFormMutation({
-		isCreating: !defaultValues?.id
-	});
+  const mutation = useSubmitProjectFormMutation({
+    isCreating: !defaultValues?.id
+  });
 
-	const onSubmit = async (data: ProjectFormSchema) => {
-		if (!session?.data?.user) {
-			return;
-		}
+  const onSubmit = async (data: ProjectFormSchema) => {
+    if (!session?.data?.user) {
+      return;
+    }
 
-		// TODO: < 2
-		if (data.students.length < 0) {
-			toast.error('Please add at least two students.');
+    // TODO: < 2
+    if (data.students.length < 0) {
+      toast.error('Please add at least two students.');
 
-			return;
-		}
+      return;
+    }
 
-		mutation.mutate(
-			{
-				...data,
-				students: [...data.students, session.data.user.id]
-			},
-			{
-				onSuccess: () => {
-					toast.success('Project updated successfully.');
-					router.replace('/project');
-				},
-				onError: () => {
-					toast.error('An error occurred while updating the project.');
-				}
-			}
-		);
-	};
+    mutation.mutate(
+      {
+        ...data,
+        students: [...data.students, session.data.user.id]
+      },
+      {
+        onSuccess: () => {
+          toast.success('Project updated successfully.');
+          router.replace('/project');
+        },
+        onError: () => {
+          toast.error('An error occurred while updating the project.');
+        }
+      }
+    );
+  };
 
-	return (
-		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)}>
-				<div className="flex items-center mb-6">
-					<h1 className="text-3xl grow">Create a project</h1>
-					<Button
-						isLoading={form.formState.isSubmitting}
-						type="submit"
-						iconLeft={{ icon: <Send /> }}
-					>
-						Submit
-					</Button>
-				</div>
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="flex items-center mb-6">
+          <h1 className="text-3xl grow">Create a project</h1>
+          <Button
+            isLoading={form.formState.isSubmitting}
+            type="submit"
+            iconLeft={{ icon: <Send /> }}
+          >
+            Submit
+          </Button>
+        </div>
 
-				<div className="flex flex-col gap-y-2">{children}</div>
-			</form>
-		</Form>
-	);
+        <div className="flex flex-col gap-y-2">{children}</div>
+      </form>
+    </Form>
+  );
 };

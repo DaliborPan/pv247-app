@@ -4,14 +4,14 @@ import { createProjectAction, updateProjectAction } from './action';
 import { type ProjectFormSchema } from './schema';
 
 export const useSubmitProjectFormMutation = (
-	{ isCreating } = {
-		isCreating: false
-	}
+  { isCreating } = {
+    isCreating: false
+  }
 ) =>
-	useMutation({
-		mutationFn: (data: ProjectFormSchema) => {
-			const action = isCreating ? createProjectAction : updateProjectAction;
+  useMutation({
+    mutationFn: (data: ProjectFormSchema) => {
+      const action = isCreating ? createProjectAction : updateProjectAction;
 
-			return action(data);
-		}
-	});
+      return action(data);
+    }
+  });

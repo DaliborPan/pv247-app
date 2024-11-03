@@ -7,16 +7,16 @@ import { db, type Project, projects } from '@/db';
 import { PROJECTS_TAG } from '@/modules/project/server';
 
 export const submitProjectAction = async ({
-	project
+  project
 }: {
-	project: Project;
+  project: Project;
 }) => {
-	await db
-		.update(projects)
-		.set({
-			status: 'submitted'
-		})
-		.where(eq(projects.id, project.id));
+  await db
+    .update(projects)
+    .set({
+      status: 'submitted'
+    })
+    .where(eq(projects.id, project.id));
 
-	revalidateTag(PROJECTS_TAG);
+  revalidateTag(PROJECTS_TAG);
 };

@@ -11,58 +11,58 @@ import { getIsAvailable } from '@/modules/lecture/utils';
 import { formatDate } from '@/lib/date';
 
 const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
-	const isAvailable = getIsAvailable(lecture);
+  const isAvailable = getIsAvailable(lecture);
 
-	return (
-		<article className="flex flex-col p-6 bg-white rounded-lg shadow">
-			<span className="flex items-center mb-1 text-xs text-gray-500">
-				from {formatDate(lecture.availableFrom)}
-			</span>
+  return (
+    <article className="flex flex-col p-6 bg-white rounded-lg shadow">
+      <span className="flex items-center mb-1 text-xs text-gray-500">
+        from {formatDate(lecture.availableFrom)}
+      </span>
 
-			<h2 className="text-xl font-medium">{lecture.homeworkName}</h2>
+      <h2 className="text-xl font-medium">{lecture.homeworkName}</h2>
 
-			<TextPreview className="mt-3 line-clamp-5 grow">
-				{lecture.homeworkPreview}
-			</TextPreview>
+      <TextPreview className="mt-3 line-clamp-5 grow">
+        {lecture.homeworkPreview}
+      </TextPreview>
 
-			<div className="flex items-end justify-between mt-6">
-				<Link
-					href={`/homeworks/${lecture.homeworkSlug}`}
-					className={cn(!isAvailable && 'pointer-events-none')}
-				>
-					<Button
-						size="sm"
-						iconLeft={!isAvailable ? { icon: <Lock /> } : undefined}
-						disabled={!isAvailable}
-					>
-						Open details
-					</Button>
-				</Link>
+      <div className="flex items-end justify-between mt-6">
+        <Link
+          href={`/homeworks/${lecture.homeworkSlug}`}
+          className={cn(!isAvailable && 'pointer-events-none')}
+        >
+          <Button
+            size="sm"
+            iconLeft={!isAvailable ? { icon: <Lock /> } : undefined}
+            disabled={!isAvailable}
+          >
+            Open details
+          </Button>
+        </Link>
 
-				<a
-					href={lecture.homeworkClassroomLink}
-					target="_blank"
-					rel="noreferrer"
-					className="flex items-center underline gap-x-2 text-primary underline-offset-2 hover:text-primary-800 hover:no-underline"
-				>
-					<Icon icon={<ExternalLink />} />
-					<span>Github Classroom Link</span>
-				</a>
-			</div>
-		</article>
-	);
+        <a
+          href={lecture.homeworkClassroomLink}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center underline gap-x-2 text-primary underline-offset-2 hover:text-primary-800 hover:no-underline"
+        >
+          <Icon icon={<ExternalLink />} />
+          <span>Github Classroom Link</span>
+        </a>
+      </div>
+    </article>
+  );
 };
 
 const Page = async () => {
-	const lectures = await getLecturesWithHomework();
+  const lectures = await getLecturesWithHomework();
 
-	return (
-		<>
-			{lectures.map((lecture, index) => (
-				<HomeworkCard key={lecture.slug} lecture={lecture} index={index} />
-			))}
-		</>
-	);
+  return (
+    <>
+      {lectures.map((lecture, index) => (
+        <HomeworkCard key={lecture.slug} lecture={lecture} index={index} />
+      ))}
+    </>
+  );
 };
 
 export default Page;

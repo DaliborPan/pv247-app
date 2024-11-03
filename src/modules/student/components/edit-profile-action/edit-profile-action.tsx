@@ -13,31 +13,31 @@ import { editProfileFormSchema, type EditProfileFormSchema } from './schema';
 import { editProfileAction } from './action';
 
 export const EditProfileAction = (props: {
-	defaultValuesPromise: Promise<DefaultValues<EditProfileFormSchema>>;
+  defaultValuesPromise: Promise<DefaultValues<EditProfileFormSchema>>;
 }) => {
-	const defaultValues = use(props.defaultValuesPromise);
+  const defaultValues = use(props.defaultValuesPromise);
 
-	return (
-		<Prompt<EditProfileFormSchema>
-			title="Edit profile"
-			formSchema={editProfileFormSchema}
-			defaultValues={defaultValues}
-			content={
-				<div className="flex flex-col pt-2 gap-y-3">
-					<FormInput name="firstName" label="First name" />
-					<FormInput name="lastName" label="Last name" />
-					<FormInput name="github" label="Github nick" />
-				</div>
-			}
-			onDecision={async ({ confirmed, data }) => {
-				if (!confirmed) return;
+  return (
+    <Prompt<EditProfileFormSchema>
+      title="Edit profile"
+      formSchema={editProfileFormSchema}
+      defaultValues={defaultValues}
+      content={
+        <div className="flex flex-col pt-2 gap-y-3">
+          <FormInput name="firstName" label="First name" />
+          <FormInput name="lastName" label="Last name" />
+          <FormInput name="github" label="Github nick" />
+        </div>
+      }
+      onDecision={async ({ confirmed, data }) => {
+        if (!confirmed) return;
 
-				await editProfileAction(data);
+        await editProfileAction(data);
 
-				toast.success('Profile updated');
-			}}
-		>
-			<Button size="sm" variant="outline" iconLeft={{ icon: <Pencil /> }} />
-		</Prompt>
-	);
+        toast.success('Profile updated');
+      }}
+    >
+      <Button size="sm" variant="outline" iconLeft={{ icon: <Pencil /> }} />
+    </Prompt>
+  );
 };

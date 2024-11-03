@@ -13,20 +13,20 @@ export const ORDERED_LECTURES_TAG = 'ordered-lectures';
  * @cache Next.js cache
  */
 export const getOrderedLectures = unstable_cache(
-	async () => {
-		const lectures = await db.query.lectures.findMany({
-			orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
-			with: {
-				homeworks: true
-			}
-		});
+  async () => {
+    const lectures = await db.query.lectures.findMany({
+      orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
+      with: {
+        homeworks: true
+      }
+    });
 
-		return lectures;
-	},
-	[ORDERED_LECTURES_TAG],
-	{
-		tags: [ORDERED_LECTURES_TAG]
-	}
+    return lectures;
+  },
+  [ORDERED_LECTURES_TAG],
+  {
+    tags: [ORDERED_LECTURES_TAG]
+  }
 );
 
 /**
@@ -35,9 +35,9 @@ export const getOrderedLectures = unstable_cache(
  * @cache using Next.js cache
  */
 export const getLecturesWithHomework = async () => {
-	const lectures = await getOrderedLectures();
+  const lectures = await getOrderedLectures();
 
-	return lectures.filter(lecture => !!lecture.homeworkSlug);
+  return lectures.filter(lecture => !!lecture.homeworkSlug);
 };
 
 /**
@@ -46,13 +46,13 @@ export const getLecturesWithHomework = async () => {
  * @cache React cache
  */
 export const getAvailableLectures = React.cache(async () => {
-	const lectures = await getOrderedLectures();
+  const lectures = await getOrderedLectures();
 
-	return lectures.filter(getIsAvailable);
+  return lectures.filter(getIsAvailable);
 });
 
 export const getIsLectureAvailableTag = (slug: LectureSlug) =>
-	`is-lecture-available_${slug}`;
+  `is-lecture-available_${slug}`;
 
 /**
  * Get is lecture available by slug
@@ -60,22 +60,22 @@ export const getIsLectureAvailableTag = (slug: LectureSlug) =>
  * @cache Next.js cache
  */
 export const getIsLectureAvailable = (slug: LectureSlug) =>
-	unstable_cache(
-		async () => {
-			const lecture = await db.query.lectures.findFirst({
-				where: (table, { eq }) => eq(table.slug, slug)
-			});
+  unstable_cache(
+    async () => {
+      const lecture = await db.query.lectures.findFirst({
+        where: (table, { eq }) => eq(table.slug, slug)
+      });
 
-			return !!lecture && getIsAvailable(lecture);
-		},
-		[getIsLectureAvailableTag(slug)],
-		{
-			tags: [getIsLectureAvailableTag(slug)]
-		}
-	)();
+      return !!lecture && getIsAvailable(lecture);
+    },
+    [getIsLectureAvailableTag(slug)],
+    {
+      tags: [getIsLectureAvailableTag(slug)]
+    }
+  )();
 
 export const getIsHomeworkAvailableTag = (slug: HomeworkSlug) =>
-	`is-homework-available_${slug}`;
+  `is-homework-available_${slug}`;
 
 /**
  * Get is homework available by slug
@@ -83,16 +83,16 @@ export const getIsHomeworkAvailableTag = (slug: HomeworkSlug) =>
  * @cache Next.js cache
  */
 export const getIsHomeworkAvailable = (slug: HomeworkSlug) =>
-	unstable_cache(
-		async () => {
-			const lecture = await db.query.lectures.findFirst({
-				where: (table, { eq }) => eq(table.homeworkSlug, slug)
-			});
+  unstable_cache(
+    async () => {
+      const lecture = await db.query.lectures.findFirst({
+        where: (table, { eq }) => eq(table.homeworkSlug, slug)
+      });
 
-			return !!lecture && getIsAvailable(lecture);
-		},
-		[getIsHomeworkAvailableTag(slug)],
-		{
-			tags: [getIsHomeworkAvailableTag(slug)]
-		}
-	)();
+      return !!lecture && getIsAvailable(lecture);
+    },
+    [getIsHomeworkAvailableTag(slug)],
+    {
+      tags: [getIsHomeworkAvailableTag(slug)]
+    }
+  )();

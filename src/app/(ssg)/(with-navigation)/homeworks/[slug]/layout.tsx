@@ -5,45 +5,45 @@ import { NavigationButtonLink } from '@/components/navigation-button-link';
 import { getLecturesWithHomework } from '@/modules/lecture/server';
 
 const Layout = async ({
-	children,
-	params
+  children,
+  params
 }: PropsWithChildren<{ params: { slug: HomeworkSlug } }>) => {
-	const lectures = await getLecturesWithHomework();
+  const lectures = await getLecturesWithHomework();
 
-	const slugLectureIndex = lectures.findIndex(
-		lecture => lecture.homeworkSlug === params.slug
-	);
+  const slugLectureIndex = lectures.findIndex(
+    lecture => lecture.homeworkSlug === params.slug
+  );
 
-	const prevLecture = lectures[slugLectureIndex - 1];
-	const nextLecture = lectures[slugLectureIndex + 1];
+  const prevLecture = lectures[slugLectureIndex - 1];
+  const nextLecture = lectures[slugLectureIndex + 1];
 
-	return (
-		<>
-			<div className="flex flex-col justify-between md:flex-row">
-				<div>
-					{prevLecture && (
-						<NavigationButtonLink
-							type="previous"
-							href={`/homeworks/${prevLecture.homeworkSlug}`}
-							name={prevLecture.homeworkName}
-						/>
-					)}
-				</div>
+  return (
+    <>
+      <div className="flex flex-col justify-between md:flex-row">
+        <div>
+          {prevLecture && (
+            <NavigationButtonLink
+              type="previous"
+              href={`/homeworks/${prevLecture.homeworkSlug}`}
+              name={prevLecture.homeworkName}
+            />
+          )}
+        </div>
 
-				<div>
-					{nextLecture && (
-						<NavigationButtonLink
-							type="next"
-							href={`/homeworks/${nextLecture.homeworkSlug}`}
-							name={nextLecture.homeworkName}
-						/>
-					)}
-				</div>
-			</div>
+        <div>
+          {nextLecture && (
+            <NavigationButtonLink
+              type="next"
+              href={`/homeworks/${nextLecture.homeworkSlug}`}
+              name={nextLecture.homeworkName}
+            />
+          )}
+        </div>
+      </div>
 
-			<main className="max-w-4xl mx-auto -mt-10">{children}</main>
-		</>
-	);
+      <main className="max-w-4xl mx-auto -mt-10">{children}</main>
+    </>
+  );
 };
 
 export default Layout;

@@ -6,11 +6,11 @@ import { type PropsWithChildren } from 'react';
 import { usePathname } from 'next/navigation';
 
 export const SignIn = ({ children }: PropsWithChildren) => {
-	const pathname = usePathname();
+  const pathname = usePathname();
 
-	const callbackUrl = pathname.startsWith('/login') ? '/' : pathname;
+  const callbackUrl = pathname.startsWith('/login') ? '/' : pathname;
 
-	return (
-		<Slot onClick={() => signIn('github', { callbackUrl })}>{children}</Slot>
-	);
+  return (
+    <Slot onClick={() => signIn('github', { callbackUrl })}>{children}</Slot>
+  );
 };

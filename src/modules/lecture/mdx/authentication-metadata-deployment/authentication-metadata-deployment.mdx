@@ -53,10 +53,10 @@ We decided to use GitHub, now we need to create a new application in it. In our 
 <MdxImage src={GITHUB_PROVIDER_SETUP} />
 
 <MdxComment>
-	It is about creating an OAuth application that will be used exclusively for
-	the development environment. Once we decided to deploy our application to
-	production, we would have to create a new OAuth application that would be
-	designed for the production environment and have real URLs populated.
+  It is about creating an OAuth application that will be used exclusively for
+  the development environment. Once we decided to deploy our application to
+  production, we would have to create a new OAuth application that would be
+  designed for the production environment and have real URLs populated.
 </MdxComment>
 
 After creating the application, we get the `Client ID` and `Client Secret` which we need to set in our `.env` file.
@@ -72,35 +72,35 @@ import { redirect } from 'next/navigation';
 import { auth } from '@src/auth';
 
 export default async function Page() {
-	const session = await auth();
+  const session = await auth();
 
-	if (!session?.user) {
-		redirect('/api/auth/signin');
-	}
+  if (!session?.user) {
+    redirect('/api/auth/signin');
+  }
 
-	return (
-		<div>
-			<h1>Current user: {session.user.name}</h1>
-			<pre>{JSON.stringify(session.user, null, 2)}</pre>
-		</div>
-	);
+  return (
+    <div>
+      <h1>Current user: {session.user.name}</h1>
+      <pre>{JSON.stringify(session.user, null, 2)}</pre>
+    </div>
+  );
 }
 ```
 
 <MdxComment>
-	In this example, we get the current session via the `auth()` function, which
-	we import from `src/auth.ts`. This function is asynchronous and can only be
-	used this way in RSC! If the `session` does not exist, we call `redirect` to
-	the `/api/auth/signin` login page, which has a button to log in via GitHub.
+  In this example, we get the current session via the `auth()` function, which
+  we import from `src/auth.ts`. This function is asynchronous and can only be
+  used this way in RSC! If the `session` does not exist, we call `redirect` to
+  the `/api/auth/signin` login page, which has a button to log in via GitHub.
 </MdxComment>
 
 The object provided by the session contains the user with the basic information we get from the provider.
 
 ```json
 {
-	"name": "GitHub name",
-	"email": "GitHub email",
-	"image": "https://avatars.githubusercontent.com/u/1234567?v=4"
+  "name": "GitHub name",
+  "email": "GitHub email",
+  "image": "https://avatars.githubusercontent.com/u/1234567?v=4"
 }
 ```
 
@@ -138,17 +138,17 @@ We will create a TypeScript declaration file that will contain the `Session` obj
 import NextAuth, { DefaultSession } from 'next-auth';
 
 declare module 'next-auth' {
-	interface Session {
-		user: DefaultSession['user'] & {
-			id: string;
-		};
-	}
+  interface Session {
+    user: DefaultSession['user'] & {
+      id: string;
+    };
+  }
 }
 ```
 
 <MdxComment>
-	This adds the `id` property to `session.user` and we can access it in our
-	application.
+  This adds the `id` property to `session.user` and we can access it in our
+  application.
 </MdxComment>
 
 But that's not enough for `id` to appear there. We need to actually insert it into the user that is returned in the session. Therefore, we go back to `src/auth.ts` again and modify `session` to contain `id`:
@@ -160,17 +160,17 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from './db';
 
 export const authOptions = {
-	providers: [GitHub],
-	adapter: DrizzleAdapter(db),
+  providers: [GitHub],
+  adapter: DrizzleAdapter(db),
 
-	callbacks: {
-		session({ session, user }) {
-			// Assign user.id to session.user.id
-			session.user.id = user.id;
+  callbacks: {
+    session({ session, user }) {
+      // Assign user.id to session.user.id
+      session.user.id = user.id;
 
-			return session;
-		}
-	}
+      return session;
+    }
+  }
 } satisfies NextAuthConfig;
 
 export const { handlers, auth } = NextAuth(authOptions);
@@ -186,21 +186,21 @@ import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { users } from './users';
 
 export const events = sqliteTable('event', {
-	id: text('id')
-		.notNull()
-		.primaryKey()
-		.$defaultFn(() => randomUUID()),
-	userId: text('user_id')
-		.notNull()
-		.references(() => users.id),
-	name: text('name')
+  id: text('id')
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => randomUUID()),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id),
+  name: text('name')
 });
 ```
 
 <MdxComment>
-	We use `uuid` to generate a unique `id` for each new record in the `event`
-	table. This is so that we don't have to manually enter the `id` each time we
-	create a new record in the `event` table.
+  We use `uuid` to generate a unique `id` for each new record in the `event`
+  table. This is so that we don't have to manually enter the `id` each time we
+  create a new record in the `event` table.
 </MdxComment>
 
 ### Example implementation of creating an event for logged in user
@@ -216,24 +216,24 @@ import { events } from '@src/db/schema';
 import CreateEventForm from '../components/create-event-form';
 
 export default async function Page() {
-	const session = await auth();
+  const session = await auth();
 
-	if (!session?.user) {
-		redirect('/api/auth/signin');
-	}
+  if (!session?.user) {
+    redirect('/api/auth/signin');
+  }
 
-	const userEvent = await db
-		.select()
-		.from(events)
-		.where(eq(events.userId, session.user.id));
+  const userEvent = await db
+    .select()
+    .from(events)
+    .where(eq(events.userId, session.user.id));
 
-	return (
-		<div>
-			<CreateEventForm />
-			<h2>Events:</h2>
-			<pre>{JSON.stringify(userEvent, null, 2)}</pre>
-		</div>
-	);
+  return (
+    <div>
+      <CreateEventForm />
+      <h2>Events:</h2>
+      <pre>{JSON.stringify(userEvent, null, 2)}</pre>
+    </div>
+  );
 }
 ```
 
@@ -246,26 +246,26 @@ import { z } from 'zod';
 import { createEventAction } from '@src/server-actions';
 
 const formSchema = z.object({
-	name: z.string()
+  name: z.string()
 });
 
 type Form = z.infer<typeof formSchema>;
 
 export function CreateEventForm() {
-	const form = useForm<Form>({
-		resolver: zodResolver(formSchema)
-	});
+  const form = useForm<Form>({
+    resolver: zodResolver(formSchema)
+  });
 
-	return (
-		<form
-			onSubmit={form.handleSubmit(async values => {
-				await createEventAction(values);
-			})}
-		>
-			<input {...form.register('name')} />
-			<button type="submit">Submit</button>
-		</form>
-	);
+  return (
+    <form
+      onSubmit={form.handleSubmit(async values => {
+        await createEventAction(values);
+      })}
+    >
+      <input {...form.register('name')} />
+      <button type="submit">Submit</button>
+    </form>
+  );
 }
 ```
 
@@ -278,20 +278,20 @@ import { events } from '@src/db/schema';
 import { auth } from '@src/auth';
 
 export async function createEventAction(input: { name: string }) {
-	const session = await auth();
+  const session = await auth();
 
-	if (!session?.user) {
-		return {
-			message: 'User must be signed in to create an event.'
-		};
-	}
+  if (!session?.user) {
+    return {
+      message: 'User must be signed in to create an event.'
+    };
+  }
 
-	await db.insert(events).values({
-		name: input.name,
-		userId: session.user.id
-	});
+  await db.insert(events).values({
+    name: input.name,
+    userId: session.user.id
+  });
 
-	invalidatePath('/protected');
+  invalidatePath('/protected');
 }
 ```
 
@@ -305,17 +305,17 @@ import { auth } from '@src/auth';
 import SignoutButton from '../components/signout-button';
 
 export default async function Page() {
-	const session = await auth();
+  const session = await auth();
 
-	if (!session?.user) {
-		redirect('/api/auth/signin');
-	}
+  if (!session?.user) {
+    redirect('/api/auth/signin');
+  }
 
-	return (
-		<div>
-			<SignoutButton />
-		</div>
-	);
+  return (
+    <div>
+      <SignoutButton />
+    </div>
+  );
 }
 ```
 
@@ -325,16 +325,16 @@ export default async function Page() {
 import { signOutAction } from '@src/server-actions';
 
 export function SignoutButton() {
-	return (
-		<button
-			onClick={async () => {
-				await signOutAction();
-			}}
-			type="button"
-		>
-			Odhlásit se
-		</button>
-	);
+  return (
+    <button
+      onClick={async () => {
+        await signOutAction();
+      }}
+      type="button"
+    >
+      Odhlásit se
+    </button>
+  );
 }
 ```
 
@@ -344,13 +344,13 @@ export function SignoutButton() {
 import { signOut } from '@src/auth';
 
 export async function signOutAction() {
-	await signOut({ redirectTo: '/' });
+  await signOut({ redirectTo: '/' });
 }
 ```
 
 <MdxComment>
-	We also have the option to specify the location where the user should move to
-	after a successful logout.
+  We also have the option to specify the location where the user should move to
+  after a successful logout.
 </MdxComment>
 
 ## Protected pages
@@ -364,13 +364,13 @@ import { authOptions } from './auth';
 export default NextAuth(authOptions).auth;
 
 export const config = {
-	matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
 };
 ```
 
 <MdxComment>
-	This ensures that the user authorization function is called when accessing any
-	page in our application.
+  This ensures that the user authorization function is called when accessing any
+  page in our application.
 </MdxComment>
 
 We now want to ensure that the authorization function ensures that if the user is not logged in, they will be redirected to the login page. We therefore need to define an `authorized` function in the config in `src/auth.ts`.
@@ -382,42 +382,42 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from './db';
 
 const getIsProtectedPath = (path: string) => {
-	const paths = ['/protected'];
+  const paths = ['/protected'];
 
-	return paths.some(p => path.startsWith(p));
+  return paths.some(p => path.startsWith(p));
 };
 
 export const authOptions = {
-	providers: [GitHub],
-	adapter: DrizzleAdapter(db),
-	callbacks: {
-		session({ session, user }) {
-			session.user.id = user.id;
-			return session;
-		},
-		authorized({ auth, request: { nextUrl } }) {
-			const isLoggedIn = !!auth?.user;
+  providers: [GitHub],
+  adapter: DrizzleAdapter(db),
+  callbacks: {
+    session({ session, user }) {
+      session.user.id = user.id;
+      return session;
+    },
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
 
-			const isProtected = getIsProtectedPath(nextUrl.pathname);
+      const isProtected = getIsProtectedPath(nextUrl.pathname);
 
-			if (!isLoggedIn && isProtected) {
-				const redirectUrl = new URL('/api/auth/signin', nextUrl.origin);
-				redirectUrl.searchParams.append('callbackUrl', nextUrl.href);
+      if (!isLoggedIn && isProtected) {
+        const redirectUrl = new URL('/api/auth/signin', nextUrl.origin);
+        redirectUrl.searchParams.append('callbackUrl', nextUrl.href);
 
-				return Response.redirect(redirectUrl);
-			}
+        return Response.redirect(redirectUrl);
+      }
 
-			return true;
-		}
-	}
+      return true;
+    }
+  }
 } satisfies NextAuthConfig;
 
 export const { handlers, auth, signOut } = NextAuth(authOptions);
 ```
 
 <MdxComment>
-	After defining all protected paths, we can control access to protected urls at
-	the middleware level in this way.
+  After defining all protected paths, we can control access to protected urls at
+  the middleware level in this way.
 </MdxComment>
 
 ## Getting session client-side
@@ -454,22 +454,22 @@ Each `layout.tsx` and `page.tsx` file can export its own metadata which will the
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-	title: '...'
+  title: '...'
 };
 ```
 
 ```tsx
 // Dynamic metadata
 export async function generateMetadata({ params }) {
-	return {
-		title: '...'
-	};
+  return {
+    title: '...'
+  };
 }
 ```
 
 <MdxComment>
-	If you use `fetch` in the `generateMetadata`, all the rules about response
-	memoization and cashing also applies to it, just like in other RSC code.
+  If you use `fetch` in the `generateMetadata`, all the rules about response
+  memoization and cashing also applies to it, just like in other RSC code.
 </MdxComment>
 
 ### Title and description
@@ -480,10 +480,10 @@ These are the two most basic attributes. Search engines use them to display your
 // src/app/layout.tsx
 
 export const metadata: Metadata = {
-	title: {
-		template: '%s | My Site',
-		default: 'My Site'
-	}
+  title: {
+    template: '%s | My Site',
+    default: 'My Site'
+  }
 };
 ```
 
@@ -491,7 +491,7 @@ export const metadata: Metadata = {
 // src/app/about/page.tsx
 
 export const metadata: Metadata = {
-	title: 'About'
+  title: 'About'
 };
 
 // Result will be 'About | My Site'
@@ -512,51 +512,51 @@ export const runtime = 'edge';
 // Image metadata
 export const alt = 'About Acme';
 export const size = {
-	width: 1200,
-	height: 630
+  width: 1200,
+  height: 630
 };
 
 export const contentType = 'image/png';
 
 // Image generation
 export default async function Image() {
-	// Font
-	const interSemiBold = fetch(
-		new URL('./Inter-SemiBold.ttf', import.meta.url)
-	).then(res => res.arrayBuffer());
+  // Font
+  const interSemiBold = fetch(
+    new URL('./Inter-SemiBold.ttf', import.meta.url)
+  ).then(res => res.arrayBuffer());
 
-	return new ImageResponse(
-		(
-			// ImageResponse JSX element
-			<div
-				style={{
-					fontSize: 128,
-					background: 'white',
-					width: '100%',
-					height: '100%',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center'
-				}}
-			>
-				About
-			</div>
-		),
-		{
-			// ImageResponse options
-			// For convenience, we can re-use the exported opengraph-image
-			// size config to also set the ImageResponse's width and height.
-			...size,
-			fonts: [
-				{
-					name: 'Inter',
-					data: await interSemiBold,
-					style: 'normal',
-					weight: 400
-				}
-			]
-		}
-	);
+  return new ImageResponse(
+    (
+      // ImageResponse JSX element
+      <div
+        style={{
+          fontSize: 128,
+          background: 'white',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        About
+      </div>
+    ),
+    {
+      // ImageResponse options
+      // For convenience, we can re-use the exported opengraph-image
+      // size config to also set the ImageResponse's width and height.
+      ...size,
+      fonts: [
+        {
+          name: 'Inter',
+          data: await interSemiBold,
+          style: 'normal',
+          weight: 400
+        }
+      ]
+    }
+  );
 }
 ```
 
@@ -580,26 +580,26 @@ Example of dynamic `src/app/sitemap.ts`:
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-	return [
-		{
-			url: 'https://acme.com',
-			lastModified: new Date(),
-			changeFrequency: 'yearly',
-			priority: 1
-		},
-		{
-			url: 'https://acme.com/about',
-			lastModified: new Date(),
-			changeFrequency: 'monthly',
-			priority: 0.8
-		},
-		{
-			url: 'https://acme.com/blog',
-			lastModified: new Date(),
-			changeFrequency: 'weekly',
-			priority: 0.5
-		}
-	];
+  return [
+    {
+      url: 'https://acme.com',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 1
+    },
+    {
+      url: 'https://acme.com/about',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8
+    },
+    {
+      url: 'https://acme.com/blog',
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.5
+    }
+  ];
 }
 ```
 

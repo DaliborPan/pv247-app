@@ -6,16 +6,16 @@ import { z } from 'zod';
  * Lecture slug
  */
 export const lectureSlugSchema = z.enum([
-	'introduction',
-	'react',
-	'styling',
-	'hooks',
-	'other-hooks-refs-tables',
-	'async-forms',
-	'nextjs',
-	'suspense-streaming-rsc',
-	'api-configs-server-actions-database',
-	'authentication-metadata-deployment'
+  'introduction',
+  'react',
+  'styling',
+  'hooks',
+  'other-hooks-refs-tables',
+  'async-forms',
+  'nextjs',
+  'suspense-streaming-rsc',
+  'api-configs-server-actions-database',
+  'authentication-metadata-deployment'
 ]);
 
 export type LectureSlug = z.infer<typeof lectureSlugSchema>;
@@ -24,18 +24,18 @@ export type LectureSlug = z.infer<typeof lectureSlugSchema>;
  * Homework slug
  */
 export const homeworkSlugSchema = z.enum([
-	'typescript',
-	'react-basics',
-	'styling',
-	'state',
-	'table-memo',
-	'forms-async',
-	'nextjs-basic',
-	'rsc-forms',
-	'api-actions-database',
+  'typescript',
+  'react-basics',
+  'styling',
+  'state',
+  'table-memo',
+  'forms-async',
+  'nextjs-basic',
+  'rsc-forms',
+  'api-actions-database',
 
-	// Last lesson does not have a homework
-	''
+  // Last lesson does not have a homework
+  ''
 ]);
 
 export type HomeworkSlug = z.infer<typeof homeworkSlugSchema>;
@@ -44,21 +44,21 @@ export type HomeworkSlug = z.infer<typeof homeworkSlugSchema>;
  * Lectures
  */
 export const lectures = sqliteTable('lecture', {
-	id: text('id').notNull().primaryKey().$defaultFn(uuid),
-	name: text('name').notNull(),
-	availableFrom: text('availableFrom').notNull(),
-	slug: text('slug', { enum: lectureSlugSchema.options }).notNull(),
-	preview: text('preview').notNull().default(''),
+  id: text('id').notNull().primaryKey().$defaultFn(uuid),
+  name: text('name').notNull(),
+  availableFrom: text('availableFrom').notNull(),
+  slug: text('slug', { enum: lectureSlugSchema.options }).notNull(),
+  preview: text('preview').notNull().default(''),
 
-	// homework
-	homeworkName: text('homeworkName').notNull().default(''),
-	homeworkSlug: text('homeworkSlug', {
-		enum: homeworkSlugSchema.options
-	}).notNull(),
-	homeworkPreview: text('homeworkPreview').notNull().default(''),
-	homeworkClassroomLink: text('homeworkClassroomLink').notNull().default(''),
-	homeworkMaxPoints: integer('homeworkMaxPoints').notNull().default(0),
-	homeworkDeadline: text('homeworkDeadline').notNull().default('')
+  // homework
+  homeworkName: text('homeworkName').notNull().default(''),
+  homeworkSlug: text('homeworkSlug', {
+    enum: homeworkSlugSchema.options
+  }).notNull(),
+  homeworkPreview: text('homeworkPreview').notNull().default(''),
+  homeworkClassroomLink: text('homeworkClassroomLink').notNull().default(''),
+  homeworkMaxPoints: integer('homeworkMaxPoints').notNull().default(0),
+  homeworkDeadline: text('homeworkDeadline').notNull().default('')
 });
 
 export type Lecture = typeof lectures.$inferSelect;

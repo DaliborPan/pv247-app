@@ -48,19 +48,19 @@ function Parent() {
 ```
 
 <MdxComment>
-	In the code above, every time the `value` in the `Parent` component changes,
-	the `Parent` is re-rendered because its state has changed. However, it also
-	renders `Child` since its `onChange` property has changed. Better said,
-	`onChange` has not changed, but it is a new instance of a function that is
-	created when the `Parent` component is re-rendered and then passed to the
-	`Child` component.
+  In the code above, every time the `value` in the `Parent` component changes,
+  the `Parent` is re-rendered because its state has changed. However, it also
+  renders `Child` since its `onChange` property has changed. Better said,
+  `onChange` has not changed, but it is a new instance of a function that is
+  created when the `Parent` component is re-rendered and then passed to the
+  `Child` component.
 </MdxComment>
 
 The `onChange` function does not need to be rendered every time the `value` changes, but only if the `childClickCount` state has changed. For a better illustration, we can add a "heavy" operation to the `Child` component that causes rendering every time the `value` changes to be blocked by rendering the `Child` component. For testing purposes, we can represent the heavy operation as follows, for example:
 
 ```js
 for (let i = 0; i < 1e9; i++) {
-	// Heavy computation
+  // Heavy computation
 }
 ```
 
@@ -68,48 +68,48 @@ When typing in the text box, we see that the `Child` component has to re-render 
 
 ```tsx
 function Child({ onChange }: { onChange: () => void }) {
-	console.log('rendering child');
+  console.log('rendering child');
 
-	heavyOperation();
+  heavyOperation();
 
-	return (
-		<div>
-			<button onClick={onChange}>Change</button>
-		</div>
-	);
+  return (
+    <div>
+      <button onClick={onChange}>Change</button>
+    </div>
+  );
 }
 
 function Parent() {
-	console.log('rendering parent');
+  console.log('rendering parent');
 
-	const [value, setValue] = useState('');
-	const [childClicksCount, setChildClicksCount] = useState(0);
+  const [value, setValue] = useState('');
+  const [childClicksCount, setChildClicksCount] = useState(0);
 
-	// Only re-create 'onChange' when 'childClicksCount' changes
-	const onChange = useCallback(() => {
-		console.log('Calling onChange');
-		setChildClicksCount(childClicksCount + 1);
-	}, [childClicksCount]);
+  // Only re-create 'onChange' when 'childClicksCount' changes
+  const onChange = useCallback(() => {
+    console.log('Calling onChange');
+    setChildClicksCount(childClicksCount + 1);
+  }, [childClicksCount]);
 
-	return (
-		<div>
-			<input
-				onChange={e => {
-					setValue(e.target.value);
-				}}
-				value={value}
-			/>
-			<Child onChange={onChange} />
-			<div>Child clicks count: {childClicksCount}</div>
-		</div>
-	);
+  return (
+    <div>
+      <input
+        onChange={e => {
+          setValue(e.target.value);
+        }}
+        value={value}
+      />
+      <Child onChange={onChange} />
+      <div>Child clicks count: {childClicksCount}</div>
+    </div>
+  );
 }
 ```
 
 <MdxComment>
-	In this case, we have already ensured that the `onChange` function will not be
-	recreated every time the `value` is changed, so we send a stable reference to
-	the same function to the `Child` component.
+  In this case, we have already ensured that the `onChange` function will not be
+  recreated every time the `value` is changed, so we send a stable reference to
+  the same function to the `Child` component.
 </MdxComment>
 
 The way React works is that if a `Parent` needs to be rerendered, all its children are rerendered, regardless of whether their properties have changed. We can prevent this behavior by using `React.memo`.
@@ -122,90 +122,90 @@ Overusing `memo` can cause performance problems rather than prevent them! At the
 
 ```tsx
 function Child({ onChange }: { onChange: () => void }) {
-	console.log('rendering child');
-	heavyOperation();
+  console.log('rendering child');
+  heavyOperation();
 
-	return (
-		<div>
-			<button onClick={onChange}>Change</button>
-		</div>
-	);
+  return (
+    <div>
+      <button onClick={onChange}>Change</button>
+    </div>
+  );
 }
 
 const MemoizedChild = memo(Child);
 
 function Parent() {
-	console.log('rendering parent');
+  console.log('rendering parent');
 
-	const [value, setValue] = useState('');
-	const [childClicksCount, setChildClicksCount] = useState(0);
+  const [value, setValue] = useState('');
+  const [childClicksCount, setChildClicksCount] = useState(0);
 
-	const onChange = useCallback(() => {
-		console.log('Calling onChange');
-		setChildClicksCount(childClicksCount + 1);
-	}, [childClicksCount]);
+  const onChange = useCallback(() => {
+    console.log('Calling onChange');
+    setChildClicksCount(childClicksCount + 1);
+  }, [childClicksCount]);
 
-	return (
-		<div>
-			<input
-				onChange={e => {
-					setValue(e.target.value);
-				}}
-				value={value}
-			/>
-			<MemoizedChild onChange={onChange} />
-			<div>Child clicks count: {childClicksCount}</div>
-		</div>
-	);
+  return (
+    <div>
+      <input
+        onChange={e => {
+          setValue(e.target.value);
+        }}
+        value={value}
+      />
+      <MemoizedChild onChange={onChange} />
+      <div>Child clicks count: {childClicksCount}</div>
+    </div>
+  );
 }
 ```
 
 <MdxComment>
-	In this case, we have already achieved what we asked for. The `Child`
-	component is not rendered every time the `value` changes, but only if the
-	`childClickCount` state has changed.
+  In this case, we have already achieved what we asked for. The `Child`
+  component is not rendered every time the `value` changes, but only if the
+  `childClickCount` state has changed.
 </MdxComment>
 
 Generally, it is better to use `React.memo` only when there is no other way to prevent re-rendering the component. In our case, there is another option, namely, using the composability of React.
 
 ```tsx
 function Child({ onChange }: { onChange: () => void }) {
-	console.log('Child rendering');
-	// ...
+  console.log('Child rendering');
+  // ...
 }
 
 function ChildClicksCounter() {
-	console.log('Child clicks counter rendering');
+  console.log('Child clicks counter rendering');
 
-	const [childClicksCount, setChildClicksCount] = useState(0);
+  const [childClicksCount, setChildClicksCount] = useState(0);
 
-	return (
-		<>
-			<Child onChange={() => setChildClicksCount(childClicksCount + 1)} />
-			<div>Child clicks count: {childClicksCount}</div>
-		</>
-	);
+  return (
+    <>
+      <Child onChange={() => setChildClicksCount(childClicksCount + 1)} />
+      <div>Child clicks count: {childClicksCount}</div>
+    </>
+  );
 }
 
 function Parent({ children }: PropsWithChildren<object>) {
-	console.log('rendering parent');
+  console.log('rendering parent');
 
-	const [value, setValue] = useState('');
+  const [value, setValue] = useState('');
 
-	return (
-		<div>
-			<input onChange={e => setValue(e.target.value)} value={value} />
-			{children}
-		</div>
-	);
+  return (
+    <div>
+      <input onChange={e => setValue(e.target.value)} value={value} />
+      {children}
+    </div>
+  );
 }
 
 export default function Home() {
-	return (
-		<Parent>
-			<ChildClicksCounter />
-		</Parent>
-	);
+  return (
+    <Parent>
+      <ChildClicksCounter />
+    </Parent>
+  );
 }
 ```
 
@@ -217,166 +217,166 @@ Alternatives to `React.memo` may be general techniques for "moving state down" o
 
 ```tsx
 function PersonTable({ data, filter }: { data: string[]; filter: string }) {
-	console.log('rendering PersonTable');
+  console.log('rendering PersonTable');
 
-	const filteredData = useMemo(() => {
-		console.log('computing filteredData');
-		// Simulate heavy computation
-		heavyOperation();
+  const filteredData = useMemo(() => {
+    console.log('computing filteredData');
+    // Simulate heavy computation
+    heavyOperation();
 
-		return data.filter(person => person.includes(filter));
-	}, [data, filter]);
+    return data.filter(person => person.includes(filter));
+  }, [data, filter]);
 
-	const [query, setQuery] = useState('');
+  const [query, setQuery] = useState('');
 
-	return (
-		<div>
-			<input value={query} onChange={e => setQuery(e.target.value)} />
-			<table>
-				<tbody>
-					{filteredData.map(person => (
-						<tr key={person}>
-							<td>{person}</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
-		</div>
-	);
+  return (
+    <div>
+      <input value={query} onChange={e => setQuery(e.target.value)} />
+      <table>
+        <tbody>
+          {filteredData.map(person => (
+            <tr key={person}>
+              <td>{person}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 ```
 
 <MdxComment>
-	In this case, we store the filtered data in `useMemo` so that we don't have to
-	filter the data again every time we change `query.` This way we achieve that
-	`filteredData` is not created every time the component is rendered, but only
-	when either `data` or `filter` is changed.
+  In this case, we store the filtered data in `useMemo` so that we don't have to
+  filter the data again every time we change `query.` This way we achieve that
+  `filteredData` is not created every time the component is rendered, but only
+  when either `data` or `filter` is changed.
 </MdxComment>
 
 If we had a separate component for rendering the table, the same rules as for `useCallback` would apply, i.e. we would have to memoize the table component using `React.memo`.
 
 ```tsx
 function PersonTable({ data }: { data: string[] }) {
-	console.log('rendering PersonTable');
+  console.log('rendering PersonTable');
 
-	return <table>{/* ... */}</table>;
+  return <table>{/* ... */}</table>;
 }
 
 const MemoizedPersonTable = memo(PersonTable);
 
 function PersonModule({ data, filter }: { data: string[]; filter: string }) {
-	console.log('rendering PersonModule');
+  console.log('rendering PersonModule');
 
-	const filteredData = useMemo(() => {
-		console.log('computing filteredData');
-		// Simulate heavy computation
-		heavyOperation();
+  const filteredData = useMemo(() => {
+    console.log('computing filteredData');
+    // Simulate heavy computation
+    heavyOperation();
 
-		return data.filter(person => person.includes(filter));
-	}, [data, filter]);
+    return data.filter(person => person.includes(filter));
+  }, [data, filter]);
 
-	const [query, setQuery] = useState('');
+  const [query, setQuery] = useState('');
 
-	return (
-		<div>
-			<input /* ... */ />
-			<MemoizedPersonTable data={filteredData} />
-		</div>
-	);
+  return (
+    <div>
+      <input /* ... */ />
+      <MemoizedPersonTable data={filteredData} />
+    </div>
+  );
 }
 ```
 
 <MdxComment>
-	This way, we achieved that if the table were a more complex component, it
-	would only be re-rendered if the `data` property changed, which is a memoized
-	component that changes if the incoming `data` or `filter` changes.
+  This way, we achieved that if the table were a more complex component, it
+  would only be re-rendered if the `data` property changed, which is a memoized
+  component that changes if the incoming `data` or `filter` changes.
 </MdxComment>
 
 Unfortunately, in this case, it is very easy to make a very small change and break this behavior.
 
 ```tsx
 function PersonTable({ data }: { data: string[] }) {
-	console.log('rendering PersonTable');
+  console.log('rendering PersonTable');
 
-	return <table>{/* ... */}</table>;
+  return <table>{/* ... */}</table>;
 }
 
 const MemoizedPersonTable = memo(PersonTable);
 
 function PersonModule({ data, filter }: { data: string[]; filter: string }) {
-	console.log('rendering PersonModule');
+  console.log('rendering PersonModule');
 
-	const filteredData = useMemo(() => {
-		console.log('computing filteredData');
-		// Simulate heavy computation
-		heavyOperation();
+  const filteredData = useMemo(() => {
+    console.log('computing filteredData');
+    // Simulate heavy computation
+    heavyOperation();
 
-		return data?.filter(person => person.includes(filter));
-	}, [data, filter]);
+    return data?.filter(person => person.includes(filter));
+  }, [data, filter]);
 
-	const [query, setQuery] = useState('');
+  const [query, setQuery] = useState('');
 
-	return (
-		<div>
-			<input /* ... */ />
-			<MemoizedPersonTable data={filteredData ?? []} />
-		</div>
-	);
+  return (
+    <div>
+      <input /* ... */ />
+      <MemoizedPersonTable data={filteredData ?? []} />
+    </div>
+  );
 }
 ```
 
 <MdxComment>
-	We changed a seemingly small thing, namely that the `PersonModule` component
-	can receive `undefined` data, in which case we send an empty array `[]` to the
-	`PersonTable`. However, this array is no longer memoized and causes the
-	memoization with `React.memo` to stop working.
+  We changed a seemingly small thing, namely that the `PersonModule` component
+  can receive `undefined` data, in which case we send an empty array `[]` to the
+  `PersonTable`. However, this array is no longer memoized and causes the
+  memoization with `React.memo` to stop working.
 </MdxComment>
 
 ```tsx
 function PersonTable({ data }: { data: string[] }) {
-	console.log('rendering PersonTable');
+  console.log('rendering PersonTable');
 
-	return <table>{/* ... */}</table>;
+  return <table>{/* ... */}</table>;
 }
 
 const MemoizedPersonTable = memo(PersonTable);
 
 function PersonModule({ data }: { data: string[] }) {
-	console.log('rendering PersonModule');
+  console.log('rendering PersonModule');
 
-	return (
-		<div>
-			{/* We can't be sure here, if 'data' are memoized in parent component */}
-			<MemoizedPersonTable data={data} />
-		</div>
-	);
+  return (
+    <div>
+      {/* We can't be sure here, if 'data' are memoized in parent component */}
+      <MemoizedPersonTable data={data} />
+    </div>
+  );
 }
 
 export default function Home() {
-	const [query, setQuery] = useState('');
+  const [query, setQuery] = useState('');
 
-	return (
-		<main className="container py-10">
-			<input /* ... */ />
+  return (
+    <main className="container py-10">
+      <input /* ... */ />
 
-			{/* Passing new instance of array every render, causing 
+      {/* Passing new instance of array every render, causing 
       re-rendering of PersonTable everytime 'query' change */}
-			<PersonModule
-				data={
-					[
-						/* ... */
-					]
-				}
-			/>
-		</main>
-	);
+      <PersonModule
+        data={
+          [
+            /* ... */
+          ]
+        }
+      />
+    </main>
+  );
 }
 ```
 
 <MdxComment>
-	At the same time, if a component receives some data via `props` and sends this
-	data to a component that needs to be memoized, it cannot be sure whether the
-	data in `props` is memoized in the parent component or not.
+  At the same time, if a component receives some data via `props` and sends this
+  data to a component that needs to be memoized, it cannot be sure whether the
+  data in `props` is memoized in the parent component or not.
 </MdxComment>
 
 For more details and examples, we recommend reading [blog post by Dominik Dorfmeister](https://tkdodo.eu/blog/the-uphill-battle-of-memoization).
@@ -393,13 +393,13 @@ In some cases it is necessary to be able to manipulate DOM elements directly, fo
 
 ```tsx
 function App() {
-	const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-	useEffect(() => {
-		inputRef.current?.focus();
-	}, []);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
-	return <input ref={inputRef} />;
+  return <input ref={inputRef} />;
 }
 ```
 
@@ -409,44 +409,44 @@ The `useRef` can also be used to store values. At the same time, it is not neces
 
 ```tsx
 function App() {
-	const nameRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
 
-	return (
-		<form
-			onSubmit={e => {
-				e.preventDefault();
-				const name = nameRef.current?.value;
-				console.log(name);
-			}}
-		>
-			<input ref={nameRef} />
-			<button type="submit">Submit</button>
-		</form>
-	);
+  return (
+    <form
+      onSubmit={e => {
+        e.preventDefault();
+        const name = nameRef.current?.value;
+        console.log(name);
+      }}
+    >
+      <input ref={nameRef} />
+      <button type="submit">Submit</button>
+    </form>
+  );
 }
 ```
 
 <MdxComment>
-	This may be preferable to using `useState` to maintain the current value of
-	the `input` tag, since changing the `ref` value does not cause the component
-	to re-render.
+  This may be preferable to using `useState` to maintain the current value of
+  the `input` tag, since changing the `ref` value does not cause the component
+  to re-render.
 </MdxComment>
 
 The `ref` can also store less common values, such as an interval of type `Timer` that can, for example, perform an action every second.
 
 ```tsx
 function TimerComponent() {
-	const intervalRef = useRef();
+  const intervalRef = useRef();
 
-	useEffect(() => {
-		intervalRef.current = setInterval(() => {
-			console.log('Timer tick');
-		}, 1000);
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      console.log('Timer tick');
+    }, 1000);
 
-		return () => clearInterval(intervalRef.current);
-	}, []);
+    return () => clearInterval(intervalRef.current);
+  }, []);
 
-	return null;
+  return null;
 }
 ```
 
@@ -456,46 +456,46 @@ function TimerComponent() {
 
 ```tsx
 const FancyButton = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<object>>(
-	({ children, ...props }, ref) => {
-		return (
-			<button ref={ref} {...props}>
-				{children}
-			</button>
-		);
-	}
+  ({ children, ...props }, ref) => {
+    return (
+      <button ref={ref} {...props}>
+        {children}
+      </button>
+    );
+  }
 );
 
 function Home() {
-	const ref = useRef<HTMLButtonElement>();
+  const ref = useRef<HTMLButtonElement>();
 
-	return (
-		<>
-			<button
-				onClick={() => {
-					console.log('Regular button clicked!');
-					ref.current?.click();
-				}}
-			>
-				Regular button
-			</button>
+  return (
+    <>
+      <button
+        onClick={() => {
+          console.log('Regular button clicked!');
+          ref.current?.click();
+        }}
+      >
+        Regular button
+      </button>
 
-			<FancyButton
-				ref={ref}
-				onClick={() => {
-					console.log('Fancy button clicked!');
-				}}
-			>
-				Fancy button
-			</FancyButton>
-		</>
-	);
+      <FancyButton
+        ref={ref}
+        onClick={() => {
+          console.log('Fancy button clicked!');
+        }}
+      >
+        Fancy button
+      </FancyButton>
+    </>
+  );
 }
 ```
 
 <MdxComment>
-	In the `Home` component we define a `ref`, which we then send to the
-	`FancyButton` component. This allows us to control the `FancyButton` in the
-	`Home` component using its reference and, for example, trigger its click.
+  In the `Home` component we define a `ref`, which we then send to the
+  `FancyButton` component. This allows us to control the `FancyButton` in the
+  `Home` component using its reference and, for example, trigger its click.
 </MdxComment>
 
 In combination with some component libraries, it may be necessary to use forwarRef for the components to work properly. An example is Radix UI, a Dialog component. When using this library and component, Radix provides us with a set of predefined components that need to be put together.
@@ -504,17 +504,17 @@ In combination with some component libraries, it may be necessary to use forwarR
 import * as Dialog from 'radix-ui/react-dialog';
 
 export default () => (
-	<Dialog.Root>
-		<Dialog.Trigger />
-		<Dialog.Portal>
-			<Dialog.Overlay />
-			<Dialog.Content>
-				<Dialog.Title />
-				<Dialog.Description />
-				<Dialog.Close />
-			</Dialog.Content>
-		</Dialog.Portal>
-	</Dialog.Root>
+  <Dialog.Root>
+    <Dialog.Trigger />
+    <Dialog.Portal>
+      <Dialog.Overlay />
+      <Dialog.Content>
+        <Dialog.Title />
+        <Dialog.Description />
+        <Dialog.Close />
+      </Dialog.Content>
+    </Dialog.Portal>
+  </Dialog.Root>
 );
 ```
 
@@ -522,33 +522,33 @@ The `DialogTrigger` is configured by the library so that event handlers are defi
 
 ```tsx
 function MyDialog() {
-	return (
-		<Dialog.Root>
-			<Dialog.Trigger>Dialog trigger</Dialog.Trigger>
-			<Dialog.Portal>
-				<Dialog.Overlay />
-				<Dialog.Content>Dialog content</Dialog.Content>
-			</Dialog.Portal>
-		</Dialog.Root>
-	);
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger>Dialog trigger</Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay />
+        <Dialog.Content>Dialog content</Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
+  );
 }
 ```
 
 <MdxComment>
-	In this case the `Trigger` works fine, since we are not using a custom
-	component for the button/trigger.
+  In this case the `Trigger` works fine, since we are not using a custom
+  component for the button/trigger.
 </MdxComment>
 
 ```tsx
 function MyDialog() {
-	return (
-		<Dialog.Root>
-			<Dialog.Trigger asChild>
-				<button>Dialog trigger</button>
-			</Dialog.Trigger>
-			...
-		</Dialog.Root>
-	);
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger asChild>
+        <button>Dialog trigger</button>
+      </Dialog.Trigger>
+      ...
+    </Dialog.Root>
+  );
 }
 ```
 
@@ -558,18 +558,18 @@ function MyDialog() {
 
 ```tsx
 function Button({ children }: PropsWithChildren) {
-	return <button>{children}</button>;
+  return <button>{children}</button>;
 }
 
 function MyDialog() {
-	return (
-		<Dialog.Root>
-			<Dialog.Trigger asChild>
-				<Button>Dialog trigger</Button>
-			</Dialog.Trigger>
-			...
-		</Dialog.Root>
-	);
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger asChild>
+        <Button>Dialog trigger</Button>
+      </Dialog.Trigger>
+      ...
+    </Dialog.Root>
+  );
 }
 ```
 
@@ -579,24 +579,24 @@ function MyDialog() {
 
 ```tsx
 const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<object>>(
-	function Button({ children, ...props }, ref) {
-		return (
-			<button ref={ref} {...props}>
-				{children}
-			</button>
-		);
-	}
+  function Button({ children, ...props }, ref) {
+    return (
+      <button ref={ref} {...props}>
+        {children}
+      </button>
+    );
+  }
 );
 
 function MyDialog() {
-	return (
-		<Dialog.Root>
-			<Dialog.Trigger asChild>
-				<Button>Dialog trigger</Button>
-			</Dialog.Trigger>
-			...
-		</Dialog.Root>
-	);
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger asChild>
+        <Button>Dialog trigger</Button>
+      </Dialog.Trigger>
+      ...
+    </Dialog.Root>
+  );
 }
 ```
 
@@ -608,8 +608,8 @@ To create a context, we use the `createContext` function, which returns an objec
 
 ```tsx
 type UserContextType = {
-	name: string;
-	age: number;
+  name: string;
+  age: number;
 };
 
 const UserContext = createContext<UserContextType | null>(null);
@@ -621,16 +621,16 @@ We use the created Context to create a Provider that wraps all components that h
 
 ```tsx
 type UserContextType = {
-	name: string;
-	age: number;
+  name: string;
+  age: number;
 };
 
 const UserContext = createContext<UserContextType | null>(null);
 
 function UserContextProvider({ children }: PropsWithChildren) {
-	const [user, setUser] = useState({ name: 'John', age: 25 });
+  const [user, setUser] = useState({ name: 'John', age: 25 });
 
-	return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 }
 ```
 
@@ -640,36 +640,36 @@ Last, we miss the ability to access the `user` value from components that are in
 
 ```tsx
 type UserContextType = {
-	name: string;
-	age: number;
+  name: string;
+  age: number;
 };
 
 const UserContext = createContext<UserContextType | null>(null);
 
 function UserContextProvider({ children }: PropsWithChildren) {
-	const [user, setUser] = useState({ name: 'John', age: 25 });
+  const [user, setUser] = useState({ name: 'John', age: 25 });
 
-	return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 }
 
 function UserDetails() {
-	const user = useContext(UserContext);
+  const user = useContext(UserContext);
 
-	return (
-		<div>
-			<h2>User Details</h2>
-			<p>Name: {user?.name}</p>
-			<p>Age: {user?.age}</p>
-		</div>
-	);
+  return (
+    <div>
+      <h2>User Details</h2>
+      <p>Name: {user?.name}</p>
+      <p>Age: {user?.age}</p>
+    </div>
+  );
 }
 
 export default function Home() {
-	return (
-		<UserContextProvider>
-			<UserDetails />
-		</UserContextProvider>
-	);
+  return (
+    <UserContextProvider>
+      <UserDetails />
+    </UserContextProvider>
+  );
 }
 ```
 
@@ -679,112 +679,112 @@ This is because if we tried to access `UserContext` from a component that is not
 
 ```tsx
 type UserContextType = {
-	name: string;
-	age: number;
+  name: string;
+  age: number;
 };
 
 const UserContext = createContext<UserContextType | null>(null);
 
 function useUserContext() {
-	const user = useContext(UserContext);
+  const user = useContext(UserContext);
 
-	if (!user) {
-		throw new Error('useUserContext must be used within a UserContextProvider');
-	}
+  if (!user) {
+    throw new Error('useUserContext must be used within a UserContextProvider');
+  }
 
-	return user;
+  return user;
 }
 
 function UserContextProvider({ children }: PropsWithChildren) {
-	const [user, setUser] = useState({ name: 'John', age: 25 });
+  const [user, setUser] = useState({ name: 'John', age: 25 });
 
-	return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 }
 
 function UserDetails() {
-	const user = useUserContext();
+  const user = useUserContext();
 
-	return (
-		<div>
-			<h2>User Details</h2>
-			<p>Name: {user.name}</p>
-			<p>Age: {user.age}</p>
-		</div>
-	);
+  return (
+    <div>
+      <h2>User Details</h2>
+      <p>Name: {user.name}</p>
+      <p>Age: {user.age}</p>
+    </div>
+  );
 }
 
 export default function Home() {
-	return (
-		<>
-			<UserContextProvider>
-				<UserDetails />
-			</UserContextProvider>
+  return (
+    <>
+      <UserContextProvider>
+        <UserDetails />
+      </UserContextProvider>
 
-			<UserDetails />
-		</>
-	);
+      <UserDetails />
+    </>
+  );
 }
 ```
 
 <MdxComment>
-	In this case the application will throw an error, because we use one instance
-	of the `UserDetails` component outside the `UserContextProvider`. But at the
-	same time, we are already using a custom `useUserContext` hook in the
-	`UserDetails` component, which ensures that the component will throw an error
-	if it is not wrapped by `UserContextProvider` and also returns the
-	`UserContextType` type, not `UserContextType | null`.
+  In this case the application will throw an error, because we use one instance
+  of the `UserDetails` component outside the `UserContextProvider`. But at the
+  same time, we are already using a custom `useUserContext` hook in the
+  `UserDetails` component, which ensures that the component will throw an error
+  if it is not wrapped by `UserContextProvider` and also returns the
+  `UserContextType` type, not `UserContextType | null`.
 </MdxComment>
 
 An important caveat for using Context is that components that get a context value via `useContext` are re-rendered whenever the context value changes. This can be undesirable if it is a more complex component that should only re-render if some other value changes.
 
 ```tsx
 function UserPage() {
-	const user = useUserContext();
+  const user = useUserContext();
 
-	return (
-		<div>
-			<h1>User Page</h1>
-			<span>{user.name}</span>
-			<span>{user.age}</span>
-			<HeavyComponent />
-		</div>
-	);
+  return (
+    <div>
+      <h1>User Page</h1>
+      <span>{user.name}</span>
+      <span>{user.age}</span>
+      <HeavyComponent />
+    </div>
+  );
 }
 ```
 
 <MdxComment>
-	In this case, the context is not well placed, because if `user` changes very
-	often, it would have to re-render `HeavyComponent` frequently, which is not
-	desirable, since `HeavyComponent` does not need the `user` value.
+  In this case, the context is not well placed, because if `user` changes very
+  often, it would have to re-render `HeavyComponent` frequently, which is not
+  desirable, since `HeavyComponent` does not need the `user` value.
 </MdxComment>
 
 ```tsx
 function UserDetails() {
-	const user = useUserContext();
+  const user = useUserContext();
 
-	return (
-		<>
-			<span>Name: {user.name}</span>
-			<span>Age: {user.age}</span>
-		</>
-	);
+  return (
+    <>
+      <span>Name: {user.name}</span>
+      <span>Age: {user.age}</span>
+    </>
+  );
 }
 
 function UserPage() {
-	return (
-		<div>
-			<h1>User Page</h1>
-			<UserDetails />
-			<HeavyComponent />
-		</div>
-	);
+  return (
+    <div>
+      <h1>User Page</h1>
+      <UserDetails />
+      <HeavyComponent />
+    </div>
+  );
 }
 ```
 
 <MdxComment>
-	In this case, we have optimized the rendering by ensuring that if the `user`
-	in the context changes frequently, the `HeavyComponent` component will not be
-	re-rendered since it does not depend on the `user` value at all.
+  In this case, we have optimized the rendering by ensuring that if the `user`
+  in the context changes frequently, the `HeavyComponent` component will not be
+  re-rendered since it does not depend on the `user` value at all.
 </MdxComment>
 
 ### Use cases, when to use context
@@ -833,22 +833,22 @@ The `data` is an array that contains the data we want to display in the table. T
 
 ```ts
 type User = {
-	id: string;
-	name: string;
-	age: number;
+  id: string;
+  name: string;
+  age: number;
 };
 
 const data: User[] = [
-	{
-		id: '1',
-		name: 'John',
-		age: 25
-	},
-	{
-		id: '2',
-		name: 'Jane',
-		age: 30
-	}
+  {
+    id: '1',
+    name: 'John',
+    age: 25
+  },
+  {
+    id: '2',
+    name: 'Jane',
+    age: 30
+  }
 ];
 ```
 
@@ -860,21 +860,21 @@ Commonly defined properties include `header` and `cell`. These tell how the colu
 
 ```tsx
 const columns: ColumnDef<User, string>[] = [
-	{
-		accessorKey: 'id',
-		header: 'ID',
-		cell: cell => <div>{cell.getValue()}</div>
-	},
-	{
-		accessorKey: 'name',
-		header: 'Name',
-		cell: cell => <div>{cell.getValue()}</div>
-	},
-	{
-		accessorKey: 'age',
-		header: 'Age',
-		cell: cell => <div>{cell.getValue()}</div>
-	}
+  {
+    accessorKey: 'id',
+    header: 'ID',
+    cell: cell => <div>{cell.getValue()}</div>
+  },
+  {
+    accessorKey: 'name',
+    header: 'Name',
+    cell: cell => <div>{cell.getValue()}</div>
+  },
+  {
+    accessorKey: 'age',
+    header: 'Age',
+    cell: cell => <div>{cell.getValue()}</div>
+  }
 ];
 ```
 
@@ -902,86 +902,86 @@ Now, we have the default setup of our table. A good starting point is to pick ba
 
 ```tsx
 type User = {
-	id: string;
-	name: string;
-	age: number;
+  id: string;
+  name: string;
+  age: number;
 };
 
 const columns: ColumnDef<User, string>[] = [
-	{
-		accessorKey: 'id',
-		header: 'ID',
-		cell: cell => <div>{cell.getValue()}</div>
-	},
-	{
-		accessorKey: 'name',
-		header: 'Name',
-		cell: cell => <div>{cell.getValue()}</div>
-	},
-	{
-		accessorKey: 'age',
-		header: 'Age',
-		cell: cell => <div>{cell.getValue()}</div>
-	}
+  {
+    accessorKey: 'id',
+    header: 'ID',
+    cell: cell => <div>{cell.getValue()}</div>
+  },
+  {
+    accessorKey: 'name',
+    header: 'Name',
+    cell: cell => <div>{cell.getValue()}</div>
+  },
+  {
+    accessorKey: 'age',
+    header: 'Age',
+    cell: cell => <div>{cell.getValue()}</div>
+  }
 ];
 
 const data: User[] = [
-	{
-		id: '1',
-		name: 'John',
-		age: 25
-	},
-	{
-		id: '2',
-		name: 'Jane',
-		age: 30
-	}
+  {
+    id: '1',
+    name: 'John',
+    age: 25
+  },
+  {
+    id: '2',
+    name: 'Jane',
+    age: 30
+  }
 ];
 
 function Table() {
-	const table = useReactTable({
-		data,
-		columns,
-		getCoreRowModel: getCoreRowModel()
-	});
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel()
+  });
 
-	return (
-		<table>
-			<thead>
-				{table.getHeaderGroups().map(headerGroup => (
-					<tr key={headerGroup.id}>
-						{headerGroup.headers.map(header => (
-							<th key={header.id}>
-								{flexRender(
-									header.column.columnDef.header,
-									header.getContext()
-								)}
-							</th>
-						))}
-					</tr>
-				))}
-			</thead>
+  return (
+    <table>
+      <thead>
+        {table.getHeaderGroups().map(headerGroup => (
+          <tr key={headerGroup.id}>
+            {headerGroup.headers.map(header => (
+              <th key={header.id}>
+                {flexRender(
+                  header.column.columnDef.header,
+                  header.getContext()
+                )}
+              </th>
+            ))}
+          </tr>
+        ))}
+      </thead>
 
-			<tbody>
-				{table.getRowModel().rows.map(row => (
-					<tr key={row.id}>
-						{row.getVisibleCells().map(cell => (
-							<td key={cell.id}>
-								{flexRender(cell.column.columnDef.cell, cell.getContext())}
-							</td>
-						))}
-					</tr>
-				))}
-			</tbody>
-		</table>
-	);
+      <tbody>
+        {table.getRowModel().rows.map(row => (
+          <tr key={row.id}>
+            {row.getVisibleCells().map(cell => (
+              <td key={cell.id}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 }
 ```
 
 <MdxComment>
-	The `flexRender` function from the library is used to render the cell and
-	header. This is the recommended way to render header and cell if you define
-	custom components in `columns`.
+  The `flexRender` function from the library is used to render the cell and
+  header. This is the recommended way to render header and cell if you define
+  custom components in `columns`.
 </MdxComment>
 
 ### Table context
@@ -1054,11 +1054,11 @@ function UserTable() {
 ```
 
 <MdxComment>
-	Using the `getFilterValue` and `setFilterValue` methods we can create a
-	component for filtering data in the table. We need to specify in `columns`
-	that the given column allows filtering and assign an `id` by which to retrieve
-	the column from the table. Finally, we need to assign `getFilteredRowModel` to
-	the `useReactTable` hook, which ensures that the data will be filtered.
+  Using the `getFilterValue` and `setFilterValue` methods we can create a
+  component for filtering data in the table. We need to specify in `columns`
+  that the given column allows filtering and assign an `id` by which to retrieve
+  the column from the table. Finally, we need to assign `getFilteredRowModel` to
+  the `useReactTable` hook, which ensures that the data will be filtered.
 </MdxComment>
 
 The other option is to keep the filter state in a separate state. This has the advantage that we have full control over how the data will be filtered. It also allows us to filter in such a way that every time we change the filter, we call the API and get new data.
@@ -1102,9 +1102,9 @@ function UserTable() {
 ```
 
 <MdxComment>
-	In this case we keep the filter state in `filterState` and call
-	`setFilterState` whenever the filter state changes. The `useMemo` responds to
-	a change in filter state by ensuring that the data is filtered.
+  In this case we keep the filter state in `filterState` and call
+  `setFilterState` whenever the filter state changes. The `useMemo` responds to
+  a change in filter state by ensuring that the data is filtered.
 </MdxComment>
 
 This works similarly with sorting, hiding some columns or pagination. See the [library documentation](https://tanstack.com/table/latest/docs/introduction) for more information.

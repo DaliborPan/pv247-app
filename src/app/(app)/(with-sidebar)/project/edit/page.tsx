@@ -4,22 +4,22 @@ import { getMineProject, getSessionUser } from '@/modules/session-user/server';
 import { ProjectForm } from '@/modules/project/components/project-form';
 
 const Page = async () => {
-	const sessionUser = await getSessionUser();
-	const project = await getMineProject();
+  const sessionUser = await getSessionUser();
+  const project = await getMineProject();
 
-	if (!project) return redirect('/project');
+  if (!project) return redirect('/project');
 
-	const defaultValues = {
-		id: project.id,
-		name: project.name,
-		description: project.description ?? '',
-		github: project.github ?? '',
-		students: project.users
-			.filter(user => user.id !== sessionUser.id)
-			.map(user => user.id)
-	};
+  const defaultValues = {
+    id: project.id,
+    name: project.name,
+    description: project.description ?? '',
+    github: project.github ?? '',
+    students: project.users
+      .filter(user => user.id !== sessionUser.id)
+      .map(user => user.id)
+  };
 
-	return <ProjectForm defaultValues={defaultValues} />;
+  return <ProjectForm defaultValues={defaultValues} />;
 };
 
 export default Page;

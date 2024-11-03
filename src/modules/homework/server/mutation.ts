@@ -3,25 +3,25 @@ import { and, eq } from 'drizzle-orm';
 import { db, type HomeworkInsert, homeworks } from '@/db';
 
 export const createHomework = (data: HomeworkInsert) =>
-	db.insert(homeworks).values(data);
+  db.insert(homeworks).values(data);
 
 export const updateHomeworkPoints = ({
-	points,
-	lectureId,
-	studentId
+  points,
+  lectureId,
+  studentId
 }: {
-	points: number;
-	lectureId: string;
-	studentId: string;
+  points: number;
+  lectureId: string;
+  studentId: string;
 }) =>
-	db
-		.update(homeworks)
-		.set({
-			points
-		})
-		.where(
-			and(
-				eq(homeworks.lectureId, lectureId),
-				eq(homeworks.studentId, studentId)
-			)
-		);
+  db
+    .update(homeworks)
+    .set({
+      points
+    })
+    .where(
+      and(
+        eq(homeworks.lectureId, lectureId),
+        eq(homeworks.studentId, studentId)
+      )
+    );

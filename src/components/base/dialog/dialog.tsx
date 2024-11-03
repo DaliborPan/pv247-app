@@ -12,7 +12,7 @@ import { DialogTitle } from './dialog-title';
 import { DialogTrigger } from './dialog-trigger';
 
 const Dialog = (props: React.ComponentProps<typeof Root>) => (
-	<Root {...props} />
+  <Root {...props} />
 );
 
 Dialog.Content = DialogContent;

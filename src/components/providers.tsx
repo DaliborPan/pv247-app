@@ -8,11 +8,11 @@ import { Toaster } from 'sonner';
 const queryClient = new QueryClient();
 
 export const Providers = ({ children }: PropsWithChildren) => (
-	<SessionProvider>
-		<QueryClientProvider client={queryClient}>
-			{children}
+  <SessionProvider>
+    <QueryClientProvider client={queryClient}>
+      {children}
 
-			<Toaster richColors />
-		</QueryClientProvider>
-	</SessionProvider>
+      <Toaster richColors />
+    </QueryClientProvider>
+  </SessionProvider>
 );

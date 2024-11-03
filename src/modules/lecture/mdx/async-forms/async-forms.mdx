@@ -22,13 +22,13 @@ Three basic functions you need to know to use Context.
 
 ```tsx
 type User = {
-	name: string;
-	age: number;
+  name: string;
+  age: number;
 };
 
 type UserContextType = {
-	user: User;
-	setUser: (user: User) => void;
+  user: User;
+  setUser: (user: User) => void;
 };
 
 // create context
@@ -36,54 +36,54 @@ const UserContext = createContext<UserContextType | null>(null);
 
 // define custom useUserContext hook
 function useUserContext() {
-	const context = useContext(UserContext);
+  const context = useContext(UserContext);
 
-	if (!context) {
-		throw new Error('useUserContext must be used within a UserProvider');
-	}
+  if (!context) {
+    throw new Error('useUserContext must be used within a UserProvider');
+  }
 
-	return context;
+  return context;
 }
 
 // define custom Context.Provider wrapper - UserProvider
 function UserProvider({ children }: { children: React.ReactNode }) {
-	const [user, setUser] = useState<User>({ name: 'John', age: 30 });
+  const [user, setUser] = useState<User>({ name: 'John', age: 30 });
 
-	const value = useMemo(
-		() => ({
-			user,
-			setUser
-		}),
-		[user]
-	);
+  const value = useMemo(
+    () => ({
+      user,
+      setUser
+    }),
+    [user]
+  );
 
-	return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
 
 function UserDetails() {
-	// Thanks to custom useUserContext hook, we can be sure
-	// that context is defined. It would throw an error if
-	// we used UserDetails component outside UserProvider.
-	const { user, setUser } = useUserContext();
+  // Thanks to custom useUserContext hook, we can be sure
+  // that context is defined. It would throw an error if
+  // we used UserDetails component outside UserProvider.
+  const { user, setUser } = useUserContext();
 
-	return (
-		<div>
-			<h1>User Details</h1>
-			<p>Name: {user.name}</p>
-			<p>Age: {user.age}</p>
-			<button onClick={() => setUser({ name: 'Jane', age: 25 })}>
-				Change User
-			</button>
-		</div>
-	);
+  return (
+    <div>
+      <h1>User Details</h1>
+      <p>Name: {user.name}</p>
+      <p>Age: {user.age}</p>
+      <button onClick={() => setUser({ name: 'Jane', age: 25 })}>
+        Change User
+      </button>
+    </div>
+  );
 }
 
 export default function Home() {
-	return (
-		<UserProvider>
-			<UserDetails />
-		</UserProvider>
-	);
+  return (
+    <UserProvider>
+      <UserDetails />
+    </UserProvider>
+  );
 }
 ```
 
@@ -93,20 +93,20 @@ It is common for an application to need to define multiple global states. It is 
 
 ```tsx
 function AppProvider({ children }: PropsWithChildren) {
-	return (
-		<SomeComponentLibraryProvider>
-			<UserProvider>
-				<SettingsProvider>{children}</SettingsProvider>
-			</UserProvider>
-		</SomeComponentLibraryProvider>
-	);
+  return (
+    <SomeComponentLibraryProvider>
+      <UserProvider>
+        <SettingsProvider>{children}</SettingsProvider>
+      </UserProvider>
+    </SomeComponentLibraryProvider>
+  );
 }
 ```
 
 <MdxComment>
-	Interestingly, for example, the `SettingsProvider` component can use the
-	context from `UserProvider`. We can use `AppProvider` in the root component of
-	our application, with the rest of our application as `children`.
+  Interestingly, for example, the `SettingsProvider` component can use the
+  context from `UserProvider`. We can use `AppProvider` in the root component of
+  our application, with the rest of our application as `children`.
 </MdxComment>
 
 ## Async
@@ -115,32 +115,32 @@ Asynchronous programming is a key component of modern JavaScript and React, allo
 
 ```tsx
 const fetchData = () => {
-	fetch('https://api.example.com/data')
-		.then(response => response.json())
-		.then(data => console.log(data))
-		.catch(error => console.error('Error while loading data:', error));
+  fetch('https://api.example.com/data')
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error while loading data:', error));
 };
 ```
 
 <MdxComment>
-	This is what data retrieval looked like before the advent of ES6 and
-	async/await.
+  This is what data retrieval looked like before the advent of ES6 and
+  async/await.
 </MdxComment>
 
 ```tsx
 const fetchData = async () => {
-	try {
-		const response = await fetch('https://api.example.com/data');
-		const data = await response.json();
-		console.log(data);
-	} catch (error) {
-		console.error('Error while loading data:', error);
-	}
+  try {
+    const response = await fetch('https://api.example.com/data');
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error('Error while loading data:', error);
+  }
 };
 ```
 
 <MdxComment>
-	This is what the equivalent code looks like using async/await.
+  This is what the equivalent code looks like using async/await.
 </MdxComment>
 
 ### Understanding of asynchronous javascript
@@ -151,13 +151,13 @@ When javascript encounters an asynchronous operation, such as `setTimeout` or `f
 
 ```tsx
 function main() {
-	console.log('A');
+  console.log('A');
 
-	setTimeout(function delayed() {
-		console.log('B');
-	}, 0);
+  setTimeout(function delayed() {
+    console.log('B');
+  }, 0);
 
-	console.log('C');
+  console.log('C');
 }
 
 main();
@@ -189,39 +189,39 @@ Without using asynchronous programming, it is possible to block a javascript thr
 
 ```tsx
 const wait = (ms: number) => {
-	const start = Date.now();
-	while (Date.now() - start < ms) {
-		// blocking JS thread
-	}
+  const start = Date.now();
+  while (Date.now() - start < ms) {
+    // blocking JS thread
+  }
 };
 
 export default function Home() {
-	return (
-		<>
-			<button
-				onClick={() => {
-					wait(2000);
-				}}
-			>
-				Click me to block main JS thread
-			</button>
+  return (
+    <>
+      <button
+        onClick={() => {
+          wait(2000);
+        }}
+      >
+        Click me to block main JS thread
+      </button>
 
-			<button
-				onClick={() => {
-					return console.log('Logging...');
-				}}
-			>
-				Click me console log
-			</button>
-		</>
-	);
+      <button
+        onClick={() => {
+          return console.log('Logging...');
+        }}
+      >
+        Click me console log
+      </button>
+    </>
+  );
 }
 ```
 
 <MdxComment>
-	In this case, clicking the _Click me to block main JS thread_ button will
-	block the javascript thread for 2 seconds. If we try to click the _Click me to
-	log_ button, the page will seemingly not respond at all.
+  In this case, clicking the _Click me to block main JS thread_ button will
+  block the javascript thread for 2 seconds. If we try to click the _Click me to
+  log_ button, the page will seemingly not respond at all.
 </MdxComment>
 
 What's going on:
@@ -240,24 +240,24 @@ However, this is different for asynchronous functions. If we call `setState` in 
 
 ```tsx
 function Home() {
-	const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-	const onClick = async () => {
-		setLoading(true);
+  const onClick = async () => {
+    setLoading(true);
 
-		console.log('JavaScript engine releases control over main thread.');
-		await new Promise(resolve => setTimeout(resolve, 2000));
-		console.log('After 2s, the execution of onClick continues...');
+    console.log('JavaScript engine releases control over main thread.');
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    console.log('After 2s, the execution of onClick continues...');
 
-		setLoading(false);
-	};
+    setLoading(false);
+  };
 
-	return (
-		<div>
-			<button onClick={onClick}>Click me</button>
-			{loading ? 'Loading...' : 'Not loading'}
-		</div>
-	);
+  return (
+    <div>
+      <button onClick={onClick}>Click me</button>
+      {loading ? 'Loading...' : 'Not loading'}
+    </div>
+  );
 }
 ```
 
@@ -281,31 +281,31 @@ If an error occurs in an asynchronous function, it is necessary to catch it and 
 
 ```tsx
 function Home() {
-	const onClick = async () => {
-		try {
-			const response = await fetch('https://api.example.com/data');
-			const data = await response.json();
-			return data;
-		} catch (e) {
-			console.log(e);
-			return null;
-		}
-	};
+  const onClick = async () => {
+    try {
+      const response = await fetch('https://api.example.com/data');
+      const data = await response.json();
+      return data;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
 
-	return (
-		<div>
-			<button onClick={onClick}>Click me</button>
-		</div>
-	);
+  return (
+    <div>
+      <button onClick={onClick}>Click me</button>
+    </div>
+  );
 }
 ```
 
 <MdxComment>
-	In this case, we just print the error to the console and return null from the
-	function. However, we can work with the error in any way we want, for example,
-	by displaying it to the user or logging it to the server. If we didn't use the
-	try/catch block, the error would be displayed in the console, causing the
-	whole application to crash.
+  In this case, we just print the error to the console and return null from the
+  function. However, we can work with the error in any way we want, for example,
+  by displaying it to the user or logging it to the server. If we didn't use the
+  try/catch block, the error would be displayed in the console, causing the
+  whole application to crash.
 </MdxComment>
 
 ## Tanstack Query
@@ -338,8 +338,8 @@ function Home({ category }: { category: string }) {
 ```
 
 <MdxComment>
-	In this case, the data acquisition looks fine at first glance. But there are
-	+- 5 bugs!
+  In this case, the data acquisition looks fine at first glance. But there are
+  +- 5 bugs!
 </MdxComment>
 
 If you want to learn about all the problems this code has, check out this blog post from the developer of Tanstack Query: [Why do you need React Query](https://tkdodo.eu/blog/why-you-want-react-query)
@@ -354,19 +354,19 @@ After installing the library, we need to register a `queryClient` to be availabl
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			retry: 0,
-			refetchOnWindowFocus: false,
-			staleTime: Infinity
-		}
-	}
+  defaultOptions: {
+    queries: {
+      retry: 0,
+      refetchOnWindowFocus: false,
+      staleTime: Infinity
+    }
+  }
 });
 
 const App = () => (
-	<QueryClientProvider client={queryClient}>
-		<Home />
-	</QueryClientProvider>
+  <QueryClientProvider client={queryClient}>
+    <Home />
+  </QueryClientProvider>
 );
 ```
 
@@ -406,8 +406,8 @@ export default function Home({ category }: { category: string }) {
 ```
 
 <MdxComment>
-	In this case we have overridden the data retrieval from useEffect + useState
-	to use `useQuery`.
+  In this case we have overridden the data retrieval from useEffect + useState
+  to use `useQuery`.
 </MdxComment>
 
 In an application, it is typical for multiple components to access data defined under a single queryKey. Therefore, it is customary to create a custom function for each query as a wrapper over `useQuery`, where all `queryOptions` are defined only once and all other components then access only their own hook.
@@ -439,9 +439,9 @@ function Home({ category }: { category: string }) {
 ```
 
 <MdxComment>
-	We extracted `queryFn` into a custom function and wrapped the whole `useQuery`
-	into `useCategoryQuery`, which can be used by any component in the
-	application.
+  We extracted `queryFn` into a custom function and wrapped the whole `useQuery`
+  into `useCategoryQuery`, which can be used by any component in the
+  application.
 </MdxComment>
 
 **data, isPending, isError, refetch**
@@ -454,17 +454,17 @@ The most commonly used properties that `useQuery` returns are `data`, `isLoading
 
 ```tsx
 function Home({ category }: { category: string }) {
-	const { data, isPending, isError } = useCategoryQuery(category);
+  const { data, isPending, isError } = useCategoryQuery(category);
 
-	if (isPending) {
-		return <div>Loading...</div>;
-	}
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
 
-	if (isError) {
-		return <div>Error</div>;
-	}
+  if (isError) {
+    return <div>Error</div>;
+  }
 
-	return `Category: ${category}, Data: ${data}`;
+  return `Category: ${category}, Data: ${data}`;
 }
 ```
 
@@ -505,36 +505,36 @@ Unlike queries, mutations are typically used to create/update/delete data or per
 
 ```tsx
 async function createCategory(category: string) {
-	const response = await fetch('/api/category', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ category })
-	});
+  const response = await fetch('/api/category', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ category })
+  });
 
-	const data = await response.json();
-	return data as string;
+  const data = await response.json();
+  return data as string;
 }
 
 function useCreateCategoryMutation() {
-	return useMutation({
-		mutationFn: createCategory
-	});
+  return useMutation({
+    mutationFn: createCategory
+  });
 }
 
 function Home({ category }: { category: string }) {
-	const mutation = useCreateCategoryMutation();
+  const mutation = useCreateCategoryMutation();
 
-	return (
-		<button onClick={() => mutation.mutate(category)}>Create category</button>
-	);
+  return (
+    <button onClick={() => mutation.mutate(category)}>Create category</button>
+  );
 }
 ```
 
 <MdxComment>
-	Again, we directly extracted `useMutation` into a custom hook that any
-	component in the application can use.
+  Again, we directly extracted `useMutation` into a custom hook that any
+  component in the application can use.
 </MdxComment>
 
 **mutate, mutateAsync, isPending, isError, callbacks**
@@ -573,24 +573,24 @@ function Home({ category }: { category: string }) {
 
 ```tsx
 function Home({ category }: { category: string }) {
-	const mutation = useCreateCategoryMutation();
+  const mutation = useCreateCategoryMutation();
 
-	return (
-		<button
-			onClick={() =>
-				mutation.mutate(category, {
-					onSuccess: data => {
-						console.log('Category created:', data);
-					},
-					onError: error => {
-						console.error('Failed to create category:', error);
-					}
-				})
-			}
-		>
-			Create category
-		</button>
-	);
+  return (
+    <button
+      onClick={() =>
+        mutation.mutate(category, {
+          onSuccess: data => {
+            console.log('Category created:', data);
+          },
+          onError: error => {
+            console.error('Failed to create category:', error);
+          }
+        })
+      }
+    >
+      Create category
+    </button>
+  );
 }
 ```
 
@@ -602,47 +602,47 @@ function Home({ category }: { category: string }) {
 
 ```tsx
 async function wait(ms: number) {
-	await new Promise(resolve =>
-		setTimeout(() => {
-			console.log('Wait finished!');
-			resolve('ok');
-		}, ms)
-	);
+  await new Promise(resolve =>
+    setTimeout(() => {
+      console.log('Wait finished!');
+      resolve('ok');
+    }, ms)
+  );
 }
 
 async function createCategory(category: string) {
-	// Simulate a network request
-	await wait(1000);
+  // Simulate a network request
+  await wait(1000);
 
-	return 'ok';
+  return 'ok';
 }
 
 function useCreateCategoryMutation() {
-	return useMutation({
-		mutationFn: createCategory,
-		onSuccess: () => {
-			// Neccessary to return Promise, if we want to wait for the Promise to be resolved!
-			return wait(1000);
-		}
-	});
+  return useMutation({
+    mutationFn: createCategory,
+    onSuccess: () => {
+      // Neccessary to return Promise, if we want to wait for the Promise to be resolved!
+      return wait(1000);
+    }
+  });
 }
 
 function Home({ category }: { category: string }) {
-	const mutation = useCreateCategoryMutation();
+  const mutation = useCreateCategoryMutation();
 
-	return (
-		<button
-			onClick={() =>
-				mutation.mutate(category, {
-					onSuccess: () => {
-						console.log('onSuccess inside mutation.mutate');
-					}
-				})
-			}
-		>
-			Create category
-		</button>
-	);
+  return (
+    <button
+      onClick={() =>
+        mutation.mutate(category, {
+          onSuccess: () => {
+            console.log('onSuccess inside mutation.mutate');
+          }
+        })
+      }
+    >
+      Create category
+    </button>
+  );
 }
 ```
 
@@ -699,15 +699,15 @@ Uncaught ZodError: [
 ```
 
 <MdxComment>
-	In this case, the schema was expecting to get a string, but instead got a
-	number.
+  In this case, the schema was expecting to get a string, but instead got a
+  number.
 </MdxComment>
 
 It is possible to define arbitrarily complex types. It is also possible to create a Typescript type from a Zod schema, which we can further use in the application. At the same time, it's linked, so if we modify the schema, the Typescript type is also automatically modified.
 
 ```tsx
 const schema = z.object({
-	name: z.string().nullable()
+  name: z.string().nullable()
 });
 
 type Schema = z.infer<typeof schema>;
@@ -729,78 +729,78 @@ A controlled form is one where we have control over all the values in the form. 
 
 ```tsx
 function Home() {
-	const [name, setName] = useState('');
+  const [name, setName] = useState('');
 
-	return (
-		<form
-			onSubmit={e => {
-				e.preventDefault();
-				console.log(name);
-			}}
-		>
-			<input onChange={e => setName(e.target.value)} type="text" value={name} />
-			<button type="submit">Submit</button>
-		</form>
-	);
+  return (
+    <form
+      onSubmit={e => {
+        e.preventDefault();
+        console.log(name);
+      }}
+    >
+      <input onChange={e => setName(e.target.value)} type="text" value={name} />
+      <button type="submit">Submit</button>
+    </form>
+  );
 }
 ```
 
 <MdxComment>
-	In this example we have a controlled form where we have control over the
-	`name` value in `<input />
-	`. We hold the value in a state where we update this state every time we change
-	it using the `setName` function.
+  In this example we have a controlled form where we have control over the
+  `name` value in `<input />
+  `. We hold the value in a state where we update this state every time we change
+  it using the `setName` function.
 </MdxComment>
 
 ```tsx
 function Home() {
-	return (
-		<form
-			onSubmit={e => {
-				e.preventDefault();
-				const name = e.target.name.value;
-				//                     ^--- Property 'name' does not exist on type 'EventTarget'
+  return (
+    <form
+      onSubmit={e => {
+        e.preventDefault();
+        const name = e.target.name.value;
+        //                     ^--- Property 'name' does not exist on type 'EventTarget'
 
-				console.log(name);
-			}}
-		>
-			<input name="name" type="text" />
-			<button type="submit">Submit</button>
-		</form>
-	);
+        console.log(name);
+      }}
+    >
+      <input name="name" type="text" />
+      <button type="submit">Submit</button>
+    </form>
+  );
 }
 ```
 
 <MdxComment>
-	In this example, we have an uncontrolled form where we have no control over
-	the `name` value in `<input />
-	`. We retrieve the value via event after submitting the form. As we can see, without
-	proper event typing, TypeScript will not be happy with this entry
+  In this example, we have an uncontrolled form where we have no control over
+  the `name` value in `<input />
+  `. We retrieve the value via event after submitting the form. As we can see, without
+  proper event typing, TypeScript will not be happy with this entry
 </MdxComment>
 
 ```tsx
 function Home() {
-	const nameRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
 
-	return (
-		<form
-			onSubmit={e => {
-				e.preventDefault();
-				const name = nameRef.current?.value;
-				console.log(name);
-			}}
-		>
-			<input ref={nameRef} type="text" />
-			<button type="submit">Submit</button>
-		</form>
-	);
+  return (
+    <form
+      onSubmit={e => {
+        e.preventDefault();
+        const name = nameRef.current?.value;
+        console.log(name);
+      }}
+    >
+      <input ref={nameRef} type="text" />
+      <button type="submit">Submit</button>
+    </form>
+  );
 }
 ```
 
 <MdxComment>
-	This is the second example of the uncontrolled form, where we define our own
-	reference for `<input />` using the `useRef` hook. We then use the `onSubmit`
-	function to pull the value from this reference.
+  This is the second example of the uncontrolled form, where we define our own
+  reference for `<input />` using the `useRef` hook. We then use the `onSubmit`
+  function to pull the value from this reference.
 </MdxComment>
 
 In all cases, if we had multiple fields, we would have to perform validation over individual values, react dynamically to changes in individual field values, etc., and it would be tough to scale these solutions. That's why libraries for implementing forms were created, where the most popular ones are Formik and React Hook Form. In this tutorial, we will be looking at React Hook Form.
@@ -838,9 +838,9 @@ function Home() {
 ```
 
 <MdxComment>
-	In this example, we create a form instance that we define with only one field,
-	`name`. This field has a default value of `""` and will be validated using the
-	`from` schema as a string.
+  In this example, we create a form instance that we define with only one field,
+  `name`. This field has a default value of `""` and will be validated using the
+  `from` schema as a string.
 </MdxComment>
 
 **register, handleSubmit**
@@ -853,20 +853,20 @@ We need two functions from the `form` instance - `handleSubmit` and register` to
 
 ```tsx
 function Home() {
-	const form = useForm<FormSchema>({
-		// ...
-	});
+  const form = useForm<FormSchema>({
+    // ...
+  });
 
-	const onSubmit = (values: FormSchema) => {
-		console.log(values.name);
-	};
+  const onSubmit = (values: FormSchema) => {
+    console.log(values.name);
+  };
 
-	return (
-		<form onSubmit={form.handleSubmit(onSubmit)}>
-			<input {...form.register('name')} />
-			<button type="submit">Submit</button>
-		</form>
-	);
+  return (
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      <input {...form.register('name')} />
+      <button type="submit">Submit</button>
+    </form>
+  );
 }
 ```
 
@@ -882,12 +882,12 @@ The `useWatch` is a hook that allows us to track changes to the field's value. W
 
   ```tsx
   const useFormValues = () => {
-  	const { getValues } = useFormContext();
+    const { getValues } = useFormContext();
 
-  	return {
-  		...useWatch(), // subscribe to form value updates
-  		...getValues() // always merge with latest form values
-  	};
+    return {
+      ...useWatch(), // subscribe to form value updates
+      ...getValues() // always merge with latest form values
+    };
   };
   ```
 
@@ -952,13 +952,13 @@ function Home() {
 ```
 
 <MdxComment>
-	In this example, they wrapped the entire form in a `FormProvider`, which
-	allowed the use of hooks like `useFormContext`. We also created a custom
-	`CustomInput` component that does not register the field using `register`, but
-	uses a `Controller` component and a `control` component that we got from
-	`useFormContext`. In `CustomInput` we also added `watch` to the value of
-	`name`, whereby we can change the component's behavior based on the value of
-	`name`.
+  In this example, they wrapped the entire form in a `FormProvider`, which
+  allowed the use of hooks like `useFormContext`. We also created a custom
+  `CustomInput` component that does not register the field using `register`, but
+  uses a `Controller` component and a `control` component that we got from
+  `useFormContext`. In `CustomInput` we also added `watch` to the value of
+  `name`, whereby we can change the component's behavior based on the value of
+  `name`.
 </MdxComment>
 
 ## Next lecture

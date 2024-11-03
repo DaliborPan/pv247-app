@@ -16,10 +16,10 @@ The most common HTTP methods are `GET`, `POST`, `PUT`, `DELETE` and `PATCH`. Oth
 // app/api/route.ts
 
 export const GET = () => {
-	return Response.json(
-		{ message: 'Hello world from GET request' },
-		{ status: 200 }
-	);
+  return Response.json(
+    { message: 'Hello world from GET request' },
+    { status: 200 }
+  );
 };
 ```
 
@@ -37,9 +37,9 @@ In pure React, we typically apply the application architecture as Server/Client,
 import { getMessage } from '@src/server';
 
 export const GET = async () => {
-	const text = await getMessage();
+  const text = await getMessage();
 
-	return Response.json({ message: text }, { status: 200 });
+  return Response.json({ message: text }, { status: 200 });
 };
 ```
 
@@ -49,9 +49,9 @@ export const GET = async () => {
 import { promises as fs } from 'node:fs';
 
 export const getMessage = async () => {
-	const text = await fs.readFile('src/server/text.txt', 'utf-8');
+  const text = await fs.readFile('src/server/text.txt', 'utf-8');
 
-	return text;
+  return text;
 };
 ```
 
@@ -68,10 +68,10 @@ export const ServerText = async () => {
 ```
 
 <MdxComment>
-	This is an inappropriate way to use the GET route handler. Like the RSC code,
-	the route handler code runs on the server. In this case, it is useless to call
-	the actual API endpoint to execute code that will execute on the same server
-	from which the endpoint is called.
+  This is an inappropriate way to use the GET route handler. Like the RSC code,
+  the route handler code runs on the server. In this case, it is useless to call
+  the actual API endpoint to execute code that will execute on the same server
+  from which the endpoint is called.
 </MdxComment>
 
 ```ts
@@ -85,9 +85,9 @@ export const ServerText = async () => {
 import { promises as fs } from 'node:fs';
 
 export const getMessage = async () => {
-	const text = await fs.readFile('src/server/text.txt', 'utf-8');
+  const text = await fs.readFile('src/server/text.txt', 'utf-8');
 
-	return text;
+  return text;
 };
 ```
 
@@ -103,10 +103,10 @@ export const ServerText = async () => {
 ```
 
 <MdxComment>
-	Instead of calling the route handler to execute code that must run on the
-	server, we can call this code (specifically the `getMessage` function)
-	directly in the RSC. The route handler would only be necessary if we needed to
-	call this code from the client component.
+  Instead of calling the route handler to execute code that must run on the
+  server, we can call this code (specifically the `getMessage` function)
+  directly in the RSC. The route handler would only be necessary if we needed to
+  call this code from the client component.
 </MdxComment>
 
 ### Submitting data via API routes
@@ -117,32 +117,32 @@ Until recently, the only way to create, edit or delete data in a database or oth
 // app/api/event/route.ts
 
 export const POST = async (request: Request) => {
-	const body = await request.json();
+  const body = await request.json();
 
-	try {
-		const data = createEventSchema.parse(body);
-		const event = await database.event.create(data);
+  try {
+    const data = createEventSchema.parse(body);
+    const event = await database.event.create(data);
 
-		return Response.json(
-			{
-				message: 'Event created successfully',
-				data: event
-			},
-			{ status: 201 }
-		);
-	} catch (e) {
-		return Response.json({ message: 'Something went wrong' }, { status: 500 });
-	}
+    return Response.json(
+      {
+        message: 'Event created successfully',
+        data: event
+      },
+      { status: 201 }
+    );
+  } catch (e) {
+    return Response.json({ message: 'Something went wrong' }, { status: 500 });
+  }
 };
 ```
 
 <MdxComment>
-	This is what a POST route handler might look like, which creates a new `event`
-	based on the data that came in the request. Just as we validated the data from
-	the backend to the client using `zod`, we need to validate the data from the
-	client to the server. The `createEventSchema` takes care of this, which
-	defines the valid shape of the object we expect from the client. We can then
-	directly access the database and thus create a new event.
+  This is what a POST route handler might look like, which creates a new `event`
+  based on the data that came in the request. Just as we validated the data from
+  the backend to the client using `zod`, we need to validate the data from the
+  client to the server. The `createEventSchema` takes care of this, which
+  defines the valid shape of the object we expect from the client. We can then
+  directly access the database and thus create a new event.
 </MdxComment>
 
 ### Route resolution
@@ -157,15 +157,15 @@ To create a dynamic route segment, i.e., a route handler that can take a dynamic
 // app/api/event/[slug]/route.ts
 
 type Params = {
-	slug: string;
+  slug: string;
 };
 
 export const GET = (_request: Request, { params }: { params: Params }) => {
-	const slug = params.slug;
+  const slug = params.slug;
 
-	return Response.json({
-		message: `Called with slug ${slug}`
-	});
+  return Response.json({
+    message: `Called with slug ${slug}`
+  });
 };
 ```
 
@@ -175,9 +175,9 @@ Next.js caches our API endpoints by default. Specifically, this means that once 
 
 ```ts
 export const GET = () => {
-	return Response.json({
-		time: new Date().toISOString()
-	});
+  return Response.json({
+    time: new Date().toISOString()
+  });
 };
 
 // This will always return the same date, anytime this route handler is called.
@@ -205,10 +205,10 @@ Route (app)                              Size     First Load JS
 ```
 
 <MdxComment>
-	This is how the build log of our application might look like. Route `/api` is
-	marked as static, meaning its result will be cached and returned every time
-	the endpoint is called. This behavior may not be desirable in all cases, and
-	we can easily change it.
+  This is how the build log of our application might look like. Route `/api` is
+  marked as static, meaning its result will be cached and returned every time
+  the endpoint is called. This behavior may not be desirable in all cases, and
+  we can easily change it.
 </MdxComment>
 
 ### Cookies and headers
@@ -219,11 +219,11 @@ One possibility is to use the so-called dynamic functions `cookies` and `headers
 import { cookies } from 'next/headers';
 
 export const GET = () => {
-	const cookiesValues = cookies();
+  const cookiesValues = cookies();
 
-	return Response.json({
-		time: new Date().toISOString()
-	});
+  return Response.json({
+    time: new Date().toISOString()
+  });
 };
 
 // This route handler will run every time endpoint is called.
@@ -233,12 +233,12 @@ export const GET = () => {
 import { headers } from 'next/headers';
 
 export const GET = () => {
-	const headersList = headers();
-	const referer = headersList.get('referer');
+  const headersList = headers();
+  const referer = headersList.get('referer');
 
-	return (
-		Response.json({ message: 'Hello from the API' }), { headers: { referer } }
-	);
+  return (
+    Response.json({ message: 'Hello from the API' }), { headers: { referer } }
+  );
 };
 ```
 
@@ -252,22 +252,22 @@ In some cases, it is appropriate to use URL query search parameters. This is the
 import { type NextRequest } from 'next/server';
 
 export const GET = (request: NextRequest) => {
-	const searchParams = request.nextUrl.searchParams;
-	const color = searchParams.get('color');
+  const searchParams = request.nextUrl.searchParams;
+  const color = searchParams.get('color');
 
-	return Response.json({
-		message: `Called with color: ${color}`
-	});
+  return Response.json({
+    message: `Called with color: ${color}`
+  });
 };
 
 // http://localhost:3000/api?color=black
 ```
 
 <MdxComment>
-	In this case, we add the `color` parameter to the URL query search, which will
-	affect the route handler's result. Again, since this is a dynamic parameter,
-	it is not possible to cache this route handler, and therefore, it will be
-	executed every time the endpoint is called.
+  In this case, we add the `color` parameter to the URL query search, which will
+  affect the route handler's result. Again, since this is a dynamic parameter,
+  it is not possible to cache this route handler, and therefore, it will be
+  executed every time the endpoint is called.
 </MdxComment>
 
 ## Route segment config
@@ -299,11 +299,11 @@ Some of the most essential configurations are `revalidate` and `dynamic`. Next.j
 If we set `export const dynamic = "force-dynamic"` in `app/page.tsx`, it means that every time we access route `/`, Next.js will always re-render the page on-demand on the server.
 
 <MdxComment className="mt-6 mb-10">
-	This behavior is proper if we access the page directly, i.e. via a URL. If we
-	access our application first on, for example, the `/users` page, and navigate
-	to `/` from that page, the first time we access `/` the page will be rendered
-	on-demand, but any subsequent moves in our application will leave the page
-	cached due to Router caching, which we will learn about later in this lesson.
+  This behavior is proper if we access the page directly, i.e. via a URL. If we
+  access our application first on, for example, the `/users` page, and navigate
+  to `/` from that page, the first time we access `/` the page will be rendered
+  on-demand, but any subsequent moves in our application will leave the page
+  cached due to Router caching, which we will learn about later in this lesson.
 </MdxComment>
 
 Route segment `revalidate` allows us to generate the page statically on the server at build time and also specify the time when it must be revalidated at the latest. This means that if we set `export const revalidate = 3600` on the `app/page.tsx` page, it means that if we build the application and make it available in production mode, all users who access `/` will be served a statically generated page for at least one hour. If someone accesses the `/` page after more than one hour, the page will be generated on the server on that request, updated in the cache, and the same generated page will be served again for another hour.
@@ -441,9 +441,9 @@ export const SubmitFormButton = () => {
 ```
 
 <MdxComment>
-	In this case we have the server action extracted into its own file, which is
-	marked as `use server`, which means that this code will safely run only on the
-	server and not even sent to the client.
+  In this case we have the server action extracted into its own file, which is
+  marked as `use server`, which means that this code will safely run only on the
+  server and not even sent to the client.
 </MdxComment>
 
 ```ts
@@ -479,8 +479,8 @@ export default async function Page() {
 ```
 
 <MdxComment>
-	In this case, we have a server action defined directly within the component
-	where the form that invokes the action occurs.
+  In this case, we have a server action defined directly within the component
+  where the form that invokes the action occurs.
 </MdxComment>
 
 ### Type safety
@@ -582,10 +582,10 @@ import { revalidatePath } from 'next/cache';
 import { addTodo } from '../server';
 
 export async function addTodoFromClientAction(input: { name: string }) {
-	// NOTE: There should still be input validation, for example via zod
-	await addTodo(input.name);
+  // NOTE: There should still be input validation, for example via zod
+  await addTodo(input.name);
 
-	revalidatePath('/server-action-client');
+  revalidatePath('/server-action-client');
 }
 ```
 
@@ -664,14 +664,14 @@ export default function Page() {
 ```
 
 <MdxComment>
-	In this case the custom `fetch` is executed only once, inside the `Parent`
-	component. Because of this, we will see a `Loading` fallback that is defined
-	inside `Page`. Once `Parent` gets the data from the API, it starts rendering,
-	where it finds the `Child` component, which is also asynchronous. Therefore,
-	it first starts rendering the `Child loading...` fallback, which is hardly
-	noticeable on the page since the `Child` component, although asynchronous,
-	occupies the same `fetch` as `Parent` and thus gets the data almost
-	immediately from the cache.
+  In this case the custom `fetch` is executed only once, inside the `Parent`
+  component. Because of this, we will see a `Loading` fallback that is defined
+  inside `Page`. Once `Parent` gets the data from the API, it starts rendering,
+  where it finds the `Child` component, which is also asynchronous. Therefore,
+  it first starts rendering the `Child loading...` fallback, which is hardly
+  noticeable on the page since the `Child` component, although asynchronous,
+  occupies the same `fetch` as `Parent` and thus gets the data almost
+  immediately from the cache.
 </MdxComment>
 
 A few rules apply to make request memoization work properly:
@@ -734,8 +734,8 @@ import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
 
 const client = createClient({
-	url: process.env.DATABASE_URL!,
-	authToken: process.env.AUTH_TOKEN
+  url: process.env.DATABASE_URL!,
+  authToken: process.env.AUTH_TOKEN
 });
 
 export const db = drizzle(client);
@@ -751,16 +751,16 @@ To work with the database, we need to define our tables (models, schemas). We ca
 import { text, integer, sqliteTable } from 'drizzle-orm/sqlite-core';
 
 export const users = sqliteTable('users', {
-	id: integer('id').primaryKey({ autoIncrement: true }),
-	name: text('name')
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name')
 });
 ```
 
 <MdxComment>
-	In this way we create tables that we will then use within our application. For
-	more information about all the possible data types supported in SQlite, we
-	recommend [drizzle
-	documentation](https://orm.drizzle.team/docs/column-types/sqlite).
+  In this way we create tables that we will then use within our application. For
+  more information about all the possible data types supported in SQlite, we
+  recommend [drizzle
+  documentation](https://orm.drizzle.team/docs/column-types/sqlite).
 </MdxComment>
 
 ### Turso
@@ -793,13 +793,13 @@ To start, we need to create a `drizzle.config.ts` file where we define the path 
 import type { Config } from 'drizzle-kit';
 
 export default {
-	schema: './src/db/schema',
-	driver: 'turso',
-	dbCredentials: {
-		url: process.env.DATABASE_URL!,
-		authToken: process.env.AUTH_TOKEN
-	},
-	out: '.drizzle'
+  schema: './src/db/schema',
+  driver: 'turso',
+  dbCredentials: {
+    url: process.env.DATABASE_URL!,
+    authToken: process.env.AUTH_TOKEN
+  },
+  out: '.drizzle'
 } satisfies Config;
 ```
 
@@ -873,9 +873,9 @@ import { db } from '@src/db';
 import { users } from '@src/db/schema/users';
 
 export async function addPerson({ name }: { name: string }) {
-	await db.insert(users).values({ name });
+  await db.insert(users).values({ name });
 
-	revalidatePath('/server-action-client-person');
+  revalidatePath('/server-action-client-person');
 }
 ```
 

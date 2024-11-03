@@ -7,10 +7,10 @@ import { updateUser } from '../../server';
 import { type EditProfileFormSchema } from './schema';
 
 export const editProfileAction = async ({
-	id,
-	...values
+  id,
+  ...values
 }: EditProfileFormSchema) => {
-	await updateUser(id, values);
+  await updateUser(id, values);
 
-	revalidatePath('/profile');
+  revalidatePath('/profile');
 };

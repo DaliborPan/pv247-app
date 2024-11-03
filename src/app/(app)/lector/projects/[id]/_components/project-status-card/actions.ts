@@ -9,29 +9,29 @@ import { PROJECTS_TAG } from '@/modules/project/server';
 import { type SetProjectPointsFormSchema } from './schema';
 
 export const confirmProjectAction = async ({
-	project
+  project
 }: {
-	project: Project;
+  project: Project;
 }) => {
-	await db
-		.update(projects)
-		.set({
-			status: project.status === 'pending' ? 'approved' : 'pending'
-		})
-		.where(eq(projects.id, project.id));
+  await db
+    .update(projects)
+    .set({
+      status: project.status === 'pending' ? 'approved' : 'pending'
+    })
+    .where(eq(projects.id, project.id));
 
-	revalidateTag(PROJECTS_TAG);
+  revalidateTag(PROJECTS_TAG);
 };
 
 export const setProjectPointsAction = async (
-	data: SetProjectPointsFormSchema
+  data: SetProjectPointsFormSchema
 ) => {
-	await db
-		.update(projects)
-		.set({
-			...data
-		})
-		.where(eq(projects.id, data.projectId));
+  await db
+    .update(projects)
+    .set({
+      ...data
+    })
+    .where(eq(projects.id, data.projectId));
 
-	revalidateTag(PROJECTS_TAG);
+  revalidateTag(PROJECTS_TAG);
 };

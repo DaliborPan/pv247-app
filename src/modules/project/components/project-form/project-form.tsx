@@ -9,50 +9,50 @@ import { StudentCombobox } from './student-combobox';
 import { type ProjectFormSchema } from './schema';
 
 const _StudentCombobox = async ({
-	defaultValues
+  defaultValues
 }: {
-	defaultValues?: Partial<ProjectFormSchema>;
+  defaultValues?: Partial<ProjectFormSchema>;
 }) => {
-	const sessionUser = await getSessionUser();
+  const sessionUser = await getSessionUser();
 
-	const students = await db.query.users.findMany({
-		where: (table, { eq, or, and, inArray, isNull, not }) =>
-			or(
-				and(
-					eq(table.role, 'student'),
-					isNull(table.projectId),
-					not(eq(table.id, sessionUser.id))
-				),
-				inArray(table.id, defaultValues?.students ?? [''])
-			)
-	});
+  const students = await db.query.users.findMany({
+    where: (table, { eq, or, and, inArray, isNull, not }) =>
+      or(
+        and(
+          eq(table.role, 'student'),
+          isNull(table.projectId),
+          not(eq(table.id, sessionUser.id))
+        ),
+        inArray(table.id, defaultValues?.students ?? [''])
+      )
+  });
 
-	return (
-		<StudentCombobox
-			options={students.map(user => ({
-				value: user.id,
-				label: `${user.firstName} ${user.lastName}`
-			}))}
-		/>
-	);
+  return (
+    <StudentCombobox
+      options={students.map(user => ({
+        value: user.id,
+        label: `${user.firstName} ${user.lastName}`
+      }))}
+    />
+  );
 };
 
 export const ProjectForm = async ({
-	defaultValues
+  defaultValues
 }: {
-	defaultValues?: Partial<ProjectFormSchema>;
+  defaultValues?: Partial<ProjectFormSchema>;
 }) => (
-	<ProjectFormProvider defaultValues={defaultValues}>
-		<FormInput name="name" label="Name" />
-		<FormInput name="github" label="GitHub repository" />
+  <ProjectFormProvider defaultValues={defaultValues}>
+    <FormInput name="name" label="Name" />
+    <FormInput name="github" label="GitHub repository" />
 
-		{/* TODO: To be rich text editor */}
-		<FormInput name="description" label="Description" />
+    {/* TODO: To be rich text editor */}
+    <FormInput name="description" label="Description" />
 
-		<div className="mt-2">
-			<Suspense>
-				<_StudentCombobox defaultValues={defaultValues} />
-			</Suspense>
-		</div>
-	</ProjectFormProvider>
+    <div className="mt-2">
+      <Suspense>
+        <_StudentCombobox defaultValues={defaultValues} />
+      </Suspense>
+    </div>
+  </ProjectFormProvider>
 );

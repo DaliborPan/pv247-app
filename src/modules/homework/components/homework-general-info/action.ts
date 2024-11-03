@@ -5,29 +5,29 @@ import { auth } from '@/auth';
 import { getUserHomework } from '../../server';
 
 export const getHomeworkPointsAction = async (lectureId: string) => {
-	const session = await auth();
+  const session = await auth();
 
-	if (!session) {
-		return {
-			status: 'error',
-			message: 'Unauthorized'
-		} as const;
-	}
+  if (!session) {
+    return {
+      status: 'error',
+      message: 'Unauthorized'
+    } as const;
+  }
 
-	const userHomework = await getUserHomework({
-		lectureId,
-		userId: session.user.id
-	});
+  const userHomework = await getUserHomework({
+    lectureId,
+    userId: session.user.id
+  });
 
-	if (!userHomework) {
-		return {
-			status: 'pending',
-			points: 0
-		} as const;
-	}
+  if (!userHomework) {
+    return {
+      status: 'pending',
+      points: 0
+    } as const;
+  }
 
-	return {
-		status: 'scored',
-		points: userHomework.points
-	} as const;
+  return {
+    status: 'scored',
+    points: userHomework.points
+  } as const;
 };

@@ -4,16 +4,16 @@ import { type SetHomeworkPointsFormSchema } from './schema';
 import { createHomeworkAction, updateHomeworkPointsAction } from './action';
 
 export const useSetHomeworkPointsMutation = ({
-	isCreating
+  isCreating
 }: {
-	isCreating: boolean;
+  isCreating: boolean;
 }) =>
-	useMutation({
-		mutationFn: (data: SetHomeworkPointsFormSchema) => {
-			const action = isCreating
-				? createHomeworkAction
-				: updateHomeworkPointsAction;
+  useMutation({
+    mutationFn: (data: SetHomeworkPointsFormSchema) => {
+      const action = isCreating
+        ? createHomeworkAction
+        : updateHomeworkPointsAction;
 
-			return action(data);
-		}
-	});
+      return action(data);
+    }
+  });

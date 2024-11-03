@@ -15,44 +15,44 @@ import { LabeledItem } from './labeled-item';
  * Using useQuery because we need to be able to prerender SSG
  */
 const usePersonHomeworkPointsQuery = (lectureId: string, userId?: string) =>
-	useQuery({
-		queryKey: ['homework-points', lectureId, userId],
-		enabled: !!userId,
-		queryFn: async () => {
-			const result = await getHomeworkPointsAction(lectureId);
+  useQuery({
+    queryKey: ['homework-points', lectureId, userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const result = await getHomeworkPointsAction(lectureId);
 
-			if (result.status === 'error') {
-				toast.error(result.message);
+      if (result.status === 'error') {
+        toast.error(result.message);
 
-				return;
-			}
+        return;
+      }
 
-			return result;
-		}
-	});
+      return result;
+    }
+  });
 
 export const HomeworkPoints = ({ lecture }: { lecture: Lecture }) => {
-	const session = useSession();
-	const { data } = usePersonHomeworkPointsQuery(
-		lecture.id,
-		session.data?.user.id
-	);
+  const session = useSession();
+  const { data } = usePersonHomeworkPointsQuery(
+    lecture.id,
+    session.data?.user.id
+  );
 
-	if (!data) return null;
+  if (!data) return null;
 
-	return session.data?.user.role === 'lector' ? (
-		<div className="flex justify-end">
-			<Link href={`/lector/homeworks/${lecture.homeworkSlug}`}>
-				<Button>Set points</Button>
-			</Link>
-		</div>
-	) : (
-		<LabeledItem label="Earned points">
-			<div>
-				{data?.status === 'pending'
-					? 'Not scored yet'
-					: `${data?.points} points`}
-			</div>
-		</LabeledItem>
-	);
+  return session.data?.user.role === 'lector' ? (
+    <div className="flex justify-end">
+      <Link href={`/lector/homeworks/${lecture.homeworkSlug}`}>
+        <Button>Set points</Button>
+      </Link>
+    </div>
+  ) : (
+    <LabeledItem label="Earned points">
+      <div>
+        {data?.status === 'pending'
+          ? 'Not scored yet'
+          : `${data?.points} points`}
+      </div>
+    </LabeledItem>
+  );
 };

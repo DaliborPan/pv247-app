@@ -10,19 +10,19 @@ export const PROJECTS_TAG = 'projects';
  * @cache Next.js cache
  */
 export const getProjects = unstable_cache(
-	async () => {
-		const projects = await db.query.projects.findMany({
-			with: {
-				users: true
-			}
-		});
+  async () => {
+    const projects = await db.query.projects.findMany({
+      with: {
+        users: true
+      }
+    });
 
-		return projects;
-	},
-	[PROJECTS_TAG],
-	{
-		tags: [PROJECTS_TAG]
-	}
+    return projects;
+  },
+  [PROJECTS_TAG],
+  {
+    tags: [PROJECTS_TAG]
+  }
 );
 export type GetProjectsResult = Awaited<ReturnType<typeof getProjects>>;
 
@@ -32,9 +32,9 @@ export type GetProjectsResult = Awaited<ReturnType<typeof getProjects>>;
  * @cache using Next.js cache
  */
 export const getProject = async (id: string) => {
-	const projects = await getProjects();
+  const projects = await getProjects();
 
-	return projects.find(project => project.id === id);
+  return projects.find(project => project.id === id);
 };
 
 export type GetProjectResult = Awaited<ReturnType<typeof getProject>>;

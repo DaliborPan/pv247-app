@@ -2,59 +2,59 @@ import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
 
 import {
-	homeworks,
-	type Homework,
-	type HomeworkInsert
+  homeworks,
+  type Homework,
+  type HomeworkInsert
 } from './schema/homeworks';
 import {
-	lectures,
-	lectureSlugSchema,
-	homeworkSlugSchema,
-	type Lecture,
-	type LectureSlug,
-	type HomeworkSlug
+  lectures,
+  lectureSlugSchema,
+  homeworkSlugSchema,
+  type Lecture,
+  type LectureSlug,
+  type HomeworkSlug
 } from './schema/lectures';
 import { projects, type Project } from './schema/projects';
 import { users, type User } from './schema/users';
 import * as relations from './schema/relations';
 
 const client = createClient({
-	url: process.env.DATABASE_URL!,
-	authToken: process.env.AUTH_TOKEN
+  url: process.env.DATABASE_URL!,
+  authToken: process.env.AUTH_TOKEN
 });
 
 const db = drizzle(client, {
-	schema: {
-		homeworks,
+  schema: {
+    homeworks,
 
-		lectures,
-		projects,
-		users,
-		...relations
-	}
+    lectures,
+    projects,
+    users,
+    ...relations
+  }
 });
 
 export {
-	db,
+  db,
 
-	// homeworks
-	homeworks,
-	type Homework,
-	type HomeworkInsert,
+  // homeworks
+  homeworks,
+  type Homework,
+  type HomeworkInsert,
 
-	// lecture
-	lectures,
-	lectureSlugSchema,
-	homeworkSlugSchema,
-	type Lecture,
-	type LectureSlug,
-	type HomeworkSlug,
+  // lecture
+  lectures,
+  lectureSlugSchema,
+  homeworkSlugSchema,
+  type Lecture,
+  type LectureSlug,
+  type HomeworkSlug,
 
-	// project
-	projects,
-	type Project,
+  // project
+  projects,
+  type Project,
 
-	// users
-	users,
-	type User
+  // users
+  users,
+  type User
 };

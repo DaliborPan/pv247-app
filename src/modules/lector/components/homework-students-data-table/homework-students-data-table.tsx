@@ -6,32 +6,32 @@ import { getSessionUser } from '@/modules/session-user/server';
 import { columns } from './columns';
 
 export const HomeworkStudentsDataTable = async ({
-	students,
-	lecture
+  students,
+  lecture
 }: {
-	students: GetStudentsWithHomeworksResult;
-	lecture?: Lecture;
+  students: GetStudentsWithHomeworksResult;
+  lecture?: Lecture;
 }) => {
-	const sessionUser = await getSessionUser();
+  const sessionUser = await getSessionUser();
 
-	return (
-		<DataTable
-			data={students.map(student => {
-				const defaultValues = {
-					lecture,
-					lectorId: sessionUser.id,
-					studentId: student.id,
-					points: student.homeworksStudent.find(
-						hw => hw.lectureId === lecture?.id
-					)?.points
-				};
+  return (
+    <DataTable
+      data={students.map(student => {
+        const defaultValues = {
+          lecture,
+          lectorId: sessionUser.id,
+          studentId: student.id,
+          points: student.homeworksStudent.find(
+            hw => hw.lectureId === lecture?.id
+          )?.points
+        };
 
-				return {
-					...student,
-					defaultValues
-				};
-			})}
-			columns={columns}
-		/>
-	);
+        return {
+          ...student,
+          defaultValues
+        };
+      })}
+      columns={columns}
+    />
+  );
 };

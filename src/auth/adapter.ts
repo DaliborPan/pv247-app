@@ -3,26 +3,26 @@ import { type SQLiteTableFn, sqliteTable } from 'drizzle-orm/sqlite-core';
 import { type Adapter } from 'next-auth/adapters';
 
 import {
-	users,
-	accounts,
-	sessions,
-	verificationTokens
+  users,
+  accounts,
+  sessions,
+  verificationTokens
 } from '@/db/schema/users';
 import { db } from '@/db';
 
 const tableFn = (...params: Parameters<SQLiteTableFn>) => {
-	switch (params[0]) {
-		case 'user':
-			return users;
-		case 'account':
-			return accounts;
-		case 'session':
-			return sessions;
-		case 'verification_token':
-			return verificationTokens;
-		default:
-			return sqliteTable(...params);
-	}
+  switch (params[0]) {
+    case 'user':
+      return users;
+    case 'account':
+      return accounts;
+    case 'session':
+      return sessions;
+    case 'verification_token':
+      return verificationTokens;
+    default:
+      return sqliteTable(...params);
+  }
 };
 
 /**
@@ -31,6 +31,6 @@ const tableFn = (...params: Parameters<SQLiteTableFn>) => {
  * Needed in order to store additional properties in the user table
  */
 export const CustomDrizzleAdapter = DrizzleAdapter(
-	db,
-	tableFn as SQLiteTableFn
+  db,
+  tableFn as SQLiteTableFn
 ) as Adapter;

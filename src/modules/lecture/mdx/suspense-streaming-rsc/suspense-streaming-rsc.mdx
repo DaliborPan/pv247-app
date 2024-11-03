@@ -61,26 +61,26 @@ We may notice unnecessary sending of requests back and forth. By simple reasonin
 ```tsx
 // This code only runs on the server:
 export async function getServerSideProps() {
-	const data = await database.query('SELECT * FROM products');
+  const data = await database.query('SELECT * FROM products');
 
-	return {
-		props: { data }
-	};
+  return {
+    props: { data }
+  };
 }
 
 // This code runs on the server + on the client
 export default function Homepage({ data }) {
-	return (
-		<>
-			<h1>Products</h1>
-			{data.map(productItem => (
-				<article key={item.id}>
-					<h2>{item.title}</h2>
-					<p>{item.description}</p>
-				</article>
-			))}
-		</>
-	);
+  return (
+    <>
+      <h1>Products</h1>
+      {data.map(productItem => (
+        <article key={item.id}>
+          <h2>{item.title}</h2>
+          <p>{item.description}</p>
+        </article>
+      ))}
+    </>
+  );
 }
 ```
 
@@ -99,19 +99,19 @@ This is still a new programming concept in React, where we can create asynchrono
 ```tsx
 // This code runs exclusively on the server
 export default async function Homepage({ data }) {
-	const data = await database.query('SELECT * FROM products');
+  const data = await database.query('SELECT * FROM products');
 
-	return (
-		<>
-			<h1>Products</h1>
-			{data.map(productItem => (
-				<article key={item.id}>
-					<h2>{item.title}</h2>
-					<p>{item.description}</p>
-				</article>
-			))}
-		</>
-	);
+  return (
+    <>
+      <h1>Products</h1>
+      {data.map(productItem => (
+        <article key={item.id}>
+          <h2>{item.title}</h2>
+          <p>{item.description}</p>
+        </article>
+      ))}
+    </>
+  );
 }
 ```
 
@@ -137,11 +137,11 @@ Importantly, since version 13, with the advent of the `app` directory, all compo
 'use client';
 
 export default function Counter() {
-	const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0);
 
-	return (
-		<button onClick={() => setCount(count + 1)}>Current value: {count}</button>
-	);
+  return (
+    <button onClick={() => setCount(count + 1)}>Current value: {count}</button>
+  );
 }
 ```
 
@@ -204,14 +204,14 @@ Within a suspense boundary, we have the flexibility to use both server and clien
 
 ```tsx
 export default function Page() {
-	return (
-		<Suspense fallback={<LoadingComponent />}>
-			<Biography />
-			<Panel>
-				<AlbumsAsyncComponent />
-			</Panel>
-		</Suspense>
-	);
+  return (
+    <Suspense fallback={<LoadingComponent />}>
+      <Biography />
+      <Panel>
+        <AlbumsAsyncComponent />
+      </Panel>
+    </Suspense>
+  );
 }
 ```
 
@@ -226,48 +226,48 @@ Let's take a similar example, but we'll make the `Bibliography` component a serv
 
 ```tsx
 function BigLoader() {
-	return <div>Big Loader...</div>;
+  return <div>Big Loader...</div>;
 }
 
 async function BibliographyAsyncComponent() {
-	await new Promise(resolve => {
-		setTimeout(resolve, 2000);
-	});
+  await new Promise(resolve => {
+    setTimeout(resolve, 2000);
+  });
 
-	return (
-		<div>
-			<h2>Bibliography</h2>
-			<p>...</p>
-		</div>
-	);
+  return (
+    <div>
+      <h2>Bibliography</h2>
+      <p>...</p>
+    </div>
+  );
 }
 
 function AlbumsLoader() {
-	return <div>Albums Loader...</div>;
+  return <div>Albums Loader...</div>;
 }
 
 async function AlbumsAsyncComponent() {
-	await new Promise(resolve => {
-		setTimeout(resolve, 3000);
-	});
+  await new Promise(resolve => {
+    setTimeout(resolve, 3000);
+  });
 
-	return (
-		<div>
-			<h2>Albums</h2>
-			<p>...</p>
-		</div>
-	);
+  return (
+    <div>
+      <h2>Albums</h2>
+      <p>...</p>
+    </div>
+  );
 }
 
 export default function Page() {
-	return (
-		<Suspense fallback={<BigLoader />}>
-			<BibliographyAsyncComponent />
-			<Suspense fallback={<AlbumsLoader />}>
-				<AlbumsAsyncComponent />
-			</Suspense>
-		</Suspense>
-	);
+  return (
+    <Suspense fallback={<BigLoader />}>
+      <BibliographyAsyncComponent />
+      <Suspense fallback={<AlbumsLoader />}>
+        <AlbumsAsyncComponent />
+      </Suspense>
+    </Suspense>
+  );
 }
 ```
 
@@ -304,52 +304,52 @@ This enables parts of the page to be displayed sooner, without waiting for all t
 
 ```tsx
 function ProductBannerLoading() {
-	return <div>Product Loading...</div>;
+  return <div>Product Loading...</div>;
 }
 
 function getRandomInt(max: number) {
-	return Math.floor(Math.random() * max);
+  return Math.floor(Math.random() * max);
 }
 
 async function ProductBanner() {
-	const waitingTime = getRandomInt(3) * 1000;
+  const waitingTime = getRandomInt(3) * 1000;
 
-	await new Promise(resolve => {
-		setTimeout(resolve, waitingTime);
-	});
+  await new Promise(resolve => {
+    setTimeout(resolve, waitingTime);
+  });
 
-	return (
-		<div>
-			<h2>Product banner</h2>
-			<p>Waiting time: {waitingTime}</p>
-		</div>
-	);
+  return (
+    <div>
+      <h2>Product banner</h2>
+      <p>Waiting time: {waitingTime}</p>
+    </div>
+  );
 }
 
 export default function Page() {
-	return (
-		<div className="container mx-auto">
-			<nav className="py-4 px-8 bg-gray-200">Navigation</nav>
+  return (
+    <div className="container mx-auto">
+      <nav className="py-4 px-8 bg-gray-200">Navigation</nav>
 
-			<div className="flex">
-				<aside className="w-1/3 bg-gray-300">sidebar</aside>
+      <div className="flex">
+        <aside className="w-1/3 bg-gray-300">sidebar</aside>
 
-				<main>
-					<h1 className="text-3xl">Products</h1>
+        <main>
+          <h1 className="text-3xl">Products</h1>
 
-					<Suspense fallback={<ProductBannerLoading />}>
-						<ProductBanner />
-					</Suspense>
-					<Suspense fallback={<ProductBannerLoading />}>
-						<ProductBanner />
-					</Suspense>
-					<Suspense fallback={<ProductBannerLoading />}>
-						<ProductBanner />
-					</Suspense>
-				</main>
-			</div>
-		</div>
-	);
+          <Suspense fallback={<ProductBannerLoading />}>
+            <ProductBanner />
+          </Suspense>
+          <Suspense fallback={<ProductBannerLoading />}>
+            <ProductBanner />
+          </Suspense>
+          <Suspense fallback={<ProductBannerLoading />}>
+            <ProductBanner />
+          </Suspense>
+        </main>
+      </div>
+    </div>
+  );
 }
 ```
 
@@ -429,12 +429,12 @@ import { Counter } from '../components/counter';
 const OtherComponent = () => <div />;
 
 export default function Page() {
-	return (
-		<div>
-			<OtherComponent />
-			<Counter />
-		</div>
-	);
+  return (
+    <div>
+      <OtherComponent />
+      <Counter />
+    </div>
+  );
 }
 ```
 
@@ -449,14 +449,14 @@ import { ServerText } from './server-text';
 const CounterValue = ({ value }) => <div>{value}</div>;
 
 export const Counter = () => {
-	const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0);
 
-	return (
-		<div>
-			<ServerText />
-			<CounterValue value={count} />
-		</div>
-	);
+  return (
+    <div>
+      <ServerText />
+      <CounterValue value={count} />
+    </div>
+  );
 };
 ```
 
@@ -464,8 +464,8 @@ export const Counter = () => {
 import fs from 'node:fs/promises';
 
 export const ServerText = async () => {
-	const text = await fs.readFile('src/components/text.txt', 'utf-8');
-	return <div>{text}</div>;
+  const text = await fs.readFile('src/components/text.txt', 'utf-8');
+  return <div>{text}</div>;
 };
 ```
 
@@ -498,12 +498,12 @@ import { ServerText } from '../components/server-text';
 const OtherComponent = () => <div />;
 
 export default function Page() {
-	return (
-		<div>
-			<OtherComponent />
-			<Counter text={<ServerText />} />
-		</div>
-	);
+  return (
+    <div>
+      <OtherComponent />
+      <Counter text={<ServerText />} />
+    </div>
+  );
 }
 ```
 
@@ -515,18 +515,18 @@ import { useState } from 'react';
 const CounterValue = ({ value }: { value: number }) => <div>{value}</div>;
 
 type CounterProps = {
-	text: React.ReactNode;
+  text: React.ReactNode;
 };
 
 export const Counter = ({ text }: CounterProps) => {
-	const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0);
 
-	return (
-		<div>
-			{text}
-			<CounterValue value={count} />
-		</div>
-	);
+  return (
+    <div>
+      {text}
+      <CounterValue value={count} />
+    </div>
+  );
 };
 ```
 
@@ -534,8 +534,8 @@ export const Counter = ({ text }: CounterProps) => {
 import fs from 'node:fs/promises';
 
 export const ServerText = async () => {
-	const text = await fs.readFile('src/components/text.txt', 'utf-8');
-	return <div>{text}</div>;
+  const text = await fs.readFile('src/components/text.txt', 'utf-8');
+  return <div>{text}</div>;
 };
 ```
 
@@ -555,9 +555,9 @@ import type { PropsWithChildren } from 'react';
 const queryClient = new QueryClient();
 
 export function Providers({ children }: PropsWithChildren) {
-	return (
-		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-	);
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
 }
 ```
 
@@ -571,22 +571,22 @@ import type { PropsWithChildren } from 'react';
 import { Providers } from './providers';
 
 const poppins = Poppins({
-	subsets: ['Latin-ext'],
-	weight: ['400', '500', '600', '700']
+  subsets: ['Latin-ext'],
+  weight: ['400', '500', '600', '700']
 });
 
 export const metadata: Metadata = {
-	title: 'PV247'
+  title: 'PV247'
 };
 
 export default function RootLayout({ children }: PropsWithChildren<{}>) {
-	return (
-		<html lang="en">
-			<body className={`flex min-h-screen flex-col ${poppins.className}`}>
-				<Providers>{children}</Providers>
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en">
+      <body className={`flex min-h-screen flex-col ${poppins.className}`}>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
 }
 ```
 

@@ -10,20 +10,20 @@ import { getSessionUser } from './session-user';
  * As a logged in lector, get all students that are assigned to me.
  */
 export const getMineStudents = async () => {
-	const sessionUser = await getSessionUser();
+  const sessionUser = await getSessionUser();
 
-	const user = await db.query.users.findFirst({
-		where: (users, { eq }) => eq(users.id, sessionUser.id),
-		with: {
-			students: {
-				with: {
-					homeworksStudent: true
-				}
-			}
-		}
-	});
+  const user = await db.query.users.findFirst({
+    where: (users, { eq }) => eq(users.id, sessionUser.id),
+    with: {
+      students: {
+        with: {
+          homeworksStudent: true
+        }
+      }
+    }
+  });
 
-	return user?.students ?? [];
+  return user?.students ?? [];
 };
 
 export type GetMineStudentsResult = Awaited<ReturnType<typeof getMineStudents>>;
@@ -34,14 +34,14 @@ export type GetMineStudentsResult = Awaited<ReturnType<typeof getMineStudents>>;
  * @cache React cache
  */
 export const getMineProject = cache(async () => {
-	const user = await getSessionUser();
-	const userProjectId = user.projectId;
+  const user = await getSessionUser();
+  const userProjectId = user.projectId;
 
-	if (!userProjectId) {
-		return undefined;
-	}
+  if (!userProjectId) {
+    return undefined;
+  }
 
-	return getProject(userProjectId);
+  return getProject(userProjectId);
 });
 
 export type GetMineProjectResult = Awaited<ReturnType<typeof getMineProject>>;
@@ -52,7 +52,7 @@ export type GetMineProjectResult = Awaited<ReturnType<typeof getMineProject>>;
  * @cache React cache
  */
 export const getMineOverview = cache(async () => {
-	const sessionUser = await getSessionUser();
+  const sessionUser = await getSessionUser();
 
-	return getUserOverview(sessionUser.id, sessionUser.projectId);
+  return getUserOverview(sessionUser.id, sessionUser.projectId);
 });

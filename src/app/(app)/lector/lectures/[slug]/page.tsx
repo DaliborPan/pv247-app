@@ -2,13 +2,13 @@ import { type LectureSlug } from '@/db';
 import { getLectureMdxComponent } from '@/modules/lecture/mdx';
 
 type Params = {
-	slug: LectureSlug;
+  slug: LectureSlug;
 };
 
 const Page = async ({ params }: { params: Params }) => {
-	const MdxComponent = getLectureMdxComponent(params.slug);
+  const MdxComponent = getLectureMdxComponent(params.slug);
 
-	return <MdxComponent />;
+  return <MdxComponent />;
 };
 
 export default Page;

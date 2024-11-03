@@ -14,23 +14,23 @@ import { RscFormsMdx } from './rsc-forms';
 import { ApiActionsDatabaseMdx } from './api-actions-database';
 
 type MdxComponent = ComponentType<{
-	readonly components?: MDXComponents | undefined;
+  readonly components?: MDXComponents | undefined;
 }>;
 
 const homeworkMdxComponentsMap: Record<HomeworkSlug, MdxComponent> = {
-	'typescript': TypescriptMdx,
-	'react-basics': ReactBasictMdx,
-	'styling': StylingMdx,
-	'state': StateMdx,
-	'table-memo': TableMemoMdx,
-	'forms-async': FormsAsyncMdx,
-	'nextjs-basic': NextjsBasicMdx,
-	'rsc-forms': RscFormsMdx,
-	'api-actions-database': ApiActionsDatabaseMdx,
+  'typescript': TypescriptMdx,
+  'react-basics': ReactBasictMdx,
+  'styling': StylingMdx,
+  'state': StateMdx,
+  'table-memo': TableMemoMdx,
+  'forms-async': FormsAsyncMdx,
+  'nextjs-basic': NextjsBasicMdx,
+  'rsc-forms': RscFormsMdx,
+  'api-actions-database': ApiActionsDatabaseMdx,
 
-	// Not used
-	'': () => null
+  // Not used
+  '': () => null
 };
 
 export const getHomeworkMdxComponent = (slug: HomeworkSlug) =>
-	homeworkMdxComponentsMap[slug];
+  homeworkMdxComponentsMap[slug];
