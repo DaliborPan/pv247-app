@@ -1,10 +1,8 @@
 import NextAuth, { type NextAuthConfig } from 'next-auth';
 import GitHub from 'next-auth/providers/github';
-import { eq } from 'drizzle-orm';
 
-import { db } from '@/db';
-import { users } from '@/db/schema/users';
 import { getNewStudentLectorId } from '@/modules/lector';
+import { updateUser } from '@/modules/student';
 
 import { CustomDrizzleAdapter } from './adapter';
 
@@ -38,7 +36,7 @@ export const authOptions = {
      * We can update the user role based on the email.
      */
     createUser: async ({ user }) => {
-      if (!user.email) {
+      if (!user.email || !user.id) {
         return;
       }
 
@@ -47,13 +45,7 @@ export const authOptions = {
         const lectorId =
           role === 'student' ? await getNewStudentLectorId() : undefined;
 
-        await db
-          .update(users)
-          .set({
-            role,
-            lectorId
-          })
-          .where(eq(users.email, user.email));
+        await updateUser(user.id, { role, lectorId });
       } catch (e) {
         console.error("ERROR: Couldn't update user role");
         console.error(e);
