@@ -71,7 +71,7 @@ export const ProjectFormProvider = ({
         <div className="flex items-center mb-6">
           <h1 className="text-3xl grow">Create a project</h1>
           <Button
-            isLoading={form.formState.isSubmitting}
+            isLoading={mutation.isPending}
             type="submit"
             iconLeft={{ icon: <Send /> }}
           >

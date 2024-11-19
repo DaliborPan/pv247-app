@@ -12,6 +12,7 @@ const Page = async () => {
   const defaultValues = {
     id: project.id,
     name: project.name,
+    shortDescription: project.shortDescription ?? '',
     description: project.description ?? '',
     github: project.github ?? '',
     students: project.users
