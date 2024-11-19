@@ -5,7 +5,10 @@ import { assignProject } from '@/modules/student';
 import { type ProjectInsert } from '@/db/schema/projects';
 
 export const createProject = async (
-  data: Pick<ProjectInsert, 'name' | 'description' | 'github'>
+  data: Pick<
+    ProjectInsert,
+    'name' | 'description' | 'github' | 'shortDescription'
+  >
 ) => {
   const [project] = await db.insert(projects).values(data).returning();
 

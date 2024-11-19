@@ -15,6 +15,7 @@ export const projects = sqliteTable('project', {
   id: text('id').notNull().primaryKey().$defaultFn(randomUUID),
   name: text('name').notNull(),
   description: text('description'),
+  shortDescription: text('short_description'),
   github: text('github'),
   points: integer('points'),
   comment: text('comment'),

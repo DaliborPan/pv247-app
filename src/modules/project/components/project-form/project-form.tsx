@@ -48,6 +48,10 @@ export const ProjectForm = async ({
   <ProjectFormProvider defaultValues={defaultValues}>
     <FormInput name="name" label="Name" />
     <FormInput name="github" label="GitHub repository" />
+    <FormInput
+      name="shortDescription"
+      label="GPT description (2 sentences overview)"
+    />
 
     <div className="pt-1.5">
       <FormEditor name="description" label="Description" />

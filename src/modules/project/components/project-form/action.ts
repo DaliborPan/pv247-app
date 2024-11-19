@@ -9,11 +9,18 @@ import { type ProjectFormSchema } from './schema';
 
 export const createProjectAction = async ({
   students,
+
   name,
-  github,
-  description
+  description,
+  shortDescription,
+  github
 }: ProjectFormSchema) => {
-  const project = await createProject({ name, description, github });
+  const project = await createProject({
+    name,
+    description,
+    shortDescription,
+    github
+  });
 
   await assignProject({ projectId: project.id, studentIds: students });
 
@@ -23,13 +30,21 @@ export const createProjectAction = async ({
 export const updateProjectAction = async ({
   id,
   students,
+
   name,
-  github,
-  description
+  description,
+  shortDescription,
+  github
 }: ProjectFormSchema) => {
   if (!id) return;
 
-  await updateProject(id, { name, description, github, studentIds: students });
+  await updateProject(id, {
+    name,
+    description,
+    shortDescription,
+    github,
+    studentIds: students
+  });
 
   revalidateTag(PROJECTS_TAG);
 };

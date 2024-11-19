@@ -24,7 +24,7 @@ export const ProjectCard = ({
     <h2 className="text-xl font-medium">{project.name}</h2>
 
     <TextPreview className="mt-3 line-clamp-4">
-      {project.description}
+      {project.shortDescription}
     </TextPreview>
 
     <div className="flex items-end justify-between mt-6 gap-x-2">
