@@ -1,0 +1,7 @@
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #a0aec0;
+  float: left;
+  pointer-events: none;
+  height: 0;
+}

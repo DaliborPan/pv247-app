@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { FormInput } from '@/components/form/form-fields';
 import { db } from '@/db';
 import { getSessionUser } from '@/modules/session-user';
+import { FormEditor } from '@/components/form/form-fields/form-editor';
 
 import { ProjectFormProvider } from './project-form-provider';
 import { StudentCombobox } from './student-combobox';
@@ -29,10 +30,12 @@ const _StudentCombobox = async ({
 
   return (
     <StudentCombobox
-      options={students.map(user => ({
-        value: user.id,
-        label: `${user.firstName} ${user.lastName}`
-      }))}
+      options={students
+        .filter(student => !!student.github)
+        .map(user => ({
+          value: user.id,
+          label: `${user.firstName} ${user.lastName}`
+        }))}
     />
   );
 };
@@ -46,8 +49,9 @@ export const ProjectForm = async ({
     <FormInput name="name" label="Name" />
     <FormInput name="github" label="GitHub repository" />
 
-    {/* TODO: To be rich text editor */}
-    <FormInput name="description" label="Description" />
+    <div className="pt-1.5">
+      <FormEditor name="description" label="Description" />
+    </div>
 
     <div className="mt-2">
       <Suspense>

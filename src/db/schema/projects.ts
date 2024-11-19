@@ -28,3 +28,5 @@ export const projects = sqliteTable('project', {
 });
 
 export type Project = typeof projects.$inferSelect;
+
+export type ProjectInsert = typeof projects.$inferInsert;

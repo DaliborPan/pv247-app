@@ -2,9 +2,10 @@ import { eq } from 'drizzle-orm';
 
 import { db, type Project, projects } from '@/db';
 import { assignProject } from '@/modules/student';
+import { type ProjectInsert } from '@/db/schema/projects';
 
 export const createProject = async (
-  data: Pick<Project, 'name' | 'description'>
+  data: Pick<ProjectInsert, 'name' | 'description' | 'github'>
 ) => {
   const [project] = await db.insert(projects).values(data).returning();
 

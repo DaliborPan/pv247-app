@@ -10,9 +10,10 @@ import { type ProjectFormSchema } from './schema';
 export const createProjectAction = async ({
   students,
   name,
+  github,
   description
 }: ProjectFormSchema) => {
-  const project = await createProject({ name, description });
+  const project = await createProject({ name, description, github });
 
   await assignProject({ projectId: project.id, studentIds: students });
 
