@@ -29,7 +29,8 @@ export const ProfileProjectCard = async () => {
         <LabeledValue label="Project description">
           <p className="relative pl-4 mt-2 text-sm font-light leading-6 line-clamp-3">
             <span className="absolute left-0 w-1 h-full bg-primary" />
-            {project.description}
+
+            {project.shortDescription}
           </p>
         </LabeledValue>
       </div>
