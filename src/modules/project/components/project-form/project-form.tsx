@@ -1,9 +1,9 @@
 import { Suspense } from 'react';
 
-import { FormInput } from '@/components/form/form-fields';
 import { db } from '@/db';
 import { getSessionUser } from '@/modules/session-user';
 import { FormEditor } from '@/components/form/form-fields/form-editor';
+import { FormInput } from '@/components/form/form-fields/form-input';
 
 import { ProjectFormProvider } from './project-form-provider';
 import { StudentCombobox } from './student-combobox';

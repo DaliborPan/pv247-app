@@ -7,8 +7,8 @@ import { Pencil, Send } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/base/button';
-import { FormInput } from '@/components/form/form-fields';
 import { Form } from '@/components/form';
+import { FormInput } from '@/components/form/form-fields/form-input';
 
 import { useSetHomeworkPointsMutation } from './mutation';
 import {

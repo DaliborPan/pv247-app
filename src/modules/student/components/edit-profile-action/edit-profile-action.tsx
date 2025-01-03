@@ -6,7 +6,7 @@ import { Pencil } from 'lucide-react';
 import { use } from 'react';
 
 import { Prompt } from '@/components/base/prompt';
-import { FormInput } from '@/components/form/form-fields';
+import { FormInput } from '@/components/form/form-fields/form-input';
 import { Button } from '@/components/base/button';
 
 import { editProfileFormSchema, type EditProfileFormSchema } from './schema';

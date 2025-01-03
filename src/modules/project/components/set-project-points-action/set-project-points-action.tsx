@@ -4,7 +4,8 @@ import { type PropsWithChildren } from 'react';
 import { toast } from 'sonner';
 
 import { Prompt } from '@/components/base/prompt';
-import { FormInput } from '@/components/form/form-fields';
+import { FormInput } from '@/components/form/form-fields/form-input';
+import { FormTextarea } from '@/components/form/form-fields/form-textarea';
 
 import {
   type SetProjectPointsFormSchema,
@@ -24,6 +25,7 @@ export const SetProjectPointsAction = ({
 
   return (
     <Prompt<SetProjectPointsFormSchema>
+      dialogProps={{ size: '2xl' }}
       title="Set points"
       formSchema={setProjectPointsFormSchema}
       defaultValues={{
@@ -31,9 +33,9 @@ export const SetProjectPointsAction = ({
         projectId
       }}
       content={
-        <div className="flex flex-col pt-2 gap-y-3">
+        <div className="flex flex-col pt-2 gap-y-4">
           <FormInput type="number" name="points" label="Points" />
-          <FormInput name="comment" label="Comment" />
+          <FormTextarea name="comment" label="Comment" />
         </div>
       }
       onDecision={async ({ confirmed, data }) => {
