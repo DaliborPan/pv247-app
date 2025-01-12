@@ -62,7 +62,9 @@ export const ProjectStatusCard = ({ project }: { project: Project }) => {
             </button>
           </SetProjectPointsAction>
 
-          <p className="text-sm text-gray-600 mt-4">{project.comment}</p>
+          <p className="text-sm leading-6 text-gray-600 mt-4 whitespace-pre-wrap">
+            {project.comment}
+          </p>
         </div>
       )}
 

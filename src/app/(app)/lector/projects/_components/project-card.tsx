@@ -13,7 +13,7 @@ export const ProjectCard = ({
 }: {
   project: GetProjectsResult[number];
 }) => (
-  <article className="p-6 bg-white rounded-lg shadow">
+  <article className="flex flex-col p-6 bg-white rounded-lg shadow">
     <span className="flex items-center mb-1 text-xs text-gray-500 truncate">
       <Icon icon={<Users />} className="mr-2" />
       {project.users
@@ -23,7 +23,7 @@ export const ProjectCard = ({
 
     <h2 className="text-xl font-medium">{project.name}</h2>
 
-    <TextPreview className="mt-3 line-clamp-4">
+    <TextPreview className="mt-3 line-clamp-4 grow">
       {project.shortDescription}
     </TextPreview>
 
