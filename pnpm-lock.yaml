@@ -15,8 +15,8 @@ dependencies:
     specifier: ^3.9.1
     version: 3.9.1(react-hook-form@7.53.1)
   '@libsql/client':
-    specifier: ^0.12.0
-    version: 0.12.0
+    specifier: ^0.14.0
+    version: 0.14.0
   '@mdx-js/loader':
     specifier: ^3.0.1
     version: 3.0.1(webpack@5.96.1)
@@ -90,8 +90,8 @@ dependencies:
     specifier: ^1.0.0
     version: 1.0.0(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
   drizzle-orm:
-    specifier: ^0.33.0
-    version: 0.33.0(@libsql/client@0.12.0)(@types/react@18.3.1)(react@18.3.1)
+    specifier: ^0.39.3
+    version: 0.39.3(@libsql/client@0.14.0)
   lucide-react:
     specifier: ^0.454.0
     version: 0.454.0(react@18.3.1)
@@ -155,8 +155,8 @@ devDependencies:
     specifier: ^10.4.17
     version: 10.4.17(postcss@8.4.35)
   drizzle-kit:
-    specifier: ^0.24.2
-    version: 0.24.2
+    specifier: ^0.30.4
+    version: 0.30.4
   eslint:
     specifier: ^8.57.0
     version: 8.57.0
@@ -271,12 +271,13 @@ packages:
     dependencies:
       regenerator-runtime: 0.14.1
 
-  /@drizzle-team/brocli@0.10.1:
-    resolution: {integrity: sha512-AHy0vjc+n/4w/8Mif+w86qpppHuF3AyXbcWW+R/W7GNA3F5/p2nuhlkCJaTXSLZheB4l1rtHzOfr9A7NwoR/Zg==}
+  /@drizzle-team/brocli@0.10.2:
+    resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
     dev: true
 
   /@esbuild-kit/core-utils@3.3.2:
     resolution: {integrity: sha512-sPRAnw9CdSsRmEtnsl2WXWdyquogVpB3yZ3dgwJfe8zrOzTsV7cJvmwrKVa+0ma5BoiGJ+BoqkMvawbayKUsqQ==}
+    deprecated: 'Merged into tsx: https://tsx.is'
     dependencies:
       esbuild: 0.18.20
       source-map-support: 0.5.21
@@ -284,6 +285,7 @@ packages:
 
   /@esbuild-kit/esm-loader@2.6.5:
     resolution: {integrity: sha512-FxEMIkJKnodyA1OaCUoEvbYRkoZlLZ4d/eXFu9Fh8CbBBgP5EmZxrfTRyN0qpXZ4vOvqnE5YdRdcrmUUXuU+dA==}
+    deprecated: 'Merged into tsx: https://tsx.is'
     dependencies:
       '@esbuild-kit/core-utils': 3.3.2
       get-tsconfig: 4.7.3
@@ -808,10 +810,10 @@ packages:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  /@libsql/client@0.12.0:
-    resolution: {integrity: sha512-Jt9ijfzlmswZzxRRksEv8Igbw7ER9IX/RSrwzEIRyzwwQLcpeZGGrnDQP9S7UPCJ90uFDiaICFiyhvwO+60DmA==}
+  /@libsql/client@0.14.0:
+    resolution: {integrity: sha512-/9HEKfn6fwXB5aTEEoMeFh4CtG0ZzbncBb1e++OCdVpgKZ/xyMsIVYXm0w7Pv4RUel803vE6LwniB3PqD72R0Q==}
     dependencies:
-      '@libsql/core': 0.12.0
+      '@libsql/core': 0.14.0
       '@libsql/hrana-client': 0.7.0
       js-base64: 3.7.7
       libsql: 0.4.5
@@ -821,8 +823,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@libsql/core@0.12.0:
-    resolution: {integrity: sha512-PZJF4qvPbDWZfXk0Tr+O5xaMhFoetA1gIVPgYLH6Bc6gAeyYxhGw268p+95SkADZDjB5CYPcVLvfQEjSVeR3Zw==}
+  /@libsql/core@0.14.0:
+    resolution: {integrity: sha512-nhbuXf7GP3PSZgdCY2Ecj8vz187ptHlZQ0VRc751oB2C1W8jQUXKKklvt7t1LJiUTQBVJuadF628eUk+3cRi4Q==}
     dependencies:
       js-base64: 3.7.7
     dev: false
@@ -2232,12 +2234,6 @@ packages:
       undici-types: 5.26.5
     dev: true
 
-  /@types/node@20.16.5:
-    resolution: {integrity: sha512-VwYCweNo3ERajwy0IUlqqcyZ8/A7Zwa9ZP3MnENWcB11AejO+tLy3pu850goUW2FC/IJMdZUfKpX/yxL1gymCA==}
-    dependencies:
-      undici-types: 6.19.8
-    dev: false
-
   /@types/node@20.17.6:
     resolution: {integrity: sha512-VEI7OdvK2wP7XHnsuXbAJnEpEkF6NjSN45QJlL4VGqZSXsnicpesdTWsg9RISeSdYd3yeRj/y3k5KGjUXYnFwQ==}
     dependencies:
@@ -2281,7 +2277,7 @@ packages:
   /@types/ws@8.5.10:
     resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
     dependencies:
-      '@types/node': 20.16.5
+      '@types/node': 20.17.6
     dev: false
 
   /@typescript-eslint/eslint-plugin@7.4.0(@typescript-eslint/parser@7.4.0)(eslint@8.57.0)(typescript@5.4.2):
@@ -3179,11 +3175,11 @@ packages:
       esutils: 2.0.3
     dev: true
 
-  /drizzle-kit@0.24.2:
-    resolution: {integrity: sha512-nXOaTSFiuIaTMhS8WJC2d4EBeIcN9OSt2A2cyFbQYBAZbi7lRsVGJNqDpEwPqYfJz38yxbY/UtbvBBahBfnExQ==}
+  /drizzle-kit@0.30.4:
+    resolution: {integrity: sha512-B2oJN5UkvwwNHscPWXDG5KqAixu7AUzZ3qbe++KU9SsQ+cZWR4DXEPYcvWplyFAno0dhRJECNEhNxiDmFaPGyQ==}
     hasBin: true
     dependencies:
-      '@drizzle-team/brocli': 0.10.1
+      '@drizzle-team/brocli': 0.10.2
       '@esbuild-kit/esm-loader': 2.6.5
       esbuild: 0.19.12
       esbuild-register: 3.5.0(esbuild@0.19.12)
@@ -3191,14 +3187,15 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.33.0(@libsql/client@0.12.0)(@types/react@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-SHy72R2Rdkz0LEq0PSG/IdvnT3nGiWuRk+2tXZQ90GVq/XQhpCzu/EFT3V2rox+w8MlkBQxifF8pCStNYnERfA==}
+  /drizzle-orm@0.39.3(@libsql/client@0.14.0):
+    resolution: {integrity: sha512-EZ8ZpYvDIvKU9C56JYLOmUskazhad+uXZCTCRN4OnRMsL+xAJ05dv1eCpAG5xzhsm1hqiuC5kAZUCS924u2DTw==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
-      '@cloudflare/workers-types': '>=3'
-      '@electric-sql/pglite': '>=0.1.1'
-      '@libsql/client': '*'
-      '@neondatabase/serverless': '>=0.1'
+      '@cloudflare/workers-types': '>=4'
+      '@electric-sql/pglite': '>=0.2.0'
+      '@libsql/client': '>=0.10.0'
+      '@libsql/client-wasm': '>=0.10.0'
+      '@neondatabase/serverless': '>=0.10.0'
       '@op-engineering/op-sqlite': '>=2'
       '@opentelemetry/api': ^1.4.1
       '@planetscale/database': '>=1'
@@ -3206,20 +3203,18 @@ packages:
       '@tidbcloud/serverless': '*'
       '@types/better-sqlite3': '*'
       '@types/pg': '*'
-      '@types/react': '>=18'
       '@types/sql.js': '*'
       '@vercel/postgres': '>=0.8.0'
       '@xata.io/client': '*'
       better-sqlite3: '>=7'
       bun-types: '*'
-      expo-sqlite: '>=13.2.0'
+      expo-sqlite: '>=14.0.0'
       knex: '*'
       kysely: '*'
       mysql2: '>=2'
       pg: '>=8'
       postgres: '>=3'
       prisma: '*'
-      react: '>=18'
       sql.js: '>=1'
       sqlite3: '>=5'
     peerDependenciesMeta:
@@ -3230,6 +3225,8 @@ packages:
       '@electric-sql/pglite':
         optional: true
       '@libsql/client':
+        optional: true
+      '@libsql/client-wasm':
         optional: true
       '@neondatabase/serverless':
         optional: true
@@ -3246,8 +3243,6 @@ packages:
       '@types/better-sqlite3':
         optional: true
       '@types/pg':
-        optional: true
-      '@types/react':
         optional: true
       '@types/sql.js':
         optional: true
@@ -3273,16 +3268,12 @@ packages:
         optional: true
       prisma:
         optional: true
-      react:
-        optional: true
       sql.js:
         optional: true
       sqlite3:
         optional: true
     dependencies:
-      '@libsql/client': 0.12.0
-      '@types/react': 18.3.1
-      react: 18.3.1
+      '@libsql/client': 0.14.0
     dev: false
 
   /eastasianwidth@0.2.0:

@@ -1,8 +1,8 @@
 import NextAuth, { type NextAuthConfig } from 'next-auth';
 import GitHub from 'next-auth/providers/github';
 
-import { getNewStudentLectorId } from '@/modules/lector';
-import { updateUser } from '@/modules/student';
+import { getNewStudentLectorId } from '@/modules/lector/server';
+import { updateUser } from '@/modules/student/server';
 
 import { CustomDrizzleAdapter } from './adapter';
 

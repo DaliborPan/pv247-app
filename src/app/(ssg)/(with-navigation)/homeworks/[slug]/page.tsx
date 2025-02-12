@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation';
 
 import { type HomeworkSlug, homeworkSlugSchema } from '@/db';
-import { getIsHomeworkAvailable } from '@/modules/lecture';
-import { getHomeworkMdxComponent } from '@/modules/homework';
+import { getHomeworkMdxComponent } from '@/modules/homework/mdx';
+import { getIsHomeworkAvailable } from '@/modules/lecture/server';
 
 type Params = {
   slug: HomeworkSlug;

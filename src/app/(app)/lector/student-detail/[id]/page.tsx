@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { StudentHomeworkCard, getStudent } from '@/modules/student';
+import { StudentHomeworkCard } from '@/modules/student/components/student-homework-card';
+import { getStudent } from '@/modules/student/server';
 
 import { StudentHero, StudentOverviewCard } from './_components';
 

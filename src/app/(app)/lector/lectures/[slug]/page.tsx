@@ -1,5 +1,5 @@
 import { type LectureSlug } from '@/db';
-import { getLectureMdxComponent } from '@/modules/lecture';
+import { getLectureMdxComponent } from '@/modules/lecture/mdx';
 
 type Params = {
   slug: LectureSlug;

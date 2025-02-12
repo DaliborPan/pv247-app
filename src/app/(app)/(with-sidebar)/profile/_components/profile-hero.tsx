@@ -1,6 +1,6 @@
-import { getSessionUser } from '@/modules/session-user';
+import { getSessionUser } from '@/modules/session-user/server';
 import { Hero } from '@/components/base/hero';
-import { EditProfileAction } from '@/modules/student';
+import { EditProfileAction } from '@/modules/student/components/edit-profile-action';
 
 const ProfileHeroContent = async () => {
   const user = await getSessionUser();

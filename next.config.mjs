@@ -14,17 +14,7 @@ const nextConfig = {
   reactStrictMode: true,
 
   experimental: {
-    optimizePackageImports: [
-      '@/db',
-
-      '@/modules/homework',
-      '@/modules/lector',
-      '@/modules/lecture',
-      '@/modules/project',
-      '@/modules/session-user',
-      '@/modules/student',
-      '@/modules/shared'
-    ]
+    optimizePackageImports: ['@/db']
   }
 };
 

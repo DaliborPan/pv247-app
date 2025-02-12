@@ -1,5 +1,4 @@
 import { drizzle } from 'drizzle-orm/libsql';
-import { createClient } from '@libsql/client';
 
 import {
   homeworks,
@@ -18,15 +17,13 @@ import { projects, type Project } from './schema/projects';
 import { users, type User } from './schema/users';
 import * as relations from './schema/relations';
 
-const client = createClient({
-  url: process.env.DATABASE_URL!,
-  authToken: process.env.AUTH_TOKEN
-});
-
-const db = drizzle(client, {
+const db = drizzle({
+  connection: {
+    url: process.env.DATABASE_URL!,
+    authToken: process.env.AUTH_TOKEN
+  },
   schema: {
     homeworks,
-
     lectures,
     projects,
     users,

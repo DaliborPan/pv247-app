@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
 import { db } from '@/db';
-import { getSessionUser } from '@/modules/session-user';
+import { getSessionUser } from '@/modules/session-user/server';
 import { FormEditor } from '@/components/form/form-fields/form-editor';
 import { FormInput } from '@/components/form/form-fields/form-input';
 

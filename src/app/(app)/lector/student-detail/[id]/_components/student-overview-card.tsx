@@ -2,10 +2,10 @@ import Link from 'next/link';
 import { ExternalLink } from 'lucide-react';
 
 import { LabeledValue } from '@/components/labeled-value';
-import { StudentOverviewCard as _StudentOverviewCard } from '@/modules/student';
 import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
 import { type User } from '@/db';
+import { StudentOverviewCard as _StudentOverviewCard } from '@/modules/student/components/student-overview-card';
 
 export const StudentOverviewCard = ({ student }: { student: User }) => (
   <_StudentOverviewCard

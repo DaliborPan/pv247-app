@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 
 import { db, type Project, projects } from '@/db';
-import { assignProject } from '@/modules/student';
+import { assignProject } from '@/modules/student/server';
 import { type ProjectInsert } from '@/db/schema/projects';
 
 export const createProject = async (

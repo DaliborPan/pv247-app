@@ -6,11 +6,12 @@ import { type Lecture } from '@/db';
 import { Icon } from '@/components/base/icon';
 import { TextPreview } from '@/components/text-preview';
 import { cn } from '@/lib/cn';
-import { getIsAvailable, getLecturesWithHomework } from '@/modules/lecture';
 import { formatDate } from '@/lib/date';
+import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
+import { getLecturesWithHomework } from '@/modules/lecture/server';
 
 const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
-  const isAvailable = getIsAvailable(lecture);
+  const isAvailable = checkIsAvailable(lecture);
 
   return (
     <article className="flex flex-col p-6 bg-white rounded-lg shadow">

@@ -3,7 +3,7 @@ import React from 'react';
 
 import { db, type HomeworkSlug, type LectureSlug } from '@/db';
 
-import { getIsAvailable } from '../utils/get-is-available';
+import { checkIsAvailable } from '../utils/check-is-available';
 
 export const ORDERED_LECTURES_TAG = 'ordered-lectures';
 
@@ -48,7 +48,7 @@ export const getLecturesWithHomework = async () => {
 export const getAvailableLectures = React.cache(async () => {
   const lectures = await getOrderedLectures();
 
-  return lectures.filter(getIsAvailable);
+  return lectures.filter(checkIsAvailable);
 });
 
 export const getIsLectureAvailableTag = (slug: LectureSlug) =>
@@ -66,7 +66,7 @@ export const getIsLectureAvailable = (slug: LectureSlug) =>
         where: (table, { eq }) => eq(table.slug, slug)
       });
 
-      return !!lecture && getIsAvailable(lecture);
+      return !!lecture && checkIsAvailable(lecture);
     },
     [getIsLectureAvailableTag(slug)],
     {
@@ -89,7 +89,7 @@ export const getIsHomeworkAvailable = (slug: HomeworkSlug) =>
         where: (table, { eq }) => eq(table.homeworkSlug, slug)
       });
 
-      return !!lecture && getIsAvailable(lecture);
+      return !!lecture && checkIsAvailable(lecture);
     },
     [getIsHomeworkAvailableTag(slug)],
     {

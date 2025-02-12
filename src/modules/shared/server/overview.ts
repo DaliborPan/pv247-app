@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { getOrderedLectures, getIsAvailable } from '@/modules/lecture';
-import { getUserHomeworks } from '@/modules/homework';
-import { getProject } from '@/modules/project';
+import { getUserHomeworks } from '@/modules/homework/server';
+import { getOrderedLectures } from '@/modules/lecture/server';
+import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
+import { getProject } from '@/modules/project/server';
 
 /**
  * Get overview by userId
@@ -15,7 +16,7 @@ export const getUserOverview = React.cache(
     const awardedHomeworksLength = userHomeworks.length;
 
     const lectures = await getOrderedLectures();
-    const availableLength = lectures.filter(getIsAvailable).length;
+    const availableLength = lectures.filter(checkIsAvailable).length;
 
     const totalPoints = userHomeworks.reduce(
       (acc, homework) => acc + (homework?.points ?? 0),

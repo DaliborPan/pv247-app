@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-import { getOrderedLectures } from '@/modules/lecture';
-import { getUserOverview } from '@/modules/shared';
+import { getUserOverview } from '@/modules/shared/server';
 import { Button } from '@/components/base/button';
+import { getOrderedLectures } from '@/modules/lecture/server';
 
 import { ListCard } from './list-card';
 import { PointsBadge } from './points-badge';

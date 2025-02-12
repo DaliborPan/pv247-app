@@ -1,5 +1,6 @@
 import { DetailCard } from '@/components/detail-card';
-import { getOrderedLectures, RevalidateLectureAction } from '@/modules/lecture';
+import { RevalidateLectureAction } from '@/modules/lecture/components/revalidate-lecture-action';
+import { getOrderedLectures } from '@/modules/lecture/server';
 
 export const RevalidateLecturesSection = async () => {
   const lectures = await getOrderedLectures();

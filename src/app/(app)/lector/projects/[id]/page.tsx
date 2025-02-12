@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-import { getProject } from '@/modules/project';
+import { getProject } from '@/modules/project/server';
 import { RichTextEditor } from '@/components/base/rich-text-editor';
 
 import { ProjectStatusCard, ProjectUsersCard } from './_components';
