@@ -18,8 +18,8 @@ export const getNewStudentLectorId = async () => {
 
   const reviewers = lectors.filter(
     lector =>
-      lector.email === 'jakubhonig@gmail.com' ||
-      lector.email === 'janskamirek@seznam.cz'
+      lector.email === 'pantlik.dalibor@seznam.cz' ||
+      lector.email === 'samueltuka0@gmail.com'
   );
 
   return reviewers.reduce((acc, lector) => {
