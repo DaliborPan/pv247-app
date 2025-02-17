@@ -12,7 +12,7 @@ const Page = async () => {
     <>
       <h2 className="mb-6 text-3xl">Awarded projects</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {awardedProjects.length ? (
           awardedProjects.map(project => (
             <ProjectCard key={project.id} project={project} />
@@ -22,9 +22,9 @@ const Page = async () => {
         )}
       </div>
 
-      <h2 className="mt-12 mb-6 text-3xl">Projects without points</h2>
+      <h2 className="mb-6 mt-12 text-3xl">Projects without points</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {otherProjects.length ? (
           otherProjects.map(project => (
             <ProjectCard key={project.id} project={project} />

@@ -36,11 +36,11 @@ export const OnboardingForm = ({ userId }: { userId: string }) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="bg-white p-8 rounded-lg flex md:block flex-col w-full items-center"
+        className="flex w-full flex-col items-center rounded-lg bg-white p-8 md:block"
       >
-        <h2 className="md:text-3xl text-2xl mb-8">Fill in basic information</h2>
+        <h2 className="mb-8 text-2xl md:text-3xl">Fill in basic information</h2>
 
-        <div className="flex flex-col gap-y-4 mb-6">
+        <div className="mb-6 flex flex-col gap-y-4">
           <FormInput name="firstName" label="First name" />
           <FormInput name="lastName" label="Last name" />
           <FormInput
@@ -59,11 +59,11 @@ export const OnboardingForm = ({ userId }: { userId: string }) => {
           />
         </div>
 
-        <div className="flex justify-end w-full md:w-auto">
+        <div className="flex w-full justify-end md:w-auto">
           <Button
             isLoading={form.formState.isSubmitSuccessful}
             type="submit"
-            className="md:w-auto w-full"
+            className="w-full md:w-auto"
           >
             Continue to the application
           </Button>

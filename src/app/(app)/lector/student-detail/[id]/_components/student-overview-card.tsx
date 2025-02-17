@@ -15,7 +15,7 @@ export const StudentOverviewCard = ({ student }: { student: User }) => (
       <LabeledValue label="Project status">
         <Link
           className={cn(
-            'flex items-center transition-colors duration-200 gap-x-2 hover:text-primary-500',
+            'flex items-center gap-x-2 transition-colors duration-200 hover:text-primary-500',
             !project?.id && 'pointer-events-none'
           )}
           href={`/lector/projects/${project?.id ?? ''}`}

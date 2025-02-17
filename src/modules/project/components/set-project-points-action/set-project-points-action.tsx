@@ -33,7 +33,7 @@ export const SetProjectPointsAction = ({
         projectId
       }}
       content={
-        <div className="flex flex-col pt-2 gap-y-4">
+        <div className="flex flex-col gap-y-4 pt-2">
           <FormInput type="number" name="points" label="Points" />
           <FormTextarea name="comment" label="Comment" />
         </div>

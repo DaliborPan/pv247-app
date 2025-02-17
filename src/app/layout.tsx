@@ -23,7 +23,7 @@ const RootLayout = ({
   <html lang="en">
     <body
       className={cn(
-        'min-h-screen flex flex-col bg-background',
+        'flex min-h-screen flex-col bg-background text-text-primary',
         poppins.className
       )}
     >

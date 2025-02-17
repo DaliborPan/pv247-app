@@ -16,7 +16,7 @@ export const SidebarCard = ({
   children,
   className
 }: SidebarCardProps) => (
-  <div className={cn('p-6 rounded-lg bg-primary-100', className)}>
+  <div className={cn('rounded-lg bg-primary-100 p-6 text-sm', className)}>
     {customTitle ? (
       customTitle
     ) : title ? (

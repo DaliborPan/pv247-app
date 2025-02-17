@@ -14,11 +14,11 @@ export const CurrentLectureCard = async () => {
   }
 
   return (
-    <div className="px-6 py-4 bg-white border rounded-lg">
+    <div className="rounded-lg border bg-white px-6 py-4">
       <div className="flex items-center">
         <div className="grow">
           <span className="text-xs text-gray-500">Current lecture</span>
-          <h3 className="-mt-1 text-xl truncate">{currentLecture.name}</h3>
+          <h3 className="-mt-1 truncate text-xl">{currentLecture.name}</h3>
         </div>
 
         <Link href={`/lectures/${currentLecture.slug}`}>

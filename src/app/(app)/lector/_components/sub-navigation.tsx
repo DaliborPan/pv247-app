@@ -17,7 +17,7 @@ const NavigationItem = ({
   return (
     <li
       className={cn(
-        'px-3 py-2 lg:py-1 lg:rounded flex',
+        'flex px-3 py-2 lg:rounded lg:py-1',
         isActive && 'bg-primary-200'
       )}
     >
@@ -31,7 +31,7 @@ const NavigationItem = ({
 export const SubNavigation = () => (
   <div className="bg-primary-100">
     <nav className="lg:ml-[calc(7.5rem+100px)]">
-      <ul className="flex flex-col lg:flex-row py-3 gap-x-8">
+      <ul className="flex flex-col gap-x-8 py-3 lg:flex-row">
         <NavigationItem href="/lector/students">Students</NavigationItem>
         <NavigationItem href="/lector/homeworks">Homework</NavigationItem>
         <NavigationItem href="/lector/projects">Projects</NavigationItem>

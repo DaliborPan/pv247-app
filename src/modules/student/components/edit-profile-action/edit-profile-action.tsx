@@ -23,7 +23,7 @@ export const EditProfileAction = (props: {
       formSchema={editProfileFormSchema}
       defaultValues={defaultValues}
       content={
-        <div className="flex flex-col pt-2 gap-y-3">
+        <div className="flex flex-col gap-y-3 pt-2">
           <FormInput name="firstName" label="First name" />
           <FormInput name="lastName" label="Last name" />
           <FormInput name="github" label="Github nick" />

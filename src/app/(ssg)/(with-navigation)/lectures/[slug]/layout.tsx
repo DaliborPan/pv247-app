@@ -10,7 +10,7 @@ const Layout = ({
   <>
     <LectureNavigation lectureSlug={params.slug} />
 
-    <main className="max-w-4xl mx-auto -mt-4 lg:-mt-10">{children}</main>
+    <main className="mx-auto -mt-4 max-w-4xl lg:-mt-10">{children}</main>
   </>
 );
 

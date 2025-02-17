@@ -41,7 +41,7 @@ const Layout = async ({
         </div>
       </div>
 
-      <main className="max-w-4xl mx-auto -mt-10">{children}</main>
+      <main className="mx-auto -mt-10 max-w-4xl">{children}</main>
     </>
   );
 };

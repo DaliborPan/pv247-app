@@ -40,7 +40,7 @@ const ToolbarButton = forwardRef(
 );
 
 const ToolbarSeparator = () => (
-  <span className="inline-block w-px mx-1.5 bg-gray-300 h-4" />
+  <span className="mx-1.5 inline-block h-4 w-px bg-gray-300" />
 );
 
 type ToolbarProps = {
@@ -130,7 +130,7 @@ export const RichTextEditorToolbar = ({
   // );
 
   return (
-    <div className="flex flex-wrap items-center w-full pb-3 gap-x-1">
+    <div className="flex w-full flex-wrap items-center gap-x-1 pb-3">
       <ToolbarButton
         active={fullscreen}
         onClick={() => {

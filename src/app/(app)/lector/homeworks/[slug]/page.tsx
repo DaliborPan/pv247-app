@@ -55,7 +55,7 @@ const Page = async ({
       }
       contents={
         <>
-          <div className="flex items-center py-2 pl-4 mb-4 rounded-lg shadow bg-gray-50">
+          <div className="mb-4 flex items-center rounded-lg bg-gray-50 py-2 pl-4 shadow">
             <div className="grow">
               <LabeledValue label="Name">
                 <h2 className="text-2xl text-primary">

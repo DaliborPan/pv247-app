@@ -40,7 +40,7 @@ export const columns: ColumnDef<
           href={url}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center font-light gap-x-2 hover:text-primary hover:underline"
+          className="flex items-center gap-x-2 font-light hover:text-primary hover:underline"
         >
           <Icon icon={<ExternalLink />} />
           Link

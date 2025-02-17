@@ -9,7 +9,7 @@ export const Sidebar = async () => {
   const user = await getSessionUser();
 
   return (
-    <aside className="lg:fixed lg:top-[100px] lg:h-[calc(100vh-132px)] lg:w-[18.5rem] lg:overflow-y-auto flex flex-col gap-y-4 lg:pr-3">
+    <aside className="flex flex-col gap-y-4 lg:fixed lg:top-[100px] lg:h-[calc(100vh-132px)] lg:w-[18.5rem] lg:overflow-y-auto lg:pr-3">
       {user.role === 'student' && <OverviewCard />}
 
       <LecturesCard />

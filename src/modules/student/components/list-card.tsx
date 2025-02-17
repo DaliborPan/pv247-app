@@ -21,7 +21,7 @@ export const ListCard = async <T extends { id: string }>({
         <div
           key={item.id}
           className={cn(
-            'flex items-center p-4 rounded-md bg-primary-100',
+            'flex items-center rounded-md bg-primary-100 p-4',
             className
           )}
         >

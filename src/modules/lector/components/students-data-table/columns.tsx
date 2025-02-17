@@ -23,7 +23,7 @@ export const columns: ColumnDef<
         href={`https://github.com/${row.original.github}`}
         target="_blank"
         rel="noreferrer"
-        className="flex items-center font-light gap-x-2 hover:text-primary hover:underline"
+        className="flex items-center gap-x-2 font-light hover:text-primary hover:underline"
       >
         <Icon icon={<ExternalLink />} />
         {row.original.github ?? row.original.name ?? row.original.lastName}
@@ -64,7 +64,7 @@ export const columns: ColumnDef<
     cell: ({ row }) => (
       <Link
         href={`/lector/student-detail/${row.original.id}`}
-        className="flex items-center hover:underline gap-x-2 hover:text-primary "
+        className="flex items-center gap-x-2 hover:text-primary hover:underline"
       >
         <span>Open</span>
         <Icon icon={<ArrowRight />} />

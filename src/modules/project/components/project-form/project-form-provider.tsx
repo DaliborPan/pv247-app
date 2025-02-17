@@ -68,8 +68,8 @@ export const ProjectFormProvider = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex items-center mb-6">
-          <h1 className="text-3xl grow">Create a project</h1>
+        <div className="mb-6 flex items-center">
+          <h1 className="grow text-3xl">Create a project</h1>
           <Button
             isLoading={mutation.isPending}
             type="submit"

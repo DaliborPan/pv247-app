@@ -21,7 +21,7 @@ export const DataTableColumnHeader = <TData, TValue>({
   }
 
   return (
-    <div className={cn('flex justify-between items-center', className)}>
+    <div className={cn('flex items-center justify-between', className)}>
       <button
         onClick={() => {
           if (column.getIsSorted() === 'desc') {
@@ -37,7 +37,7 @@ export const DataTableColumnHeader = <TData, TValue>({
       </button>
 
       {column.getIsSorted() !== false && (
-        <div className="mt-0 ml-2 mr-6">
+        <div className="ml-2 mr-6 mt-0">
           <Icon
             icon={
               column.getIsSorted() === 'desc' ? <ChevronDown /> : <ChevronUp />

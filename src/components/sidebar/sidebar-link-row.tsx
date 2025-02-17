@@ -16,8 +16,8 @@ export const SidebarLinkRow = ({
     {...props}
     href={href}
     className={cn(
-      'flex items-center text-sm',
-      !isAvailable && 'opacity-50 pointer-events-none'
+      'flex items-center text-text-secondary hover:underline',
+      !isAvailable && 'pointer-events-none opacity-50'
     )}
   >
     {children}

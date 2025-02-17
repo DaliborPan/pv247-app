@@ -6,19 +6,19 @@ import { MdxImage, MdxCodeBlock, MdxComment } from './components/mdx/';
 export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
   // headings
   h1: ({ children }) => (
-    <h1 className="mt-20 mb-8 text-5xl leading-tight">{children}</h1>
+    <h1 className="mb-8 mt-20 text-5xl leading-tight">{children}</h1>
   ),
-  h2: ({ children }) => <h2 className="mt-12 mb-6 text-3xl">{children}</h2>,
+  h2: ({ children }) => <h2 className="mb-6 mt-12 text-3xl">{children}</h2>,
   h3: ({ children }) => (
-    <h3 className="mt-10 mb-4 text-xl font-medium text-primary">{children}</h3>
+    <h3 className="mb-4 mt-10 text-xl font-medium text-primary">{children}</h3>
   ),
   h4: ({ children }) => (
-    <h4 className="mt-8 mb-4 font-medium text-primary">{children}</h4>
+    <h4 className="mb-4 mt-8 font-medium text-primary">{children}</h4>
   ),
 
   // lists
-  ul: ({ children }) => <ul className="pl-6 mb-6 list-disc">{children}</ul>,
-  ol: ({ children }) => <ol className="pl-6 mb-6 list-decimal">{children}</ol>,
+  ul: ({ children }) => <ul className="mb-6 list-disc pl-6">{children}</ul>,
+  ol: ({ children }) => <ol className="mb-6 list-decimal pl-6">{children}</ol>,
   li: ({ children }) => (
     <li className="my-2 font-light leading-8 text-markdown">{children}</li>
   ),
@@ -31,7 +31,7 @@ export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
   ),
   a: ({ children, ...props }) => (
     <a
-      className="ml-px underline text-primary hover:no-underline"
+      className="ml-px text-primary underline hover:no-underline"
       {...props}
       target="_blank"
     >
@@ -42,12 +42,12 @@ export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
     <strong className="font-semibold text-black">{children}</strong>
   ),
   em: ({ children }) => (
-    <em className="not-italic font-normal text-primary">{children}</em>
+    <em className="font-normal not-italic text-primary">{children}</em>
   ),
 
   // code
   code: ({ children }) => (
-    <code className="px-2 py-1 text-sm rounded-lg bg-primary-100">
+    <code className="rounded-lg bg-primary-100 px-2 py-1 text-sm">
       {children}
     </code>
   ),

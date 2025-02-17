@@ -16,7 +16,7 @@ export const CorrectState = ({ children }: PropsWithChildren) => {
       <form>
         <span className="text-gray-500">form</span>
         <input onChange={e => onNameChange(e.target.value)} type="text" />
-        <span className="block mt-4 text-gray-500">name</span>
+        <span className="mt-4 block text-gray-500">name</span>
         <span>{name}</span>
       </form>
     </LiveCodeWrapper>

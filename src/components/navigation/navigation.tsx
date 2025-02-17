@@ -19,7 +19,7 @@ const NavigationDelimiter = ({ className }: { className?: string }) => (
 
 const UserMenuItem = ({ user }: { user: User }) => (
   <Link href="/profile" className="flex items-center gap-x-3">
-    <div className="rounded-full size-8 bg-neutral" />
+    <div className="size-8 rounded-full bg-neutral" />
 
     <span>{user.name}</span>
   </Link>
@@ -32,12 +32,12 @@ export const Navigation = ({
   user?: User;
   isUserLoading?: boolean;
 }) => (
-  <header className="sticky top-0 z-20 flex items-center px-4 py-2 bg-white border-b md:px-10 gap-x-20">
+  <header className="sticky top-0 z-20 flex items-center gap-x-20 border-b bg-white px-4 py-2 md:px-10">
     <Image src={MUNI_LOGO} width={100} alt="muni-logo" />
 
     <MobileNavigation user={user} isUserLoading={isUserLoading} />
 
-    <div className="items-center hidden grow lg:flex">
+    <div className="hidden grow items-center lg:flex">
       <nav className="grow">
         <ul className="flex items-center gap-x-10">
           <NavigationItem href="/">Home</NavigationItem>

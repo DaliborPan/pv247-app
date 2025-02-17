@@ -27,8 +27,8 @@ export const LectureCard = ({
   isAvailable?: boolean;
   href?: string;
 }) => (
-  <article className="flex flex-col p-6 bg-white rounded-lg shadow">
-    <span className="flex items-center mb-1 text-xs text-gray-500">
+  <article className="flex flex-col rounded-lg bg-white p-6 shadow">
+    <span className="mb-1 flex items-center text-xs text-gray-500">
       from {formatDate(lecture.availableFrom)}
     </span>
 
@@ -38,7 +38,7 @@ export const LectureCard = ({
       {lecture.preview}
     </TextPreview>
 
-    <div className="flex items-end justify-between mt-6">
+    <div className="mt-6 flex items-end justify-between">
       <Link href={href} className={cn(!isAvailable && 'pointer-events-none')}>
         <Button
           iconLeft={!isAvailable ? { icon: <Lock /> } : undefined}

@@ -27,15 +27,15 @@ export const DataTable = <TData extends { id: string }>({
   return (
     <div className="overflow-x-auto">
       <table className="table w-full caption-bottom">
-        <thead className="[&_tr]:bg-primary-100 [&_tr]:h-auto table-header-group h-auto">
+        <thead className="table-header-group h-auto [&_tr]:h-auto [&_tr]:bg-primary-100">
           {table.getHeaderGroups().map(headerGroup => (
             <tr
-              className="block transition-colors border-b"
+              className="block border-b transition-colors"
               key={headerGroup.id}
             >
               {headerGroup.headers.map(header => (
                 <th
-                  className="p-2 font-medium text-left text-primary"
+                  className="p-2 text-left font-medium text-primary"
                   key={header.id}
                   style={{ width: `${header.getSize()}px` }}
                 >
@@ -51,12 +51,12 @@ export const DataTable = <TData extends { id: string }>({
         <tbody className="">
           {table.getRowModel().rows.map(row => (
             <tr
-              className="flex items-center transition-colors border-b even:bg-white/50 odd:bg-white"
+              className="flex items-center border-b transition-colors odd:bg-white even:bg-white/50"
               key={row.id}
             >
               {row.getVisibleCells().map(cell => (
                 <td
-                  className="inline-block p-2 antialiased text-left align-middle"
+                  className="inline-block p-2 text-left align-middle antialiased"
                   key={cell.id}
                   style={{ width: `${cell.column.getSize()}px` }}
                 >

@@ -12,12 +12,12 @@ export const LiveCodeWrapper = ({
   className?: string;
   childrenWrapperClassName?: string;
 }>) => (
-  <div className={cn('flex flex-col lg:flex-row gap-x-4', className)}>
+  <div className={cn('flex flex-col gap-x-4 lg:flex-row', className)}>
     <div className="grow">{codeBlock}</div>
 
     <div
       className={cn(
-        'flex justify-center p-4 pt-10 my-6 rounded-lg shadow bg-primary-100',
+        'my-6 flex justify-center rounded-lg bg-primary-100 p-4 pt-10 shadow',
         childrenWrapperClassName
       )}
     >

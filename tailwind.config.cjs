@@ -28,7 +28,18 @@ module.exports = {
         'primary-800': '#000075',
         'primary-900': '#000047',
 
-        'primary-foreground': '#ffffff',
+        'neutral-50': '#f6f6f6',
+        'neutral-100': '#e7e7e7',
+        'neutral-200': '#d1d1d1',
+        'neutral-300': '#b0b0b0',
+        'neutral-400': '#888888',
+        'neutral-500': '#6d6d6d',
+        'neutral-600': '#5d5d5d',
+        'neutral-700': '#4f4f4f',
+        'neutral-800': '#454545',
+        'neutral-900': '#3b3b3b',
+        'neutral-950': '#262626',
+
         'destructive': 'hsl(0 72.22% 50.59%)',
         'destructive-foreground': 'hsl(210 40% 98%)',
 
@@ -39,7 +50,13 @@ module.exports = {
         'muted-foreground': 'hsl(215 20.2% 65.1%)',
 
         // `p` tag in lecture
-        'markdown': 'hsl(222deg, 22%, 5%)'
+        'markdown': 'hsl(222deg, 22%, 5%)',
+
+        // text
+        'text-primary': '#262626', // neutral-950
+        'text-secondary': '#4f4f4f', // neutral-700
+        'text-terciary': '#6d6d6d', // neutral-500
+        'text-primary-color': '#0000a3' // primary-700
       }
     }
   },

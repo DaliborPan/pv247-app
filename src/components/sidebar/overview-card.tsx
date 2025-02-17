@@ -9,8 +9,10 @@ const OverviewCardRow = ({
   children
 }: PropsWithChildren<{ title: string }>) => (
   <div className="flex items-center">
-    <span className="text-gray-600 grow">{title}</span>
-    <span className="text-sm font-medium text-primary">{children}</span>
+    <span className="grow text-text-secondary">{title}</span>
+    <span className="text-sm font-medium text-text-primary-color">
+      {children}
+    </span>
   </div>
 );
 

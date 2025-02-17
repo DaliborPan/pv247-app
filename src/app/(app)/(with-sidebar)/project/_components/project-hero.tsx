@@ -52,13 +52,13 @@ export const ProjectHero = async () => {
         </>
       }
     >
-      <div className="rounded-full shadow size-20 bg-gradient-to-tr from-primary-500 to-primary-100" />
+      <div className="size-20 rounded-full bg-gradient-to-tr from-primary-500 to-primary-100 shadow" />
 
       <div>
         <div className="text-2xl font-medium text-slate-900">
           {project.name}
         </div>
-        <div className="flex items-center mt-1 gap-x-2">
+        <div className="mt-1 flex items-center gap-x-2">
           <Icon icon={<Users />} />
           <div className="text-sm text-gray-500">{displayUsers}</div>
         </div>

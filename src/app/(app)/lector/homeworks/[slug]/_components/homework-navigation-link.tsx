@@ -25,7 +25,7 @@ export const HomeworkNavigationLink = ({
     <Link href={`/lector/homeworks/${lecture.homeworkSlug}?type=${viewType}`}>
       <Button
         variant="ghost"
-        className="flex flex-col items-start h-auto font-normal hover:bg-white hover:shadow"
+        className="flex h-auto flex-col items-start font-normal hover:bg-white hover:shadow"
       >
         <span
           className={cn('text-sm text-gray-600', type === 'previous' && 'pl-6')}
@@ -34,7 +34,7 @@ export const HomeworkNavigationLink = ({
         </span>
         <div
           className={cn(
-            'flex items-center font-medium gap-x-2',
+            'flex items-center gap-x-2 font-medium',
             type === 'next' && 'flex-row-reverse'
           )}
         >

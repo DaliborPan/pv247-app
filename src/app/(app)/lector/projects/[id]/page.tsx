@@ -13,8 +13,8 @@ const Page = async ({ params: { id } }: { params: { id: string } }) => {
   }
 
   return (
-    <div className="flex flex-col-reverse gap-8 md:gap-y-0 md:flex-row">
-      <div className="md:w-2/3 w-full">
+    <div className="flex flex-col-reverse gap-8 md:flex-row md:gap-y-0">
+      <div className="w-full md:w-2/3">
         <h1 className="mb-6 text-3xl">{project.name}</h1>
 
         <RichTextEditor
@@ -24,7 +24,7 @@ const Page = async ({ params: { id } }: { params: { id: string } }) => {
         />
       </div>
 
-      <aside className="flex flex-col md:w-1/3 w-full gap-y-6">
+      <aside className="flex w-full flex-col gap-y-6 md:w-1/3">
         <ProjectStatusCard project={project} />
         <ProjectUsersCard project={project} />
       </aside>

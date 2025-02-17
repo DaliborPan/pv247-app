@@ -21,14 +21,14 @@ export const MdxCodeBlock = ({ children }: PropsWithChildren<object>) => {
     <pre
       ref={ref}
       className={cn(
-        'p-4 my-6 bg-[#0c0c1a] rounded-lg shadow [&>code]:px-0 [&>code]:bg-transparent overflow-y-hidden relative',
+        'relative my-6 overflow-y-hidden rounded-lg bg-[#0c0c1a] p-4 shadow [&>code]:bg-transparent [&>code]:px-0',
         !expanded &&
           height > 321 &&
-          'max-h-[322px] after:content-[""] after:absolute after:inset-x-0 after:bottom-0 after:h-20 after:bg-gradient-to-b after:from-transparent after:to-gray-700'
+          'max-h-[322px] after:absolute after:inset-x-0 after:bottom-0 after:h-20 after:bg-gradient-to-b after:from-transparent after:to-gray-700 after:content-[""]'
       )}
     >
       {height > 321 && height !== Infinity && (
-        <div className="absolute font-sans lg:top-4 bottom-4 right-4 z-20">
+        <div className="absolute bottom-4 right-4 z-20 font-sans lg:top-4">
           <Button
             variant="outline"
             onClick={() => setExpanded(!expanded)}

@@ -8,14 +8,14 @@ export const MdxComment = ({
 }: PropsWithChildren<{ className?: string }>) => (
   <div
     className={cn(
-      'relative px-6 py-4 mt-10 border-l-4 rounded-lg rounded-bl-none mb-14 border-primary bg-primary-100 [&>p>code]:!bg-primary-200',
+      'relative mb-14 mt-10 rounded-lg rounded-bl-none border-l-4 border-primary bg-primary-100 px-6 py-4 [&>p>code]:!bg-primary-200',
       className
     )}
   >
     {children}
 
-    <div className="absolute flex -top-6 -left-[26px]">
-      <div className="grid p-2 rounded-full bg-background size-12 text-primary place-items-center">
+    <div className="absolute -left-[26px] -top-6 flex">
+      <div className="grid size-12 place-items-center rounded-full bg-background p-2 text-primary">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="32"

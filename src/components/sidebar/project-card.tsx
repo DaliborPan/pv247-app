@@ -13,8 +13,8 @@ export const ProjectCard = async () => {
     <SidebarCard
       className="hidden lg:block"
       customTitle={
-        <div className="flex items-center mb-4">
-          <h3 className="text-xl grow">Project</h3>
+        <div className="mb-4 flex items-center">
+          <h3 className="grow text-xl">Project</h3>
 
           <Link href="/project">
             <Button
@@ -28,20 +28,18 @@ export const ProjectCard = async () => {
     >
       {project?.name ? (
         <div className="flex flex-col gap-y-2">
-          <span className="text-sm font-medium text-primary">
+          <span className="font-medium text-text-primary-color">
             {project.name}
           </span>
 
-          <div className="flex items-center text-sm text-gray-600">
+          <div className="flex items-center text-text-secondary">
             {/* TODO: Icon based on if project is accepted or not */}
             <Icon icon={<Users />} className="mr-2" />
             <span className="truncate">{project.users.length} students</span>
           </div>
         </div>
       ) : (
-        <span className="text-sm text-gray-600">
-          Project not submitted yet.
-        </span>
+        <span className="text-text-terciary">Project not submitted yet.</span>
       )}
     </SidebarCard>
   );

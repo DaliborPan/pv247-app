@@ -27,8 +27,8 @@ export const ProfileProjectCard = async () => {
       <div className="flex flex-col gap-y-3">
         <LabeledValue label="Project name">{project.name}</LabeledValue>
         <LabeledValue label="Project description">
-          <p className="relative pl-4 mt-2 text-sm font-light leading-6 line-clamp-3">
-            <span className="absolute left-0 w-1 h-full bg-primary" />
+          <p className="relative mt-2 line-clamp-3 pl-4 text-sm font-light leading-6">
+            <span className="absolute left-0 h-full w-1 bg-primary" />
 
             {project.shortDescription}
           </p>

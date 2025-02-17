@@ -20,7 +20,7 @@ export const NavigationButtonLink = ({
     <Link href={href}>
       <Button
         variant="ghost"
-        className="flex items-center md:items-start justify-between w-full h-auto py-4 font-normal bg-white hover:bg-white hover:shadow md:bg-transparent md:justify-start"
+        className="flex h-auto w-full items-center justify-between bg-white py-4 font-normal hover:bg-white hover:shadow md:items-start md:justify-start md:bg-transparent"
       >
         <div className="flex flex-col items-start">
           <span
@@ -42,7 +42,7 @@ export const NavigationButtonLink = ({
           </div>
         </div>
 
-        <Icon icon={<ChevronIcon />} className="md:hidden size-6" />
+        <Icon icon={<ChevronIcon />} className="size-6 md:hidden" />
       </Button>
     </Link>
   );

@@ -74,15 +74,15 @@ const RichTextEditorComponent = (
   } = props;
 
   return (
-    <div className="relative prose max-w-none">
+    <div className="prose relative max-w-none">
       {editor && (
         <div
           className={cn(
-            'rounded-[3px] bg-primary-100 px-4 pt-2 pb-4 w-full',
+            'w-full rounded-[3px] bg-primary-100 px-4 pb-4 pt-2',
             disabled && 'py-4',
             wrapperClassName,
             {
-              'fixed top-0 left-0 h-full z-[9999]': fullscreen
+              'fixed left-0 top-0 z-[9999] h-full': fullscreen
             }
           )}
         >
@@ -96,7 +96,7 @@ const RichTextEditorComponent = (
 
           <div
             className={cn(
-              'overflow-y-scroll min-h-24 max-h-96',
+              'max-h-96 min-h-24 overflow-y-scroll',
               disabled && 'no-scrollbar',
               className,
               {
@@ -130,7 +130,7 @@ export const RichTextEditor = (props: RichTextEditorProps) => {
   );
 
   return (
-    <div className="relative prose max-w-none">
+    <div className="prose relative max-w-none">
       {fullscreen && <Portal>{editorComponent}</Portal>}
       {!fullscreen && editorComponent}
     </div>

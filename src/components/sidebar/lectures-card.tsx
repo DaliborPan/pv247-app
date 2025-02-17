@@ -19,14 +19,16 @@ export const LecturesCard = async () => {
           .map((lecture, index) => {
             const isAvailable = index !== availableLectures.length;
 
+            const IconComponent = isAvailable ? ArrowRight : Lock;
+
             return (
               <SidebarLinkRow
                 key={lecture.slug}
                 href={`/lectures/${lecture.slug}`}
                 isAvailable={isAvailable}
               >
-                <span className="text-gray-600 grow">{lecture.name}</span>
-                <Icon icon={isAvailable ? <ArrowRight /> : <Lock />} />
+                <span className="grow text-text-secondary">{lecture.name}</span>
+                <Icon icon={<IconComponent />} />
               </SidebarLinkRow>
             );
           })}

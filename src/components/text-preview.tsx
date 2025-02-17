@@ -10,7 +10,7 @@ export const TextPreview = ({
 }>) => (
   <p
     className={cn(
-      'mt-4 text-sm leading-6 text-gray-600 line-clamp-3',
+      'mt-4 line-clamp-3 text-sm leading-6 text-gray-600',
       className
     )}
   >

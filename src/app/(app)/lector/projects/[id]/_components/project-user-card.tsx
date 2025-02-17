@@ -10,7 +10,7 @@ export const ProjectUsersCard = ({
   project: NonNullable<GetProjectResult>;
 }) => (
   <SidebarCard title="Users">
-    <ul className="text-primary font-medium flex flex-col gap-y-1.5">
+    <ul className="flex flex-col gap-y-1.5 font-medium text-primary">
       {project.users.map(user => (
         <li key={user.id} className="flex items-center gap-x-2">
           <Icon icon={<User />} />

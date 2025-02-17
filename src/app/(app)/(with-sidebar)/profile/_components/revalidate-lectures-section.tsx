@@ -7,7 +7,7 @@ export const RevalidateLecturesSection = async () => {
 
   return (
     <DetailCard title="Revalidate lectures">
-      <div className="grid md:grid-cols-2 gap-2">
+      <div className="grid gap-2 md:grid-cols-2">
         {lectures.map(lecture => (
           <div key={lecture.id} className="flex items-center gap-x-4">
             <RevalidateLectureAction lecture={lecture} />

@@ -14,8 +14,8 @@ const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
   const isAvailable = checkIsAvailable(lecture);
 
   return (
-    <article className="flex flex-col p-6 bg-white rounded-lg shadow">
-      <span className="flex items-center mb-1 text-xs text-gray-500">
+    <article className="flex flex-col rounded-lg bg-white p-6 shadow">
+      <span className="mb-1 flex items-center text-xs text-gray-500">
         from {formatDate(lecture.availableFrom)}
       </span>
 
@@ -25,7 +25,7 @@ const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
         {lecture.homeworkPreview}
       </TextPreview>
 
-      <div className="flex items-end justify-between mt-6">
+      <div className="mt-6 flex items-end justify-between">
         <Link
           href={`/homeworks/${lecture.homeworkSlug}`}
           className={cn(!isAvailable && 'pointer-events-none')}
@@ -43,7 +43,7 @@ const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
           href={lecture.homeworkClassroomLink}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center underline gap-x-2 text-primary underline-offset-2 hover:text-primary-800 hover:no-underline"
+          className="flex items-center gap-x-2 text-primary underline underline-offset-2 hover:text-primary-800 hover:no-underline"
         >
           <Icon icon={<ExternalLink />} />
           <span>Github Classroom Link</span>

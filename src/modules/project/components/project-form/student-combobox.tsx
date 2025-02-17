@@ -19,13 +19,13 @@ const StudentSelectedComboboxItem = ({
   const students = formContext.watch('students');
 
   return (
-    <div className="flex items-center p-4 bg-white rounded-lg">
-      <div className="flex items-center grow gap-x-3">
-        <div className="rounded-full size-10 bg-background" />
+    <div className="flex items-center rounded-lg bg-white p-4">
+      <div className="flex grow items-center gap-x-3">
+        <div className="size-10 rounded-full bg-background" />
 
         <div className="flex flex-col">
           <span className="text-sm">{studentOption.label}</span>
-          <span className="-mt-px text-gray-600 text-xxs">Web developer</span>
+          <span className="-mt-px text-xxs text-gray-600">Web developer</span>
         </div>
       </div>
 
@@ -53,7 +53,7 @@ export const StudentCombobox = ({ options }: { options: ComboboxOption[] }) => {
     <div>
       <div className="flex flex-col gap-y-2">
         <div className="flex items-center">
-          <FormLabel className="text-xl grow">Students</FormLabel>
+          <FormLabel className="grow text-xl">Students</FormLabel>
 
           <Combobox
             emptyMessage="No options available."
@@ -78,7 +78,7 @@ export const StudentCombobox = ({ options }: { options: ComboboxOption[] }) => {
       </div>
 
       {students.length > 0 ? (
-        <div className="flex flex-col gap-y-2 mt-4">
+        <div className="mt-4 flex flex-col gap-y-2">
           {students.map(s => (
             <StudentSelectedComboboxItem
               key={s}
@@ -87,7 +87,7 @@ export const StudentCombobox = ({ options }: { options: ComboboxOption[] }) => {
           ))}
         </div>
       ) : (
-        <div className="flex items-center justify-center p-4 mt-4 text-gray-400 bg-white rounded-lg">
+        <div className="mt-4 flex items-center justify-center rounded-lg bg-white p-4 text-gray-400">
           No students added yet.
         </div>
       )}

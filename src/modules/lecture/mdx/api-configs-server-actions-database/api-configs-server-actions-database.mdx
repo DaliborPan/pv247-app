@@ -298,7 +298,7 @@ Some of the most essential configurations are `revalidate` and `dynamic`. Next.j
 
 If we set `export const dynamic = "force-dynamic"` in `app/page.tsx`, it means that every time we access route `/`, Next.js will always re-render the page on-demand on the server.
 
-<MdxComment className="mt-6 mb-10">
+<MdxComment className="mb-10 mt-6">
   This behavior is proper if we access the page directly, i.e. via a URL. If we
   access our application first on, for example, the `/users` page, and navigate
   to `/` from that page, the first time we access `/` the page will be rendered

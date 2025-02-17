@@ -15,10 +15,10 @@ export const ProjectStatusCard = ({ project }: { project: Project }) => {
   return (
     <SidebarCard
       customTitle={
-        <div className="flex items-center mb-2 gap-x-2">
+        <div className="mb-2 flex items-center gap-x-2">
           <h3
             className={cn(
-              'truncate grow',
+              'grow truncate',
               project.status === 'pending' ? 'text-sm' : 'text-lg'
             )}
           >
@@ -51,8 +51,8 @@ export const ProjectStatusCard = ({ project }: { project: Project }) => {
               comment: project.comment ?? undefined
             }}
           >
-            <button className="flex items-center w-full px-4 py-2 bg-white rounded-md shadow hover:bg-background">
-              <span className="font-medium text-left grow text-primary">
+            <button className="flex w-full items-center rounded-md bg-white px-4 py-2 shadow hover:bg-background">
+              <span className="grow text-left font-medium text-primary">
                 {project.points} points
               </span>
 
@@ -60,7 +60,7 @@ export const ProjectStatusCard = ({ project }: { project: Project }) => {
             </button>
           </SetProjectPointsAction>
 
-          <p className="text-sm leading-6 text-gray-600 mt-4 whitespace-pre-wrap">
+          <p className="mt-4 whitespace-pre-wrap text-sm leading-6 text-gray-600">
             {project.comment}
           </p>
         </div>

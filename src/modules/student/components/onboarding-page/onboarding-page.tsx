@@ -7,11 +7,11 @@ export const OnboardingPage = async () => {
 
   return (
     <div className="container mt-8">
-      <h1 className="text-2xl md:text-5xl md:font-light mb-4">
+      <h1 className="mb-4 text-2xl md:text-5xl md:font-light">
         Welcome to the PV247 course application
       </h1>
 
-      <p className="text-gray-700 mb-8 text-sm md:text-base">
+      <p className="mb-8 text-sm text-gray-700 md:text-base">
         In this web application, you will find all information and study
         materials.{' '}
       </p>

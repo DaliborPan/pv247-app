@@ -16,7 +16,7 @@ export const NavigationItem = ({ children, href }: NavigationItemProps) => {
     : pathname === href;
 
   return (
-    <li className="relative whitespace-nowrap mt-[2px]">
+    <li className="relative mt-[2px] whitespace-nowrap">
       <Link href={href}>{children}</Link>
 
       {isActive && (

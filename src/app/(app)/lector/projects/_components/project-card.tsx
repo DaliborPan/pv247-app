@@ -13,8 +13,8 @@ export const ProjectCard = ({
 }: {
   project: GetProjectsResult[number];
 }) => (
-  <article className="flex flex-col p-6 bg-white rounded-lg shadow">
-    <span className="flex items-center mb-1 text-xs text-gray-500 truncate">
+  <article className="flex flex-col rounded-lg bg-white p-6 shadow">
+    <span className="mb-1 flex items-center truncate text-xs text-gray-500">
       <Icon icon={<Users />} className="mr-2" />
       {project.users
         .map(user => `${user.firstName} ${user.lastName}`)
@@ -27,7 +27,7 @@ export const ProjectCard = ({
       {project.shortDescription}
     </TextPreview>
 
-    <div className="flex items-end justify-between mt-6 gap-x-2">
+    <div className="mt-6 flex items-end justify-between gap-x-2">
       <Link href={`/lector/projects/${project.id}`} className="grow">
         <Button size="sm">Open project</Button>
       </Link>

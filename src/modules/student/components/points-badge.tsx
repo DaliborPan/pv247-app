@@ -6,7 +6,7 @@ import { Icon } from '@/components/base/icon';
 export const PointsBadge = ({ points }: { points?: number }) => (
   <Badge
     variant="secondary"
-    className="flex items-center px-3 py-1 text-sm text-black bg-primary-200 gap-x-2 hover:bg-primary-200"
+    className="flex items-center gap-x-2 bg-primary-200 px-3 py-1 text-sm text-black hover:bg-primary-200"
   >
     {points === undefined ? (
       <>

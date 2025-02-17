@@ -27,22 +27,22 @@ export const HomeworksCard = async () => {
               homework => homework.lectureId === lecture.id
             );
 
+            const IconComponent = isAvailable ? ArrowRight : Lock;
+
             return (
               <SidebarLinkRow
                 key={lecture.slug}
                 href={`/homeworks/${lecture.homeworkSlug}`}
                 isAvailable={isAvailable}
               >
-                <span className="text-gray-600 grow">
-                  {lecture.homeworkName}
-                </span>
+                <span className="grow">{lecture.homeworkName}</span>
 
                 {homework ? (
-                  <span className="text-sm font-medium text-primary">
+                  <span className="font-medium text-text-primary-color">
                     {homework.points}/{lecture.homeworkMaxPoints}
                   </span>
                 ) : (
-                  <Icon icon={isAvailable ? <ArrowRight /> : <Lock />} />
+                  <Icon icon={<IconComponent />} />
                 )}
               </SidebarLinkRow>
             );

@@ -57,7 +57,7 @@ export const Combobox = ({
             role="combobox"
             {...triggerButtonProps}
             className={cn(
-              'w-[200px] flex justify-between text-gray-600 border-gray-600',
+              'flex w-[200px] justify-between border-gray-600 text-gray-600',
               triggerButtonProps?.className
             )}
             aria-expanded={open}
