@@ -6,9 +6,9 @@ export const LabeledItem = ({
   children: React.ReactNode;
 }) => (
   <div className="flex flex-col">
-    <span className="font-light text-gray-600">{label}</span>
-    <span className="-mt-[2px] text-lg font-medium text-primary">
-      {children}
+    <span className="text-sm font-light uppercase text-text-terciary">
+      {label}
     </span>
+    <span className="text-lg text-text-primary-color">{children}</span>
   </div>
 );

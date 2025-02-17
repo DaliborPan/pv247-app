@@ -12,7 +12,7 @@ export const HomeworkGeneralInfo = async ({ slug }: { slug: HomeworkSlug }) => {
   if (!lecture) return null;
 
   return (
-    <div className="mt-8 grid grid-cols-4 items-center gap-x-10 rounded-lg bg-primary-100 p-4">
+    <div className="mt-8 grid items-center gap-4 rounded-lg bg-primary-100 p-4 lg:grid-cols-4 lg:gap-10">
       <div className="grow">
         <LabeledItem label="Maximum points">
           {lecture?.homeworkMaxPoints} points

@@ -32,47 +32,53 @@ export const Navigation = ({
   user?: User;
   isUserLoading?: boolean;
 }) => (
-  <header className="sticky top-0 z-20 flex items-center gap-x-20 border-b bg-white px-4 py-2 md:px-10">
-    <Image src={MUNI_LOGO} width={100} alt="muni-logo" />
+  <header className="sticky top-0 z-20 border-b bg-white py-2 md:px-10 lg:px-4">
+    <div className="container flex items-center gap-x-20 lg:w-full">
+      <Image src={MUNI_LOGO} width={100} alt="muni-logo" />
 
-    <MobileNavigation user={user} isUserLoading={isUserLoading} />
+      <MobileNavigation user={user} isUserLoading={isUserLoading} />
 
-    <div className="hidden grow items-center lg:flex">
-      <nav className="grow">
-        <ul className="flex items-center gap-x-10">
-          <NavigationItem href="/">Home</NavigationItem>
-          <NavigationItem href="/lectures">Lectures</NavigationItem>
-          <NavigationItem href="/homeworks">Homeworks</NavigationItem>
+      <div className="hidden grow items-center lg:flex">
+        <nav className="grow">
+          <ul className="flex items-center gap-x-10">
+            <NavigationItem href="/">Home</NavigationItem>
+            <NavigationItem href="/lectures">Lectures</NavigationItem>
+            <NavigationItem href="/homeworks">Homeworks</NavigationItem>
 
-          {isUserLoading ? null : user?.role === 'lector' ? (
-            <NavigationItem href="/lector/students">Lector</NavigationItem>
-          ) : (
-            <NavigationItem href="/project">Project</NavigationItem>
-          )}
-        </ul>
-      </nav>
+            {isUserLoading ? null : user?.role === 'lector' ? (
+              <NavigationItem href="/lector/students">Lector</NavigationItem>
+            ) : (
+              <NavigationItem href="/project">Project</NavigationItem>
+            )}
+          </ul>
+        </nav>
 
-      {isUserLoading ? null : user ? (
-        <div className="flex items-center">
-          <UserMenuItem user={user} />
-          <NavigationDelimiter className="mr-4" />
-          <Logout>
-            <Button iconLeft={{ icon: <LogOut /> }} variant="ghost" size="sm" />
-          </Logout>
-        </div>
-      ) : (
-        <SignIn>
-          <Button
-            // Temporary
-            disabled
-            size="sm"
-            variant="outline/primary"
-            iconLeft={{ icon: <Github /> }}
-          >
-            Sign in
-          </Button>
-        </SignIn>
-      )}
+        {isUserLoading ? null : user ? (
+          <div className="flex items-center">
+            <UserMenuItem user={user} />
+            <NavigationDelimiter className="mr-4" />
+            <Logout>
+              <Button
+                iconLeft={{ icon: <LogOut /> }}
+                variant="ghost"
+                size="sm"
+              />
+            </Logout>
+          </div>
+        ) : (
+          <SignIn>
+            <Button
+              // Temporary
+              disabled
+              size="sm"
+              variant="outline/primary"
+              iconLeft={{ icon: <Github /> }}
+            >
+              Sign in
+            </Button>
+          </SignIn>
+        )}
+      </div>
     </div>
   </header>
 );

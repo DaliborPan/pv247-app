@@ -15,18 +15,18 @@ export const CurrentLectureCard = async () => {
 
   return (
     <div className="rounded-lg border bg-white px-6 py-4">
-      <div className="flex items-center">
-        <div className="grow">
-          <span className="text-xs text-gray-500">Current lecture</span>
-          <h3 className="-mt-1 truncate text-xl">{currentLecture.name}</h3>
+      <div className="flex flex-col lg:flex-row lg:items-center">
+        <div className="grow truncate">
+          <span className="mb-1 text-xs text-text-terciary">
+            Current lecture
+          </span>
+          <h3 className="truncate text-xl">{currentLecture.name}</h3>
         </div>
 
         <Link href={`/lectures/${currentLecture.slug}`}>
-          <Button
-            variant="primary/inverse"
-            size="sm"
-            iconLeft={{ icon: <ArrowRight /> }}
-          />
+          <Button variant="link" size="sm" iconRight={{ icon: <ArrowRight /> }}>
+            Learn more
+          </Button>
         </Link>
       </div>
 

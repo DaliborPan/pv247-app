@@ -9,7 +9,7 @@ import { Navigation } from '@/components/navigation';
 type Page = '/homeworks' | '/lectures';
 
 const pageTitleMap: Record<Page, string> = {
-  '/homeworks': 'Homeworks',
+  '/homeworks': 'Weekly homework',
   '/lectures': 'Lectures'
 };
 

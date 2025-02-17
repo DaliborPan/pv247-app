@@ -10,6 +10,12 @@ const buttonVariants = cva(
   'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
+      size: {
+        md: 'h-10 px-4 py-2',
+        sm: 'h-9 rounded-md px-3',
+        xs: 'h-7 rounded-md px-2 text-xs',
+        lg: 'h-11 rounded-md px-8 text-base'
+      },
       variant: {
         'primary': 'bg-primary text-white hover:bg-primary/90',
         'primary/inverse':
@@ -24,13 +30,7 @@ const buttonVariants = cva(
           'border border-destructive bg-transparent text-destructive hover:bg-destructive/5',
         'secondary': 'bg-slate-800 text-slate-200 hover:bg-slate-800/80',
         'ghost': 'hover:bg-accent hover:text-accent-foreground',
-        'link': 'text-primary underline-offset-4 hover:underline'
-      },
-      size: {
-        md: 'h-10 px-4 py-2',
-        sm: 'h-9 rounded-md px-3',
-        xs: 'h-7 rounded-md px-2 text-xs',
-        lg: 'h-11 rounded-md px-8 text-base'
+        'link': 'text-primary underline-offset-4 hover:underline px-0'
       }
     },
     defaultVariants: {

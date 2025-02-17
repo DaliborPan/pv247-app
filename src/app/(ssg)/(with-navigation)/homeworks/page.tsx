@@ -15,7 +15,7 @@ const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
 
   return (
     <article className="flex flex-col rounded-lg bg-white p-6 shadow">
-      <span className="mb-1 flex items-center text-xs text-gray-500">
+      <span className="mb-1 flex items-center text-xs text-text-terciary">
         from {formatDate(lecture.availableFrom)}
       </span>
 
@@ -25,7 +25,7 @@ const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
         {lecture.homeworkPreview}
       </TextPreview>
 
-      <div className="mt-6 flex items-end justify-between">
+      <div className="mt-6 flex items-center justify-between lg:items-end">
         <Link
           href={`/homeworks/${lecture.homeworkSlug}`}
           className={cn(!isAvailable && 'pointer-events-none')}
@@ -39,15 +39,20 @@ const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
           </Button>
         </Link>
 
-        <a
-          href={lecture.homeworkClassroomLink}
-          target="_blank"
-          rel="noreferrer"
-          className="flex items-center gap-x-2 text-primary underline underline-offset-2 hover:text-primary-800 hover:no-underline"
-        >
-          <Icon icon={<ExternalLink />} />
-          <span>Github Classroom Link</span>
-        </a>
+        {isAvailable && (
+          <a
+            href={lecture.homeworkClassroomLink}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-x-2 text-text-primary-color underline underline-offset-2 hover:no-underline"
+          >
+            <Icon icon={<ExternalLink />} />
+            <span className="hidden lg:inline-block">
+              Github Classroom Link
+            </span>
+            <span className="lg:hidden">GH classroom</span>
+          </a>
+        )}
       </div>
     </article>
   );

@@ -8,7 +8,7 @@ const Layout = ({ children }: PropsWithChildren) => (
       <Sidebar />
     </Suspense>
 
-    <div className="pt-8 lg:pl-[20rem] lg:pt-0">{children}</div>
+    <div className="pt-4 lg:pl-[20rem] lg:pt-0">{children}</div>
   </div>
 );
 

@@ -1,12 +1,14 @@
+import { Suspense } from 'react';
+
 import { CurrentLectureCard, GeneralInfo } from './_components';
 
 const Page = () => (
   <>
-    <section className="mb-16">
-      <CurrentLectureCard />
+    <section className="mb-10 lg:mb-12">
+      <Suspense>
+        <CurrentLectureCard />
+      </Suspense>
     </section>
-
-    <h1 className="text-3xl font-light lg:text-5xl">Course information</h1>
 
     <main>
       <GeneralInfo />
