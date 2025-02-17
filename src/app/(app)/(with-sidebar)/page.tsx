@@ -2,11 +2,11 @@ import { CurrentLectureCard, GeneralInfo } from './_components';
 
 const Page = () => (
   <>
-    <h1 className="mb-6 text-3xl">Home page</h1>
-
-    <section className="mb-12">
+    <section className="mb-8">
       <CurrentLectureCard />
     </section>
+
+    <h1 className="text-5xl font-light lg:-mb-2">Course information</h1>
 
     <main>
       <GeneralInfo />

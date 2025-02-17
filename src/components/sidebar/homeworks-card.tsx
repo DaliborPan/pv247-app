@@ -15,7 +15,7 @@ export const HomeworksCard = async () => {
   } = await getMineOverview();
 
   return (
-    <SidebarCard title="Homeworks" className="hidden lg:block">
+    <SidebarCard title="Homework" className="hidden lg:block">
       <div className="flex flex-col gap-y-2">
         {lectures
           .slice(0, availableLength + 1)

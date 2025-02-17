@@ -15,16 +15,23 @@ const NavigationItem = ({
   const isActive = pathname.startsWith(href);
 
   return (
-    <li className={cn('px-3 py-1 rounded-sm', isActive && 'bg-primary-200')}>
-      <Link href={href}>{children}</Link>
+    <li
+      className={cn(
+        'px-3 py-2 lg:py-1 lg:rounded flex',
+        isActive && 'bg-primary-200'
+      )}
+    >
+      <Link href={href} className="w-full">
+        {children}
+      </Link>
     </li>
   );
 };
 
 export const SubNavigation = () => (
   <div className="bg-primary-100">
-    <nav className="ml-[calc(7.5rem+100px)]">
-      <ul className="flex py-3 gap-x-8">
+    <nav className="lg:ml-[calc(7.5rem+100px)]">
+      <ul className="flex flex-col lg:flex-row py-3 gap-x-8">
         <NavigationItem href="/lector/students">Students</NavigationItem>
         <NavigationItem href="/lector/homeworks">Homework</NavigationItem>
         <NavigationItem href="/lector/projects">Projects</NavigationItem>

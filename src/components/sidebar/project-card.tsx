@@ -11,6 +11,7 @@ export const ProjectCard = async () => {
 
   return (
     <SidebarCard
+      className="hidden lg:block"
       customTitle={
         <div className="flex items-center mb-4">
           <h3 className="text-xl grow">Project</h3>

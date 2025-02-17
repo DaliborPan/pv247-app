@@ -1,7 +1,8 @@
 import { type PropsWithChildren } from 'react';
 
-import { ResponsiveSidebarCard } from '@/components/sidebar-card';
 import { getMineOverview } from '@/modules/session-user/server';
+
+import { SidebarCard } from '../sidebar-card';
 
 const OverviewCardRow = ({
   title,
@@ -17,12 +18,12 @@ export const OverviewCard = async () => {
   const { homeworks, lectures, project } = await getMineOverview();
 
   return (
-    <ResponsiveSidebarCard title="Overview">
+    <SidebarCard title="Overview">
       <div className="flex flex-col gap-y-1">
         <OverviewCardRow title="Lectures">{lectures.display}</OverviewCardRow>
         <OverviewCardRow title="Homeworks">{homeworks.display}</OverviewCardRow>
         <OverviewCardRow title="Project">{project.display}</OverviewCardRow>
       </div>
-    </ResponsiveSidebarCard>
+    </SidebarCard>
   );
 };
