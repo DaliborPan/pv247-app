@@ -16,7 +16,7 @@ import {
 
 export type FormInputProps = InputProps & {
   name: string;
-  description?: string;
+  description?: React.ReactNode;
 };
 
 export const FormInput = ({
