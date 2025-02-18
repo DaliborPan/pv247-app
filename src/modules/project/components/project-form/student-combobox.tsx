@@ -25,7 +25,9 @@ const StudentSelectedComboboxItem = ({
 
         <div className="flex flex-col">
           <span className="text-sm">{studentOption.label}</span>
-          <span className="-mt-px text-xxs text-gray-600">Web developer</span>
+          <span className="-mt-px text-xxs text-text-secondary">
+            Web developer
+          </span>
         </div>
       </div>
 
@@ -87,7 +89,7 @@ export const StudentCombobox = ({ options }: { options: ComboboxOption[] }) => {
           ))}
         </div>
       ) : (
-        <div className="mt-4 flex items-center justify-center rounded-lg bg-white p-4 text-gray-400">
+        <div className="mt-4 flex items-center justify-center rounded-lg bg-white p-4 text-text-terciary">
           No students added yet.
         </div>
       )}

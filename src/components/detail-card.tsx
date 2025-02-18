@@ -8,7 +8,7 @@ export const DetailCard = ({
   title?: React.ReactNode;
   actions?: React.ReactNode;
 }>) => (
-  <div className="mx-6 mt-8 rounded-lg bg-white p-8 shadow-lg">
+  <div className="rounded-lg bg-white p-8 shadow-lg">
     <div className="mb-4 flex items-center gap-x-2">
       <h3 className="grow text-xl">{title}</h3>
 

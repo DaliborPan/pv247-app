@@ -13,8 +13,16 @@ export const LabeledValue = ({
   valueClassName?: string;
   wrapperClassName?: string;
 }>) => (
-  <div className={cn('flex flex-col', wrapperClassName)}>
-    <span className={cn('text-xs text-gray-500', labelClassName)}>{label}</span>
+  <div className={cn('flex flex-col font-medium', wrapperClassName)}>
+    <span
+      className={cn(
+        'text-xs font-light uppercase text-text-secondary',
+        labelClassName
+      )}
+    >
+      {label}
+    </span>
+
     {children}
   </div>
 );

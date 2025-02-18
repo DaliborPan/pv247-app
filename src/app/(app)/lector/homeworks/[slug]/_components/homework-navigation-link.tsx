@@ -28,10 +28,14 @@ export const HomeworkNavigationLink = ({
         className="flex h-auto flex-col items-start font-normal hover:bg-white hover:shadow"
       >
         <span
-          className={cn('text-sm text-gray-600', type === 'previous' && 'pl-6')}
+          className={cn(
+            'text-xs font-light text-text-terciary',
+            type === 'previous' && 'pl-6'
+          )}
         >
           {type === 'previous' ? 'Previous' : 'Next'}
         </span>
+
         <div
           className={cn(
             'flex items-center gap-x-2 font-medium',

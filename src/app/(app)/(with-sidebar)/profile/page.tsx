@@ -18,12 +18,12 @@ const Page = async () => {
       <ProfileHero />
 
       <Suspense>
-        {user.role !== 'lector' ? (
-          <>
+        {user.role === 'student' ? (
+          <div className="mt-4 flex flex-col gap-y-4 lg:mt-8">
             <StudentOverviewCard userId={user.id} projectId={user.projectId} />
             <StudentHomeworkCard userId={user.id} projectId={user.projectId} />
             <ProfileProjectCard />
-          </>
+          </div>
         ) : (
           <RevalidateLecturesSection />
         )}

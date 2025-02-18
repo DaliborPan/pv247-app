@@ -1,21 +1,16 @@
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
-
 import { getUserOverview } from '@/modules/shared/server';
-import { Button } from '@/components/base/button';
 import { getOrderedLectures } from '@/modules/lecture/server';
+import { cn } from '@/lib/cn';
 
 import { ListCard } from './list-card';
 import { PointsBadge } from './points-badge';
 
 export const StudentHomeworkCard = async ({
   userId,
-  projectId,
-  showHomeworkLink = false
+  projectId
 }: {
   userId: string;
   projectId: string | null;
-  showHomeworkLink?: boolean;
 }) => {
   const lectures = await getOrderedLectures();
 
@@ -26,6 +21,7 @@ export const StudentHomeworkCard = async ({
   return (
     <ListCard
       title="Homework"
+      className={cn('flex-col items-start gap-2 lg:flex-row lg:items-center')}
       items={lectures
         .slice(0, availableLength + 1)
         .filter(lecture => !!lecture.homeworkSlug)}
@@ -39,10 +35,11 @@ export const StudentHomeworkCard = async ({
         return (
           <>
             <div className="grow">
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-text-terciary">
                 Homework {index + 1}
               </span>
-              <h4 className="-mt-1">{lecture.homeworkName}</h4>
+
+              <h4>{lecture.homeworkName}</h4>
             </div>
 
             <div className="flex items-center gap-x-2">
@@ -51,17 +48,6 @@ export const StudentHomeworkCard = async ({
                 / {lecture.homeworkMaxPoints}
               </span>
             </div>
-
-            {showHomeworkLink && (
-              <Link href={`/homeworks/${lecture.homeworkSlug}`}>
-                <Button
-                  className="ml-4"
-                  size="sm"
-                  variant="ghost"
-                  iconLeft={{ icon: <ArrowRight /> }}
-                />
-              </Link>
-            )}
           </>
         );
       }}

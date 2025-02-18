@@ -25,7 +25,7 @@ export const NavigationButtonLink = ({
         <div className="flex flex-col items-start">
           <span
             className={cn(
-              'text-sm text-gray-600',
+              'text-xs font-light text-text-secondary',
               type === 'previous' && 'md:pl-6'
             )}
           >

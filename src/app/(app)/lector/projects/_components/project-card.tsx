@@ -14,7 +14,7 @@ export const ProjectCard = ({
   project: GetProjectsResult[number];
 }) => (
   <article className="flex flex-col rounded-lg bg-white p-6 shadow">
-    <span className="mb-1 flex items-center truncate text-xs text-gray-500">
+    <span className="mb-1 flex items-center truncate text-xs text-text-terciary">
       <Icon icon={<Users />} className="mr-2" />
       {project.users
         .map(user => `${user.firstName} ${user.lastName}`)
@@ -32,7 +32,7 @@ export const ProjectCard = ({
         <Button size="sm">Open project</Button>
       </Link>
 
-      <Badge variant="outline" className="text-gray-600">
+      <Badge variant="outline" className="text-text-secondary">
         <Icon icon={<Calendar />} className="mr-2" />
         {formatDate(project.updatedAt)}
       </Badge>
@@ -43,7 +43,7 @@ export const ProjectCard = ({
           {project.points} points
         </Badge>
       ) : (
-        <Badge variant="outline" className="text-gray-600">
+        <Badge variant="outline" className="text-text-secondary">
           {project.status}
         </Badge>
       )}

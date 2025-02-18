@@ -18,7 +18,7 @@ const Page = async () => {
             <ProjectCard key={project.id} project={project} />
           ))
         ) : (
-          <p className="col-span-2 text-gray-500">No awarded projects</p>
+          <p className="col-span-2 text-text-terciary">No awarded projects</p>
         )}
       </div>
 
@@ -30,7 +30,9 @@ const Page = async () => {
             <ProjectCard key={project.id} project={project} />
           ))
         ) : (
-          <p className="col-span-2 text-gray-500">No projects without points</p>
+          <p className="col-span-2 text-text-terciary">
+            No projects without points
+          </p>
         )}
       </div>
     </>

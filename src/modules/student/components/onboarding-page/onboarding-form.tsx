@@ -50,7 +50,7 @@ export const OnboardingForm = ({ userId }: { userId: string }) => {
               <div className="text-xs md:text-sm">
                 <span>If your github URL is </span>
                 <span className="text-primary md:text-sm">
-                  https://github.com/DaliborPan,{' '}
+                  github.com/DaliborPan,{' '}
                 </span>
                 <span>then fill in </span>
                 <span className="font-medium text-black">DaliborPan</span>
@@ -63,7 +63,7 @@ export const OnboardingForm = ({ userId }: { userId: string }) => {
           <Button
             isLoading={form.formState.isSubmitSuccessful}
             type="submit"
-            className="w-full md:w-auto"
+            className="w-full lg:w-auto"
           >
             Continue to the application
           </Button>

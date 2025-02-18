@@ -40,7 +40,7 @@ export const SubmitProjectCard = async () => {
       {isPending ? null : project.github ? (
         <SubmitProjectAction project={project} />
       ) : (
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-text-terciary">
           You need to set github link first.
         </p>
       )}

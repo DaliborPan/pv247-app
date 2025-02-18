@@ -56,11 +56,13 @@ export const MobileNavigation = ({
         <DropdownMenuLinkItem href="/lectures">Lectures</DropdownMenuLinkItem>
         <DropdownMenuLinkItem href="/homeworks">Homeworks</DropdownMenuLinkItem>
 
-        {isUserLoading ? null : user?.role === 'lector' ? (
+        {user?.role === 'lector' && (
           <DropdownMenuLinkItem href="/lector/students">
             Lector
           </DropdownMenuLinkItem>
-        ) : (
+        )}
+
+        {user?.role === 'student' && (
           <DropdownMenuLinkItem href="/project">Project</DropdownMenuLinkItem>
         )}
 

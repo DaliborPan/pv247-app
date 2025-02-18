@@ -25,23 +25,21 @@ export const StudentOverviewCard = async ({
     <DetailCard title="Overview">
       <div
         className={cn(
-          'grid grid-cols-3 gap-4',
-          otherFields ? 'grid-cols-4' : 'grid-cols-3'
+          'grid grid-cols-1 gap-6 lg:gap-4',
+          otherFields ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
         )}
       >
         <LabeledValue label="Homework points">
           {homeworks.totalPoints} points
         </LabeledValue>
+
         <LabeledValue label="Project points">
           {project.project?.points
             ? `${project.project.points} points`
             : 'No points yet'}
         </LabeledValue>
-        <LabeledValue label="Total points">
-          <div className="flex items-center gap-x-4">
-            <span>{totalPoints} points</span>
-          </div>
-        </LabeledValue>
+
+        <LabeledValue label="Total points">{totalPoints} points</LabeledValue>
 
         {otherFields?.(overview)}
       </div>

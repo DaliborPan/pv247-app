@@ -55,12 +55,10 @@ export const ProjectHero = async () => {
       <div className="size-20 rounded-full bg-gradient-to-tr from-primary-500 to-primary-100 shadow" />
 
       <div>
-        <div className="text-2xl font-medium text-slate-900">
-          {project.name}
-        </div>
+        <div className="text-2xl font-medium">{project.name}</div>
         <div className="mt-1 flex items-center gap-x-2">
           <Icon icon={<Users />} />
-          <div className="text-sm text-gray-500">{displayUsers}</div>
+          <div className="text-sm text-text-terciary">{displayUsers}</div>
         </div>
       </div>
     </Hero>

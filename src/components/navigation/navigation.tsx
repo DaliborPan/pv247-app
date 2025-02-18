@@ -45,9 +45,11 @@ export const Navigation = ({
             <NavigationItem href="/lectures">Lectures</NavigationItem>
             <NavigationItem href="/homeworks">Homeworks</NavigationItem>
 
-            {isUserLoading ? null : user?.role === 'lector' ? (
+            {user?.role === 'lector' && (
               <NavigationItem href="/lector/students">Lector</NavigationItem>
-            ) : (
+            )}
+
+            {user?.role === 'student' && (
               <NavigationItem href="/project">Project</NavigationItem>
             )}
           </ul>
@@ -68,8 +70,6 @@ export const Navigation = ({
         ) : (
           <SignIn>
             <Button
-              // Temporary
-              disabled
               size="sm"
               variant="outline/primary"
               iconLeft={{ icon: <Github /> }}

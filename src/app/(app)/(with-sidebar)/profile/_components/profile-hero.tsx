@@ -15,11 +15,11 @@ const ProfileHeroContent = async () => {
 
   return (
     <>
-      <div className="size-20 rounded-full bg-gradient-to-tr from-primary-100 to-primary-300 shadow" />
+      <div className="hidden size-20 rounded-full bg-gradient-to-tr from-primary-100 to-primary-300 shadow lg:block" />
 
-      <div>
-        <div className="text-2xl font-medium text-slate-900">{displayName}</div>
-        <div className="text-sm text-gray-500">{displayRole}</div>
+      <div className="pr-10 lg:pr-0">
+        <div className="text-2xl font-medium">{displayName}</div>
+        <div className="text-sm text-text-terciary">{displayRole}</div>
       </div>
     </>
   );

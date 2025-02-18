@@ -7,7 +7,7 @@ import { cn } from '@/lib/cn';
 import { Icon, type IconProps } from '../icon';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       size: {
@@ -17,7 +17,7 @@ const buttonVariants = cva(
         lg: 'h-11 rounded-md px-8 text-base'
       },
       variant: {
-        'primary': 'bg-primary text-white hover:bg-primary/90',
+        'primary': 'bg-primary text-white hover:bg-primary-700',
         'primary/inverse':
           'bg-primary-200 text-primary hover:bg-primary-400 hover:text-white',
         'destructive':

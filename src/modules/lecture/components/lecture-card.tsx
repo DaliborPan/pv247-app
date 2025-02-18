@@ -28,7 +28,7 @@ export const LectureCard = ({
   href?: string;
 }) => (
   <article className="flex flex-col rounded-lg bg-white p-6 shadow">
-    <span className="mb-1 flex items-center text-xs text-gray-500">
+    <span className="mb-1 flex items-center text-xs text-text-terciary">
       from {formatDate(lecture.availableFrom)}
     </span>
 
@@ -49,7 +49,7 @@ export const LectureCard = ({
         </Button>
       </Link>
 
-      <Badge variant="outline" className="text-gray-600">
+      <Badge variant="outline" className="text-text-terciary">
         <Icon icon={<Layers />} className="mr-2" />
         {getNumberWithOrdinal(index + 1)} week
       </Badge>

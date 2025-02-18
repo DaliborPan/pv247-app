@@ -12,10 +12,12 @@ import { Button } from '@/components/base/button';
 import { editProfileFormSchema, type EditProfileFormSchema } from './schema';
 import { editProfileAction } from './action';
 
-export const EditProfileAction = (props: {
+export const EditProfileAction = ({
+  defaultValuesPromise
+}: {
   defaultValuesPromise: Promise<DefaultValues<EditProfileFormSchema>>;
 }) => {
-  const defaultValues = use(props.defaultValuesPromise);
+  const defaultValues = use(defaultValuesPromise);
 
   return (
     <Prompt<EditProfileFormSchema>

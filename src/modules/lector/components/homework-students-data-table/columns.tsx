@@ -46,7 +46,7 @@ export const columns: ColumnDef<
           Link
         </a>
       ) : (
-        <div className="flex items-center gap-x-2 text-gray-500">
+        <div className="flex items-center gap-x-2 text-text-terciary">
           <Icon icon={<X />} />
           No link
         </div>
