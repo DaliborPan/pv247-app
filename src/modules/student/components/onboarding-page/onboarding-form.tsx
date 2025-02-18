@@ -36,9 +36,9 @@ export const OnboardingForm = ({ userId }: { userId: string }) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex w-full flex-col items-center rounded-lg bg-white p-8 md:block"
+        className="flex w-full flex-col items-center rounded-lg bg-white p-8 lg:block"
       >
-        <h2 className="mb-8 text-2xl md:text-3xl">Fill in basic information</h2>
+        <h2 className="mb-8 text-2xl lg:text-3xl">Fill in basic information</h2>
 
         <div className="mb-6 flex flex-col gap-y-4">
           <FormInput name="firstName" label="First name" />
