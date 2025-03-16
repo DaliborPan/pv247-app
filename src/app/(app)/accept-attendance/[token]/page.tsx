@@ -13,9 +13,7 @@ import { getOrderedLectures } from '@/modules/lecture/server';
 const getLecture = async (token: string) => {
   const lectures = await getOrderedLectures();
 
-  const lecture = lectures.find(lecture => lecture.attendanceToken === token);
-
-  return lecture;
+  return lectures.find(lecture => lecture.attendanceToken === token);
 };
 
 const Page = async ({ params }: { params: { token: string } }) => {
