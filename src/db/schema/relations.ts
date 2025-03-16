@@ -4,6 +4,7 @@ import { users } from './users';
 import { projects } from './projects';
 import { homeworks } from './homeworks';
 import { lectures } from './lectures';
+import { studentLectures } from './studentLecture';
 
 export const userRelations = relations(users, ({ one, many }) => ({
   project: one(projects, {
@@ -15,6 +16,8 @@ export const userRelations = relations(users, ({ one, many }) => ({
     references: [users.id],
     relationName: 'lector'
   }),
+
+  studentLectures: many(studentLectures),
 
   homeworksStudent: many(homeworks, {
     relationName: 'hw-student'
@@ -32,7 +35,8 @@ export const projectRelations = relations(projects, ({ many }) => ({
 }));
 
 export const lectureRelations = relations(lectures, ({ many }) => ({
-  homeworks: many(homeworks)
+  homeworks: many(homeworks),
+  students: many(studentLectures)
 }));
 
 export const homeworkRelations = relations(homeworks, ({ one }) => ({
@@ -51,3 +55,17 @@ export const homeworkRelations = relations(homeworks, ({ one }) => ({
     references: [lectures.id]
   })
 }));
+
+export const studentLecutreRelations = relations(
+  studentLectures,
+  ({ one }) => ({
+    student: one(users, {
+      fields: [studentLectures.studentId],
+      references: [users.id]
+    }),
+    lecture: one(lectures, {
+      fields: [studentLectures.lectureId],
+      references: [lectures.id]
+    })
+  })
+);
