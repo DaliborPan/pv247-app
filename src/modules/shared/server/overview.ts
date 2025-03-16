@@ -4,6 +4,7 @@ import { getUserHomeworks } from '@/modules/homework/server';
 import { getOrderedLectures } from '@/modules/lecture/server';
 import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
 import { getProject } from '@/modules/project/server';
+import { getStudentLectures } from '@/modules/student-lecture/server';
 
 /**
  * Get overview by userId
@@ -24,6 +25,8 @@ export const getUserOverview = React.cache(
     );
 
     const project = !projectId ? undefined : await getProject(projectId);
+
+    const attendances = await getStudentLectures({ studentId: userId });
 
     return {
       lectures: {
@@ -46,7 +49,11 @@ export const getUserOverview = React.cache(
               : 'Submitted',
         project
       },
-      totalPoints: totalPoints + (project?.points ?? 0)
+      totalPoints: totalPoints + (project?.points ?? 0),
+      attendance: {
+        display: `${attendances.length}/${lectures.length}`,
+        attendances
+      }
     };
   }
 );

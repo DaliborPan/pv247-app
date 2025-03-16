@@ -1,6 +1,7 @@
 'use client';
 
 import { toast } from 'sonner';
+import { RefreshCw } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { type Lecture } from '@/db';
@@ -14,6 +15,7 @@ export const RevalidateLectureAction = ({ lecture }: { lecture: Lecture }) => {
     <Button
       size="sm"
       isLoading={mutation.isPending}
+      iconLeft={{ icon: <RefreshCw /> }}
       onClick={() => {
         mutation.mutate(void 0, {
           onSuccess: () => {
