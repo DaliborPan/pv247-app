@@ -1,3 +1,3 @@
 export { ProfileHero } from './profile-hero';
-export { RevalidateLecturesSection } from './revalidate-lectures-section';
+export { LectorLecturesSection } from './lector-lectures-section';
 export { ProfileProjectCard } from './profile-project-card';
