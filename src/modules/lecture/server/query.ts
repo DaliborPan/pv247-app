@@ -96,3 +96,14 @@ export const getIsHomeworkAvailable = (slug: HomeworkSlug) =>
       tags: [getIsHomeworkAvailableTag(slug)]
     }
   )();
+
+/**
+ * Get lecture by id
+ *
+ * @cache Next.js cache
+ */
+export const getLecture = async (id: string) => {
+  const lectures = await getOrderedLectures();
+
+  return lectures.find(lecture => lecture.id === id);
+};

@@ -49,6 +49,7 @@ export const lectures = sqliteTable('lecture', {
   availableFrom: text('availableFrom').notNull(),
   slug: text('slug', { enum: lectureSlugSchema.options }).notNull(),
   preview: text('preview').notNull().default(''),
+  attendanceToken: text('attendanceToken').notNull().default(''),
 
   // homework
   homeworkName: text('homeworkName').notNull().default(''),
