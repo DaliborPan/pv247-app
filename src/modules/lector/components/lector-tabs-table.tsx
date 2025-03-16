@@ -20,7 +20,7 @@ export const LectorTabsTable = ({
   return (
     <Tabs defaultValue={viewType}>
       <div className="mb-6 flex items-center gap-x-2">
-        <h1 className="grow text-4xl">{title}</h1>
+        <h1 className="hidden grow text-4xl lg:block">{title}</h1>
 
         {triggers.length !== 0 && (
           <TabsList>

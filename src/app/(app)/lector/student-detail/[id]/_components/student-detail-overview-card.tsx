@@ -5,10 +5,10 @@ import { LabeledValue } from '@/components/labeled-value';
 import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
 import { type User } from '@/db';
-import { StudentOverviewCard as _StudentOverviewCard } from '@/modules/student/components/student-overview-card';
+import { StudentOverviewCard } from '@/modules/student/components/student-overview-card';
 
-export const StudentOverviewCard = ({ student }: { student: User }) => (
-  <_StudentOverviewCard
+export const StudentDetailOverviewCard = ({ student }: { student: User }) => (
+  <StudentOverviewCard
     userId={student.id}
     projectId={student.projectId}
     otherFields={({ project: { project, display: projectDisplayName } }) => (

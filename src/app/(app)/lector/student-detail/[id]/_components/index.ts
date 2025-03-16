@@ -1,2 +1,2 @@
 export { StudentHero } from './student-hero';
-export { StudentOverviewCard } from './student-overview-card';
+export { StudentDetailOverviewCard } from './student-detail-overview-card';
