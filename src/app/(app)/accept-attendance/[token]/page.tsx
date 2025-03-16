@@ -8,29 +8,27 @@ import {
   getStudentLectures
 } from '@/modules/student-lecture/server';
 import { Button } from '@/components/base/button';
-import { getLecture } from '@/modules/lecture/server';
+import { getOrderedLectures } from '@/modules/lecture/server';
 
-const Page = async ({
-  params,
-  searchParams
-}: {
-  params: { lectureId: string };
-  searchParams: { token: string };
-}) => {
+const getLecture = async (token: string) => {
+  const lectures = await getOrderedLectures();
+
+  const lecture = lectures.find(lecture => lecture.attendanceToken === token);
+
+  return lecture;
+};
+
+const Page = async ({ params }: { params: { token: string } }) => {
   const user = await getSessionUser();
-  const lecture = await getLecture(params.lectureId);
+  const lecture = await getLecture(params.token);
 
-  if (
-    !lecture ||
-    !searchParams.token ||
-    searchParams.token !== lecture.attendanceToken
-  ) {
+  if (!lecture) {
     redirect('/');
   }
 
   const studentLecture = (
     await getStudentLectures({
-      lectureId: params.lectureId,
+      lectureId: lecture.id,
       studentId: user.id
     })
   ).at(0);

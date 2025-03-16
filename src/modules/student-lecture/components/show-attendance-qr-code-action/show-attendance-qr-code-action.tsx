@@ -15,7 +15,7 @@ export const ShowAttendanceQrCodeAction = ({
 }) => {
   const formattedAcceptAttendanceUrl =
     typeof window !== 'undefined'
-      ? `${window.location.origin}/accept-attendance/${lecture.slug}?token=${lecture.attendanceToken}`
+      ? `${window.location.origin}/accept-attendance/${lecture.attendanceToken}`
       : '';
 
   return (
