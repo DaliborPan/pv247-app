@@ -17,13 +17,15 @@ const OverviewCardRow = ({
 );
 
 export const OverviewCard = async () => {
-  const { homeworks, lectures, project } = await getMineOverview();
+  const { homeworks, project, attendance } = await getMineOverview();
 
   return (
     <SidebarCard title="Overview">
       <div className="flex flex-col gap-y-1">
-        <OverviewCardRow title="Lectures">{lectures.display}</OverviewCardRow>
-        <OverviewCardRow title="Homeworks">{homeworks.display}</OverviewCardRow>
+        <OverviewCardRow title="Attendance">
+          {attendance.display}
+        </OverviewCardRow>
+        <OverviewCardRow title="Homework">{homeworks.display}</OverviewCardRow>
         <OverviewCardRow title="Project">{project.display}</OverviewCardRow>
       </div>
     </SidebarCard>

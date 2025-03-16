@@ -9,6 +9,8 @@ import { type Lecture } from '@/db';
 import { cn } from '@/lib/cn';
 import { formatDate } from '@/lib/date';
 
+import { AttendanceBadge } from './attendance-badge';
+
 const getNumberWithOrdinal = (num: number) => {
   const s = ['th', 'st', 'nd', 'rd'];
   const value = num % 100;
@@ -38,9 +40,13 @@ export const LectureCard = ({
       {lecture.preview}
     </TextPreview>
 
-    <div className="mt-6 flex items-end justify-between">
-      <Link href={href} className={cn(!isAvailable && 'pointer-events-none')}>
+    <div className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-end">
+      <Link
+        href={href}
+        className={cn('grow', !isAvailable && 'pointer-events-none')}
+      >
         <Button
+          className="w-full lg:w-auto"
           iconLeft={!isAvailable ? { icon: <Lock /> } : undefined}
           disabled={!isAvailable}
           size="sm"
@@ -49,10 +55,14 @@ export const LectureCard = ({
         </Button>
       </Link>
 
-      <Badge variant="outline" className="text-text-terciary">
-        <Icon icon={<Layers />} className="mr-2" />
-        {getNumberWithOrdinal(index + 1)} week
-      </Badge>
+      <div className="flex gap-x-2">
+        <AttendanceBadge lecture={lecture} />
+
+        <Badge variant="outline" className="text-text-terciary">
+          <Icon icon={<Layers />} className="mr-2" />
+          {getNumberWithOrdinal(index + 1)} week
+        </Badge>
+      </div>
     </div>
   </article>
 );
