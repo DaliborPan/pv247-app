@@ -25,7 +25,6 @@ const Page = async ({
     !searchParams.token ||
     searchParams.token !== lecture.attendanceToken
   ) {
-    console.log('Redirecting');
     redirect('/');
   }
 
