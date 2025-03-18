@@ -21,7 +21,12 @@ export const DataTableColumnHeader = <TData, TValue>({
   }
 
   return (
-    <div className={cn('flex items-center justify-between', className)}>
+    <div
+      className={cn(
+        'flex items-center justify-between whitespace-nowrap',
+        className
+      )}
+    >
       <button
         onClick={() => {
           if (column.getIsSorted() === 'desc') {
