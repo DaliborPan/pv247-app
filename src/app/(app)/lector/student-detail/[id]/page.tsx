@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 
 import { StudentHomeworkCard } from '@/modules/student/components/student-homework-card';
 import { getStudent } from '@/modules/student/server';
+import { StudentAttendanceCard } from '@/modules/student/components/student-attendance-card';
 
 import { StudentHero, StudentDetailOverviewCard } from './_components';
 
@@ -17,6 +18,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
       <StudentHero student={student} />
       <StudentDetailOverviewCard student={student} />
       <StudentHomeworkCard userId={student.id} projectId={student.projectId} />
+      <StudentAttendanceCard userId={student.id} />
     </div>
   );
 };
