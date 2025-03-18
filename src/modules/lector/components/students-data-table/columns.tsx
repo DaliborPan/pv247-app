@@ -31,13 +31,19 @@ export const columns: ColumnDef<
     )
   },
   {
-    accessorKey: 'lastName',
+    accessorKey: 'fullname',
     header: props => <DataTableColumnHeader {...props} title="Full name" />,
     minSize: 300,
     cell: ({ row }) =>
       row.original.firstName && row.original.lastName
         ? `${row.original.firstName} ${row.original.lastName}`
-        : ''
+        : '',
+    filterFn: (row, _columnId, filterValue) => {
+      const fullName =
+        `${row.original.firstName} ${row.original.lastName}`.toLowerCase();
+
+      return fullName.includes(filterValue.toLowerCase());
+    }
   },
   {
     accessorKey: 'projectId',

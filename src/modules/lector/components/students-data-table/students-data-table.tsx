@@ -16,6 +16,9 @@ export const StudentsDataTable = ({
         0
       )
     }))}
+    search={{
+      name: 'fullname'
+    }}
     columns={columns}
   />
 );
