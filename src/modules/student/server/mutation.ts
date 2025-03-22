@@ -1,9 +1,15 @@
-import { eq, inArray } from 'drizzle-orm';
+import { inArray } from 'drizzle-orm';
 
 import { db, type User, users } from '@/db';
+import { type SessionUserType } from '@/modules/session-user/types';
 
-export const updateUser = (id: string, values: Partial<User>) =>
-  db.update(users).set(values).where(eq(users.id, id));
+import { updateUser } from './repository';
+
+const updateUserPersonalInfo = (
+  _sessionUser: SessionUserType,
+  updatedUserId: string,
+  values: Pick<User, 'firstName' | 'lastName' | 'github'>
+) => updateUser(updatedUserId, values);
 
 export const assignProject = ({
   projectId,
@@ -19,3 +25,7 @@ export const assignProject = ({
     })
     .where(inArray(users.id, studentIds))
     .execute();
+
+export const studentMutations = {
+  updateUserPersonalInfo
+};

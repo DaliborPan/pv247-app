@@ -7,4 +7,4 @@ export const editProfileFormSchema = z.object({
   github: z.string()
 });
 
-export type EditProfileFormSchema = z.infer<typeof editProfileFormSchema>;
+export type EditProfileFormType = z.infer<typeof editProfileFormSchema>;

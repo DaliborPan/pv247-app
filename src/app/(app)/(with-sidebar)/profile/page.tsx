@@ -19,7 +19,7 @@ const Page = async () => {
 
       <Suspense>
         <div className="mt-4 flex flex-col gap-y-4 lg:mt-8">
-          {user.role === 'student' ? (
+          {user.role === 'student' && (
             <>
               <StudentOverviewCard
                 userId={user.id}
@@ -31,9 +31,9 @@ const Page = async () => {
               />
               <ProfileProjectCard />
             </>
-          ) : (
-            <LectorLecturesSection />
           )}
+
+          {user.role === 'lector' && <LectorLecturesSection />}
         </div>
       </Suspense>
     </>

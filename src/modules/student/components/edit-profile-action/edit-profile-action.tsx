@@ -9,18 +9,18 @@ import { Prompt } from '@/components/base/prompt';
 import { FormInput } from '@/components/form/form-fields/form-input';
 import { Button } from '@/components/base/button';
 
-import { editProfileFormSchema, type EditProfileFormSchema } from './schema';
+import { editProfileFormSchema, type EditProfileFormType } from './schema';
 import { editProfileAction } from './action';
 
 export const EditProfileAction = ({
   defaultValuesPromise
 }: {
-  defaultValuesPromise: Promise<DefaultValues<EditProfileFormSchema>>;
+  defaultValuesPromise: Promise<DefaultValues<EditProfileFormType>>;
 }) => {
   const defaultValues = use(defaultValuesPromise);
 
   return (
-    <Prompt<EditProfileFormSchema>
+    <Prompt<EditProfileFormType>
       title="Edit profile"
       formSchema={editProfileFormSchema}
       defaultValues={defaultValues}
@@ -34,9 +34,14 @@ export const EditProfileAction = ({
       onDecision={async ({ confirmed, data }) => {
         if (!confirmed) return;
 
-        await editProfileAction(data);
+        const [_result, error] = await editProfileAction(data);
 
-        toast.success('Profile updated');
+        if (error) {
+          toast.error(error.message);
+          return;
+        }
+
+        toast.success('Profile updated successfully!');
       }}
     >
       <Button size="sm" variant="outline" iconLeft={{ icon: <Pencil /> }} />
