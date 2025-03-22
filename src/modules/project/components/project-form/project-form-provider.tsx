@@ -48,21 +48,20 @@ export const ProjectFormProvider = ({
       return;
     }
 
-    mutation.mutate(
-      {
-        ...data,
-        students: [...data.students, session.data.user.id]
-      },
-      {
-        onSuccess: () => {
-          toast.success('Project updated successfully.');
-          router.replace('/project');
-        },
-        onError: () => {
-          toast.error('An error occurred while updating the project.');
-        }
-      }
-    );
+    const [_result, error] = await mutation.mutateAsync({
+      ...data,
+      students: [...data.students, session.data.user.id]
+    });
+
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+
+    toast.success('Project updated successfully.');
+
+    // TODO(pv) - needed?
+    router.replace('/project');
   };
 
   return (

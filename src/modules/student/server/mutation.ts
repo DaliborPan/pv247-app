@@ -1,31 +1,18 @@
-import { inArray } from 'drizzle-orm';
-
-import { db, type User, users } from '@/db';
+import { type User } from '@/db';
 import { type SessionUserType } from '@/modules/session-user/types';
 
 import { updateUser } from './repository';
 
-const updateUserPersonalInfo = (
-  _sessionUser: SessionUserType,
+export const updateUserPersonalInfoMutation = (
+  sessionUser: SessionUserType,
   updatedUserId: string,
   values: Pick<User, 'firstName' | 'lastName' | 'github'>
-) => updateUser(updatedUserId, values);
+) => {
+  if (sessionUser.id !== updatedUserId) {
+    throw new Error(
+      `User ${sessionUser.id} is not allowed to update user ${updatedUserId}`
+    );
+  }
 
-export const assignProject = ({
-  projectId,
-  studentIds
-}: {
-  projectId: string | null;
-  studentIds: string[];
-}) =>
-  db
-    .update(users)
-    .set({
-      projectId
-    })
-    .where(inArray(users.id, studentIds))
-    .execute();
-
-export const studentMutations = {
-  updateUserPersonalInfo
+  return updateUser(updatedUserId, values);
 };

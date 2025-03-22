@@ -4,7 +4,7 @@ import { revalidateTag } from 'next/cache';
 
 import { type Project } from '@/db';
 
-import { updateProject } from '../../server/mutation';
+import { updateProject } from '../../server';
 import { PROJECTS_TAG } from '../../server/query';
 
 export const approveProjectAction = async ({
