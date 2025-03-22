@@ -9,22 +9,26 @@ import { type SessionUserType } from '@/modules/session-user/types';
 import { updateProject } from './repository';
 
 export const createProjectMutation = async (
-  _sessionUser: SessionUserType,
+  sessionUser: SessionUserType,
   studentIds: string[],
   values: Pick<
     ProjectInsert,
     'name' | 'description' | 'github' | 'shortDescription'
   >
 ) => {
+  if (!studentIds.includes(sessionUser.id)) {
+    throw new Error(
+      `User ${sessionUser.id} is not allowed to create a project.`
+    );
+  }
+
   const [project] = await db.insert(projects).values(values).returning();
 
   await assignProject({ projectId: project.id, userIds: studentIds });
-
-  return project;
 };
 
 export const updateProjectMutation = async (
-  _sessionUser: SessionUserType,
+  sessionUser: SessionUserType,
   id: string,
   studentIds: string[],
   values: Pick<
@@ -32,18 +36,20 @@ export const updateProjectMutation = async (
     'name' | 'description' | 'github' | 'shortDescription'
   >
 ) => {
-  // TODO(pv) - authorization check - sessionUser is allowed to update project with `id`
+  const currentProjectStudents = await getStudentsByProjectId(id);
+
+  if (!currentProjectStudents.some(user => user.id === sessionUser.id)) {
+    throw new Error(
+      `User ${sessionUser.id} is not allowed to update project ${id}`
+    );
+  }
 
   await updateProject(id, values);
-
-  if (!studentIds) return;
-
-  const previousStudents = await getStudentsByProjectId(id);
 
   // Remove students from previous project
   await assignProject({
     projectId: null,
-    userIds: previousStudents.map(user => user.id)
+    userIds: currentProjectStudents.map(user => user.id)
   });
 
   // Add students to new project

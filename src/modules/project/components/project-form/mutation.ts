@@ -3,11 +3,11 @@ import { useMutation } from '@tanstack/react-query';
 import { createProjectAction, updateProjectAction } from './action';
 import { type ProjectFormSchema } from './schema';
 
-export const useSubmitProjectFormMutation = (
-  { isCreating } = {
-    isCreating: false
-  }
-) =>
+export const useSubmitProjectFormMutation = ({
+  isCreating
+}: {
+  isCreating: boolean;
+}) =>
   useMutation({
     mutationFn: async (data: ProjectFormSchema) => {
       const action = isCreating ? createProjectAction : updateProjectAction;
