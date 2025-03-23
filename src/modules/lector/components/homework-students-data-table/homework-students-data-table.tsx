@@ -1,7 +1,8 @@
 import { DataTable } from '@/components/data-table';
 import { type Lecture } from '@/db';
-import { type GetStudentsWithHomeworksResult } from '@/modules/student/server';
 import { getSessionUser } from '@/modules/session-user/server';
+
+import { type GetStudentsWithHomeworkLoaderResult } from '../../server';
 
 import { columns } from './columns';
 
@@ -9,7 +10,7 @@ export const HomeworkStudentsDataTable = async ({
   students,
   lecture
 }: {
-  students: GetStudentsWithHomeworksResult;
+  students: GetStudentsWithHomeworkLoaderResult;
   lecture?: Lecture;
 }) => {
   const sessionUser = await getSessionUser();

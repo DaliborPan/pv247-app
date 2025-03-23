@@ -1,12 +1,13 @@
 import { DataTable } from '@/components/data-table';
-import { type GetStudentsWithHomeworksResult } from '@/modules/student/server';
+
+import { type GetStudentsWithHomeworkLoaderResult } from '../../server';
 
 import { columns } from './columns';
 
 export const StudentsDataTable = ({
   students
 }: {
-  students: GetStudentsWithHomeworksResult;
+  students: GetStudentsWithHomeworkLoaderResult;
 }) => (
   <DataTable
     data={students.map(student => ({

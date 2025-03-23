@@ -23,3 +23,11 @@ export const getStudentsByProjectId = (projectId: string) =>
   db.query.users.findMany({
     where: (users, { eq }) => eq(users.projectId, projectId)
   });
+
+export const getStudentsWithHomework = () =>
+  db.query.users.findMany({
+    where: (table, { eq }) => eq(table.role, 'student'),
+    with: {
+      homeworksStudent: true
+    }
+  });

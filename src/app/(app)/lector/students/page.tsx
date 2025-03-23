@@ -1,8 +1,10 @@
 import { TabsContent } from '@/components/base/tabs';
-import { getStudentsWithHomeworks } from '@/modules/student/server';
 import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
 import { StudentsDataTable } from '@/modules/lector/components/students-data-table';
-import { getMineStudentsLoader } from '@/modules/session-user/server';
+import {
+  getMineStudentsLoader,
+  getStudentsWithHomeworkLoader
+} from '@/modules/lector/server';
 
 const Page = async () => {
   const lectorStudents = await getMineStudentsLoader();
@@ -30,7 +32,9 @@ const Page = async () => {
       contents={
         <>
           <TabsContent value="all">
-            <StudentsDataTable students={await getStudentsWithHomeworks()} />
+            <StudentsDataTable
+              students={await getStudentsWithHomeworkLoader()}
+            />
           </TabsContent>
 
           <TabsContent value="own">

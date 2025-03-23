@@ -1,5 +1,6 @@
 import { db } from '@/db';
 import { type SessionUserType } from '@/modules/session-user/types';
+import { getStudentsWithHomework } from '@/modules/student/server';
 
 import { getLectorStudents } from './repository';
 
@@ -54,3 +55,11 @@ export const getMineStudentsQuery = async (sessionUser: SessionUserType) => {
 export type GetMineStudentsResult = Awaited<
   ReturnType<typeof getMineStudentsQuery>
 >;
+
+export const getStudentsWithHomeworkQuery = (sessionUser: SessionUserType) => {
+  if (sessionUser.role !== 'lector') {
+    throw new Error(`Unauthorized`);
+  }
+
+  return getStudentsWithHomework();
+};
