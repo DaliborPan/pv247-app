@@ -1,5 +1,5 @@
 import { type HomeworkSlug } from '@/db';
-import { getOrderedLectures } from '@/modules/lecture/server';
+import { getOrderedLecturesLoader } from '@/modules/lecture/server';
 
 import { HomeworkNavigationLink } from './homework-navigation-link';
 
@@ -8,7 +8,7 @@ export const HomeworksNavigation = async ({
 }: {
   homeworkSlug: HomeworkSlug;
 }) => {
-  const lectures = await getOrderedLectures();
+  const lectures = await getOrderedLecturesLoader();
 
   const slugLectureIndex = lectures.findIndex(
     lecture => lecture.homeworkSlug === homeworkSlug

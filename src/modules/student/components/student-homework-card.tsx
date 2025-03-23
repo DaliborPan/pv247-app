@@ -1,13 +1,13 @@
-import { getOrderedLectures } from '@/modules/lecture/server';
 import { cn } from '@/lib/cn';
 import { getUserOverviewLoader } from '@/modules/shared/server';
 import { type User } from '@/db';
+import { getOrderedLecturesLoader } from '@/modules/lecture/server';
 
 import { ListCard } from './list-card';
 import { PointsBadge } from './points-badge';
 
 export const StudentHomeworkCard = async ({ user }: { user: User }) => {
-  const lectures = await getOrderedLectures();
+  const lectures = await getOrderedLecturesLoader();
 
   const {
     lectures: { userHomeworks, availableLength }

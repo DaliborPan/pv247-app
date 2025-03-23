@@ -1,3 +1,3 @@
 export * from './query';
 export * from './loader';
-export * from './repository';
+export * from './cache';

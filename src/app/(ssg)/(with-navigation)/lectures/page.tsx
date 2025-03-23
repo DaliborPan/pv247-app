@@ -1,9 +1,9 @@
 import { LectureCard } from '@/modules/lecture/components/lecture-card';
-import { getOrderedLectures } from '@/modules/lecture/server';
+import { getOrderedLecturesLoader } from '@/modules/lecture/server';
 import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
 
 const Page = async () => {
-  const lectures = await getOrderedLectures();
+  const lectures = await getOrderedLecturesLoader();
 
   return (
     <>

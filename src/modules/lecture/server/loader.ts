@@ -1,32 +1,11 @@
-import { revalidateTag, unstable_cache } from 'next/cache';
-
 import { checkIsAvailable } from '../utils/check-is-available';
 
 import { getOrderedLecturesQuery } from './query';
 
-/**
- * Get all ordered lectures
- *
- * @cache Next.js cache
- */
-export const getOrderedLecturesLoader = (() => {
-  const tags = ['getOrderedLecturesLoader'];
+export const getOrderedLecturesLoader = getOrderedLecturesQuery;
 
-  const handler = () =>
-    unstable_cache(getOrderedLecturesQuery, tags, { tags })();
-
-  handler.revalidate = () => revalidateTag(tags[0]);
-
-  return handler;
-})();
-
-/**
- * Get all available lectures
- *
- * @cache using Next.js cache
- */
 export const getAvailableLecturesLoader = async () => {
-  const lectures = await getOrderedLecturesLoader();
+  const lectures = await getOrderedLecturesQuery();
 
   return lectures.filter(checkIsAvailable);
 };
@@ -34,34 +13,22 @@ export const getAvailableLecturesLoader = async () => {
 /**
  * Get all lectures, that have homework
  * - basically filter out last lecture
- *
- * @cache using Next.js cache
  */
 export const getLecturesWithHomeworkLoader = async () => {
-  const lectures = await getOrderedLecturesLoader();
+  const lectures = await getOrderedLecturesQuery();
 
   return lectures.filter(lecture => !!lecture.homeworkSlug);
 };
 
-/**
- * Get lecture by slug and check if it's available
- *
- * @cache using Next.js cache
- */
 export const getIsLectureAvailable = async (slug: string) => {
-  const lectures = await getOrderedLecturesLoader();
+  const lectures = await getOrderedLecturesQuery();
   const lecture = lectures.find(lecture => lecture.slug === slug);
 
   return !!lecture && checkIsAvailable(lecture);
 };
 
-/**
- * Get lecture by homrworkSlug and check if it's available
- *
- * @cache using Next.js cache
- */
 export const getIsHomeworkAvailable = async (homeworkSlug: string) => {
-  const lectures = await getLecturesWithHomeworkLoader();
+  const lectures = await getOrderedLecturesQuery();
   const lecture = lectures.find(
     lecture => lecture.homeworkSlug === homeworkSlug
   );

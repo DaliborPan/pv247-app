@@ -8,10 +8,10 @@ import {
   getStudentLecturesQuery
 } from '@/modules/student-lecture/server';
 import { Button } from '@/components/base/button';
-import { getOrderedLectures } from '@/modules/lecture/server';
+import { getOrderedLecturesLoader } from '@/modules/lecture/server';
 
 const getLecture = async (token: string) => {
-  const lectures = await getOrderedLectures();
+  const lectures = await getOrderedLecturesLoader();
 
   return lectures.find(lecture => lecture.attendanceToken === token);
 };
