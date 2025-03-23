@@ -12,15 +12,12 @@ export const getOrderedLecturesLoaderTag = 'ordered-lectures';
  * @cache Next.js cache
  */
 export const getOrderedLecturesLoader = (() => {
-  const tag = 'ordered-lectures';
+  const tag = 'getOrderedLecturesLoader';
 
-  const handler = () => {
-    const callback = unstable_cache(() => getOrderedLecturesQuery(), [], {
-      tags: [getOrderedLecturesLoaderTag]
-    });
-
-    return callback();
-  };
+  const handler = () =>
+    unstable_cache(() => getOrderedLecturesQuery(), [], {
+      tags: [tag]
+    })();
 
   handler.revalidate = () => revalidateTag(tag);
 
