@@ -1,23 +1,22 @@
 import { DetailCard } from '@/components/detail-card';
 import { LabeledValue } from '@/components/labeled-value';
+import { type User } from '@/db';
 import { cn } from '@/lib/cn';
 import {
-  getUserOverview,
-  type GetUserOverviewResult
+  getUserOverviewLoader,
+  type GetUserOverviewLoaderResult
 } from '@/modules/shared/server';
 
 type StudentOverviewCardProps = {
-  userId: string;
-  projectId: string | null;
-  otherFields?: (overview: GetUserOverviewResult) => React.ReactNode;
+  user: User;
+  otherFields?: (overview: GetUserOverviewLoaderResult) => React.ReactNode;
 };
 
 export const StudentOverviewCard = async ({
   otherFields,
-  userId,
-  projectId
+  user
 }: StudentOverviewCardProps) => {
-  const overview = await getUserOverview(userId, projectId);
+  const overview = await getUserOverviewLoader(user);
 
   const { homeworks, project, totalPoints } = overview;
 

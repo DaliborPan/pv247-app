@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import { getSessionUser } from '@/modules/session-user/server';
 import {
   addStudentLecture,
-  getStudentLectures
+  getStudentLecturesQuery
 } from '@/modules/student-lecture/server';
 import { Button } from '@/components/base/button';
 import { getOrderedLectures } from '@/modules/lecture/server';
@@ -17,7 +17,7 @@ const getLecture = async (token: string) => {
 };
 
 const Page = async ({ params }: { params: { token: string } }) => {
-  const user = await getSessionUser();
+  const sessionUser = await getSessionUser();
   const lecture = await getLecture(params.token);
 
   if (!lecture) {
@@ -25,14 +25,14 @@ const Page = async ({ params }: { params: { token: string } }) => {
   }
 
   const studentLecture = (
-    await getStudentLectures({
-      lectureId: lecture.id,
-      studentId: user.id
-    })
+    await getStudentLecturesQuery(sessionUser, lecture.id)
   ).at(0);
 
   if (!studentLecture) {
-    await addStudentLecture({ studentId: user.id, lectureId: lecture.id });
+    await addStudentLecture({
+      studentId: sessionUser.id,
+      lectureId: lecture.id
+    });
   }
 
   return (

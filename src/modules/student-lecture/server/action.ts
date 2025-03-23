@@ -1,27 +1,11 @@
 'use server';
 
-import { auth } from '@/auth';
+import { z } from 'zod';
 
-import { getStudentLectures } from './query';
+import { authServerAction } from '@/server/server-actions';
 
-export const getAttendancesAction = async ({
-  studentId
-}: {
-  studentId: string;
-}) => {
-  const session = await auth();
+import { getStudentLecturesQuery } from './query';
 
-  if (!session) {
-    return {
-      status: 'error',
-      message: 'Unauthorized'
-    } as const;
-  }
-
-  const attendances = await getStudentLectures({ studentId });
-
-  return {
-    status: 'success',
-    attendances
-  } as const;
-};
+export const getAttendancesAction = authServerAction
+  .input(z.undefined())
+  .handler(async ({ ctx }) => getStudentLecturesQuery(ctx.sessionUser));

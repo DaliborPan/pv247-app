@@ -16,7 +16,7 @@ export const createProjectMutation = async (
     'name' | 'description' | 'github' | 'shortDescription'
   >
 ) => {
-  if (!studentIds.includes(sessionUser.id)) {
+  if (!!sessionUser.projectId || !studentIds.includes(sessionUser.id)) {
     throw new Error(
       `User ${sessionUser.id} is not allowed to create a project.`
     );

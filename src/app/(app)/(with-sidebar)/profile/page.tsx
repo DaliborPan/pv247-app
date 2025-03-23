@@ -21,14 +21,8 @@ const Page = async () => {
         <div className="mt-4 flex flex-col gap-y-4 lg:mt-8">
           {user.role === 'student' && (
             <>
-              <StudentOverviewCard
-                userId={user.id}
-                projectId={user.projectId}
-              />
-              <StudentHomeworkCard
-                userId={user.id}
-                projectId={user.projectId}
-              />
+              <StudentOverviewCard user={user} />
+              <StudentHomeworkCard user={user} />
               <ProfileProjectCard />
             </>
           )}
