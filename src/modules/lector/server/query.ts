@@ -1,4 +1,7 @@
 import { db } from '@/db';
+import { type SessionUserType } from '@/modules/session-user/types';
+
+import { getLectorStudents } from './repository';
 
 /**
  * When new student is created, assign it to the lector
@@ -30,3 +33,24 @@ export const getNewStudentLectorId = async () => {
     return acc;
   }, lectors[0]).id;
 };
+
+/**
+ * As a logged in lector, get all students that are assigned to me.
+ */
+export const getMineStudentsQuery = async (sessionUser: SessionUserType) => {
+  if (sessionUser.role !== 'lector') {
+    throw new Error(`Unauthorized`);
+  }
+
+  const user = await getLectorStudents({ lectorId: sessionUser.id });
+
+  if (!user) {
+    throw new Error(`Lector ${sessionUser.id} not found`);
+  }
+
+  return user.students;
+};
+
+export type GetMineStudentsResult = Awaited<
+  ReturnType<typeof getMineStudentsQuery>
+>;

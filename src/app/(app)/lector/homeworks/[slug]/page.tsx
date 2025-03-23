@@ -3,11 +3,11 @@ import { redirect } from 'next/navigation';
 import { homeworkSlugSchema } from '@/db';
 import { TabsContent } from '@/components/base/tabs';
 import { LabeledValue } from '@/components/labeled-value';
-import { getMineStudents } from '@/modules/session-user/server';
 import { getStudentsWithHomeworks } from '@/modules/student/server';
 import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
 import { HomeworkStudentsDataTable } from '@/modules/lector/components/homework-students-data-table';
 import { getOrderedLectures } from '@/modules/lecture/server';
+import { getMineStudentsLoader } from '@/modules/session-user/server';
 
 import { HomeworksNavigation } from './_components';
 
@@ -28,7 +28,7 @@ const Page = async ({
 
   const paramSlug = parsedSlug.data;
 
-  const lectorStudents = await getMineStudents();
+  const lectorStudents = await getMineStudentsLoader();
   const hasOwnStudents = !!lectorStudents.length;
 
   const lectures = await getOrderedLectures();

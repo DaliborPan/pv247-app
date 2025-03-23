@@ -1,32 +1,9 @@
 import { cache } from 'react';
 
-import { db } from '@/db';
 import { getUserOverviewQuery } from '@/modules/shared/server';
 import { getProject } from '@/modules/project/server';
 
 import { getSessionUser } from './session-user';
-
-/**
- * As a logged in lector, get all students that are assigned to me.
- */
-export const getMineStudents = async () => {
-  const sessionUser = await getSessionUser();
-
-  const user = await db.query.users.findFirst({
-    where: (users, { eq }) => eq(users.id, sessionUser.id),
-    with: {
-      students: {
-        with: {
-          homeworksStudent: true
-        }
-      }
-    }
-  });
-
-  return user?.students ?? [];
-};
-
-export type GetMineStudentsResult = Awaited<ReturnType<typeof getMineStudents>>;
 
 /**
  * Get mine project

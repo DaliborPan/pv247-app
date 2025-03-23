@@ -1,11 +1,11 @@
 import { TabsContent } from '@/components/base/tabs';
 import { getStudentsWithHomeworks } from '@/modules/student/server';
-import { getMineStudents } from '@/modules/session-user/server';
 import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
 import { StudentsDataTable } from '@/modules/lector/components/students-data-table';
+import { getMineStudentsLoader } from '@/modules/session-user/server';
 
 const Page = async () => {
-  const lectorStudents = await getMineStudents();
+  const lectorStudents = await getMineStudentsLoader();
   const hasOwnStudents = !!lectorStudents.length;
 
   return (
