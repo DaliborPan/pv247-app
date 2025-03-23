@@ -1,5 +1,5 @@
 import { type User } from '@/db';
-import { getUserHomeworks } from '@/modules/homework/server';
+import { getHomework } from '@/modules/homework/server';
 import { getOrderedLectures } from '@/modules/lecture/server';
 import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
 import { getProject } from '@/modules/project/server';
@@ -19,7 +19,7 @@ export const getUserOverviewQuery = async (
     );
   }
 
-  const userHomeworks = await getUserHomeworks(user.id);
+  const userHomeworks = await getHomework({ userId: user.id });
   const awardedHomeworksLength = userHomeworks.length;
 
   const lectures = await getOrderedLectures();
