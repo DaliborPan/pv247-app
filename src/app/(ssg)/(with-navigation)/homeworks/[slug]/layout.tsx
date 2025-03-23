@@ -2,13 +2,13 @@ import { type PropsWithChildren } from 'react';
 
 import { type HomeworkSlug } from '@/db';
 import { NavigationButtonLink } from '@/components/navigation-button-link';
-import { getLecturesWithHomework } from '@/modules/lecture/server';
+import { getLecturesWithHomeworkLoader } from '@/modules/lecture/server';
 
 const Layout = async ({
   children,
   params
 }: PropsWithChildren<{ params: { slug: HomeworkSlug } }>) => {
-  const lectures = await getLecturesWithHomework();
+  const lectures = await getLecturesWithHomeworkLoader();
 
   const slugLectureIndex = lectures.findIndex(
     lecture => lecture.homeworkSlug === params.slug

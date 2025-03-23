@@ -29,3 +29,41 @@ export const getAvailableLecturesLoader = async () => {
 
   return lectures.filter(checkIsAvailable);
 };
+
+/**
+ * Get all lectures, that have homework
+ * - basically filter out last lecture
+ *
+ * @cache using Next.js cache
+ */
+export const getLecturesWithHomeworkLoader = async () => {
+  const lectures = await getOrderedLecturesLoader();
+
+  return lectures.filter(lecture => !!lecture.homeworkSlug);
+};
+
+/**
+ * Get lecture by slug and check if it's available
+ *
+ * @cache using Next.js cache
+ */
+export const getIsLectureAvailable = async (slug: string) => {
+  const lectures = await getOrderedLecturesLoader();
+  const lecture = lectures.find(lecture => lecture.slug === slug);
+
+  return !!lecture && checkIsAvailable(lecture);
+};
+
+/**
+ * Get lecture by homrworkSlug and check if it's available
+ *
+ * @cache using Next.js cache
+ */
+export const getIsHomeworkAvailable = async (homeworkSlug: string) => {
+  const lectures = await getLecturesWithHomeworkLoader();
+  const lecture = lectures.find(
+    lecture => lecture.homeworkSlug === homeworkSlug
+  );
+
+  return !!lecture && checkIsAvailable(lecture);
+};

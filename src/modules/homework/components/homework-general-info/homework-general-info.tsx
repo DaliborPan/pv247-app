@@ -1,12 +1,12 @@
 import { type HomeworkSlug } from '@/db';
-import { getLecturesWithHomework } from '@/modules/lecture/server';
+import { getLecturesWithHomeworkLoader } from '@/modules/lecture/server';
 
 import { PersonHomeworkDeadline } from './person-homework-deadline';
 import { LabeledItem } from './labeled-item';
 import { HomeworkPoints } from './homework-points';
 
 export const HomeworkGeneralInfo = async ({ slug }: { slug: HomeworkSlug }) => {
-  const lectures = await getLecturesWithHomework();
+  const lectures = await getLecturesWithHomeworkLoader();
   const lecture = lectures.find(lecture => lecture.homeworkSlug === slug);
 
   if (!lecture) return null;

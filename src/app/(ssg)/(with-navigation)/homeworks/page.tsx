@@ -8,7 +8,7 @@ import { TextPreview } from '@/components/text-preview';
 import { cn } from '@/lib/cn';
 import { formatDate } from '@/lib/date';
 import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
-import { getLecturesWithHomework } from '@/modules/lecture/server';
+import { getLecturesWithHomeworkLoader } from '@/modules/lecture/server';
 
 const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
   const isAvailable = checkIsAvailable(lecture);
@@ -59,7 +59,7 @@ const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
 };
 
 const Page = async () => {
-  const lectures = await getLecturesWithHomework();
+  const lectures = await getLecturesWithHomeworkLoader();
 
   return (
     <>

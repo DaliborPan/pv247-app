@@ -1,1 +1,1 @@
-export { RevalidateLectureAction } from './revalidate-lecture-action';
+export { RevalidateLecturesAction } from './revalidate-lecture-action';
