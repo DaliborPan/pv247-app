@@ -1,7 +1,7 @@
 import { cache } from 'react';
 
 import { getUserOverviewQuery } from '@/modules/shared/server';
-import { getProject } from '@/modules/project/server';
+import { getProjectQuery } from '@/modules/project/server';
 
 import { getSessionUser } from './session-user';
 
@@ -18,7 +18,7 @@ export const getMineProject = cache(async () => {
     return undefined;
   }
 
-  return getProject(userProjectId);
+  return getProjectQuery(userProjectId);
 });
 
 export type GetMineProjectResult = Awaited<ReturnType<typeof getMineProject>>;

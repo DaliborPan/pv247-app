@@ -1,14 +1,8 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-
 import { authServerAction } from '@/server/server-actions';
 
-import {
-  createProjectMutation,
-  PROJECTS_TAG,
-  updateProjectMutation
-} from '../../server';
+import { createProjectMutation, updateProjectMutation } from '../../server';
 
 import { projectFormSchema } from './schema';
 
@@ -17,7 +11,7 @@ export const createProjectAction = authServerAction
   .handler(async ({ input: { students, ...input }, ctx }) => {
     await createProjectMutation(ctx.sessionUser, students, input);
 
-    revalidateTag(PROJECTS_TAG);
+    // revalidateTag(PROJECTS_TAG);
   });
 
 export const updateProjectAction = authServerAction
@@ -29,5 +23,5 @@ export const updateProjectAction = authServerAction
 
     await updateProjectMutation(ctx.sessionUser, id, students, input);
 
-    revalidateTag(PROJECTS_TAG);
+    // revalidateTag(PROJECTS_TAG);
   });

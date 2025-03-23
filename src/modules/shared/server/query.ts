@@ -2,7 +2,7 @@ import { type User } from '@/db';
 import { getHomework } from '@/modules/homework/server';
 import { getOrderedLectures } from '@/modules/lecture/server';
 import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
-import { getProject } from '@/modules/project/server';
+import { getProjectsCached } from '@/modules/project/server';
 import { type SessionUserType } from '@/modules/session-user/types';
 import { getStudentLectures } from '@/modules/student-lecture/server';
 
@@ -32,7 +32,9 @@ export const getUserOverviewQuery = async (
 
   const project = !user.projectId
     ? undefined
-    : await getProject(user.projectId);
+    : (await getProjectsCached()).find(
+        project => project.id === user.projectId
+      );
 
   const attendances = await getStudentLectures({ studentId: user.id });
 

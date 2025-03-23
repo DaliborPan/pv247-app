@@ -1,10 +1,8 @@
 'use server';
 
 import { eq } from 'drizzle-orm';
-import { revalidateTag } from 'next/cache';
 
 import { db, type Project, projects } from '@/db';
-import { PROJECTS_TAG } from '@/modules/project/server';
 
 export const submitProjectAction = async ({
   project
@@ -18,5 +16,5 @@ export const submitProjectAction = async ({
     })
     .where(eq(projects.id, project.id));
 
-  revalidateTag(PROJECTS_TAG);
+  // revalidateTag(PROJECTS_TAG);
 };

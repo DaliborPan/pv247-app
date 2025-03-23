@@ -1,11 +1,8 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-
 import { type Project } from '@/db';
 
 import { updateProject } from '../../server';
-import { PROJECTS_TAG } from '../../server/query';
 
 export const approveProjectAction = async ({
   project
@@ -16,5 +13,5 @@ export const approveProjectAction = async ({
     status: project.status === 'pending' ? 'approved' : 'pending'
   });
 
-  revalidateTag(PROJECTS_TAG);
+  // getProjectsLoader.revalidate();
 };

@@ -1,12 +1,13 @@
 import { redirect } from 'next/navigation';
 
-import { getProject } from '@/modules/project/server';
+import { getProjectsLoader } from '@/modules/project/server';
 import { RichTextEditor } from '@/components/base/rich-text-editor';
 
 import { ProjectStatusCard, ProjectUsersCard } from './_components';
 
 const Page = async ({ params: { id } }: { params: { id: string } }) => {
-  const project = await getProject(id);
+  const projects = await getProjectsLoader();
+  const project = projects.find(project => project.id === id);
 
   if (!project) {
     redirect('/lector/projects');

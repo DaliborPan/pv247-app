@@ -2,13 +2,17 @@ import { Github, Pencil, SquareArrowOutUpRight } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { SidebarCard } from '@/components/sidebar-card';
-import { type Project } from '@/db';
 import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
 import { SetProjectPointsAction } from '@/modules/project/components/set-project-points-action';
 import { ApproveProjectButton } from '@/modules/project/components/approve-project-action';
+import { type GetProjectsLoaderResult } from '@/modules/project/server';
 
-export const ProjectStatusCard = ({ project }: { project: Project }) => {
+export const ProjectStatusCard = ({
+  project
+}: {
+  project: GetProjectsLoaderResult[number];
+}) => {
   const status = project.status;
   const hasPoints = !!project.points;
 

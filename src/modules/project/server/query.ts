@@ -1,28 +1,19 @@
 import { type SessionUserType } from '@/modules/session-user/types';
 
-import { getProjects } from './repository';
+import { getProjectsCached } from './cache';
 
-export const PROJECTS_TAG = 'projects';
-
-export const getProjectsQuery = async (
-  sessionUserRole: SessionUserType['role']
-) => {
-  if (sessionUserRole !== 'lector') {
-    throw new Error(`${sessionUserRole} cannot read projects`);
+export const getProjectsQuery = (sessionUser: SessionUserType) => {
+  if (sessionUser.role !== 'lector') {
+    throw new Error(`${sessionUser.id} cannot read projects`);
   }
 
-  return getProjects();
+  return getProjectsCached();
 };
 
-/**
- * Get project by id
- *
- * @cache using Next.js cache
- */
-export const getProject = async (id: string) => {
-  const projects = await getProjects();
+export const getProjectQuery = async (id: string) => {
+  const projects = await getProjectsCached();
 
   return projects.find(project => project.id === id);
 };
 
-export type GetProjectResult = Awaited<ReturnType<typeof getProject>>;
+export type GetProjectQueryResult = Awaited<ReturnType<typeof getProjectQuery>>;

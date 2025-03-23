@@ -1,8 +1,6 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-
-import { PROJECTS_TAG, updateProject } from '@/modules/project/server';
+import { updateProject } from '@/modules/project/server';
 
 import { type SetProjectPointsFormSchema } from './schema';
 
@@ -13,5 +11,5 @@ export const setProjectPointsAction = async ({
 }: SetProjectPointsFormSchema) => {
   await updateProject(projectId, { comment, points });
 
-  revalidateTag(PROJECTS_TAG);
+  // revalidateTag(PROJECTS_TAG);
 };
