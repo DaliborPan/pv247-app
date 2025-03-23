@@ -4,22 +4,18 @@ import { checkIsAvailable } from '../utils/check-is-available';
 
 import { getOrderedLecturesQuery } from './query';
 
-export const getOrderedLecturesLoaderTag = 'ordered-lectures';
-
 /**
  * Get all ordered lectures
  *
  * @cache Next.js cache
  */
 export const getOrderedLecturesLoader = (() => {
-  const tag = 'getOrderedLecturesLoader';
+  const tags = ['getOrderedLecturesLoader'];
 
   const handler = () =>
-    unstable_cache(getOrderedLecturesQuery, [], {
-      tags: [tag]
-    })();
+    unstable_cache(getOrderedLecturesQuery, tags, { tags })();
 
-  handler.revalidate = () => revalidateTag(tag);
+  handler.revalidate = () => revalidateTag(tags[0]);
 
   return handler;
 })();

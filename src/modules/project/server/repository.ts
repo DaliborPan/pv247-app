@@ -9,3 +9,10 @@ export const getProjectById = (id: string) =>
   db.query.projects.findFirst({
     where: (table, { eq }) => eq(table.id, id)
   });
+
+export const getProjects = () =>
+  db.query.projects.findMany({
+    with: {
+      users: true
+    }
+  });

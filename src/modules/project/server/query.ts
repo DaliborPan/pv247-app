@@ -1,30 +1,18 @@
-import { unstable_cache } from 'next/cache';
+import { type SessionUserType } from '@/modules/session-user/types';
 
-import { db } from '@/db';
+import { getProjects } from './repository';
 
 export const PROJECTS_TAG = 'projects';
 
-/**
- * Get all projects
- *
- * @cache Next.js cache
- */
-export const getProjects = unstable_cache(
-  async () => {
-    const projects = await db.query.projects.findMany({
-      with: {
-        users: true
-      }
-    });
-
-    return projects;
-  },
-  [PROJECTS_TAG],
-  {
-    tags: [PROJECTS_TAG]
+export const getProjectsQuery = async (
+  sessionUserRole: SessionUserType['role']
+) => {
+  if (sessionUserRole !== 'lector') {
+    throw new Error(`${sessionUserRole} cannot read projects`);
   }
-);
-export type GetProjectsResult = Awaited<ReturnType<typeof getProjects>>;
+
+  return getProjects();
+};
 
 /**
  * Get project by id

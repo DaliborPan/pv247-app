@@ -1,9 +1,9 @@
-import { getProjects } from '@/modules/project/server';
+import { getProjectsLoader } from '@/modules/project/server';
 
 import { ProjectCard } from './_components';
 
 const Page = async () => {
-  const projects = await getProjects();
+  const projects = await getProjectsLoader();
 
   const awardedProjects = projects.filter(project => !!project.points);
   const otherProjects = projects.filter(project => !project.points);
