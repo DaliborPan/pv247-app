@@ -15,7 +15,7 @@ export const getOrderedLecturesLoader = (() => {
   const tag = 'getOrderedLecturesLoader';
 
   const handler = () =>
-    unstable_cache(() => getOrderedLecturesQuery(), [], {
+    unstable_cache(getOrderedLecturesQuery, [], {
       tags: [tag]
     })();
 
