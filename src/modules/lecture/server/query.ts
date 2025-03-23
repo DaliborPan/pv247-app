@@ -1,33 +1,12 @@
 import { unstable_cache } from 'next/cache';
-import React from 'react';
 
 import { db, type HomeworkSlug, type LectureSlug } from '@/db';
 
 import { checkIsAvailable } from '../utils/check-is-available';
 
-export const ORDERED_LECTURES_TAG = 'ordered-lectures';
+import { getOrderedLectures } from './repository';
 
-/**
- * Get all ordered lectures
- *
- * @cache Next.js cache
- */
-export const getOrderedLectures = unstable_cache(
-  async () => {
-    const lectures = await db.query.lectures.findMany({
-      orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
-      with: {
-        homeworks: true
-      }
-    });
-
-    return lectures;
-  },
-  [ORDERED_LECTURES_TAG],
-  {
-    tags: [ORDERED_LECTURES_TAG]
-  }
-);
+export const getOrderedLecturesQuery = getOrderedLectures;
 
 /**
  * Get all lectures with homework (filter away last lecture)
@@ -39,17 +18,6 @@ export const getLecturesWithHomework = async () => {
 
   return lectures.filter(lecture => !!lecture.homeworkSlug);
 };
-
-/**
- * Get all available lectures
- *
- * @cache React cache
- */
-export const getAvailableLectures = React.cache(async () => {
-  const lectures = await getOrderedLectures();
-
-  return lectures.filter(checkIsAvailable);
-});
 
 export const getIsLectureAvailableTag = (slug: LectureSlug) =>
   `is-lecture-available_${slug}`;
