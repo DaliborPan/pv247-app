@@ -1,5 +1,3 @@
-import { redirect } from 'next/navigation';
-
 import { StudentHomeworkCard } from '@/modules/student/components/student-homework-card';
 import { StudentAttendanceCard } from '@/modules/student/components/student-attendance-card';
 import { getStudentLoader } from '@/modules/lector/server';
@@ -8,10 +6,6 @@ import { StudentHero, StudentDetailOverviewCard } from './_components';
 
 const Page = async ({ params }: { params: { id: string } }) => {
   const student = await getStudentLoader(params.id);
-
-  if (!student) {
-    redirect('/lector');
-  }
 
   return (
     <div className="mx-auto mb-8 flex max-w-4xl flex-col gap-y-4">

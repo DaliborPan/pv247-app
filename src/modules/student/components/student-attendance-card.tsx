@@ -1,7 +1,7 @@
 import { DetailCard } from '@/components/detail-card';
 import { getOrderedLecturesLoader } from '@/modules/lecture/server';
 import { SetStudentAttendanceAction } from '@/modules/student-lecture/components/set-student-attendance-action';
-import { getStudentLectures } from '@/modules/student-lecture/server';
+import { getStudentLecturesLoader } from '@/modules/student-lecture/server';
 
 const AttendanceCell = ({
   studentId,
@@ -25,7 +25,7 @@ const AttendanceCell = ({
 
 export const StudentAttendanceCard = async ({ userId }: { userId: string }) => {
   const lectures = await getOrderedLecturesLoader();
-  const attendances = await getStudentLectures({ studentId: userId });
+  const attendances = await getStudentLecturesLoader({ userId });
 
   return (
     <DetailCard title="Attendance">

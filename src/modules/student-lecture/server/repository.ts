@@ -1,35 +1,50 @@
-import { db } from '@/db';
+import { and, eq } from 'drizzle-orm';
 
-/**
- * Get all student-lectures by lectureId or studentId
- */
+import { db, studentLectures } from '@/db';
+
 export const getStudentLectures = async ({
   lectureId,
   studentId
 }: {
   lectureId?: string;
   studentId?: string;
+}) =>
+  db.query.studentLectures.findMany({
+    where: (table, { eq, and }) =>
+      and(
+        ...[
+          ...(lectureId ? [eq(table.lectureId, lectureId)] : []),
+          ...(studentId ? [eq(table.studentId, studentId)] : [])
+        ]
+      )
+  });
+
+export const deleteStudentLecture = async ({
+  lectureId,
+  studentId
+}: {
+  lectureId: string;
+  studentId: string;
 }) => {
-  if (!lectureId && !studentId) {
-    return [];
-  }
+  await db
+    .delete(studentLectures)
+    .where(
+      and(
+        eq(studentLectures.lectureId, lectureId),
+        eq(studentLectures.studentId, studentId)
+      )
+    );
+};
 
-  return db.query.studentLectures.findMany({
-    where: (studentLectures, { eq, and }) => {
-      if (lectureId && studentId) {
-        return and(
-          eq(studentLectures.lectureId, lectureId),
-          eq(studentLectures.studentId, studentId)
-        );
-      }
-
-      if (lectureId) {
-        return eq(studentLectures.lectureId, lectureId);
-      }
-
-      if (studentId) {
-        return eq(studentLectures.studentId, studentId);
-      }
-    }
+export const createStudentLecture = async ({
+  lectureId,
+  studentId
+}: {
+  lectureId: string;
+  studentId: string;
+}) => {
+  await db.insert(studentLectures).values({
+    lectureId,
+    studentId
   });
 };

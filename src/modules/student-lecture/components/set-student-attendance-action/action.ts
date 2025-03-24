@@ -1,30 +1,23 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
 
-import { auth } from '@/auth';
+import { authServerAction } from '@/server/server-actions';
 
-import { updateStudentLecture } from '../../server';
+import { updateStudentLectureMutation } from '../../server';
 
-export const setStudentAttendanceAction = async ({
-  studentId,
-  lectureId
-}: {
-  studentId: string;
-  lectureId: string;
-}) => {
-  const session = await auth();
+export const setStudentAttendanceAction = authServerAction
+  .input(
+    z.object({
+      studentId: z.string(),
+      lectureId: z.string()
+    })
+  )
+  .handler(async ({ input, ctx }) => {
+    const result = await updateStudentLectureMutation(ctx.sessionUser, input);
 
-  if (!session) {
-    return {
-      status: 'error',
-      message: 'Unauthorized'
-    } as const;
-  }
+    revalidatePath(`/lector/student-detail/${input.studentId}`);
 
-  const result = await updateStudentLecture({ studentId, lectureId });
-
-  revalidatePath(`/lector/student-detail/${studentId}`);
-
-  return result;
-};
+    return result;
+  });

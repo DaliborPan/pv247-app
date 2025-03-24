@@ -8,4 +8,6 @@ import { getStudentLecturesQuery } from './query';
 
 export const getAttendancesAction = authServerAction
   .input(z.undefined())
-  .handler(async ({ ctx }) => getStudentLecturesQuery(ctx.sessionUser));
+  .handler(({ ctx }) =>
+    getStudentLecturesQuery(ctx.sessionUser, { userId: ctx.sessionUser.id })
+  );

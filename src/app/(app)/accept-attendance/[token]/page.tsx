@@ -4,20 +4,18 @@ import { ArrowRight } from 'lucide-react';
 
 import { getSessionUser } from '@/modules/session-user/server';
 import {
-  addStudentLecture,
-  getStudentLecturesQuery
+  addStudentLectureMutation,
+  getMineStudentLecturesLoader
 } from '@/modules/student-lecture/server';
 import { Button } from '@/components/base/button';
 import { getOrderedLecturesLoader } from '@/modules/lecture/server';
 
 const getLecture = async (token: string) => {
   const lectures = await getOrderedLecturesLoader();
-
   return lectures.find(lecture => lecture.attendanceToken === token);
 };
 
 const Page = async ({ params }: { params: { token: string } }) => {
-  const sessionUser = await getSessionUser();
   const lecture = await getLecture(params.token);
 
   if (!lecture) {
@@ -25,11 +23,14 @@ const Page = async ({ params }: { params: { token: string } }) => {
   }
 
   const studentLecture = (
-    await getStudentLecturesQuery(sessionUser, lecture.id)
+    await getMineStudentLecturesLoader({ lectureId: lecture.id })
   ).at(0);
 
   if (!studentLecture) {
-    await addStudentLecture({
+    const sessionUser = await getSessionUser();
+
+    // special case of calling mutation inside RSC
+    await addStudentLectureMutation(sessionUser, {
       studentId: sessionUser.id,
       lectureId: lecture.id
     });

@@ -15,7 +15,7 @@ import {
 } from './schema/lectures';
 import { projects, type Project } from './schema/projects';
 import { users, type User } from './schema/users';
-import { studentLectures } from './schema/studentLecture';
+import { type StudentLecture, studentLectures } from './schema/studentLecture';
 import * as relations from './schema/relations';
 
 const db = drizzle({
@@ -55,5 +55,9 @@ export {
 
   // users
   users,
-  type User
+  type User,
+
+  // student-lecture
+  studentLectures,
+  type StudentLecture
 };
