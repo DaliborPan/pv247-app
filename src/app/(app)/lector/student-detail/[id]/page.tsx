@@ -1,13 +1,13 @@
 import { redirect } from 'next/navigation';
 
 import { StudentHomeworkCard } from '@/modules/student/components/student-homework-card';
-import { getStudent } from '@/modules/student/server';
 import { StudentAttendanceCard } from '@/modules/student/components/student-attendance-card';
+import { getStudentLoader } from '@/modules/lector/server';
 
 import { StudentHero, StudentDetailOverviewCard } from './_components';
 
 const Page = async ({ params }: { params: { id: string } }) => {
-  const student = await getStudent(params.id);
+  const student = await getStudentLoader(params.id);
 
   if (!student) {
     redirect('/lector');

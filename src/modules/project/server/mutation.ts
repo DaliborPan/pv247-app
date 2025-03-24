@@ -1,8 +1,5 @@
 import { db, projects } from '@/db';
-import {
-  assignProject,
-  getStudentsByProjectId
-} from '@/modules/student/server';
+import { assignProject, getStudents } from '@/modules/student/server';
 import { type ProjectInsert } from '@/db/schema/projects';
 import { type SessionUserType } from '@/modules/session-user/types';
 
@@ -36,7 +33,7 @@ export const updateProjectMutation = async (
     'name' | 'description' | 'github' | 'shortDescription'
   >
 ) => {
-  const currentProjectStudents = await getStudentsByProjectId(id);
+  const currentProjectStudents = await getStudents({ projectId: id });
 
   if (!currentProjectStudents.some(user => user.id === sessionUser.id)) {
     throw new Error(

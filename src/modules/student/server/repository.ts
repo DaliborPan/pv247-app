@@ -19,9 +19,21 @@ export const assignProject = ({
     })
     .where(and(inArray(users.id, userIds), eq(users.role, 'student')));
 
-export const getStudentsByProjectId = (projectId: string) =>
+export const getStudents = ({
+  projectId,
+  userId
+}: {
+  projectId?: string;
+  userId?: string;
+}) =>
   db.query.users.findMany({
-    where: (users, { eq }) => eq(users.projectId, projectId)
+    where: (table, { eq, and }) =>
+      and(
+        ...[
+          ...(projectId ? [eq(table.projectId, projectId)] : []),
+          ...(userId ? [eq(table.id, userId)] : [])
+        ]
+      )
   });
 
 export const getStudentsWithHomework = () =>

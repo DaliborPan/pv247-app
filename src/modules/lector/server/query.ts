@@ -1,6 +1,6 @@
 import { db } from '@/db';
 import { type SessionUserType } from '@/modules/session-user/types';
-import { getStudentsWithHomework } from '@/modules/student/server';
+import { getStudents, getStudentsWithHomework } from '@/modules/student/server';
 
 import { getLectorStudents } from './repository';
 
@@ -62,4 +62,21 @@ export const getStudentsWithHomeworkQuery = (sessionUser: SessionUserType) => {
   }
 
   return getStudentsWithHomework();
+};
+
+export const getStudentQuery = async (
+  sessionUser: SessionUserType,
+  userId: string
+) => {
+  if (sessionUser.role !== 'lector') {
+    throw new Error(`Unauthorized`);
+  }
+
+  const users = await getStudents({ userId });
+
+  if (!users.length) {
+    throw new Error(`Student ${userId} not found`);
+  }
+
+  return users[0];
 };
