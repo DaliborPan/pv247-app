@@ -5,7 +5,7 @@ import { Button } from '@/components/base/button';
 import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
 import { Hero } from '@/components/base/hero';
-import { getMineProject } from '@/modules/session-user/server';
+import { getMineProjectLoader } from '@/modules/session-user/server';
 
 const GithubLink = ({ href }: { href?: string | null }) => (
   <a
@@ -35,7 +35,7 @@ const EditLink = ({ disabled }: { disabled: boolean }) => (
 );
 
 export const ProjectHero = async () => {
-  const project = await getMineProject();
+  const project = await getMineProjectLoader();
 
   if (!project) return null;
 

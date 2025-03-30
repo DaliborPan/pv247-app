@@ -1,41 +1,26 @@
 import { Suspense } from 'react';
 
-import { db } from '@/db';
-import { getSessionUser } from '@/modules/session-user/server';
 import { FormEditor } from '@/components/form/form-fields/form-editor';
 import { FormInput } from '@/components/form/form-fields/form-input';
+import { getProjectFormStudentComboboxLoader } from '@/modules/student/server';
 
 import { ProjectFormProvider } from './project-form-provider';
 import { StudentCombobox } from './student-combobox';
 import { type ProjectFormSchema } from './schema';
 
-const _StudentCombobox = async ({
+const ProjectFormStudentCombobox = async ({
   defaultValues
 }: {
   defaultValues?: Partial<ProjectFormSchema>;
 }) => {
-  const sessionUser = await getSessionUser();
-
-  const students = await db.query.users.findMany({
-    where: (table, { eq, or, and, inArray, isNull, not }) =>
-      or(
-        and(
-          eq(table.role, 'student'),
-          isNull(table.projectId),
-          not(eq(table.id, sessionUser.id))
-        ),
-        inArray(table.id, defaultValues?.students ?? [''])
-      )
-  });
+  const students = await getProjectFormStudentComboboxLoader(defaultValues?.id);
 
   return (
     <StudentCombobox
-      options={students
-        .filter(student => !!student.github)
-        .map(user => ({
-          value: user.id,
-          label: `${user.firstName} ${user.lastName}`
-        }))}
+      options={students.map(user => ({
+        value: user.id,
+        label: `${user.firstName} ${user.lastName}`
+      }))}
     />
   );
 };
@@ -59,7 +44,7 @@ export const ProjectForm = async ({
 
     <div className="mt-2">
       <Suspense>
-        <_StudentCombobox defaultValues={defaultValues} />
+        <ProjectFormStudentCombobox defaultValues={defaultValues} />
       </Suspense>
     </div>
   </ProjectFormProvider>

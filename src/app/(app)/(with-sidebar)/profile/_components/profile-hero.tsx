@@ -3,15 +3,19 @@ import { Hero } from '@/components/base/hero';
 import { EditProfileAction } from '@/modules/student/components/edit-profile-action';
 
 const ProfileHeroContent = async () => {
-  const user = await getSessionUser();
+  const sessionUser = await getSessionUser();
 
   const displayName =
-    user.firstName && user.lastName
-      ? `${user.firstName} ${user.lastName}`
-      : user.name;
+    sessionUser.firstName && sessionUser.lastName
+      ? `${sessionUser.firstName} ${sessionUser.lastName}`
+      : sessionUser.name;
 
   const displayRole =
-    user.role === 'student' ? 'Course Student' : 'Course Teacher';
+    sessionUser.role === 'student'
+      ? 'Course Student'
+      : sessionUser.role === 'lector'
+        ? 'Course Teacher'
+        : '';
 
   return (
     <>
@@ -26,13 +30,13 @@ const ProfileHeroContent = async () => {
 };
 
 const getDefaultValues = async () => {
-  const user = await getSessionUser();
+  const sessionUser = await getSessionUser();
 
   return {
-    id: user.id,
-    firstName: user.firstName ?? undefined,
-    lastName: user.lastName ?? undefined,
-    github: user.github ?? undefined
+    id: sessionUser.id,
+    firstName: sessionUser.firstName ?? undefined,
+    lastName: sessionUser.lastName ?? undefined,
+    github: sessionUser.github ?? undefined
   };
 };
 

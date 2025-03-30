@@ -52,3 +52,17 @@ export const updateProjectMutation = async (
   // Add students to new project
   await assignProject({ projectId: id, userIds: studentIds });
 };
+
+export const updateProjectStatusMutation = async (
+  sessionUser: SessionUserType,
+  projectId: string,
+  values: Pick<ProjectInsert, 'status'>
+) => {
+  if (sessionUser.projectId !== projectId) {
+    throw new Error(
+      `User ${sessionUser.id} is not allowed to update project ${projectId}`
+    );
+  }
+
+  await updateProject(projectId, values);
+};

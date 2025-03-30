@@ -10,13 +10,11 @@ import {
 import { Button } from '@/components/base/button';
 import { getOrderedLecturesLoader } from '@/modules/lecture/server';
 
-const getLecture = async (token: string) => {
-  const lectures = await getOrderedLecturesLoader();
-  return lectures.find(lecture => lecture.attendanceToken === token);
-};
-
 const Page = async ({ params }: { params: { token: string } }) => {
-  const lecture = await getLecture(params.token);
+  const lectures = await getOrderedLecturesLoader();
+  const lecture = lectures.find(
+    lecture => lecture.attendanceToken === params.token
+  );
 
   if (!lecture) {
     redirect('/');

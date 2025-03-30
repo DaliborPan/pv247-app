@@ -1,6 +1,6 @@
 import { type PropsWithChildren } from 'react';
 
-import { getMineOverview } from '@/modules/session-user/server';
+import { getMineOverviewLoader } from '@/modules/session-user/server';
 
 import { SidebarCard } from '../sidebar-card';
 
@@ -17,7 +17,7 @@ const OverviewCardRow = ({
 );
 
 export const OverviewCard = async () => {
-  const { homeworks, project, attendance } = await getMineOverview();
+  const { homeworks, project, attendance } = await getMineOverviewLoader();
 
   return (
     <SidebarCard title="Overview">

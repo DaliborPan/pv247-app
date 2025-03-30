@@ -1,6 +1,7 @@
 import { and, eq, inArray } from 'drizzle-orm';
 
 import { db, type User, users } from '@/db';
+import { type SessionUserType } from '@/modules/session-user/types';
 
 export const updateUser = (id: string, values: Partial<User>) =>
   db.update(users).set(values).where(eq(users.id, id));
@@ -42,4 +43,25 @@ export const getStudentsWithHomework = () =>
     with: {
       homeworksStudent: true
     }
+  });
+
+export const getProjectFormStudents = (
+  sessionUser: SessionUserType,
+  projectId: string | undefined
+) =>
+  db.query.users.findMany({
+    where: (table, { eq, or, and, isNull, isNotNull, not }) =>
+      and(
+        or(
+          ...[
+            and(
+              eq(table.role, 'student'),
+              isNull(table.projectId),
+              not(eq(table.id, sessionUser.id))
+            ),
+            ...(projectId ? [eq(table.projectId, projectId)] : [])
+          ]
+        ),
+        isNotNull(table.github)
+      )
   });

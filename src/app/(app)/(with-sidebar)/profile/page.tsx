@@ -11,7 +11,7 @@ import {
 } from './_components';
 
 const Page = async () => {
-  const user = await getSessionUser();
+  const sessionUser = await getSessionUser();
 
   return (
     <>
@@ -19,15 +19,15 @@ const Page = async () => {
 
       <Suspense>
         <div className="mt-4 flex flex-col gap-y-4 lg:mt-8">
-          {user.role === 'student' && (
+          {sessionUser.role === 'student' && (
             <>
-              <StudentOverviewCard user={user} />
-              <StudentHomeworkCard user={user} />
+              <StudentOverviewCard user={sessionUser} />
+              <StudentHomeworkCard user={sessionUser} />
               <ProfileProjectCard />
             </>
           )}
 
-          {user.role === 'lector' && <LectorLecturesSection />}
+          {sessionUser.role === 'lector' && <LectorLecturesSection />}
         </div>
       </Suspense>
     </>

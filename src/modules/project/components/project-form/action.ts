@@ -10,8 +10,6 @@ export const createProjectAction = authServerAction
   .input(projectFormSchema)
   .handler(async ({ input: { students, ...input }, ctx }) => {
     await createProjectMutation(ctx.sessionUser, students, input);
-
-    // revalidateTag(PROJECTS_TAG);
   });
 
 export const updateProjectAction = authServerAction
@@ -22,6 +20,4 @@ export const updateProjectAction = authServerAction
     }
 
     await updateProjectMutation(ctx.sessionUser, id, students, input);
-
-    // revalidateTag(PROJECTS_TAG);
   });

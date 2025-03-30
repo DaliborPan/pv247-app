@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 
 import { authServerAction } from '@/server/server-actions';
 
-import { updateUserPersonalInfoMutation } from '../../server/mutation';
+import { updateUserPersonalInfoMutation } from '../../server';
 
 import { editProfileFormSchema } from './schema';
 

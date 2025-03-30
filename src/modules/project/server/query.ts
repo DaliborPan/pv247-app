@@ -10,7 +10,14 @@ export const getProjectsQuery = (sessionUser: SessionUserType) => {
   return getProjectsCached();
 };
 
-export const getProjectQuery = async (id: string) => {
+export const getProjectQuery = async (
+  sessionUser: SessionUserType,
+  id: string
+) => {
+  if (sessionUser.role !== 'lector' && sessionUser.id !== id) {
+    throw new Error(`${sessionUser.id} cannot read project ${id}`);
+  }
+
   const projects = await getProjectsCached();
 
   return projects.find(project => project.id === id);
