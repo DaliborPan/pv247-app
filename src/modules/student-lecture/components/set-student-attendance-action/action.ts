@@ -3,11 +3,11 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-import { authServerAction } from '@/server/server-actions';
+import { authLectorServerAction } from '@/server/server-actions';
 
 import { updateStudentLectureMutation } from '../../server';
 
-export const setStudentAttendanceAction = authServerAction
+export const setStudentAttendanceAction = authLectorServerAction
   .input(
     z.object({
       studentId: z.string(),
