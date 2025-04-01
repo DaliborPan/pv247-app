@@ -1,6 +1,6 @@
 import { DataTable } from '@/components/data-table';
 
-import { type GetStudentsWithHomeworkLoaderResult } from '../../server';
+import { type GetStudentsWithHomeworkLoaderResult } from '../../server/loader';
 
 import { columns } from './columns';
 

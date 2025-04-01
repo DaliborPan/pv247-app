@@ -9,7 +9,7 @@ import { getOrderedLecturesLoader } from '@/modules/lecture/server';
 import {
   getMineStudentsLoader,
   getStudentsWithHomeworkLoader
-} from '@/modules/lector/server';
+} from '@/modules/lector/server/loader';
 
 import { HomeworksNavigation } from './_components';
 
