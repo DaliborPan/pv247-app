@@ -41,13 +41,14 @@ export const SetProjectPointsAction = ({
       onDecision={async ({ confirmed, data }) => {
         if (!confirmed) return;
 
-        try {
-          await mutation.mutateAsync(data);
+        const [_, error] = await mutation.mutateAsync(data);
 
-          toast.success('Project points updated!');
-        } catch (error) {
-          toast.error('Failed to update project points');
+        if (error) {
+          toast.error(error.message);
+          return;
         }
+
+        toast.success('Project points updated!');
       }}
     >
       {children}

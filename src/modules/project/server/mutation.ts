@@ -66,3 +66,14 @@ export const updateProjectStatusMutation = async (
 
   await updateProject(projectId, values);
 };
+
+export const updateProjectPointsMutation = async (
+  sessionUser: SessionUserType,
+  { id, comment, points }: { id: string; comment: string; points: number }
+) => {
+  if (sessionUser.role !== 'lector') {
+    throw new Error('Unauthorized');
+  }
+
+  await updateProject(id, { comment, points });
+};

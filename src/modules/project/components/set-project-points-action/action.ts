@@ -1,15 +1,16 @@
 'use server';
 
-import { updateProject } from '@/modules/project/server';
+import { updateProjectPointsMutation } from '@/modules/project/server';
+import { authLectorServerAction } from '@/server/server-actions';
 
-import { type SetProjectPointsFormSchema } from './schema';
+import { setProjectPointsFormSchema } from './schema';
 
-export const setProjectPointsAction = async ({
-  projectId,
-  comment,
-  points
-}: SetProjectPointsFormSchema) => {
-  await updateProject(projectId, { comment, points });
-
-  // revalidateTag(PROJECTS_TAG);
-};
+export const setProjectPointsAction = authLectorServerAction
+  .input(setProjectPointsFormSchema)
+  .handler(async ({ ctx, input }) => {
+    await updateProjectPointsMutation(ctx.sessionUser, {
+      id: input.projectId,
+      points: input.points,
+      comment: input.comment
+    });
+  });
