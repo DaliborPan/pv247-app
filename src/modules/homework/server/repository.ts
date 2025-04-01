@@ -1,6 +1,6 @@
-import { and } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
-import { db } from '@/db';
+import { db, HomeworkInsert, homeworks } from '@/db';
 
 export const getHomework = ({
   userId,
@@ -17,3 +17,27 @@ export const getHomework = ({
   });
 
 export type GetHomeworksResult = Awaited<ReturnType<typeof getHomework>>;
+
+export const updateHomeworkPoints = ({
+  points,
+  lectureId,
+  studentId
+}: {
+  points: number;
+  lectureId: string;
+  studentId: string;
+}) =>
+  db
+    .update(homeworks)
+    .set({
+      points
+    })
+    .where(
+      and(
+        eq(homeworks.lectureId, lectureId),
+        eq(homeworks.studentId, studentId)
+      )
+    );
+
+export const createHomework = (data: HomeworkInsert) =>
+  db.insert(homeworks).values(data);

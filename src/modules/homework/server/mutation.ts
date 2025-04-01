@@ -1,27 +1,26 @@
-import { and, eq } from 'drizzle-orm';
+import { type HomeworkInsert } from '@/db';
+import { type SessionUserType } from '@/modules/session-user/types';
 
-import { db, type HomeworkInsert, homeworks } from '@/db';
+import { createHomework, updateHomeworkPoints } from './repository';
 
-export const createHomework = (data: HomeworkInsert) =>
-  db.insert(homeworks).values(data);
+export const createHomeworkMutation = async (
+  sessionUser: SessionUserType,
+  data: HomeworkInsert
+) => {
+  if (sessionUser.role !== 'lector') {
+    throw new Error('Unauthorized');
+  }
 
-export const updateHomeworkPoints = ({
-  points,
-  lectureId,
-  studentId
-}: {
-  points: number;
-  lectureId: string;
-  studentId: string;
-}) =>
-  db
-    .update(homeworks)
-    .set({
-      points
-    })
-    .where(
-      and(
-        eq(homeworks.lectureId, lectureId),
-        eq(homeworks.studentId, studentId)
-      )
-    );
+  await createHomework(data);
+};
+
+export const updateHomeworkPointsMutation = async (
+  sessionUser: SessionUserType,
+  params: { studentId: string; lectureId: string; points: number }
+) => {
+  if (sessionUser.role !== 'lector') {
+    throw new Error('Unauthorized');
+  }
+
+  await updateHomeworkPoints(params);
+};

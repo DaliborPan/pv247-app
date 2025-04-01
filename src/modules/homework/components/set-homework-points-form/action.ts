@@ -1,10 +1,16 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
 
-import { createHomework, updateHomeworkPoints } from '../../server/mutation';
+import { authLectorServerAction } from '@/server/server-actions';
 
-import { type SetHomeworkPointsFormSchema } from './schema';
+import {
+  createHomeworkMutation,
+  updateHomeworkPointsMutation
+} from '../../server/mutation';
+
+import { setHomeworkPointsFormSchema } from './schema';
 
 const revalidate = ({ studentId }: { studentId: string }) => {
   revalidatePath('/lector/homeworks/[slug]', 'page');
@@ -12,27 +18,26 @@ const revalidate = ({ studentId }: { studentId: string }) => {
   revalidatePath(`/lector/student-detail/${studentId}`);
 };
 
-export const updateHomeworkPointsAction = async ({
-  lecture,
-  ...data
-}: SetHomeworkPointsFormSchema) => {
-  await updateHomeworkPoints({
-    ...data,
-    lectureId: lecture.id
+export const updateHomeworkPointsAction = authLectorServerAction
+  .input(setHomeworkPointsFormSchema)
+  .handler(async ({ input, ctx }) => {
+    await updateHomeworkPointsMutation(ctx.sessionUser, {
+      lectureId: input.lecture.id,
+      studentId: input.studentId,
+      points: input.points
+    });
+
+    revalidate({ studentId: input.studentId });
   });
 
-  revalidate({ studentId: data.studentId });
-};
+export const createHomeworkAction = authLectorServerAction
+  .input(setHomeworkPointsFormSchema)
+  .handler(async ({ input, ctx }) => {
+    await createHomeworkMutation(ctx.sessionUser, {
+      ...input,
+      name: input.lecture.homeworkName,
+      lectureId: input.lecture.id
+    });
 
-export const createHomeworkAction = async ({
-  lecture,
-  ...data
-}: SetHomeworkPointsFormSchema) => {
-  await createHomework({
-    ...data,
-    name: lecture.homeworkName,
-    lectureId: lecture.id
+    revalidate({ studentId: input.studentId });
   });
-
-  revalidate({ studentId: data.studentId });
-};
