@@ -5,13 +5,13 @@ import { getSessionUser } from '@/modules/session-user/server';
 import { OnboardingPage } from '@/modules/student/components/onboarding-page/onboarding-page';
 
 const Layout = async ({ children }: PropsWithChildren) => {
-  const user = await getSessionUser();
+  const sessionUser = await getSessionUser();
 
-  const showOnboarding = !user.github;
+  const showOnboarding = !sessionUser.github;
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={sessionUser} />
 
       <div className="my-8">
         {showOnboarding ? <OnboardingPage /> : children}

@@ -33,7 +33,6 @@ const getDefaultValues = async () => {
   const sessionUser = await getSessionUser();
 
   return {
-    id: sessionUser.id,
     firstName: sessionUser.firstName ?? undefined,
     lastName: sessionUser.lastName ?? undefined,
     github: sessionUser.github ?? undefined

@@ -2,15 +2,20 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { updateUser } from '../../server';
+import { authServerAction } from '@/server/server-actions';
 
-import { type OnboardingFormSchema } from './schema';
+import { updateUserPersonalInfoMutation } from '../../server';
 
-export const onboardingFormAction = async ({
-  id,
-  ...values
-}: OnboardingFormSchema) => {
-  await updateUser(id, values);
+import { onboardingFormSchema } from './schema';
 
-  revalidatePath('/', 'layout');
-};
+export const onboardingFormAction = authServerAction
+  .input(onboardingFormSchema)
+  .handler(async ({ ctx, input: { firstName, lastName, github } }) => {
+    await updateUserPersonalInfoMutation(ctx.sessionUser, ctx.sessionUser.id, {
+      firstName,
+      lastName,
+      github
+    });
+
+    revalidatePath('/', 'layout');
+  });

@@ -10,8 +10,12 @@ import { editProfileFormSchema } from './schema';
 
 export const editProfileAction = authServerAction
   .input(editProfileFormSchema)
-  .handler(async ({ input: { id, ...input }, ctx }) => {
-    await updateUserPersonalInfoMutation(ctx.sessionUser, id, input);
+  .handler(async ({ ctx, input }) => {
+    await updateUserPersonalInfoMutation(
+      ctx.sessionUser,
+      ctx.sessionUser.id,
+      input
+    );
 
     revalidatePath('/profile');
   });

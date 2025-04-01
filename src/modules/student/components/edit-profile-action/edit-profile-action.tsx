@@ -34,7 +34,7 @@ export const EditProfileAction = ({
       onDecision={async ({ confirmed, data }) => {
         if (!confirmed) return;
 
-        const [_result, error] = await editProfileAction(data);
+        const [_, error] = await editProfileAction(data);
 
         if (error) {
           toast.error(error.message);
