@@ -1,17 +1,21 @@
 'use server';
 
-import { type Project } from '@/db';
+import { z } from 'zod';
 
-import { updateProject } from '../../server';
+import { authServerAction } from '@/server/server-actions';
+import { projectStatusSchema } from '@/db/schema/projects';
 
-export const approveProjectAction = async ({
-  project
-}: {
-  project: Project;
-}) => {
-  await updateProject(project.id, {
-    status: project.status === 'pending' ? 'approved' : 'pending'
+import { updateProjectStatusMutation } from '../../server';
+
+export const approveProjectAction = authServerAction
+  .input(
+    z.object({
+      projectId: z.string(),
+      currentStatus: projectStatusSchema
+    })
+  )
+  .handler(async ({ ctx, input }) => {
+    await updateProjectStatusMutation(ctx.sessionUser, input.projectId, {
+      status: input.currentStatus === 'pending' ? 'approved' : 'pending'
+    });
   });
-
-  // getProjectsLoader.revalidate();
-};

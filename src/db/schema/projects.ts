@@ -20,9 +20,9 @@ export const projects = sqliteTable('project', {
   points: integer('points'),
   comment: text('comment'),
 
-  status: text('status', { enum: projectStatusSchema.options }).$default(
-    () => 'pending'
-  ),
+  status: text('status', { enum: projectStatusSchema.options })
+    .notNull()
+    .default('pending' as const),
   updatedAt: text('updated_at')
     .notNull()
     .default(sql`(CURRENT_TIMESTAMP)`)

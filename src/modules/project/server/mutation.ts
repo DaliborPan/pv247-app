@@ -58,7 +58,7 @@ export const updateProjectStatusMutation = async (
   projectId: string,
   values: Pick<ProjectInsert, 'status'>
 ) => {
-  if (sessionUser.projectId !== projectId) {
+  if (sessionUser.projectId !== projectId && sessionUser.role !== 'lector') {
     throw new Error(
       `User ${sessionUser.id} is not allowed to update project ${projectId}`
     );
