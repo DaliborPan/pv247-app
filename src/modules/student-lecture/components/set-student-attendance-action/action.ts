@@ -15,7 +15,10 @@ export const setStudentAttendanceAction = authLectorServerAction
     })
   )
   .handler(async ({ input, ctx }) => {
-    const result = await updateStudentLectureMutation(ctx.sessionUser, input);
+    const result = await updateStudentLectureMutation(
+      ctx.sessionUserLector,
+      input
+    );
 
     revalidatePath(`/lector/student-detail/${input.studentId}`);
 

@@ -1,7 +1,10 @@
 import { db, projects } from '@/db';
 import { assignProject, getStudents } from '@/modules/student/server';
 import { type ProjectInsert } from '@/db/schema/projects';
-import { type SessionUserType } from '@/modules/session-user/types';
+import {
+  type SessionUserLectorType,
+  type SessionUserType
+} from '@/modules/session-user/types';
 
 import { updateProject } from './repository';
 
@@ -68,12 +71,8 @@ export const updateProjectStatusMutation = async (
 };
 
 export const updateProjectPointsMutation = async (
-  sessionUser: SessionUserType,
+  _sessionUserLector: SessionUserLectorType,
   { id, comment, points }: { id: string; comment: string; points: number }
 ) => {
-  if (sessionUser.role !== 'lector') {
-    throw new Error('Unauthorized');
-  }
-
   await updateProject(id, { comment, points });
 };

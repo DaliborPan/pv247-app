@@ -8,7 +8,7 @@ import { setProjectPointsFormSchema } from './schema';
 export const setProjectPointsAction = authLectorServerAction
   .input(setProjectPointsFormSchema)
   .handler(async ({ ctx, input }) => {
-    await updateProjectPointsMutation(ctx.sessionUser, {
+    await updateProjectPointsMutation(ctx.sessionUserLector, {
       id: input.projectId,
       points: input.points,
       comment: input.comment

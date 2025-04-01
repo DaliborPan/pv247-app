@@ -24,6 +24,11 @@ export const authLectorServerAction = createServerActionProcedure(
       throw new Error('User not authorized');
     }
 
-    return ctx;
+    return {
+      sessionUserLector: {
+        ...ctx.sessionUser,
+        role: 'lector' as const
+      }
+    };
   })
   .createServerAction();

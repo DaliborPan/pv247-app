@@ -20,7 +20,7 @@ const revalidate = ({ studentId }: { studentId: string }) => {
 export const updateHomeworkPointsAction = authLectorServerAction
   .input(setHomeworkPointsFormSchema)
   .handler(async ({ input, ctx }) => {
-    await updateHomeworkPointsMutation(ctx.sessionUser, {
+    await updateHomeworkPointsMutation(ctx.sessionUserLector, {
       lectureId: input.lecture.id,
       studentId: input.studentId,
       points: input.points
@@ -32,7 +32,7 @@ export const updateHomeworkPointsAction = authLectorServerAction
 export const createHomeworkAction = authLectorServerAction
   .input(setHomeworkPointsFormSchema)
   .handler(async ({ input, ctx }) => {
-    await createHomeworkMutation(ctx.sessionUser, {
+    await createHomeworkMutation(ctx.sessionUserLector, {
       ...input,
       name: input.lecture.homeworkName,
       lectureId: input.lecture.id

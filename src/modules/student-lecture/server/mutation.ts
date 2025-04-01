@@ -1,4 +1,7 @@
-import { type SessionUserType } from '@/modules/session-user/types';
+import {
+  type SessionUserLectorType,
+  type SessionUserType
+} from '@/modules/session-user/types';
 
 import {
   createStudentLecture,
@@ -26,7 +29,7 @@ export const addStudentLectureMutation = async (
 };
 
 export const updateStudentLectureMutation = async (
-  sessionUser: SessionUserType,
+  _sessionUserLector: SessionUserLectorType,
   {
     lectureId,
     studentId
@@ -35,10 +38,6 @@ export const updateStudentLectureMutation = async (
     studentId: string;
   }
 ) => {
-  if (sessionUser.role !== 'lector') {
-    throw new Error('Unauthorized');
-  }
-
   const existingStudentLectures = await getStudentLectures({
     lectureId,
     studentId
