@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
 import { SetProjectPointsAction } from '@/modules/project/components/set-project-points-action';
 import { ApproveProjectButton } from '@/modules/project/components/approve-project-action';
-import { type GetProjectsLoaderResult } from '@/modules/project/server';
+import { type GetProjectsLoaderResult } from '@/modules/project/loader';
 
 export const ProjectStatusCard = ({
   project

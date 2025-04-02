@@ -1,5 +1,5 @@
 import { type HomeworkSlug } from '@/db';
-import { getOrderedLecturesLoader } from '@/modules/lecture/server';
+import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
 
 import { HomeworkNavigationLink } from './homework-navigation-link';
 

@@ -1,6 +1,6 @@
-import { getSessionUser } from '@/modules/session-user/server';
+import { getSessionUser } from '@/modules/session-user';
 
-import { getStudentLecturesQuery } from './query';
+import { getStudentLecturesQuery } from './server';
 
 export const getStudentLecturesLoader = async ({
   userId

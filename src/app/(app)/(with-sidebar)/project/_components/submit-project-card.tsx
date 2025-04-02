@@ -3,7 +3,7 @@ import { Pencil } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { DetailCard } from '@/components/detail-card';
-import { getMineProjectLoader } from '@/modules/session-user/server';
+import { getMineProjectLoader } from '@/modules/session-user/loader';
 import { SubmitProjectAction } from '@/modules/project/components/submit-project-action';
 
 export const SubmitProjectCard = async () => {

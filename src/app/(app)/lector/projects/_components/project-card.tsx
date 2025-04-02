@@ -6,7 +6,7 @@ import { TextPreview } from '@/components/text-preview';
 import { Button } from '@/components/base/button';
 import { Badge } from '@/components/base/badge';
 import { formatDate } from '@/lib/date';
-import { type GetProjectsLoaderResult } from '@/modules/project/server';
+import { type GetProjectsLoaderResult } from '@/modules/project/loader';
 
 export const ProjectCard = ({
   project

@@ -2,7 +2,7 @@ import { User } from 'lucide-react';
 
 import { Icon } from '@/components/base/icon';
 import { SidebarCard } from '@/components/sidebar-card';
-import { type GetProjectsLoaderResult } from '@/modules/project/server';
+import { type GetProjectsLoaderResult } from '@/modules/project/loader';
 
 export const ProjectUsersCard = ({
   project

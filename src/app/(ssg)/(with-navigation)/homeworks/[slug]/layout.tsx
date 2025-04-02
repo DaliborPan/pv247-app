@@ -2,7 +2,7 @@ import { type PropsWithChildren } from 'react';
 
 import { type HomeworkSlug } from '@/db';
 import { NavigationButtonLink } from '@/components/navigation-button-link';
-import { getLecturesWithHomeworkLoader } from '@/modules/lecture/server';
+import { getLecturesWithHomeworkLoader } from '@/modules/lecture/loader';
 
 const Layout = async ({
   children,

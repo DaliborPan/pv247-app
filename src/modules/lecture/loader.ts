@@ -1,6 +1,5 @@
-import { checkIsAvailable } from '../utils/check-is-available';
-
-import { getOrderedLecturesQuery } from './query';
+import { checkIsAvailable } from './utils/check-is-available';
+import { getOrderedLecturesQuery } from './server';
 
 export const getOrderedLecturesLoader = getOrderedLecturesQuery;
 

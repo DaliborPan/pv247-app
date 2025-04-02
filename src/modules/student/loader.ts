@@ -1,6 +1,6 @@
-import { getSessionUser } from '@/modules/session-user/server';
+import { getSessionUser } from '@/modules/session-user';
 
-import { getProjectFormStudentComboboxQuery } from './query';
+import { getProjectFormStudentComboboxQuery } from './server';
 
 /**
  * Loads students, that are not assigned to a project and are not the current user.

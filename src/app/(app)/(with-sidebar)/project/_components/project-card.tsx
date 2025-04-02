@@ -1,6 +1,6 @@
 import { RichTextEditor } from '@/components/base/rich-text-editor';
 import { DetailCard } from '@/components/detail-card';
-import { getMineProjectLoader } from '@/modules/session-user/server';
+import { getMineProjectLoader } from '@/modules/session-user/loader';
 
 export const ProjectCard = async () => {
   const project = await getMineProjectLoader();

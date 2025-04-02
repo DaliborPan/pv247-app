@@ -1,10 +1,10 @@
-import { getSessionUser } from '@/modules/session-user/server';
+import { getSessionUser } from '@/modules/session-user';
 
 import {
   getMineStudentsQuery,
   getStudentQuery,
   getStudentsWithHomeworkQuery
-} from './query';
+} from './server';
 
 export const getMineStudentsLoader = async () => {
   const sessionUser = await getSessionUser();

@@ -5,11 +5,11 @@ import { TabsContent } from '@/components/base/tabs';
 import { LabeledValue } from '@/components/labeled-value';
 import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
 import { HomeworkStudentsDataTable } from '@/modules/lector/components/homework-students-data-table';
-import { getOrderedLecturesLoader } from '@/modules/lecture/server';
+import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
 import {
   getMineStudentsLoader,
   getStudentsWithHomeworkLoader
-} from '@/modules/lector/server/loader';
+} from '@/modules/lector/loader';
 
 import { HomeworksNavigation } from './_components';
 

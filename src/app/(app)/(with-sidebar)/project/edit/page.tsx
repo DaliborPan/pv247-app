@@ -1,10 +1,8 @@
 import { redirect } from 'next/navigation';
 
-import {
-  getMineProjectLoader,
-  getSessionUser
-} from '@/modules/session-user/server';
+import { getSessionUser } from '@/modules/session-user';
 import { ProjectForm } from '@/modules/project/components/project-form';
+import { getMineProjectLoader } from '@/modules/session-user/loader';
 
 const Page = async () => {
   const sessionUser = await getSessionUser();

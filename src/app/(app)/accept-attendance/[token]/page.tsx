@@ -2,13 +2,11 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-import { getSessionUser } from '@/modules/session-user/server';
-import {
-  addStudentLectureMutation,
-  getMineStudentLecturesLoader
-} from '@/modules/student-lecture/server';
+import { getSessionUser } from '@/modules/session-user';
+import { addStudentLectureMutation } from '@/modules/student-lecture/server';
 import { Button } from '@/components/base/button';
-import { getOrderedLecturesLoader } from '@/modules/lecture/server';
+import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
+import { getMineStudentLecturesLoader } from '@/modules/student-lecture/loader';
 
 const Page = async ({ params }: { params: { token: string } }) => {
   const lectures = await getOrderedLecturesLoader();

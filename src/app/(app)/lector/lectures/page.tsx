@@ -1,5 +1,5 @@
 import { LectureCard } from '@/modules/lecture/components/lecture-card';
-import { getOrderedLecturesLoader } from '@/modules/lecture/server';
+import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
 
 const Page = async () => {
   const lectures = await getOrderedLecturesLoader();

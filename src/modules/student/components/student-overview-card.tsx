@@ -5,7 +5,7 @@ import { cn } from '@/lib/cn';
 import {
   getUserOverviewLoader,
   type GetUserOverviewLoaderResult
-} from '@/modules/shared/server';
+} from '@/modules/shared/loader';
 
 type StudentOverviewCardProps = {
   user: User;

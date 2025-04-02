@@ -1,6 +1,6 @@
 import { createServerActionProcedure } from 'zsa';
 
-import { getSessionUser } from '@/modules/session-user/server';
+import { getSessionUser } from '@/modules/session-user';
 
 const authServerProcedure = createServerActionProcedure().handler(async () => {
   try {

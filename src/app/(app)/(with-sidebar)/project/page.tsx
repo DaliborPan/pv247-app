@@ -1,5 +1,5 @@
 import { ProjectForm } from '@/modules/project/components/project-form';
-import { getMineProjectLoader } from '@/modules/session-user/server';
+import { getMineProjectLoader } from '@/modules/session-user/loader';
 
 import { SubmitProjectCard } from './_components/submit-project-card';
 import { ProjectCard, ProjectHero } from './_components';

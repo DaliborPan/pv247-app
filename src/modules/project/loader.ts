@@ -1,6 +1,6 @@
-import { getSessionUser } from '@/modules/session-user/server';
+import { getSessionUser } from '@/modules/session-user';
 
-import { getProjectsQuery } from './query';
+import { getProjectsQuery } from './server/query';
 
 export const getProjectsLoader = async () => {
   const sessionUser = await getSessionUser();

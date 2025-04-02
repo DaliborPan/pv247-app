@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn';
-import { getUserOverviewLoader } from '@/modules/shared/server';
+import { getUserOverviewLoader } from '@/modules/shared/loader';
 import { type User } from '@/db';
-import { getOrderedLecturesLoader } from '@/modules/lecture/server';
+import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
 
 import { ListCard } from './list-card';
 import { PointsBadge } from './points-badge';

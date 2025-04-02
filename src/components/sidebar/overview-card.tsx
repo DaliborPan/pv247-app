@@ -1,6 +1,6 @@
 import { type PropsWithChildren } from 'react';
 
-import { getMineOverviewLoader } from '@/modules/session-user/server';
+import { getMineOverviewLoader } from '@/modules/session-user/loader';
 
 import { SidebarCard } from '../sidebar-card';
 

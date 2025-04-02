@@ -1,7 +1,7 @@
 import { DetailCard } from '@/components/detail-card';
-import { getOrderedLecturesLoader } from '@/modules/lecture/server';
+import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
 import { SetStudentAttendanceAction } from '@/modules/student-lecture/components/set-student-attendance-action';
-import { getStudentLecturesLoader } from '@/modules/student-lecture/server';
+import { getStudentLecturesLoader } from '@/modules/student-lecture/loader';
 
 const AttendanceCell = ({
   studentId,

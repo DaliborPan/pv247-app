@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 
 import { FormEditor } from '@/components/form/form-fields/form-editor';
 import { FormInput } from '@/components/form/form-fields/form-input';
-import { getProjectFormStudentComboboxLoader } from '@/modules/student/server/loader';
+import { getProjectFormStudentComboboxLoader } from '@/modules/student/loader';
 
 import { ProjectFormProvider } from './project-form-provider';
 import { StudentCombobox } from './student-combobox';

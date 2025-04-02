@@ -1,5 +1,5 @@
 import { LectureCard } from '@/modules/lecture/components/lecture-card';
-import { getOrderedLecturesLoader } from '@/modules/lecture/server';
+import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
 import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
 
 const Page = async () => {

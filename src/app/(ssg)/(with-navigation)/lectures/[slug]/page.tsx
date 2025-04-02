@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 import { lectureSlugSchema, type LectureSlug } from '@/db';
-import { getIsLectureAvailable } from '@/modules/lecture/server';
+import { getIsLectureAvailable } from '@/modules/lecture/loader';
 import { getLectureMdxComponent } from '@/modules/lecture/mdx';
 
 type Params = {

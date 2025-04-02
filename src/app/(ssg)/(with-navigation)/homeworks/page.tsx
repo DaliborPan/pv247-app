@@ -8,7 +8,7 @@ import { TextPreview } from '@/components/text-preview';
 import { cn } from '@/lib/cn';
 import { formatDate } from '@/lib/date';
 import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
-import { getLecturesWithHomeworkLoader } from '@/modules/lecture/server';
+import { getLecturesWithHomeworkLoader } from '@/modules/lecture/loader';
 
 const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
   const isAvailable = checkIsAvailable(lecture);

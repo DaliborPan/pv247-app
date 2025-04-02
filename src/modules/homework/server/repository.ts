@@ -1,6 +1,6 @@
 import { and, eq } from 'drizzle-orm';
 
-import { db, HomeworkInsert, homeworks } from '@/db';
+import { db, type HomeworkInsert, homeworks } from '@/db';
 
 export const getHomework = ({
   userId,

@@ -1,9 +1,9 @@
 import { cache } from 'react';
 
-import { getSessionUser } from '@/modules/session-user/server';
+import { getSessionUser } from '@/modules/session-user';
 import { type User } from '@/db';
 
-import { getUserOverviewQuery } from './query';
+import { getUserOverviewQuery } from './server';
 
 export const getUserOverviewLoader = cache(async (user: User) => {
   const sessionUser = await getSessionUser();

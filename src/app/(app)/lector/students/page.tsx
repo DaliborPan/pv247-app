@@ -4,7 +4,7 @@ import { StudentsDataTable } from '@/modules/lector/components/students-data-tab
 import {
   getMineStudentsLoader,
   getStudentsWithHomeworkLoader
-} from '@/modules/lector/server/loader';
+} from '@/modules/lector/loader';
 
 const Page = async () => {
   const lectorStudents = await getMineStudentsLoader();

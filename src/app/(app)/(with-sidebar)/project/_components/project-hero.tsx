@@ -5,7 +5,7 @@ import { Button } from '@/components/base/button';
 import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
 import { Hero } from '@/components/base/hero';
-import { getMineProjectLoader } from '@/modules/session-user/server';
+import { getMineProjectLoader } from '@/modules/session-user/loader';
 
 const GithubLink = ({ href }: { href?: string | null }) => (
   <a

@@ -1,4 +1,4 @@
-import { getProjectsLoader } from '@/modules/project/server';
+import { getProjectsLoader } from '@/modules/project/loader';
 
 import { ProjectCard } from './_components';
 

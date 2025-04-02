@@ -1,7 +1,7 @@
 import { NavigationButtonLink } from '@/components/navigation-button-link';
 import { type LectureSlug } from '@/db';
 
-import { getOrderedLecturesLoader } from '../server';
+import { getOrderedLecturesLoader } from '../loader';
 
 export const LectureNavigation = async ({
   lectureSlug,
