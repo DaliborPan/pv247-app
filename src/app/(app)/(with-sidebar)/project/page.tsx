@@ -1,5 +1,5 @@
 import { ProjectForm } from '@/modules/project/components/project-form';
-import { getMineProjectLoader } from '@/modules/session-user/loader';
+import { getMineProjectLoader } from '@/modules/project/loader';
 
 import { SubmitProjectCard } from './_components/submit-project-card';
 import { ProjectCard, ProjectHero } from './_components';
@@ -9,9 +9,9 @@ const Page = async () => {
 
   return project ? (
     <div>
-      <ProjectHero />
-      <ProjectCard />
-      <SubmitProjectCard />
+      <ProjectHero project={project} />
+      <ProjectCard project={project} />
+      <SubmitProjectCard project={project} />
     </div>
   ) : (
     <ProjectForm />

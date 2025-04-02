@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 
 import { getSessionUser } from '@/modules/session-user';
 import { ProjectForm } from '@/modules/project/components/project-form';
-import { getMineProjectLoader } from '@/modules/session-user/loader';
+import { getMineProjectLoader } from '@/modules/project/loader';
 
 const Page = async () => {
   const sessionUser = await getSessionUser();

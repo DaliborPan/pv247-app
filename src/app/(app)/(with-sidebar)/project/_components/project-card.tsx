@@ -1,17 +1,14 @@
 import { RichTextEditor } from '@/components/base/rich-text-editor';
 import { DetailCard } from '@/components/detail-card';
-import { getMineProjectLoader } from '@/modules/session-user/loader';
+import { type GetMineProjectLoaderResult } from '@/modules/project/loader';
 
-export const ProjectCard = async () => {
-  const project = await getMineProjectLoader();
-
-  if (!project?.description) {
-    return null;
-  }
-
-  return (
+export const ProjectCard = ({
+  project
+}: {
+  project: NonNullable<GetMineProjectLoaderResult>;
+}) =>
+  project.description ? (
     <DetailCard title="Description">
       <RichTextEditor value={project.description} disabled />
     </DetailCard>
-  );
-};
+  ) : null;

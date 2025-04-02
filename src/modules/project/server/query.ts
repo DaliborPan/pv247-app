@@ -20,7 +20,13 @@ export const getProjectQuery = async (
 
   const projects = await getProjectsCached();
 
-  return projects.find(project => project.id === id);
+  const project = projects.find(project => project.id === id);
+
+  if (!project) {
+    throw new Error(`Project ${id} not found`);
+  }
+
+  return project;
 };
 
 export type GetProjectQueryResult = Awaited<ReturnType<typeof getProjectQuery>>;
