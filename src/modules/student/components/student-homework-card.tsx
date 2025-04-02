@@ -1,7 +1,8 @@
 import { cn } from '@/lib/cn';
-import { getUserOverviewLoader } from '@/modules/shared/loader';
 import { type User } from '@/db';
 import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
+
+import { getStudentOverviewLoader } from '../loader';
 
 import { ListCard } from './list-card';
 import { PointsBadge } from './points-badge';
@@ -11,7 +12,7 @@ export const StudentHomeworkCard = async ({ user }: { user: User }) => {
 
   const {
     lectures: { userHomeworks, availableLength }
-  } = await getUserOverviewLoader(user);
+  } = await getStudentOverviewLoader(user);
 
   return (
     <ListCard

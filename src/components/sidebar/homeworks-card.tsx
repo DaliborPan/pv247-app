@@ -2,8 +2,8 @@ import { ArrowRight, Lock } from 'lucide-react';
 
 import { Icon } from '@/components/base/icon';
 import { SidebarCard } from '@/components/sidebar-card';
-import { getMineOverviewLoader } from '@/modules/session-user/loader';
 import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
+import { getMineOverviewLoader } from '@/modules/student/loader';
 
 import { SidebarLinkRow } from './sidebar-link-row';
 
