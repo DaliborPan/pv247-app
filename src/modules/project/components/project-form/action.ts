@@ -1,51 +1,23 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
+import { authServerAction } from '@/server/server-actions';
 
-import { assignProject } from '@/modules/student/server';
+import { createProjectMutation, updateProjectMutation } from '../../server';
 
-import { createProject, PROJECTS_TAG, updateProject } from '../../server';
+import { projectFormSchema } from './schema';
 
-import { type ProjectFormSchema } from './schema';
-
-export const createProjectAction = async ({
-  students,
-
-  name,
-  description,
-  shortDescription,
-  github
-}: ProjectFormSchema) => {
-  const project = await createProject({
-    name,
-    description,
-    shortDescription,
-    github
+export const createProjectAction = authServerAction
+  .input(projectFormSchema)
+  .handler(async ({ input: { students, ...input }, ctx }) => {
+    await createProjectMutation(ctx.sessionUser, students, input);
   });
 
-  await assignProject({ projectId: project.id, studentIds: students });
+export const updateProjectAction = authServerAction
+  .input(projectFormSchema)
+  .handler(async ({ input: { id, students, ...input }, ctx }) => {
+    if (!id) {
+      throw new Error('Project id is required');
+    }
 
-  revalidateTag(PROJECTS_TAG);
-};
-
-export const updateProjectAction = async ({
-  id,
-  students,
-
-  name,
-  description,
-  shortDescription,
-  github
-}: ProjectFormSchema) => {
-  if (!id) return;
-
-  await updateProject(id, {
-    name,
-    description,
-    shortDescription,
-    github,
-    studentIds: students
+    await updateProjectMutation(ctx.sessionUser, id, students, input);
   });
-
-  revalidateTag(PROJECTS_TAG);
-};

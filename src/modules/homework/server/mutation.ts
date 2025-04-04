@@ -1,27 +1,18 @@
-import { and, eq } from 'drizzle-orm';
+import { type HomeworkInsert } from '@/db';
+import { type SessionUserLectorType } from '@/modules/session-user/types';
 
-import { db, type HomeworkInsert, homeworks } from '@/db';
+import { createHomework, updateHomeworkPoints } from './repository';
 
-export const createHomework = (data: HomeworkInsert) =>
-  db.insert(homeworks).values(data);
+export const createHomeworkMutation = async (
+  _sessionUserLector: SessionUserLectorType,
+  data: HomeworkInsert
+) => {
+  await createHomework(data);
+};
 
-export const updateHomeworkPoints = ({
-  points,
-  lectureId,
-  studentId
-}: {
-  points: number;
-  lectureId: string;
-  studentId: string;
-}) =>
-  db
-    .update(homeworks)
-    .set({
-      points
-    })
-    .where(
-      and(
-        eq(homeworks.lectureId, lectureId),
-        eq(homeworks.studentId, studentId)
-      )
-    );
+export const updateHomeworkPointsMutation = async (
+  _sessionUserLector: SessionUserLectorType,
+  params: { studentId: string; lectureId: string; points: number }
+) => {
+  await updateHomeworkPoints(params);
+};

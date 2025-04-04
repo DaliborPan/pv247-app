@@ -6,10 +6,11 @@ import { ArrowRight, Check, ExternalLink, X } from 'lucide-react';
 
 import { DataTableColumnHeader } from '@/components/data-table';
 import { Icon } from '@/components/base/icon';
-import { type GetStudentsWithHomeworksResult } from '@/modules/student/server';
+
+import { type GetStudentsWithHomeworkLoaderResult } from '../../loader';
 
 export const columns: ColumnDef<
-  GetStudentsWithHomeworksResult[number] & {
+  GetStudentsWithHomeworkLoaderResult[number] & {
     homeworkPoints: number;
   },
   string

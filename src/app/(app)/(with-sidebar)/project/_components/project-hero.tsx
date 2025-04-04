@@ -5,7 +5,7 @@ import { Button } from '@/components/base/button';
 import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
 import { Hero } from '@/components/base/hero';
-import { getMineProject } from '@/modules/session-user/server';
+import { type GetMineProjectLoaderResult } from '@/modules/project/loader';
 
 const GithubLink = ({ href }: { href?: string | null }) => (
   <a
@@ -34,11 +34,11 @@ const EditLink = ({ disabled }: { disabled: boolean }) => (
   </Link>
 );
 
-export const ProjectHero = async () => {
-  const project = await getMineProject();
-
-  if (!project) return null;
-
+export const ProjectHero = ({
+  project
+}: {
+  project: NonNullable<GetMineProjectLoaderResult>;
+}) => {
   const displayUsers = project.users
     .map(user => `${user.firstName} ${user.lastName}`)
     .join(', ');

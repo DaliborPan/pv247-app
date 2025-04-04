@@ -1,40 +1,32 @@
-import { unstable_cache } from 'next/cache';
+import { type SessionUserType } from '@/modules/session-user/types';
 
-import { db } from '@/db';
+import { getProjectsCached } from './cache';
 
-export const PROJECTS_TAG = 'projects';
-
-/**
- * Get all projects
- *
- * @cache Next.js cache
- */
-export const getProjects = unstable_cache(
-  async () => {
-    const projects = await db.query.projects.findMany({
-      with: {
-        users: true
-      }
-    });
-
-    return projects;
-  },
-  [PROJECTS_TAG],
-  {
-    tags: [PROJECTS_TAG]
+export const getProjectsQuery = (sessionUser: SessionUserType) => {
+  if (sessionUser.role !== 'lector') {
+    throw new Error(`${sessionUser.id} cannot read projects`);
   }
-);
-export type GetProjectsResult = Awaited<ReturnType<typeof getProjects>>;
 
-/**
- * Get project by id
- *
- * @cache using Next.js cache
- */
-export const getProject = async (id: string) => {
-  const projects = await getProjects();
-
-  return projects.find(project => project.id === id);
+  return getProjectsCached();
 };
 
-export type GetProjectResult = Awaited<ReturnType<typeof getProject>>;
+export const getProjectQuery = async (
+  sessionUser: SessionUserType,
+  id: string
+) => {
+  if (sessionUser.role !== 'lector' && sessionUser.id !== id) {
+    throw new Error(`${sessionUser.id} cannot read project ${id}`);
+  }
+
+  const projects = await getProjectsCached();
+
+  const project = projects.find(project => project.id === id);
+
+  if (!project) {
+    throw new Error(`Project ${id} not found`);
+  }
+
+  return project;
+};
+
+export type GetProjectQueryResult = Awaited<ReturnType<typeof getProjectQuery>>;

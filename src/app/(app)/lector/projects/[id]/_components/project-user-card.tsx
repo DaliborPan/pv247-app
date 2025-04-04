@@ -2,12 +2,12 @@ import { User } from 'lucide-react';
 
 import { Icon } from '@/components/base/icon';
 import { SidebarCard } from '@/components/sidebar-card';
-import { type GetProjectResult } from '@/modules/project/server';
+import { type GetProjectsLoaderResult } from '@/modules/project/loader';
 
 export const ProjectUsersCard = ({
   project
 }: {
-  project: NonNullable<GetProjectResult>;
+  project: GetProjectsLoaderResult[number];
 }) => (
   <SidebarCard title="Users">
     <ul className="flex flex-col gap-y-1.5 font-medium text-primary">

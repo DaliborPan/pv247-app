@@ -1,22 +1,15 @@
 'use server';
 
-import { eq } from 'drizzle-orm';
-import { revalidateTag } from 'next/cache';
+import { z } from 'zod';
 
-import { db, type Project, projects } from '@/db';
-import { PROJECTS_TAG } from '@/modules/project/server';
+import { authServerAction } from '@/server/server-actions';
 
-export const submitProjectAction = async ({
-  project
-}: {
-  project: Project;
-}) => {
-  await db
-    .update(projects)
-    .set({
+import { updateProjectStatusMutation } from '../../server';
+
+export const submitProjectAction = authServerAction
+  .input(z.object({ projectId: z.string() }))
+  .handler(async ({ input, ctx }) => {
+    await updateProjectStatusMutation(ctx.sessionUser, input.projectId, {
       status: 'submitted'
-    })
-    .where(eq(projects.id, project.id));
-
-  revalidateTag(PROJECTS_TAG);
-};
+    });
+  });

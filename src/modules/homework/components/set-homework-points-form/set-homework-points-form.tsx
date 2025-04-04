@@ -32,18 +32,16 @@ export const SetHomeworkPointsForm = ({
 
   const mutation = useSetHomeworkPointsMutation({ isCreating: !hasPoints });
 
-  const onSubmit = (data: SetHomeworkPointsFormSchema) => {
-    mutation.mutate(data, {
-      onSuccess: () => {
-        toast.success('Points were successfully set');
-      },
-      onError: () => {
-        toast.error('Failed to set points');
-      },
-      onSettled: () => {
-        setIsEditing(false);
-      }
-    });
+  const onSubmit = async (data: SetHomeworkPointsFormSchema) => {
+    const [_, error] = await mutation.mutateAsync(data);
+
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+
+    toast.success('Points were successfully set');
+    setIsEditing(false);
   };
 
   return isEditing ? (

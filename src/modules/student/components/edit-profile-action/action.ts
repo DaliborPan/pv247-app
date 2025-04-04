@@ -2,15 +2,20 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { updateUser } from '../../server/mutation';
+import { authServerAction } from '@/server/server-actions';
 
-import { type EditProfileFormSchema } from './schema';
+import { updateUserPersonalInfoMutation } from '../../server';
 
-export const editProfileAction = async ({
-  id,
-  ...values
-}: EditProfileFormSchema) => {
-  await updateUser(id, values);
+import { editProfileFormSchema } from './schema';
 
-  revalidatePath('/profile');
-};
+export const editProfileAction = authServerAction
+  .input(editProfileFormSchema)
+  .handler(async ({ ctx, input }) => {
+    await updateUserPersonalInfoMutation(
+      ctx.sessionUser,
+      ctx.sessionUser.id,
+      input
+    );
+
+    revalidatePath('/profile');
+  });

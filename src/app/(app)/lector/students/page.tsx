@@ -1,12 +1,16 @@
 import { TabsContent } from '@/components/base/tabs';
-import { getStudentsWithHomeworks } from '@/modules/student/server';
-import { getMineStudents } from '@/modules/session-user/server';
 import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
 import { StudentsDataTable } from '@/modules/lector/components/students-data-table';
+import { getStudentsWithHomeworkLoader } from '@/modules/lector/loader';
+import { getSessionUser } from '@/modules/session-user';
 
 const Page = async () => {
-  const lectorStudents = await getMineStudents();
-  const hasOwnStudents = !!lectorStudents.length;
+  const students = await getStudentsWithHomeworkLoader();
+
+  const sessionUser = await getSessionUser();
+  const hasOwnStudents = students.some(
+    student => student.lectorId === sessionUser.id
+  );
 
   return (
     <LectorTabsTable
@@ -30,11 +34,15 @@ const Page = async () => {
       contents={
         <>
           <TabsContent value="all">
-            <StudentsDataTable students={await getStudentsWithHomeworks()} />
+            <StudentsDataTable students={students} />
           </TabsContent>
 
           <TabsContent value="own">
-            <StudentsDataTable students={lectorStudents} />
+            <StudentsDataTable
+              students={students.filter(
+                student => student.lectorId === sessionUser.id
+              )}
+            />
           </TabsContent>
         </>
       }

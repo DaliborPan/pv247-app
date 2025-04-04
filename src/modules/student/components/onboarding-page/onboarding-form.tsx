@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 import { Form } from '@/components/form';
 import { FormInput } from '@/components/form/form-fields/form-input';
@@ -13,23 +14,25 @@ import { onboardingFormAction } from './action';
 
 const useOnboardingFormMutation = () =>
   useMutation({
-    mutationFn: async (data: OnboardingFormSchema) => {
-      await onboardingFormAction(data);
-    }
+    mutationFn: async (data: OnboardingFormSchema) => onboardingFormAction(data)
   });
 
-export const OnboardingForm = ({ userId }: { userId: string }) => {
+export const OnboardingForm = () => {
   const form = useForm<OnboardingFormSchema>({
-    resolver: zodResolver(onboardingFormSchema),
-    defaultValues: {
-      id: userId
-    }
+    resolver: zodResolver(onboardingFormSchema)
   });
 
   const mutation = useOnboardingFormMutation();
 
-  const onSubmit = (data: OnboardingFormSchema) => {
-    mutation.mutate(data);
+  const onSubmit = async (data: OnboardingFormSchema) => {
+    const [_, error] = await mutation.mutateAsync(data);
+
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+
+    toast.success('You have successfully filled in your information');
   };
 
   return (

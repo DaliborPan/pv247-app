@@ -1,38 +1,78 @@
-import { eq } from 'drizzle-orm';
-
-import { db, type Project, projects } from '@/db';
-import { assignProject } from '@/modules/student/server';
+import { db, projects } from '@/db';
+import { assignProject, getStudents } from '@/modules/student/server';
 import { type ProjectInsert } from '@/db/schema/projects';
+import {
+  type SessionUserLectorType,
+  type SessionUserType
+} from '@/modules/session-user/types';
 
-export const createProject = async (
-  data: Pick<
+import { updateProject } from './repository';
+
+export const createProjectMutation = async (
+  sessionUser: SessionUserType,
+  studentIds: string[],
+  values: Pick<
     ProjectInsert,
     'name' | 'description' | 'github' | 'shortDescription'
   >
 ) => {
-  const [project] = await db.insert(projects).values(data).returning();
+  if (!!sessionUser.projectId || !studentIds.includes(sessionUser.id)) {
+    throw new Error(
+      `User ${sessionUser.id} is not allowed to create a project.`
+    );
+  }
 
-  return project;
+  const [project] = await db.insert(projects).values(values).returning();
+
+  await assignProject({ projectId: project.id, userIds: studentIds });
 };
 
-export const updateProject = async (
+export const updateProjectMutation = async (
+  sessionUser: SessionUserType,
   id: string,
-  { studentIds, ...data }: Partial<Project> & { studentIds?: string[] }
+  studentIds: string[],
+  values: Pick<
+    ProjectInsert,
+    'name' | 'description' | 'github' | 'shortDescription'
+  >
 ) => {
-  await db.update(projects).set(data).where(eq(projects.id, id)).execute();
+  const currentProjectStudents = await getStudents({ projectId: id });
 
-  if (!studentIds) return;
+  if (!currentProjectStudents.some(user => user.id === sessionUser.id)) {
+    throw new Error(
+      `User ${sessionUser.id} is not allowed to update project ${id}`
+    );
+  }
 
-  const previousStudents = await db.query.users.findMany({
-    where: (users, { eq }) => eq(users.projectId, id)
-  });
+  await updateProject(id, values);
 
   // Remove students from previous project
   await assignProject({
     projectId: null,
-    studentIds: previousStudents.map(user => user.id)
+    userIds: currentProjectStudents.map(user => user.id)
   });
 
   // Add students to new project
-  await assignProject({ projectId: id, studentIds });
+  await assignProject({ projectId: id, userIds: studentIds });
+};
+
+export const updateProjectStatusMutation = async (
+  sessionUser: SessionUserType,
+  projectId: string,
+  values: Pick<ProjectInsert, 'status'>
+) => {
+  if (sessionUser.projectId !== projectId && sessionUser.role !== 'lector') {
+    throw new Error(
+      `User ${sessionUser.id} is not allowed to update project ${projectId}`
+    );
+  }
+
+  await updateProject(projectId, values);
+};
+
+export const updateProjectPointsMutation = async (
+  _sessionUserLector: SessionUserLectorType,
+  { id, comment, points }: { id: string; comment: string; points: number }
+) => {
+  await updateProject(id, { comment, points });
 };

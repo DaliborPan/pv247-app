@@ -1,33 +1,20 @@
 'use server';
 
-import { auth } from '@/auth';
+import { z } from 'zod';
 
-import { getUserHomework } from '../../server/query';
+import { authServerAction } from '@/server/server-actions';
 
-export const getHomeworkPointsAction = async (lectureId: string) => {
-  const session = await auth();
+import { getUserHomeworkQuery } from '../../server/query';
 
-  if (!session) {
-    return {
-      status: 'error',
-      message: 'Unauthorized'
-    } as const;
-  }
-
-  const userHomework = await getUserHomework({
-    lectureId,
-    userId: session.user.id
-  });
-
-  if (!userHomework) {
-    return {
-      status: 'pending',
-      points: 0
-    } as const;
-  }
-
-  return {
-    status: 'scored',
-    points: userHomework.points
-  } as const;
-};
+export const getHomeworkPointsAction = authServerAction
+  .input(
+    z.object({
+      lectureId: z.string()
+    })
+  )
+  .handler(({ input, ctx }) =>
+    getUserHomeworkQuery(ctx.sessionUser, {
+      lectureId: input.lectureId,
+      userId: ctx.sessionUser.id
+    })
+  );

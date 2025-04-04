@@ -2,38 +2,22 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-import { getSessionUser } from '@/modules/session-user/server';
-import {
-  addStudentLecture,
-  getStudentLectures
-} from '@/modules/student-lecture/server';
 import { Button } from '@/components/base/button';
-import { getOrderedLectures } from '@/modules/lecture/server';
-
-const getLecture = async (token: string) => {
-  const lectures = await getOrderedLectures();
-
-  return lectures.find(lecture => lecture.attendanceToken === token);
-};
+import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
+import { processAcceptMineAttendanceAction } from '@/modules/student-lecture/action';
 
 const Page = async ({ params }: { params: { token: string } }) => {
-  const user = await getSessionUser();
-  const lecture = await getLecture(params.token);
+  const lectures = await getOrderedLecturesLoader();
+  const lecture = lectures.find(
+    lecture => lecture.attendanceToken === params.token
+  );
 
   if (!lecture) {
     redirect('/');
   }
 
-  const studentLecture = (
-    await getStudentLectures({
-      lectureId: lecture.id,
-      studentId: user.id
-    })
-  ).at(0);
-
-  if (!studentLecture) {
-    await addStudentLecture({ studentId: user.id, lectureId: lecture.id });
-  }
+  // special case of calling action in RSC
+  await processAcceptMineAttendanceAction({ lectureId: lecture.id });
 
   return (
     <>

@@ -2,27 +2,38 @@
 
 import { toast } from 'sonner';
 import { RefreshCw } from 'lucide-react';
+import { useMutation } from '@tanstack/react-query';
 
 import { Button } from '@/components/base/button';
-import { type Lecture } from '@/db';
 
-import { useRevalidateLectureMutation } from './mutation';
+import { revalidateLecturesAction } from './action';
 
-export const RevalidateLectureAction = ({ lecture }: { lecture: Lecture }) => {
-  const mutation = useRevalidateLectureMutation(lecture);
+const useRevalidateLectureMutation = () =>
+  useMutation({
+    mutationFn: async () => revalidateLecturesAction()
+  });
+
+export const RevalidateLecturesAction = () => {
+  const mutation = useRevalidateLectureMutation();
 
   return (
     <Button
-      size="sm"
+      size="xs"
+      variant="outline/primary"
       isLoading={mutation.isPending}
       iconLeft={{ icon: <RefreshCw /> }}
-      onClick={() => {
-        mutation.mutate(void 0, {
-          onSuccess: () => {
-            toast.success('Lecture revalidated');
-          }
-        });
+      onClick={async () => {
+        const [_result, error] = await mutation.mutateAsync();
+
+        if (error) {
+          toast.error(error.message);
+          return;
+        }
+
+        toast.success('Lectures revalidated');
       }}
-    />
+    >
+      Revalidate
+    </Button>
   );
 };

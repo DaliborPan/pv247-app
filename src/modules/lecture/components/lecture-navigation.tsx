@@ -1,7 +1,7 @@
 import { NavigationButtonLink } from '@/components/navigation-button-link';
 import { type LectureSlug } from '@/db';
 
-import { getOrderedLectures } from '../server/query';
+import { getOrderedLecturesLoader } from '../loader';
 
 export const LectureNavigation = async ({
   lectureSlug,
@@ -10,7 +10,7 @@ export const LectureNavigation = async ({
   lectureSlug: LectureSlug;
   baseHref?: string;
 }) => {
-  const lectures = await getOrderedLectures();
+  const lectures = await getOrderedLecturesLoader();
 
   const slugLectureIndex = lectures.findIndex(
     lecture => lecture.slug === lectureSlug

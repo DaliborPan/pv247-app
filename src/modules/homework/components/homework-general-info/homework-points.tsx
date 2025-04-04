@@ -2,8 +2,8 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-import { toast } from 'sonner';
 import Link from 'next/link';
+import { toast } from 'sonner';
 
 import { type Lecture } from '@/db';
 import { Button } from '@/components/base/button';
@@ -14,31 +14,30 @@ import { LabeledItem } from './labeled-item';
 /**
  * Using useQuery because we need to be able to prerender SSG
  */
-const usePersonHomeworkPointsQuery = (lectureId: string, userId?: string) =>
-  useQuery({
-    queryKey: ['homework-points', lectureId, userId],
-    enabled: !!userId,
+const usePersonHomeworkPointsQuery = (lectureId: string) => {
+  const session = useSession();
+
+  return useQuery({
+    queryKey: ['homework-points', lectureId, session.data?.user.id],
+    enabled: !!session.data?.user.id,
     queryFn: async () => {
-      const result = await getHomeworkPointsAction(lectureId);
+      const [data, error] = await getHomeworkPointsAction({ lectureId });
 
-      if (result.status === 'error') {
-        toast.error(result.message);
-
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
-      return result;
+      return data;
     }
   });
+};
 
 export const HomeworkPoints = ({ lecture }: { lecture: Lecture }) => {
   const session = useSession();
-  const { data } = usePersonHomeworkPointsQuery(
-    lecture.id,
-    session.data?.user.id
-  );
+  const { isSuccess, data } = usePersonHomeworkPointsQuery(lecture.id);
 
-  if (!data) return null;
+  if (!isSuccess) return null;
 
   return session.data?.user.role === 'lector' ? (
     <div className="flex justify-end">
@@ -48,11 +47,7 @@ export const HomeworkPoints = ({ lecture }: { lecture: Lecture }) => {
     </div>
   ) : (
     <LabeledItem label="Earned points">
-      <div>
-        {data?.status === 'pending'
-          ? 'Not scored yet'
-          : `${data?.points} points`}
-      </div>
+      <div>{!data ? 'Not scored yet' : `${data.points} points`}</div>
     </LabeledItem>
   );
 };

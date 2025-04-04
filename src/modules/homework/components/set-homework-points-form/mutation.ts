@@ -9,7 +9,7 @@ export const useSetHomeworkPointsMutation = ({
   isCreating: boolean;
 }) =>
   useMutation({
-    mutationFn: (data: SetHomeworkPointsFormSchema) => {
+    mutationFn: async (data: SetHomeworkPointsFormSchema) => {
       const action = isCreating
         ? createHomeworkAction
         : updateHomeworkPointsAction;

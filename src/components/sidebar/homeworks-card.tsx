@@ -2,17 +2,17 @@ import { ArrowRight, Lock } from 'lucide-react';
 
 import { Icon } from '@/components/base/icon';
 import { SidebarCard } from '@/components/sidebar-card';
-import { getMineOverview } from '@/modules/session-user/server';
-import { getOrderedLectures } from '@/modules/lecture/server';
+import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
+import { getMineOverviewLoader } from '@/modules/student/loader';
 
 import { SidebarLinkRow } from './sidebar-link-row';
 
 export const HomeworksCard = async () => {
-  const lectures = await getOrderedLectures();
+  const lectures = await getOrderedLecturesLoader();
 
   const {
     lectures: { userHomeworks, availableLength }
-  } = await getMineOverview();
+  } = await getMineOverviewLoader();
 
   return (
     <SidebarCard title="Homework" className="hidden lg:block">

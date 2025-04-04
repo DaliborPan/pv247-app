@@ -3,14 +3,14 @@ import { Pencil } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { DetailCard } from '@/components/detail-card';
-import { getMineProject } from '@/modules/session-user/server';
 import { SubmitProjectAction } from '@/modules/project/components/submit-project-action';
+import { type GetMineProjectLoaderResult } from '@/modules/project/loader';
 
-export const SubmitProjectCard = async () => {
-  const project = await getMineProject();
-
-  if (!project) return null;
-
+export const SubmitProjectCard = ({
+  project
+}: {
+  project: NonNullable<GetMineProjectLoaderResult>;
+}) => {
   const isPending = project.status === 'pending';
 
   return (

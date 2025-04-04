@@ -1,50 +1,51 @@
-import { and, eq } from 'drizzle-orm';
+import {
+  type SessionUserLectorType,
+  type SessionUserType
+} from '@/modules/session-user/types';
 
-import { db } from '@/db';
-import { studentLectures } from '@/db/schema/studentLecture';
+import { createStudentLecture, deleteStudentLecture } from './repository';
+import { getStudentLecturesCached } from './cache';
 
-export const addStudentLecture = async ({
-  lectureId,
-  studentId
-}: {
-  lectureId: string;
-  studentId: string;
-}) =>
-  db.insert(studentLectures).values({
-    lectureId,
-    studentId
-  });
-
-export const updateStudentLecture = async ({
-  lectureId,
-  studentId
-}: {
-  lectureId: string;
-  studentId: string;
-}) => {
-  const existing = await db.query.studentLectures.findFirst({
-    where: and(
-      eq(studentLectures.lectureId, lectureId),
-      eq(studentLectures.studentId, studentId)
-    )
-  });
+export const processAcceptMineAttendanceMutation = async (
+  sessionUser: SessionUserType,
+  lectureId: string
+) => {
+  const existing = (await getStudentLecturesCached(sessionUser.id)).find(
+    studentLecture => studentLecture.lectureId === lectureId
+  );
 
   if (existing) {
-    await db
-      .delete(studentLectures)
-      .where(
-        and(
-          eq(studentLectures.lectureId, lectureId),
-          eq(studentLectures.studentId, studentId)
-        )
-      );
+    return false;
+  }
+
+  await createStudentLecture({ lectureId, studentId: sessionUser.id });
+
+  return true;
+};
+
+export const updateStudentLectureMutation = async (
+  _sessionUserLector: SessionUserLectorType,
+  {
+    lectureId,
+    studentId
+  }: {
+    lectureId: string;
+    studentId: string;
+  }
+) => {
+  const existing = (await getStudentLecturesCached(studentId)).find(
+    studentLecture => studentLecture.lectureId === lectureId
+  );
+
+  if (existing) {
+    await deleteStudentLecture({ lectureId, studentId });
 
     return {
       status: 'deleted'
     } as const;
   }
 
-  await addStudentLecture({ lectureId, studentId });
+  await createStudentLecture({ lectureId, studentId });
 
   return {
     status: 'created'

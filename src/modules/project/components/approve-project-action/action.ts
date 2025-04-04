@@ -1,20 +1,21 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
+import { z } from 'zod';
 
-import { type Project } from '@/db';
+import { authServerAction } from '@/server/server-actions';
+import { projectStatusSchema } from '@/db/schema/projects';
 
-import { updateProject } from '../../server/mutation';
-import { PROJECTS_TAG } from '../../server/query';
+import { updateProjectStatusMutation } from '../../server';
 
-export const approveProjectAction = async ({
-  project
-}: {
-  project: Project;
-}) => {
-  await updateProject(project.id, {
-    status: project.status === 'pending' ? 'approved' : 'pending'
+export const approveProjectAction = authServerAction
+  .input(
+    z.object({
+      projectId: z.string(),
+      currentStatus: projectStatusSchema
+    })
+  )
+  .handler(async ({ ctx, input }) => {
+    await updateProjectStatusMutation(ctx.sessionUser, input.projectId, {
+      status: input.currentStatus === 'pending' ? 'approved' : 'pending'
+    });
   });
-
-  revalidateTag(PROJECTS_TAG);
-};

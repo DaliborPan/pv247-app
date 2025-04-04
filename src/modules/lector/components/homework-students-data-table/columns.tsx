@@ -5,15 +5,16 @@ import { ExternalLink, X } from 'lucide-react';
 
 import { DataTableColumnHeader } from '@/components/data-table';
 import { Icon } from '@/components/base/icon';
-import { type GetStudentsWithHomeworksResult } from '@/modules/student/server';
 import {
   SetHomeworkPointsForm,
   type SetHomeworkPointsFormSchema
 } from '@/modules/homework/components/set-homework-points-form';
 import { orderedHomeworkSlugs } from '@/modules/lecture/const/homework-slug';
 
+import { type GetStudentsWithHomeworkLoaderResult } from '../../loader';
+
 export const columns: ColumnDef<
-  GetStudentsWithHomeworksResult[number] & {
+  GetStudentsWithHomeworkLoaderResult[number] & {
     defaultValues: Partial<SetHomeworkPointsFormSchema>;
   },
   unknown

@@ -1,17 +1,21 @@
 import { ProjectForm } from '@/modules/project/components/project-form';
-import { getMineProject } from '@/modules/session-user/server';
+import { getMineProjectLoader } from '@/modules/project/loader';
 
 import { SubmitProjectCard } from './_components/submit-project-card';
-import { ProjectCard, ProjectHero } from './_components';
+import { ProjectDescriptionCard, ProjectHero } from './_components';
 
 const Page = async () => {
-  const project = await getMineProject();
+  const project = await getMineProjectLoader();
 
   return project ? (
     <div>
-      <ProjectHero />
-      <ProjectCard />
-      <SubmitProjectCard />
+      <ProjectHero project={project} />
+
+      {project.description && (
+        <ProjectDescriptionCard description={project.description} />
+      )}
+
+      <SubmitProjectCard project={project} />
     </div>
   ) : (
     <ProjectForm />

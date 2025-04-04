@@ -2,13 +2,13 @@ import { ArrowRight, Lock } from 'lucide-react';
 
 import { SidebarCard } from '@/components/sidebar-card';
 import { Icon } from '@/components/base/icon';
-import { getOrderedLectures } from '@/modules/lecture/server';
 import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
+import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
 
 import { SidebarLinkRow } from './sidebar-link-row';
 
 export const LecturesCard = async () => {
-  const lectures = await getOrderedLectures();
+  const lectures = await getOrderedLecturesLoader();
   const availableLectures = lectures.filter(checkIsAvailable);
 
   return (

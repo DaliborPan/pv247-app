@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { type PropsWithChildren } from 'react';
 
 import { cn } from '@/lib/cn';
+import { homeworkSlugSchema } from '@/db/schema/lectures';
 
 const NavigationItem = ({
   children,
@@ -33,7 +34,11 @@ export const SubNavigation = () => (
     <nav className="lg:ml-[calc(7.5rem+100px)]">
       <ul className="flex flex-col gap-x-8 py-3 lg:flex-row">
         <NavigationItem href="/lector/students">Students</NavigationItem>
-        <NavigationItem href="/lector/homeworks">Homework</NavigationItem>
+        <NavigationItem
+          href={`/lector/homeworks/${homeworkSlugSchema.options[0]}`}
+        >
+          Homework
+        </NavigationItem>
         <NavigationItem href="/lector/projects">Projects</NavigationItem>
         <NavigationItem href="/lector/lectures">Lectures</NavigationItem>
       </ul>

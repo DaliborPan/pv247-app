@@ -1,21 +1,9 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
+import { authLectorServerAction } from '@/server/server-actions';
 
-import { type Lecture } from '@/db';
+import { getOrderedLecturesCached } from '../../server';
 
-import {
-  getIsHomeworkAvailableTag,
-  getIsLectureAvailableTag,
-  ORDERED_LECTURES_TAG
-} from '../../server';
-
-export const revalidateLectureAction = async (lecture: Lecture) => {
-  revalidateTag(getIsLectureAvailableTag(lecture.slug));
-  revalidateTag(getIsHomeworkAvailableTag(lecture.homeworkSlug));
-
-  /**
-   * TODO: should be changed to only propagate to places where needed
-   */
-  revalidateTag(ORDERED_LECTURES_TAG);
-};
+export const revalidateLecturesAction = authLectorServerAction.handler(() => {
+  getOrderedLecturesCached.revalidate();
+});

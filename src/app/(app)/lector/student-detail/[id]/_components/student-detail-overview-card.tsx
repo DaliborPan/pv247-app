@@ -9,8 +9,7 @@ import { StudentOverviewCard } from '@/modules/student/components/student-overvi
 
 export const StudentDetailOverviewCard = ({ student }: { student: User }) => (
   <StudentOverviewCard
-    userId={student.id}
-    projectId={student.projectId}
+    user={student}
     otherFields={({ project: { project, display: projectDisplayName } }) => (
       <LabeledValue label="Project status">
         <Link

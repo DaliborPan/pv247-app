@@ -1,23 +1,24 @@
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { useSession } from 'next-auth/react';
 
-import { getAttendancesAction } from '../server/action';
+import { getAttendancesAction } from '../action';
 
-export const useAttendanceQuery = ({ studentId }: { studentId?: string }) =>
-  useQuery({
-    queryKey: ['attendance', studentId],
-    enabled: !!studentId,
+export const useAttendanceQuery = () => {
+  const session = useSession();
+
+  return useQuery({
+    queryKey: ['attendance', session.data?.user?.id],
+    enabled: !!session.data?.user,
     queryFn: async () => {
-      if (!studentId) return;
+      const [data, error] = await getAttendancesAction();
 
-      const result = await getAttendancesAction({ studentId });
-
-      if (result.status === 'error') {
-        toast.error(result.message);
-
+      if (error) {
+        toast.error(error.message);
         return;
       }
 
-      return result;
+      return data;
     }
   });
+};

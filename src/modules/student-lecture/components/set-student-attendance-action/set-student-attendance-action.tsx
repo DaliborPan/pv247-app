@@ -17,10 +17,14 @@ const useSetStudentAttendanceMutation = () =>
       studentId: string;
       lectureId: string;
     }) => {
-      const result = await setStudentAttendanceAction({ studentId, lectureId });
+      const [result, error] = await setStudentAttendanceAction({
+        studentId,
+        lectureId
+      });
 
-      if (result.status === 'error') {
-        toast.error(result.message);
+      if (error) {
+        toast.error(error.message);
+        return;
       }
 
       toast.success(

@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 import { lectureSlugSchema, type LectureSlug } from '@/db';
-import { getIsLectureAvailable } from '@/modules/lecture/server';
+import { getIsLectureAvailableLoader } from '@/modules/lecture/loader';
 import { getLectureMdxComponent } from '@/modules/lecture/mdx';
 
 type Params = {
@@ -15,7 +15,7 @@ export const generateStaticParams = (): Params[] => {
 };
 
 const Page = async ({ params }: { params: Params }) => {
-  const isAvailable = await getIsLectureAvailable(params.slug);
+  const isAvailable = await getIsLectureAvailableLoader(params.slug);
 
   if (!isAvailable) {
     redirect('/lectures');
