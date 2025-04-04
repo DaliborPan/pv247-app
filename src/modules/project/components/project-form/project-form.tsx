@@ -25,7 +25,7 @@ const ProjectFormStudentCombobox = async ({
   );
 };
 
-export const ProjectForm = async ({
+export const ProjectForm = ({
   defaultValues
 }: {
   defaultValues?: Partial<ProjectFormSchema>;

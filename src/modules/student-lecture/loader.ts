@@ -1,6 +1,9 @@
 import { getSessionUser } from '@/modules/session-user';
 
-import { getStudentLecturesQuery } from './server';
+import {
+  getStudentLecturesQuery,
+  processAcceptMineAttendanceMutation
+} from './server';
 
 export const getStudentLecturesLoader = async ({
   userId
@@ -12,15 +15,13 @@ export const getStudentLecturesLoader = async ({
   return getStudentLecturesQuery(sessionUser, { userId });
 };
 
-export const getMineStudentLecturesLoader = async ({
+export const processAcceptMineAttendanceLoader = async ({
   lectureId
 }: {
   lectureId: string;
 }) => {
   const sessionUser = await getSessionUser();
 
-  return getStudentLecturesQuery(sessionUser, {
-    lectureId,
-    userId: sessionUser.id
-  });
+  // special case of calling mutation inside loader
+  await processAcceptMineAttendanceMutation(sessionUser, lectureId);
 };

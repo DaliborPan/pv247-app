@@ -9,23 +9,19 @@ import {
   getStudentLectures
 } from './repository';
 
-export const addStudentLectureMutation = async (
+export const processAcceptMineAttendanceMutation = async (
   sessionUser: SessionUserType,
-  {
-    lectureId,
-    studentId
-  }: {
-    lectureId: string;
-    studentId: string;
-  }
+  lectureId: string
 ) => {
-  if (sessionUser.role !== 'lector' && sessionUser.id !== studentId) {
-    throw new Error(
-      `User ${sessionUser.id} is not allowed to add attendance for other user`
-    );
+  const existing = (
+    await getStudentLectures({ lectureId, studentId: sessionUser.id })
+  ).at(0);
+
+  if (existing) {
+    return;
   }
 
-  await createStudentLecture({ lectureId, studentId });
+  await createStudentLecture({ lectureId, studentId: sessionUser.id });
 };
 
 export const updateStudentLectureMutation = async (
