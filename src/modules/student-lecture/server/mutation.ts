@@ -3,25 +3,24 @@ import {
   type SessionUserType
 } from '@/modules/session-user/types';
 
-import {
-  createStudentLecture,
-  deleteStudentLecture,
-  getStudentLectures
-} from './repository';
+import { createStudentLecture, deleteStudentLecture } from './repository';
+import { getStudentLecturesCached } from './cache';
 
 export const processAcceptMineAttendanceMutation = async (
   sessionUser: SessionUserType,
   lectureId: string
 ) => {
-  const existing = (
-    await getStudentLectures({ lectureId, studentId: sessionUser.id })
-  ).at(0);
+  const existing = (await getStudentLecturesCached(sessionUser.id)).find(
+    studentLecture => studentLecture.lectureId === lectureId
+  );
 
   if (existing) {
-    return;
+    return false;
   }
 
   await createStudentLecture({ lectureId, studentId: sessionUser.id });
+
+  return true;
 };
 
 export const updateStudentLectureMutation = async (
@@ -34,12 +33,11 @@ export const updateStudentLectureMutation = async (
     studentId: string;
   }
 ) => {
-  const existingStudentLectures = await getStudentLectures({
-    lectureId,
-    studentId
-  });
+  const existing = (await getStudentLecturesCached(studentId)).find(
+    studentLecture => studentLecture.lectureId === lectureId
+  );
 
-  if (existingStudentLectures.length) {
+  if (existing) {
     await deleteStudentLecture({ lectureId, studentId });
 
     return {

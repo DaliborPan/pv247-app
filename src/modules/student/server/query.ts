@@ -4,7 +4,7 @@ import { getHomework } from '@/modules/homework/server';
 import { getOrderedLecturesCached } from '@/modules/lecture/server';
 import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
 import { getProjectsCached } from '@/modules/project/server';
-import { getStudentLectures } from '@/modules/student-lecture/server';
+import { getStudentLecturesCached } from '@/modules/student-lecture/server';
 
 import { getProjectFormStudents } from './repository';
 
@@ -40,7 +40,7 @@ export const getStudentOverviewQuery = async (
         project => project.id === user.projectId
       );
 
-  const attendances = await getStudentLectures({ studentId: user.id });
+  const attendances = await getStudentLecturesCached(user.id);
 
   return {
     lectures: {

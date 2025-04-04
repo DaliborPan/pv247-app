@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
 
-import { getAttendancesAction } from '../server/action';
+import { getAttendancesAction } from '../action';
 
 export const useAttendanceQuery = () => {
   const session = useSession();

@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
-import { processAcceptMineAttendanceLoader } from '@/modules/student-lecture/loader';
+import { processAcceptMineAttendanceAction } from '@/modules/student-lecture/action';
 
 const Page = async ({ params }: { params: { token: string } }) => {
   const lectures = await getOrderedLecturesLoader();
@@ -16,7 +16,8 @@ const Page = async ({ params }: { params: { token: string } }) => {
     redirect('/');
   }
 
-  await processAcceptMineAttendanceLoader({ lectureId: lecture.id });
+  // special case of calling action in RSC
+  await processAcceptMineAttendanceAction({ lectureId: lecture.id });
 
   return (
     <>

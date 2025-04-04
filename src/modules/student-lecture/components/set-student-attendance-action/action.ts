@@ -1,11 +1,13 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
 import { authLectorServerAction } from '@/server/server-actions';
 
-import { updateStudentLectureMutation } from '../../server';
+import {
+  getStudentLecturesCached,
+  updateStudentLectureMutation
+} from '../../server';
 
 export const setStudentAttendanceAction = authLectorServerAction
   .input(
@@ -20,7 +22,7 @@ export const setStudentAttendanceAction = authLectorServerAction
       input
     );
 
-    revalidatePath(`/lector/student-detail/${input.studentId}`);
+    getStudentLecturesCached.revalidate(input.studentId);
 
     return result;
   });

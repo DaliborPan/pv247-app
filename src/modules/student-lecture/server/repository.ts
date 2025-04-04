@@ -3,20 +3,13 @@ import { and, eq } from 'drizzle-orm';
 import { db, studentLectures } from '@/db';
 
 export const getStudentLectures = async ({
-  lectureId,
   studentId
 }: {
-  lectureId?: string;
-  studentId?: string;
+  studentId: string;
 }) =>
   db.query.studentLectures.findMany({
-    where: (table, { eq, and }) =>
-      and(
-        ...[
-          ...(lectureId ? [eq(table.lectureId, lectureId)] : []),
-          ...(studentId ? [eq(table.studentId, studentId)] : [])
-        ]
-      )
+    where: (table, { eq }) =>
+      studentId ? eq(table.studentId, studentId) : undefined
   });
 
 export const deleteStudentLecture = async ({
