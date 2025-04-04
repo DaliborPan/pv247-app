@@ -1,8 +1,6 @@
 import { db } from '@/db';
 import { type SessionUserType } from '@/modules/session-user/types';
-import { getStudents, getStudentsWithHomework } from '@/modules/student/server';
-
-import { getLectorStudents } from './repository';
+import { getStudentsWithHomeworkCached } from '@/modules/student/server';
 
 /**
  * When new student is created, assign it to the lector
@@ -35,48 +33,29 @@ export const getNewStudentLectorId = async () => {
   }, lectors[0]).id;
 };
 
-/**
- * As a logged in lector, get all students that are assigned to me.
- */
-export const getMineStudentsQuery = async (sessionUser: SessionUserType) => {
-  if (sessionUser.role !== 'lector') {
-    throw new Error(`Unauthorized`);
-  }
-
-  const user = await getLectorStudents({ lectorId: sessionUser.id });
-
-  if (!user) {
-    throw new Error(`Lector ${sessionUser.id} not found`);
-  }
-
-  return user.students;
-};
-
-export type GetMineStudentsResult = Awaited<
-  ReturnType<typeof getMineStudentsQuery>
->;
-
 export const getStudentsWithHomeworkQuery = (sessionUser: SessionUserType) => {
   if (sessionUser.role !== 'lector') {
     throw new Error(`Unauthorized`);
   }
 
-  return getStudentsWithHomework();
+  return getStudentsWithHomeworkCached();
 };
 
 export const getStudentQuery = async (
   sessionUser: SessionUserType,
-  userId: string
+  studentId: string
 ) => {
   if (sessionUser.role !== 'lector') {
     throw new Error(`Unauthorized`);
   }
 
-  const users = await getStudents({ userId });
+  const student = (await getStudentsWithHomeworkCached()).find(
+    student => student.id === studentId
+  );
 
-  if (!users.length) {
-    throw new Error(`Student ${userId} not found`);
+  if (!student) {
+    throw new Error(`Student ${studentId} not found`);
   }
 
-  return users[0];
+  return student;
 };

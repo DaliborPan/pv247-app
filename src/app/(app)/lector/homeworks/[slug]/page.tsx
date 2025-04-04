@@ -6,20 +6,12 @@ import { LabeledValue } from '@/components/labeled-value';
 import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
 import { HomeworkStudentsDataTable } from '@/modules/lector/components/homework-students-data-table';
 import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
-import {
-  getMineStudentsLoader,
-  getStudentsWithHomeworkLoader
-} from '@/modules/lector/loader';
+import { getStudentsWithHomeworkLoader } from '@/modules/lector/loader';
+import { getSessionUser } from '@/modules/session-user';
 
 import { HomeworksNavigation } from './_components';
 
-const Page = async ({
-  params
-}: {
-  params: {
-    slug: string;
-  };
-}) => {
+const Page = async ({ params }: { params: { slug: string } }) => {
   const parsedSlug = homeworkSlugSchema.safeParse(
     params.slug ?? homeworkSlugSchema.options[0]
   );
@@ -30,11 +22,15 @@ const Page = async ({
 
   const paramSlug = parsedSlug.data;
 
-  const lectorStudents = await getMineStudentsLoader();
-  const hasOwnStudents = !!lectorStudents.length;
-
   const lectures = await getOrderedLecturesLoader();
   const lecture = lectures.find(lecture => lecture.homeworkSlug === paramSlug);
+
+  const studentsWithHomework = await getStudentsWithHomeworkLoader();
+
+  const sessionUser = await getSessionUser();
+  const hasOwnStudents = studentsWithHomework.some(
+    student => student.lectorId === sessionUser.id
+  );
 
   return (
     <LectorTabsTable
@@ -71,14 +67,16 @@ const Page = async ({
 
           <TabsContent value="all">
             <HomeworkStudentsDataTable
-              students={await getStudentsWithHomeworkLoader()}
+              students={studentsWithHomework}
               lecture={lecture}
             />
           </TabsContent>
 
           <TabsContent value="own">
             <HomeworkStudentsDataTable
-              students={lectorStudents}
+              students={studentsWithHomework.filter(
+                student => student.lectorId === sessionUser.id
+              )}
               lecture={lecture}
             />
           </TabsContent>

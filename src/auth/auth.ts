@@ -2,7 +2,10 @@ import NextAuth, { type NextAuthConfig } from 'next-auth';
 import GitHub from 'next-auth/providers/github';
 
 import { getNewStudentLectorId } from '@/modules/lector/server';
-import { updateUser } from '@/modules/student/server';
+import {
+  getStudentsWithHomeworkCached,
+  updateUser
+} from '@/modules/student/server';
 
 import { CustomDrizzleAdapter } from './adapter';
 
@@ -46,6 +49,8 @@ export const authOptions = {
           role === 'student' ? await getNewStudentLectorId() : undefined;
 
         await updateUser(user.id, { role, lectorId });
+
+        getStudentsWithHomeworkCached.revalidate();
       } catch (e) {
         console.error("ERROR: Couldn't update user role");
         console.error(e);

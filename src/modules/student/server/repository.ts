@@ -37,13 +37,16 @@ export const getStudents = ({
       )
   });
 
-export const getStudentsWithHomework = () =>
-  db.query.users.findMany({
+export const getStudentsWithHomework = () => {
+  console.log('Calling for all students');
+
+  return db.query.users.findMany({
     where: (table, { eq }) => eq(table.role, 'student'),
     with: {
       homeworksStudent: true
     }
   });
+};
 
 export const getProjectFormStudents = (
   sessionUser: SessionUserType,

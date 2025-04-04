@@ -1,8 +1,7 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
-
 import { authLectorServerAction } from '@/server/server-actions';
+import { getStudentsWithHomeworkCached } from '@/modules/student/server';
 
 import {
   createHomeworkMutation,
@@ -10,12 +9,6 @@ import {
 } from '../../server/mutation';
 
 import { setHomeworkPointsFormSchema } from './schema';
-
-const revalidate = ({ studentId }: { studentId: string }) => {
-  revalidatePath('/lector/homeworks/[slug]', 'page');
-  revalidatePath('/lector/students');
-  revalidatePath(`/lector/student-detail/${studentId}`);
-};
 
 export const updateHomeworkPointsAction = authLectorServerAction
   .input(setHomeworkPointsFormSchema)
@@ -26,7 +19,7 @@ export const updateHomeworkPointsAction = authLectorServerAction
       points: input.points
     });
 
-    revalidate({ studentId: input.studentId });
+    getStudentsWithHomeworkCached.revalidate();
   });
 
 export const createHomeworkAction = authLectorServerAction
@@ -38,5 +31,5 @@ export const createHomeworkAction = authLectorServerAction
       lectureId: input.lecture.id
     });
 
-    revalidate({ studentId: input.studentId });
+    getStudentsWithHomeworkCached.revalidate();
   });

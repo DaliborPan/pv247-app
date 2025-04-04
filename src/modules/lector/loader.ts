@@ -1,16 +1,6 @@
 import { getSessionUser } from '@/modules/session-user';
 
-import {
-  getMineStudentsQuery,
-  getStudentQuery,
-  getStudentsWithHomeworkQuery
-} from './server';
-
-export const getMineStudentsLoader = async () => {
-  const sessionUser = await getSessionUser();
-
-  return getMineStudentsQuery(sessionUser);
-};
+import { getStudentQuery, getStudentsWithHomeworkQuery } from './server';
 
 export const getStudentsWithHomeworkLoader = async () => {
   const sessionUser = await getSessionUser();
@@ -22,8 +12,8 @@ export type GetStudentsWithHomeworkLoaderResult = Awaited<
   ReturnType<typeof getStudentsWithHomeworkLoader>
 >;
 
-export const getStudentLoader = async (id: string) => {
+export const getStudentLoader = async (studentId: string) => {
   const sessionUser = await getSessionUser();
 
-  return getStudentQuery(sessionUser, id);
+  return getStudentQuery(sessionUser, studentId);
 };
