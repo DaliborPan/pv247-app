@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 
 import { type HomeworkSlug, homeworkSlugSchema } from '@/db';
 import { getHomeworkMdxComponent } from '@/modules/homework/mdx';
-import { getIsHomeworkAvailable } from '@/modules/lecture/loader';
+import { getIsHomeworkAvailableLoader } from '@/modules/lecture/loader';
 
 type Params = {
   slug: HomeworkSlug;
@@ -15,7 +15,7 @@ export const generateStaticParams = (): Params[] => {
 };
 
 const Page = async ({ params }: { params: Params }) => {
-  const isAvailable = await getIsHomeworkAvailable(params.slug);
+  const isAvailable = await getIsHomeworkAvailableLoader(params.slug);
 
   if (!isAvailable) {
     redirect('/homeworks');

@@ -19,14 +19,14 @@ export const getLecturesWithHomeworkLoader = async () => {
   return lectures.filter(lecture => !!lecture.homeworkSlug);
 };
 
-export const getIsLectureAvailable = async (slug: string) => {
+export const getIsLectureAvailableLoader = async (slug: string) => {
   const lectures = await getOrderedLecturesQuery();
   const lecture = lectures.find(lecture => lecture.slug === slug);
 
   return !!lecture && checkIsAvailable(lecture);
 };
 
-export const getIsHomeworkAvailable = async (homeworkSlug: string) => {
+export const getIsHomeworkAvailableLoader = async (homeworkSlug: string) => {
   const lectures = await getOrderedLecturesQuery();
   const lecture = lectures.find(
     lecture => lecture.homeworkSlug === homeworkSlug
