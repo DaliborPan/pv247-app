@@ -3,9 +3,9 @@
 import { z } from 'zod';
 
 import { authServerAction } from '@/server/server-actions';
-import { projectStatusSchema } from '@/db/schema/projects';
 
 import { updateProjectStatusMutation } from '../../server';
+import { projectStatusSchema } from '../../schema';
 
 export const approveProjectAction = authServerAction
   .input(

@@ -1,5 +1,4 @@
 import { assignProject, getStudents } from '@/modules/student/server';
-import { type ProjectInsert } from '@/db/schema/projects';
 import {
   type SessionUserLectorType,
   type SessionUserType
@@ -7,7 +6,7 @@ import {
 
 import { createProject, updateProject } from './repository';
 
-export type CreateProjectMutationValuesType = Pick<
+type CreateProjectMutationValuesType = Pick<
   Parameters<typeof createProject>[0],
   'name' | 'description' | 'github' | 'shortDescription'
 >;
@@ -28,14 +27,16 @@ export const createProjectMutation = async (
   await assignProject({ projectId: project.id, userIds: studentIds });
 };
 
+type UpdateProjectMutationValuesType = Pick<
+  Parameters<typeof updateProject>[1],
+  'name' | 'description' | 'github' | 'shortDescription'
+>;
+
 export const updateProjectMutation = async (
   sessionUser: SessionUserType,
   id: string,
   studentIds: string[],
-  values: Pick<
-    ProjectInsert,
-    'name' | 'description' | 'github' | 'shortDescription'
-  >
+  values: UpdateProjectMutationValuesType
 ) => {
   const currentProjectStudents = await getStudents({ projectId: id });
 
@@ -57,7 +58,7 @@ export const updateProjectMutation = async (
   await assignProject({ projectId: id, userIds: studentIds });
 };
 
-export type UpdateProjectStatusMutationValuesType = Pick<
+type UpdateProjectStatusMutationValuesType = Pick<
   Parameters<typeof updateProject>[1],
   'status'
 >;
@@ -76,9 +77,15 @@ export const updateProjectStatusMutation = async (
   await updateProject(projectId, values);
 };
 
+type UpdateProjectPointsMutationValuesType = Pick<
+  Parameters<typeof updateProject>[1],
+  'comment' | 'points'
+>;
+
 export const updateProjectPointsMutation = async (
   _sessionUserLector: SessionUserLectorType,
-  { id, comment, points }: { id: string; comment: string; points: number }
+  projectId: string,
+  values: UpdateProjectPointsMutationValuesType
 ) => {
-  await updateProject(id, { comment, points });
+  await updateProject(projectId, values);
 };
