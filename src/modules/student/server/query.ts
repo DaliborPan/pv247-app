@@ -1,10 +1,10 @@
 import { type SessionUserType } from '@/modules/session-user/types';
-import { type User } from '@/db';
 import { getHomework } from '@/modules/homework/server';
 import { getOrderedLecturesCached } from '@/modules/lecture/server';
 import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
 import { getProjectsCached } from '@/modules/project/server';
 import { getStudentLecturesCached } from '@/modules/student-lecture/server';
+import { type UserType } from '@/modules/user/schema';
 
 import { getProjectFormStudents } from './repository';
 
@@ -15,7 +15,7 @@ export const getProjectFormStudentComboboxQuery = async (
 
 export const getStudentOverviewQuery = async (
   sessionUser: SessionUserType,
-  user: User
+  user: UserType
 ) => {
   if (sessionUser.role !== 'lector' && sessionUser.id !== user.id) {
     throw new Error(

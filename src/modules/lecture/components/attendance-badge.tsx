@@ -6,11 +6,12 @@
 import { UserCheck } from 'lucide-react';
 
 import { useAttendanceQuery } from '@/modules/student-lecture/hooks';
-import { type Lecture } from '@/db';
 import { Badge } from '@/components/base/badge';
 import { Icon } from '@/components/base/icon';
 
-export const AttendanceBadge = ({ lecture }: { lecture: Lecture }) => {
+import { type LectureType } from '../schema';
+
+export const AttendanceBadge = ({ lecture }: { lecture: LectureType }) => {
   const { data } = useAttendanceQuery();
 
   if (!data) return null;

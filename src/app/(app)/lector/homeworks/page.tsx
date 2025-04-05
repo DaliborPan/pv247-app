@@ -1,9 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { homeworkSlugSchema } from '@/db';
-
 const Page = () => {
-  redirect(`/lector/homeworks/${homeworkSlugSchema.options[0]}`);
+  redirect(`/lector/homeworks/typescript`);
 };
 
 export default Page;

@@ -1,12 +1,12 @@
-import { type HomeworkSlug } from '@/db';
 import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
+import { type HomeworkSlugType } from '@/modules/lecture/schema';
 
 import { HomeworkNavigationLink } from './homework-navigation-link';
 
 export const HomeworksNavigation = async ({
   homeworkSlug
 }: {
-  homeworkSlug: HomeworkSlug;
+  homeworkSlug: HomeworkSlugType;
 }) => {
   const lectures = await getOrderedLecturesLoader();
 

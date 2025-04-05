@@ -5,13 +5,13 @@ import QrCode from 'react-qr-code';
 
 import { Button } from '@/components/base/button';
 import { Dialog } from '@/components/base/dialog';
-import { type Lecture } from '@/db';
 import { Icon } from '@/components/base/icon';
+import { type LectureType } from '@/modules/lecture/schema';
 
 export const ShowAttendanceQrCodeAction = ({
   lecture
 }: {
-  lecture: Lecture;
+  lecture: LectureType;
 }) => {
   const formattedAcceptAttendanceUrl =
     typeof window !== 'undefined'

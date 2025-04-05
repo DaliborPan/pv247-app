@@ -1,6 +1,7 @@
 import { and, eq } from 'drizzle-orm';
 
-import { db, studentLectures } from '@/db';
+import { db } from '@/db';
+import { studentLectures } from '@/db/schema/studentLecture';
 
 export const getStudentLectures = async ({
   studentId

@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { type PropsWithChildren } from 'react';
 
 import { cn } from '@/lib/cn';
-import { homeworkSlugSchema } from '@/db/schema/lectures';
+import { homeworkSlugSchema } from '@/modules/lecture/schema';
 
 const NavigationItem = ({
   children,

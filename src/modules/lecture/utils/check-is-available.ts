@@ -1,4 +1,4 @@
-import { type Lecture } from '@/db';
+import { type LectureType } from '../schema';
 
-export const checkIsAvailable = (lecture: Lecture) =>
+export const checkIsAvailable = (lecture: LectureType) =>
   new Date(lecture.availableFrom) < new Date();

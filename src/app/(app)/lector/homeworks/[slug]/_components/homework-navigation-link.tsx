@@ -5,16 +5,16 @@ import { useSearchParams } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
-import { type Lecture } from '@/db';
 import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
+import { type LectureType } from '@/modules/lecture/schema';
 
 export const HomeworkNavigationLink = ({
   type,
   lecture
 }: {
   type: 'previous' | 'next';
-  lecture: Lecture;
+  lecture: LectureType;
 }) => {
   const searchParams = useSearchParams();
   const viewType = searchParams.get('type') ?? 'all';

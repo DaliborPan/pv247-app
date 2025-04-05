@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { type User } from 'next-auth';
 import { Github, LogOut } from 'lucide-react';
 
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/base/button';
+import { type UserType } from '@/modules/user/schema';
 
 import MUNI_LOGO from '../../../public/muni-logo.png';
 import { SignIn } from '../sign-in';
@@ -17,7 +17,7 @@ const NavigationDelimiter = ({ className }: { className?: string }) => (
   <div className={cn('mx-6 h-5 w-[2px] bg-[#B9BBC6]', className)} />
 );
 
-const UserMenuItem = ({ user }: { user: User }) => (
+const UserMenuItem = ({ user }: { user: UserType }) => (
   <Link href="/profile" className="flex items-center gap-x-3">
     <div className="size-8 rounded-full bg-neutral" />
 
@@ -29,7 +29,7 @@ export const Navigation = ({
   user,
   isUserLoading = false
 }: {
-  user?: User;
+  user?: UserType;
   isUserLoading?: boolean;
 }) => (
   <header className="sticky top-0 z-20 border-b bg-white py-2 md:px-10 lg:px-4">

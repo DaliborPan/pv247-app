@@ -1,13 +1,13 @@
 import { NavigationButtonLink } from '@/components/navigation-button-link';
-import { type LectureSlug } from '@/db';
 
 import { getOrderedLecturesLoader } from '../loader';
+import { type LectureSlugType } from '../schema';
 
 export const LectureNavigation = async ({
   lectureSlug,
   baseHref = '/lectures'
 }: {
-  lectureSlug: LectureSlug;
+  lectureSlug: LectureSlugType;
   baseHref?: string;
 }) => {
   const lectures = await getOrderedLecturesLoader();

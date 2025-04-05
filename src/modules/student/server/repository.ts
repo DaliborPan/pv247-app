@@ -1,9 +1,11 @@
 import { and, eq, inArray } from 'drizzle-orm';
 
-import { db, type User, users } from '@/db';
+import { db } from '@/db';
 import { type SessionUserType } from '@/modules/session-user/types';
+import { users } from '@/db/schema/users';
+import { type UserType } from '@/modules/user/schema';
 
-export const updateUser = (id: string, values: Partial<User>) =>
+export const updateUser = (id: string, values: Partial<Omit<UserType, 'id'>>) =>
   db.update(users).set(values).where(eq(users.id, id));
 
 export const assignProject = ({

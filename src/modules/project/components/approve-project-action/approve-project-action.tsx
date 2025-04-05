@@ -5,11 +5,12 @@ import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 
 import { Button } from '@/components/base/button';
-import { type Project } from '@/db';
+
+import { type ProjectType } from '../../schema';
 
 import { approveProjectAction } from './action';
 
-const useApproveProjectMutation = (project: Project) =>
+const useApproveProjectMutation = (project: ProjectType) =>
   useMutation({
     mutationFn: async () =>
       approveProjectAction({
@@ -18,7 +19,7 @@ const useApproveProjectMutation = (project: Project) =>
       })
   });
 
-export const ApproveProjectButton = ({ project }: { project: Project }) => {
+export const ApproveProjectButton = ({ project }: { project: ProjectType }) => {
   const mutation = useApproveProjectMutation(project);
 
   const StatusIcon = project.status === 'pending' ? Check : X;

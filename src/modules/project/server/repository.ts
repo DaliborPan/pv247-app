@@ -1,8 +1,12 @@
 import { eq } from 'drizzle-orm';
 
-import { db, type Project, projects } from '@/db';
+import { db } from '@/db';
+import { type ProjectInsert, projects } from '@/db/schema/projects';
 
-export const updateProject = (id: string, data: Partial<Project>) =>
+export const createProject = (data: ProjectInsert) =>
+  db.insert(projects).values(data).returning();
+
+export const updateProject = (id: string, data: Partial<ProjectInsert>) =>
   db.update(projects).set(data).where(eq(projects.id, id));
 
 export const getProjectById = (id: string) =>

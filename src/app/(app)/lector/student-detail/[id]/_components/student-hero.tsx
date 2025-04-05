@@ -1,7 +1,7 @@
 import { Hero } from '@/components/base/hero';
-import { type User } from '@/db';
+import { type UserType } from '@/modules/user/schema';
 
-export const StudentHero = ({ student }: { student: User }) => {
+export const StudentHero = ({ student }: { student: UserType }) => {
   const displayName = student.firstName
     ? `${student.firstName} ${student.lastName}`
     : student.name;

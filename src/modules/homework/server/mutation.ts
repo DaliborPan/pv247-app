@@ -1,18 +1,25 @@
-import { type HomeworkInsert } from '@/db';
 import { type SessionUserLectorType } from '@/modules/session-user/types';
 
 import { createHomework, updateHomeworkPoints } from './repository';
 
+export type CreateHomeworkMutationValuesType = Parameters<
+  typeof createHomework
+>[0];
+
 export const createHomeworkMutation = async (
   _sessionUserLector: SessionUserLectorType,
-  data: HomeworkInsert
+  values: CreateHomeworkMutationValuesType
 ) => {
-  await createHomework(data);
+  await createHomework(values);
 };
 
 export const updateHomeworkPointsMutation = async (
   _sessionUserLector: SessionUserLectorType,
-  params: { studentId: string; lectureId: string; points: number }
+  {
+    studentId,
+    lectureId,
+    points
+  }: { studentId: string; lectureId: string; points: number }
 ) => {
-  await updateHomeworkPoints(params);
+  await updateHomeworkPoints({ studentId, lectureId }, { points });
 };

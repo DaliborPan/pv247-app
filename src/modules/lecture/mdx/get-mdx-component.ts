@@ -1,7 +1,7 @@
 import { type ComponentType } from 'react';
 import { type MDXComponents } from 'mdx/types';
 
-import { type LectureSlug } from '@/db';
+import { type LectureSlugType } from '../schema';
 
 import { IntroductionMdx } from './introduction';
 import { ReactMdx } from './react';
@@ -18,7 +18,7 @@ type MdxComponent = ComponentType<{
   readonly components?: MDXComponents | undefined;
 }>;
 
-const lectureMdxComponentsMap: Record<LectureSlug, MdxComponent> = {
+const lectureMdxComponentsMap: Record<LectureSlugType, MdxComponent> = {
   'introduction': IntroductionMdx,
   'react': ReactMdx,
   'styling': StylingMdx,
@@ -31,5 +31,5 @@ const lectureMdxComponentsMap: Record<LectureSlug, MdxComponent> = {
   'authentication-metadata-deployment': AuthenticationMetadataDeploymentMdx
 };
 
-export const getLectureMdxComponent = (slug: LectureSlug) =>
+export const getLectureMdxComponent = (slug: LectureSlugType) =>
   lectureMdxComponentsMap[slug];
