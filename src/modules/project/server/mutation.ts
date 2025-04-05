@@ -1,5 +1,4 @@
 import { assignProject, getStudents } from '@/modules/student/server';
-import { type ProjectInsert } from '@/db/schema/projects';
 import {
   type SessionUserLectorType,
   type SessionUserType
@@ -7,15 +6,13 @@ import {
 
 import { createProject, updateProject } from './repository';
 
-export type CreateProjectMutationValuesType = Pick<
-  Parameters<typeof createProject>[0],
-  'name' | 'description' | 'github' | 'shortDescription'
->;
-
 export const createProjectMutation = async (
   sessionUser: SessionUserType,
   studentIds: string[],
-  values: CreateProjectMutationValuesType
+  values: Pick<
+    Parameters<typeof createProject>[0],
+    'name' | 'description' | 'github' | 'shortDescription'
+  >
 ) => {
   if (!!sessionUser.projectId || !studentIds.includes(sessionUser.id)) {
     throw new Error(
@@ -30,22 +27,22 @@ export const createProjectMutation = async (
 
 export const updateProjectMutation = async (
   sessionUser: SessionUserType,
-  id: string,
+  projectId: string,
   studentIds: string[],
   values: Pick<
-    ProjectInsert,
+    Parameters<typeof updateProject>[1],
     'name' | 'description' | 'github' | 'shortDescription'
   >
 ) => {
-  const currentProjectStudents = await getStudents({ projectId: id });
+  const currentProjectStudents = await getStudents({ projectId });
 
   if (!currentProjectStudents.some(user => user.id === sessionUser.id)) {
     throw new Error(
-      `User ${sessionUser.id} is not allowed to update project ${id}`
+      `User ${sessionUser.id} is not allowed to update project ${projectId}`
     );
   }
 
-  await updateProject(id, values);
+  await updateProject(projectId, values);
 
   // Remove students from previous project
   await assignProject({
@@ -54,18 +51,13 @@ export const updateProjectMutation = async (
   });
 
   // Add students to new project
-  await assignProject({ projectId: id, userIds: studentIds });
+  await assignProject({ projectId, userIds: studentIds });
 };
-
-export type UpdateProjectStatusMutationValuesType = Pick<
-  Parameters<typeof updateProject>[1],
-  'status'
->;
 
 export const updateProjectStatusMutation = async (
   sessionUser: SessionUserType,
   projectId: string,
-  values: UpdateProjectStatusMutationValuesType
+  values: Pick<Parameters<typeof updateProject>[1], 'status'>
 ) => {
   if (sessionUser.projectId !== projectId && sessionUser.role !== 'lector') {
     throw new Error(
@@ -76,9 +68,15 @@ export const updateProjectStatusMutation = async (
   await updateProject(projectId, values);
 };
 
+type UpdateProjectPointsMutationValuesType = Pick<
+  Parameters<typeof updateProject>[1],
+  'comment' | 'points'
+>;
+
 export const updateProjectPointsMutation = async (
   _sessionUserLector: SessionUserLectorType,
-  { id, comment, points }: { id: string; comment: string; points: number }
+  projectId: string,
+  values: UpdateProjectPointsMutationValuesType
 ) => {
-  await updateProject(id, { comment, points });
+  await updateProject(projectId, values);
 };

@@ -1,7 +1,7 @@
 import NextAuth, { type NextAuthConfig } from 'next-auth';
 import GitHub from 'next-auth/providers/github';
 
-import { getNewStudentLectorId } from '@/modules/lector/server';
+import { getNewStudentLectorIdQuery } from '@/modules/lector/server';
 import {
   getStudentsWithHomeworkCached,
   updateUser
@@ -46,7 +46,7 @@ export const authOptions = {
       try {
         const role = LECTOR_EMAILS.includes(user.email) ? 'lector' : 'student';
         const lectorId =
-          role === 'student' ? await getNewStudentLectorId() : undefined;
+          role === 'student' ? await getNewStudentLectorIdQuery() : undefined;
 
         await updateUser(user.id, { role, lectorId });
 

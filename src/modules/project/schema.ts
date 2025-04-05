@@ -1,7 +1,14 @@
 import { z } from 'zod';
 
-export const projectStatusSchema = z.enum(['pending', 'approved', 'submitted']);
+/**
+ * Special case of importing schemas from database, because we want
+ * to have enums in database directly.
+ *
+ * Reexporting them from this file to allow other components/... to import from here
+ */
+import { dbProjectStatusSchema } from '@/db/schema/projects/project-status';
 
+export const projectStatusSchema = dbProjectStatusSchema;
 export type ProjectStatusType = z.infer<typeof projectStatusSchema>;
 
 export const projectSchema = z.object({

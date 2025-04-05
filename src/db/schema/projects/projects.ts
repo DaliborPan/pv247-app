@@ -2,14 +2,8 @@ import { randomUUID } from 'crypto';
 
 import { sql } from 'drizzle-orm';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
-import { z } from 'zod';
 
-/**
- * Project status
- */
-export const projectStatusSchema = z.enum(['pending', 'approved', 'submitted']);
-
-export type ProjectStatus = z.infer<typeof projectStatusSchema>;
+import { dbProjectStatusSchema } from './project-status';
 
 export const projects = sqliteTable('project', {
   id: text('id').notNull().primaryKey().$defaultFn(randomUUID),
@@ -20,7 +14,7 @@ export const projects = sqliteTable('project', {
   points: integer('points'),
   comment: text('comment'),
 
-  status: text('status', { enum: projectStatusSchema.options })
+  status: text('status', { enum: dbProjectStatusSchema.options })
     .notNull()
     .default('pending' as const),
   updatedAt: text('updated_at')
