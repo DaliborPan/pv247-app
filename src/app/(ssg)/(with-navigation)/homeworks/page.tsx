@@ -2,15 +2,15 @@ import Link from 'next/link';
 import { ExternalLink, Lock } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
-import { type Lecture } from '@/db';
 import { Icon } from '@/components/base/icon';
 import { TextPreview } from '@/components/text-preview';
 import { cn } from '@/lib/cn';
 import { formatDate } from '@/lib/date';
 import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
 import { getLecturesWithHomeworkLoader } from '@/modules/lecture/loader';
+import { type LectureType } from '@/modules/lecture/schema';
 
-const HomeworkCard = ({ lecture }: { lecture: Lecture; index: number }) => {
+const HomeworkCard = ({ lecture }: { lecture: LectureType; index: number }) => {
   const isAvailable = checkIsAvailable(lecture);
 
   return (

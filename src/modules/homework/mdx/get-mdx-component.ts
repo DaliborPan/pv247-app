@@ -1,7 +1,7 @@
 import { type ComponentType } from 'react';
 import { type MDXComponents } from 'mdx/types';
 
-import { type HomeworkSlug } from '@/db';
+import { type HomeworkSlugType } from '@/modules/lecture/schema';
 
 import { TypescriptMdx } from './typescript';
 import { ReactBasictMdx } from './react-basics';
@@ -17,7 +17,7 @@ type MdxComponent = ComponentType<{
   readonly components?: MDXComponents | undefined;
 }>;
 
-const homeworkMdxComponentsMap: Record<HomeworkSlug, MdxComponent> = {
+const homeworkMdxComponentsMap: Record<HomeworkSlugType, MdxComponent> = {
   'typescript': TypescriptMdx,
   'react-basics': ReactBasictMdx,
   'styling': StylingMdx,
@@ -32,5 +32,5 @@ const homeworkMdxComponentsMap: Record<HomeworkSlug, MdxComponent> = {
   '': () => null
 };
 
-export const getHomeworkMdxComponent = (slug: HomeworkSlug) =>
+export const getHomeworkMdxComponent = (slug: HomeworkSlugType) =>
   homeworkMdxComponentsMap[slug];

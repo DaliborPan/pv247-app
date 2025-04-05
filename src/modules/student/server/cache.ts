@@ -13,9 +13,7 @@ export const getStudentsWithHomeworkCached = (() => {
         return getStudentsWithHomework();
       },
       [tag],
-      {
-        tags: [tag]
-      }
+      { tags: [tag] }
     )();
 
   handler.revalidate = () => revalidateTag(tag);

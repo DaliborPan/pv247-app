@@ -2,18 +2,12 @@ import { type SessionUserType } from '@/modules/session-user/types';
 
 import { getHomework } from './repository';
 
-/**
- * Get homework by userId and lectureId
- */
 export const getUserHomeworkQuery = async (
   sessionUser: SessionUserType,
   {
-    userId,
-    lectureId
-  }: {
-    userId: string;
-    lectureId: string;
-  }
+    lectureId,
+    userId
+  }: Required<NonNullable<Parameters<typeof getHomework>[0]>>
 ) => {
   if (sessionUser.role !== 'lector' && sessionUser.id !== userId) {
     throw new Error(

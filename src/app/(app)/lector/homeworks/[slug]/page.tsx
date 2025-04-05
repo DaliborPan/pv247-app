@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 
-import { homeworkSlugSchema } from '@/db';
 import { TabsContent } from '@/components/base/tabs';
 import { LabeledValue } from '@/components/labeled-value';
 import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
@@ -8,6 +7,7 @@ import { HomeworkStudentsDataTable } from '@/modules/lector/components/homework-
 import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
 import { getStudentsWithHomeworkLoader } from '@/modules/lector/loader';
 import { getSessionUser } from '@/modules/session-user';
+import { homeworkSlugSchema } from '@/modules/lecture/schema';
 
 import { HomeworksNavigation } from './_components';
 

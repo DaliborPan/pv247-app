@@ -1,11 +1,14 @@
 import { redirect } from 'next/navigation';
 
-import { lectureSlugSchema, type LectureSlug } from '@/db';
 import { getIsLectureAvailableLoader } from '@/modules/lecture/loader';
 import { getLectureMdxComponent } from '@/modules/lecture/mdx';
+import {
+  lectureSlugSchema,
+  type LectureSlugType
+} from '@/modules/lecture/schema';
 
 type Params = {
-  slug: LectureSlug;
+  slug: LectureSlugType;
 };
 
 export const generateStaticParams = (): Params[] => {

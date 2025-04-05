@@ -11,11 +11,7 @@ const withMDX = nextMDX({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-
-  experimental: {
-    optimizePackageImports: ['@/db']
-  }
+  reactStrictMode: true
 };
 
 export default withMDX(nextConfig);

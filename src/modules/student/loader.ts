@@ -1,7 +1,7 @@
 import { cache } from 'react';
 
 import { getSessionUser } from '@/modules/session-user';
-import { type User } from '@/db';
+import { type UserType } from '@/modules/user/schema';
 
 import {
   getProjectFormStudentComboboxQuery,
@@ -21,7 +21,7 @@ export const getProjectFormStudentComboboxLoader = async (
   return getProjectFormStudentComboboxQuery(sessionUser, projectId);
 };
 
-export const getStudentOverviewLoader = async (user: User) => {
+export const getStudentOverviewLoader = async (user: UserType) => {
   const sessionUser = await getSessionUser();
 
   return getStudentOverviewQuery(sessionUser, user);

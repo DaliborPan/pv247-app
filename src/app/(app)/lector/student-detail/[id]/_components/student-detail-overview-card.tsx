@@ -4,10 +4,14 @@ import { ExternalLink } from 'lucide-react';
 import { LabeledValue } from '@/components/labeled-value';
 import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
-import { type User } from '@/db';
 import { StudentOverviewCard } from '@/modules/student/components/student-overview-card';
+import { type UserType } from '@/modules/user/schema';
 
-export const StudentDetailOverviewCard = ({ student }: { student: User }) => (
+export const StudentDetailOverviewCard = ({
+  student
+}: {
+  student: UserType;
+}) => (
   <StudentOverviewCard
     user={student}
     otherFields={({ project: { project, display: projectDisplayName } }) => (

@@ -1,8 +1,8 @@
-import { type LectureSlug } from '@/db';
 import { getLectureMdxComponent } from '@/modules/lecture/mdx';
+import { type LectureSlugType } from '@/modules/lecture/schema';
 
 type Params = {
-  slug: LectureSlug;
+  slug: LectureSlugType;
 };
 
 const Page = async ({ params }: { params: Params }) => {

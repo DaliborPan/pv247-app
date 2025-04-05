@@ -1,12 +1,12 @@
 import { type PropsWithChildren } from 'react';
 
-import { type LectureSlug } from '@/db';
 import { LectureNavigation } from '@/modules/lecture/components/lecture-navigation';
+import { type LectureSlugType } from '@/modules/lecture/schema';
 
 const Layout = ({
   children,
   params
-}: PropsWithChildren<{ params: { slug: LectureSlug } }>) => (
+}: PropsWithChildren<{ params: { slug: LectureSlugType } }>) => (
   <>
     <LectureNavigation lectureSlug={params.slug} />
 

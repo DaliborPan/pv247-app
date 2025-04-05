@@ -1,7 +1,8 @@
 import Link, { type LinkProps } from 'next/link';
 import { type PropsWithChildren } from 'react';
-import { type User } from 'next-auth';
 import { Menu } from 'lucide-react';
+
+import { type UserType } from '@/modules/user/schema';
 
 import { Button } from '../base/button';
 import {
@@ -28,7 +29,7 @@ export const MobileNavigation = ({
   user,
   isUserLoading = false
 }: {
-  user?: User;
+  user?: UserType;
   isUserLoading?: boolean;
 }) => (
   <div className="flex grow items-center gap-x-3 lg:hidden">

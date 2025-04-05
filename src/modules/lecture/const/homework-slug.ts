@@ -1,6 +1,6 @@
-import { type HomeworkSlug } from '@/db';
+import { type HomeworkSlugType } from '../schema';
 
-export const orderedHomeworkSlugs: HomeworkSlug[] = [
+export const orderedHomeworkSlugs: HomeworkSlugType[] = [
   'typescript',
   'react-basics',
   'styling',

@@ -6,18 +6,21 @@ import {
 } from 'drizzle-orm/sqlite-core';
 import type { AdapterAccount } from '@auth/core/adapters';
 
+import { dbRoleSchema } from './role';
+
 export const users = sqliteTable('user', {
   id: text('id').notNull().primaryKey(),
   name: text('name'),
-  github: text('github'),
   email: text('email').notNull(),
-  emailVerified: integer('emailVerified', { mode: 'timestamp_ms' }),
   image: text('image'),
-  role: text('role').$type<'student' | 'lector'>().notNull().default('student'),
+  role: text('role', { enum: dbRoleSchema.options })
+    .notNull()
+    .default('student'),
 
   // edited info
   firstName: text('firstName'),
   lastName: text('lastName'),
+  github: text('github'),
 
   // lector
   lectorId: text('lectorId'),
@@ -25,8 +28,6 @@ export const users = sqliteTable('user', {
   // project
   projectId: text('projectId')
 });
-
-export type User = typeof users.$inferSelect;
 
 export const accounts = sqliteTable(
   'account',

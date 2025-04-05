@@ -1,6 +1,8 @@
-import { type Lecture } from '@/db';
 import { formatDate } from '@/lib/date';
+import { type LectureType } from '@/modules/lecture/schema';
 
-export const PersonHomeworkDeadline = ({ lecture }: { lecture: Lecture }) => (
-  <div>{formatDate(lecture.homeworkDeadline)}</div>
-);
+export const PersonHomeworkDeadline = ({
+  lecture
+}: {
+  lecture: LectureType;
+}) => <div>{formatDate(lecture.homeworkDeadline)}</div>;

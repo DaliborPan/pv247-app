@@ -5,8 +5,9 @@ import React from 'react';
 import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 
-import { type Project } from '@/db';
 import { Button } from '@/components/base/button';
+
+import { type ProjectType } from '../../schema';
 
 import { submitProjectAction } from './action';
 
@@ -15,7 +16,7 @@ export const useSubmitProjectMutation = (projectId: string) =>
     mutationFn: async () => submitProjectAction({ projectId })
   });
 
-export const SubmitProjectAction = ({ project }: { project: Project }) => {
+export const SubmitProjectAction = ({ project }: { project: ProjectType }) => {
   const mutation = useSubmitProjectMutation(project.id);
 
   return (

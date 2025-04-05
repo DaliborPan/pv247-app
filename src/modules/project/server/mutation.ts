@@ -1,4 +1,3 @@
-import { db, projects } from '@/db';
 import { assignProject, getStudents } from '@/modules/student/server';
 import { type ProjectInsert } from '@/db/schema/projects';
 import {
@@ -6,15 +5,17 @@ import {
   type SessionUserType
 } from '@/modules/session-user/types';
 
-import { updateProject } from './repository';
+import { createProject, updateProject } from './repository';
+
+export type CreateProjectMutationValuesType = Pick<
+  Parameters<typeof createProject>[0],
+  'name' | 'description' | 'github' | 'shortDescription'
+>;
 
 export const createProjectMutation = async (
   sessionUser: SessionUserType,
   studentIds: string[],
-  values: Pick<
-    ProjectInsert,
-    'name' | 'description' | 'github' | 'shortDescription'
-  >
+  values: CreateProjectMutationValuesType
 ) => {
   if (!!sessionUser.projectId || !studentIds.includes(sessionUser.id)) {
     throw new Error(
@@ -22,7 +23,7 @@ export const createProjectMutation = async (
     );
   }
 
-  const [project] = await db.insert(projects).values(values).returning();
+  const [project] = await createProject(values);
 
   await assignProject({ projectId: project.id, userIds: studentIds });
 };
@@ -56,10 +57,15 @@ export const updateProjectMutation = async (
   await assignProject({ projectId: id, userIds: studentIds });
 };
 
+export type UpdateProjectStatusMutationValuesType = Pick<
+  Parameters<typeof updateProject>[1],
+  'status'
+>;
+
 export const updateProjectStatusMutation = async (
   sessionUser: SessionUserType,
   projectId: string,
-  values: Pick<ProjectInsert, 'status'>
+  values: UpdateProjectStatusMutationValuesType
 ) => {
   if (sessionUser.projectId !== projectId && sessionUser.role !== 'lector') {
     throw new Error(

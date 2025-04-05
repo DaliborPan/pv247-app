@@ -1,11 +1,14 @@
 import { redirect } from 'next/navigation';
 
-import { type HomeworkSlug, homeworkSlugSchema } from '@/db';
 import { getHomeworkMdxComponent } from '@/modules/homework/mdx';
 import { getIsHomeworkAvailableLoader } from '@/modules/lecture/loader';
+import {
+  homeworkSlugSchema,
+  type HomeworkSlugType
+} from '@/modules/lecture/schema';
 
 type Params = {
-  slug: HomeworkSlug;
+  slug: HomeworkSlugType;
 };
 
 export const generateStaticParams = (): Params[] => {

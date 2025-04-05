@@ -1,6 +1,7 @@
 import { and, eq } from 'drizzle-orm';
 
-import { db, type HomeworkInsert, homeworks } from '@/db';
+import { db } from '@/db';
+import { type HomeworkInsert, homeworks } from '@/db/schema/homeworks';
 
 export const getHomework = ({
   userId,
@@ -18,15 +19,10 @@ export const getHomework = ({
 
 export type GetHomeworksResult = Awaited<ReturnType<typeof getHomework>>;
 
-export const updateHomeworkPoints = ({
-  points,
-  lectureId,
-  studentId
-}: {
-  points: number;
-  lectureId: string;
-  studentId: string;
-}) =>
+export const updateHomeworkPoints = (
+  { lectureId, studentId }: { lectureId: string; studentId: string },
+  { points }: Pick<HomeworkInsert, 'points'>
+) =>
   db
     .update(homeworks)
     .set({

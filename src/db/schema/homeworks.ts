@@ -17,5 +17,4 @@ export const homeworks = sqliteTable('homework', {
   lectureId: text('lectureId')
 });
 
-export type Homework = typeof homeworks.$inferSelect;
 export type HomeworkInsert = typeof homeworks.$inferInsert;

@@ -1,14 +1,14 @@
 import { DetailCard } from '@/components/detail-card';
 import { LabeledValue } from '@/components/labeled-value';
-import { type User } from '@/db';
 import { cn } from '@/lib/cn';
 import {
   getStudentOverviewLoader,
   type GetStudentOverviewLoaderResult
 } from '@/modules/student/loader';
+import { type UserType } from '@/modules/user/schema';
 
 type StudentOverviewCardProps = {
-  user: User;
+  user: UserType;
   otherFields?: (overview: GetStudentOverviewLoaderResult) => React.ReactNode;
 };
 

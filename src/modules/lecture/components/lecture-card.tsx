@@ -5,9 +5,10 @@ import { Badge } from '@/components/base/badge';
 import { Button } from '@/components/base/button';
 import { Icon } from '@/components/base/icon';
 import { TextPreview } from '@/components/text-preview';
-import { type Lecture } from '@/db';
 import { cn } from '@/lib/cn';
 import { formatDate } from '@/lib/date';
+
+import { type LectureType } from '../schema';
 
 import { AttendanceBadge } from './attendance-badge';
 
@@ -24,7 +25,7 @@ export const LectureCard = ({
   isAvailable = true,
   href = `/lectures/${lecture.slug}`
 }: {
-  lecture: Lecture;
+  lecture: LectureType;
   index: number;
   isAvailable?: boolean;
   href?: string;

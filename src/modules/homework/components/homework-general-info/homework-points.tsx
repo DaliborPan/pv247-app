@@ -5,8 +5,8 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 
-import { type Lecture } from '@/db';
 import { Button } from '@/components/base/button';
+import { type LectureType } from '@/modules/lecture/schema';
 
 import { getHomeworkPointsAction } from './action';
 import { LabeledItem } from './labeled-item';
@@ -33,7 +33,7 @@ const usePersonHomeworkPointsQuery = (lectureId: string) => {
   });
 };
 
-export const HomeworkPoints = ({ lecture }: { lecture: Lecture }) => {
+export const HomeworkPoints = ({ lecture }: { lecture: LectureType }) => {
   const session = useSession();
   const { isSuccess, data } = usePersonHomeworkPointsQuery(lecture.id);
 
