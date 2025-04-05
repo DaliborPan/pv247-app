@@ -7,7 +7,10 @@ export const getUserHomeworkQuery = async (
   {
     lectureId,
     userId
-  }: Required<NonNullable<Parameters<typeof getHomework>[0]>>
+  }: {
+    lectureId?: string;
+    userId: string;
+  }
 ) => {
   if (sessionUser.role !== 'lector' && sessionUser.id !== userId) {
     throw new Error(
@@ -15,6 +18,11 @@ export const getUserHomeworkQuery = async (
     );
   }
 
-  const homework = await getHomework({ lectureId, userId });
-  return homework.at(0);
+  const userHomework = await getHomework({ userId });
+
+  if (lectureId) {
+    return userHomework.filter(homework => homework.lectureId === lectureId);
+  }
+
+  return userHomework;
 };

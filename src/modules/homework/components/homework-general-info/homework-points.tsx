@@ -8,7 +8,8 @@ import { toast } from 'sonner';
 import { Button } from '@/components/base/button';
 import { type LectureType } from '@/modules/lecture/schema';
 
-import { getHomeworkPointsAction } from './action';
+import { getHomeworkPointsAction } from '../../action';
+
 import { LabeledItem } from './labeled-item';
 
 /**
@@ -28,7 +29,7 @@ const usePersonHomeworkPointsQuery = (lectureId: string) => {
         return;
       }
 
-      return data;
+      return data.at(0);
     }
   });
 };

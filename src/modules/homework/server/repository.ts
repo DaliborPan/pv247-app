@@ -3,18 +3,9 @@ import { and, eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { type HomeworkInsertType, homeworks } from '@/db/schema/homeworks';
 
-export const getHomework = ({
-  userId,
-  lectureId
-}: { userId?: string; lectureId?: string } = {}) =>
+export const getHomework = ({ userId }: { userId: string }) =>
   db.query.homeworks.findMany({
-    where: (table, { eq }) =>
-      and(
-        ...[
-          ...(userId ? [eq(table.studentId, userId)] : []),
-          ...(lectureId ? [eq(table.lectureId, lectureId)] : [])
-        ]
-      )
+    where: (table, { eq }) => eq(table.studentId, userId)
   });
 
 export const updateHomeworkPoints = (

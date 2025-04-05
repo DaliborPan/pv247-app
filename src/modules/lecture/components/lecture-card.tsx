@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Layers, Lock } from 'lucide-react';
+import { BookOpen, Layers, Lock } from 'lucide-react';
 
 import { Badge } from '@/components/base/badge';
 import { Button } from '@/components/base/button';
@@ -48,11 +48,11 @@ export const LectureCard = ({
       >
         <Button
           className="w-full lg:w-auto"
-          iconLeft={!isAvailable ? { icon: <Lock /> } : undefined}
+          iconLeft={{ icon: !isAvailable ? <Lock /> : <BookOpen /> }}
           disabled={!isAvailable}
           size="sm"
         >
-          Open lecture
+          Start learning
         </Button>
       </Link>
 

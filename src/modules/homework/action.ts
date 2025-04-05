@@ -4,17 +4,19 @@ import { z } from 'zod';
 
 import { authServerAction } from '@/server/server-actions';
 
-import { getUserHomeworkQuery } from '../../server/query';
+import { getUserHomeworkQuery } from './server';
 
 export const getHomeworkPointsAction = authServerAction
   .input(
-    z.object({
-      lectureId: z.string()
-    })
+    z
+      .object({
+        lectureId: z.string()
+      })
+      .optional()
   )
   .handler(({ input, ctx }) =>
     getUserHomeworkQuery(ctx.sessionUser, {
-      lectureId: input.lectureId,
+      lectureId: input?.lectureId,
       userId: ctx.sessionUser.id
     })
   );
