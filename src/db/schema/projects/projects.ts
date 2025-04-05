@@ -22,4 +22,4 @@ export const projects = sqliteTable('project', {
     .default(sql`(CURRENT_TIMESTAMP)`)
 });
 
-export type ProjectInsert = typeof projects.$inferInsert;
+export type ProjectInsertType = typeof projects.$inferInsert;

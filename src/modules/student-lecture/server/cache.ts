@@ -17,7 +17,7 @@ export const getStudentLecturesCached = (() => {
       () => {
         console.log(`[CACHE_MISS]: ${getTag(studentId)}`);
 
-        return getStudentLectures({ studentId });
+        return getStudentLectures(studentId);
       },
       [getTag(studentId)],
       {

@@ -1,1 +1,7 @@
-export { users, accounts, sessions, verificationTokens } from './users';
+export {
+  users,
+  type UserInsertType,
+  accounts,
+  sessions,
+  verificationTokens
+} from './users';

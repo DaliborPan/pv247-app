@@ -11,3 +11,5 @@ export const studentLectures = sqliteTable('studentLecture', {
   // lecture
   lectureId: text('lectureId')
 });
+
+export type StudentLectureInsertType = typeof studentLectures.$inferInsert;

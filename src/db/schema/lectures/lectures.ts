@@ -22,5 +22,3 @@ export const lectures = sqliteTable('lecture', {
   homeworkMaxPoints: integer('homeworkMaxPoints').notNull().default(0),
   homeworkDeadline: text('homeworkDeadline').notNull().default('')
 });
-
-export type Lecture = typeof lectures.$inferSelect;

@@ -1,26 +1,24 @@
 import { and, eq } from 'drizzle-orm';
 
 import { db } from '@/db';
-import { studentLectures } from '@/db/schema/studentLecture';
+import {
+  type StudentLectureInsertType,
+  studentLectures
+} from '@/db/schema/studentLecture';
 
-export const getStudentLectures = async ({
-  studentId
-}: {
-  studentId: string;
-}) =>
+export const getStudentLectures = (studentId: string) =>
   db.query.studentLectures.findMany({
-    where: (table, { eq }) =>
-      studentId ? eq(table.studentId, studentId) : undefined
+    where: (table, { eq }) => eq(table.studentId, studentId)
   });
 
-export const deleteStudentLecture = async ({
+export const deleteStudentLecture = ({
   lectureId,
   studentId
 }: {
   lectureId: string;
   studentId: string;
-}) => {
-  await db
+}) =>
+  db
     .delete(studentLectures)
     .where(
       and(
@@ -28,17 +26,7 @@ export const deleteStudentLecture = async ({
         eq(studentLectures.studentId, studentId)
       )
     );
-};
 
-export const createStudentLecture = async ({
-  lectureId,
-  studentId
-}: {
-  lectureId: string;
-  studentId: string;
-}) => {
-  await db.insert(studentLectures).values({
-    lectureId,
-    studentId
-  });
-};
+export const createStudentLecture = (
+  values: Omit<StudentLectureInsertType, 'id'>
+) => db.insert(studentLectures).values(values);

@@ -2,25 +2,26 @@ import { and, eq, inArray } from 'drizzle-orm';
 
 import { db } from '@/db';
 import { type SessionUserType } from '@/modules/session-user/types';
-import { users } from '@/db/schema/users';
-import { type UserType } from '@/modules/user/schema';
+import { users, type UserInsertType } from '@/db/schema/users';
 
-export const updateUser = (id: string, values: Partial<Omit<UserType, 'id'>>) =>
-  db.update(users).set(values).where(eq(users.id, id));
+export const updateUser = (
+  id: string,
+  values: Partial<Omit<UserInsertType, 'id'>>
+) => db.update(users).set(values).where(eq(users.id, id));
 
 export const assignProject = ({
   projectId,
-  userIds
+  studentIds
 }: {
   projectId: string | null;
-  userIds: string[];
+  studentIds: string[];
 }) =>
   db
     .update(users)
     .set({
       projectId
     })
-    .where(and(inArray(users.id, userIds), eq(users.role, 'student')));
+    .where(and(inArray(users.id, studentIds), eq(users.role, 'student')));
 
 export const getStudents = ({
   projectId,
@@ -39,16 +40,13 @@ export const getStudents = ({
       )
   });
 
-export const getStudentsWithHomework = () => {
-  console.log('Calling for all students');
-
-  return db.query.users.findMany({
+export const getStudentsWithHomework = () =>
+  db.query.users.findMany({
     where: (table, { eq }) => eq(table.role, 'student'),
     with: {
       homeworksStudent: true
     }
   });
-};
 
 export const getProjectFormStudents = (
   sessionUser: SessionUserType,

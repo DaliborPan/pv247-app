@@ -29,6 +29,8 @@ export const users = sqliteTable('user', {
   projectId: text('projectId')
 });
 
+export type UserInsertType = typeof users.$inferInsert;
+
 export const accounts = sqliteTable(
   'account',
   {

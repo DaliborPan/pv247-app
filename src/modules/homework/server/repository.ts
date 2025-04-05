@@ -1,7 +1,7 @@
 import { and, eq } from 'drizzle-orm';
 
 import { db } from '@/db';
-import { type HomeworkInsert, homeworks } from '@/db/schema/homeworks';
+import { type HomeworkInsertType, homeworks } from '@/db/schema/homeworks';
 
 export const getHomework = ({
   userId,
@@ -17,11 +17,9 @@ export const getHomework = ({
       )
   });
 
-export type GetHomeworksResult = Awaited<ReturnType<typeof getHomework>>;
-
 export const updateHomeworkPoints = (
   { lectureId, studentId }: { lectureId: string; studentId: string },
-  { points }: Pick<HomeworkInsert, 'points'>
+  { points }: Pick<HomeworkInsertType, 'points'>
 ) =>
   db
     .update(homeworks)
@@ -35,5 +33,5 @@ export const updateHomeworkPoints = (
       )
     );
 
-export const createHomework = (data: HomeworkInsert) =>
-  db.insert(homeworks).values(data);
+export const createHomework = (values: Omit<HomeworkInsertType, 'id'>) =>
+  db.insert(homeworks).values(values);

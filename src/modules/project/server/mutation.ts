@@ -22,7 +22,7 @@ export const createProjectMutation = async (
 
   const [project] = await createProject(values);
 
-  await assignProject({ projectId: project.id, userIds: studentIds });
+  await assignProject({ projectId: project.id, studentIds });
 };
 
 export const updateProjectMutation = async (
@@ -47,11 +47,11 @@ export const updateProjectMutation = async (
   // Remove students from previous project
   await assignProject({
     projectId: null,
-    userIds: currentProjectStudents.map(user => user.id)
+    studentIds: currentProjectStudents.map(user => user.id)
   });
 
   // Add students to new project
-  await assignProject({ projectId, userIds: studentIds });
+  await assignProject({ projectId, studentIds });
 };
 
 export const updateProjectStatusMutation = async (
