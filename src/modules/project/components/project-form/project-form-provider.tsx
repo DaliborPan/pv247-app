@@ -6,7 +6,6 @@ import { type PropsWithChildren } from 'react';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
 import { Send } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 
 import { Form } from '@/components/form';
 import { Button } from '@/components/base/button';
@@ -21,7 +20,6 @@ export const ProjectFormProvider = ({
   defaultValues?: Partial<ProjectFormSchema>;
 }>) => {
   const session = useSession();
-  const router = useRouter();
 
   const form = useForm<ProjectFormSchema>({
     resolver: zodResolver(projectFormSchema),
@@ -59,16 +57,15 @@ export const ProjectFormProvider = ({
     }
 
     toast.success('Project updated successfully.');
-
-    // TODO(pv) - needed?
-    router.replace('/project');
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="mb-6 flex items-center">
-          <h1 className="grow text-3xl">Create a project</h1>
+          <h1 className="grow text-3xl">
+            {defaultValues ? 'Edit your project' : 'Create a project'}
+          </h1>
           <Button
             isLoading={mutation.isPending}
             type="submit"

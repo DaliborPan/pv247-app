@@ -8,7 +8,7 @@ const Page = async () => {
   const project = await getMineProjectLoader();
 
   return project ? (
-    <div>
+    <div className="flex flex-col gap-y-4">
       <ProjectHero project={project} />
 
       {project.description && (
