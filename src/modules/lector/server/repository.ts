@@ -11,3 +11,16 @@ export const getLectorStudents = ({ lectorId }: { lectorId: string }) =>
       }
     }
   });
+
+export const getHomeworkReviewers = ({
+  reviewerEmails
+}: {
+  reviewerEmails: string[];
+}) =>
+  db.query.users.findMany({
+    where: (users, { eq, or }) =>
+      or(...reviewerEmails.map(email => eq(users.email, email))),
+    with: {
+      students: true
+    }
+  });
