@@ -14,7 +14,7 @@ export const getProjectQuery = async (
   sessionUser: SessionUserType,
   id: string
 ) => {
-  if (sessionUser.role !== 'lector' && sessionUser.id !== id) {
+  if (sessionUser.role !== 'lector' && sessionUser.projectId !== id) {
     throw new Error(`${sessionUser.id} cannot read project ${id}`);
   }
 

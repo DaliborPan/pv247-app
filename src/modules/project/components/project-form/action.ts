@@ -1,5 +1,7 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+
 import { authServerAction } from '@/server/server-actions';
 
 import { createProjectMutation, updateProjectMutation } from '../../server';
@@ -10,6 +12,8 @@ export const createProjectAction = authServerAction
   .input(projectFormSchema)
   .handler(async ({ input: { students, ...input }, ctx }) => {
     await createProjectMutation(ctx.sessionUser, students, input);
+
+    revalidatePath('/project');
   });
 
 export const updateProjectAction = authServerAction
@@ -20,4 +24,6 @@ export const updateProjectAction = authServerAction
     }
 
     await updateProjectMutation(ctx.sessionUser, id, students, input);
+
+    revalidatePath('/project/edit');
   });
