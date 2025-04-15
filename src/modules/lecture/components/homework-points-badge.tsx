@@ -9,18 +9,22 @@ import { useMineHomeworkPointsQuery } from '@/modules/homework/hooks';
 import { Badge } from '@/components/base/badge';
 import { Icon } from '@/components/base/icon';
 
-import { type LectureType } from '../schema';
-
-export const HomeworkPointsBadge = ({ lecture }: { lecture: LectureType }) => {
+export const HomeworkPointsBadge = ({
+  maxPoints,
+  lectureId
+}: {
+  maxPoints: number;
+  lectureId: string;
+}) => {
   const { data } = useMineHomeworkPointsQuery();
 
-  const homework = data?.find(homework => homework.lectureId === lecture.id);
+  const homework = data?.find(homework => homework.lectureId === lectureId);
 
   if (!homework) {
     return (
       <Badge variant="outline" className="text-text-terciary">
         <Icon icon={<Layers />} className="mr-2" />
-        Maximum points: {lecture.homeworkMaxPoints}
+        Maximum points: {maxPoints}
       </Badge>
     );
   }
@@ -31,7 +35,7 @@ export const HomeworkPointsBadge = ({ lecture }: { lecture: LectureType }) => {
       className="border-text-primary-color text-text-primary-color"
     >
       <Icon icon={<MonitorCheck />} className="mr-2" />
-      {homework.points} / {lecture.homeworkMaxPoints}
+      {homework.points} / {maxPoints}
     </Badge>
   );
 };

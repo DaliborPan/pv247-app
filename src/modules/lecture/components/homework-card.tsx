@@ -70,7 +70,10 @@ export const HomeworkCard = ({
         </div>
 
         <div>
-          <HomeworkPointsBadge lecture={lecture} />
+          <HomeworkPointsBadge
+            maxPoints={lecture.homeworkMaxPoints}
+            lectureId={lecture.id}
+          />
         </div>
       </div>
     </article>
