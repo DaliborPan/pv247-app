@@ -9,15 +9,13 @@ import { useAttendanceQuery } from '@/modules/student-lecture/hooks';
 import { Badge } from '@/components/base/badge';
 import { Icon } from '@/components/base/icon';
 
-import { type LectureType } from '../schema';
-
-export const AttendanceBadge = ({ lecture }: { lecture: LectureType }) => {
+export const AttendanceBadge = ({ lectureId }: { lectureId: string }) => {
   const { data } = useAttendanceQuery();
 
   if (!data) return null;
 
   const hasAttendance = data.some(
-    attendance => attendance.lectureId === lecture.id
+    attendance => attendance.lectureId === lectureId
   );
 
   return !hasAttendance ? null : (

@@ -57,7 +57,7 @@ export const LectureCard = ({
       </Link>
 
       <div className="flex gap-x-2">
-        <AttendanceBadge lecture={lecture} />
+        <AttendanceBadge lectureId={lecture.id} />
 
         <Badge variant="outline" className="text-text-terciary">
           <Icon icon={<Layers />} className="mr-2" />
