@@ -64,7 +64,7 @@ export const OnboardingForm = () => {
 
         <div className="flex w-full justify-end md:w-auto">
           <Button
-            isLoading={form.formState.isSubmitSuccessful}
+            isLoading={mutation.isPending}
             type="submit"
             className="w-full lg:w-auto"
           >
