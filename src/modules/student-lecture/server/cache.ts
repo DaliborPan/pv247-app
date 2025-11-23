@@ -25,7 +25,8 @@ export const getStudentLecturesCached = (() => {
       }
     )();
 
-  handler.revalidate = (studentId: string) => revalidateTag(getTag(studentId));
+  handler.revalidate = (studentId: string) =>
+    revalidateTag(getTag(studentId), 'max');
 
   return handler;
 })();
