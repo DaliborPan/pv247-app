@@ -1,5 +1,5 @@
 import type { MDXComponents } from 'mdx/types';
-import Image, { type ImageProps } from 'next/image';
+import { type ImageProps } from 'next/image';
 
 import { MdxImage, MdxCodeBlock, MdxComment } from './components/mdx/';
 
@@ -52,17 +52,6 @@ export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
     </code>
   ),
   pre: ({ children }) => <MdxCodeBlock>{children}</MdxCodeBlock>,
-
-  // image
-  img: ({ src, alt }) => (
-    <Image
-      src={src ?? ''}
-      alt={alt ?? ''}
-      className="rounded shadow"
-      width={500}
-      height={1}
-    />
-  ),
 
   // other
   hr: () => <hr className="my-8 border-t border-gray-200" />,

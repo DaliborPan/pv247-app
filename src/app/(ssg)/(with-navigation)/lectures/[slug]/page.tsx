@@ -8,7 +8,7 @@ import {
 } from '@/modules/lecture/schema';
 
 type Params = {
-  slug: LectureSlugType;
+  slug: string;
 };
 
 export const generateStaticParams = (): Params[] => {
@@ -17,14 +17,15 @@ export const generateStaticParams = (): Params[] => {
   return lectures.map(slug => ({ slug }));
 };
 
-const Page = async ({ params }: { params: Params }) => {
+const Page = async (props: { params: Promise<Params> }) => {
+  const params = await props.params;
   const isAvailable = await getIsLectureAvailableLoader(params.slug);
 
   if (!isAvailable) {
     redirect('/lectures');
   }
 
-  const MdxComponent = getLectureMdxComponent(params.slug);
+  const MdxComponent = getLectureMdxComponent(params.slug as LectureSlugType);
 
   return <MdxComponent />;
 };

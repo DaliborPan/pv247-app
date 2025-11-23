@@ -10,7 +10,7 @@ import { processAcceptMineAttendanceMutation } from './server/mutation';
 
 export const getAttendancesAction = authServerAction
   .input(z.undefined())
-  .handler(({ ctx }) =>
+  .handler(async ({ ctx }) =>
     getStudentLecturesQuery(ctx.sessionUser, { userId: ctx.sessionUser.id })
   );
 
