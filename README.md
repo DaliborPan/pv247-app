@@ -45,4 +45,3 @@ turso dev --db-file dev.db --port 8020
 ```
 pnpm dev
 ```
-  

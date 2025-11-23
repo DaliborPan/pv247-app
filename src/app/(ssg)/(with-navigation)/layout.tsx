@@ -1,9 +1,9 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
 import { type PropsWithChildren } from 'react';
 import { useParams, usePathname } from 'next/navigation';
 
+import { useSession } from '@/auth/client';
 import { Navigation } from '@/components/navigation';
 
 type Page = '/homeworks' | '/lectures';
@@ -17,14 +17,9 @@ const pageTitleMap: Record<Page, string> = {
  * We need to get user client-side here in order to generate lectures statically
  */
 const PublicNavigation = () => {
-  const session = useSession();
+  const { user, isPending } = useSession();
 
-  return (
-    <Navigation
-      user={session.data?.user}
-      isUserLoading={session.status === 'loading'}
-    />
-  );
+  return <Navigation user={user} isUserLoading={isPending} />;
 };
 
 const Layout = ({ children }: PropsWithChildren) => {

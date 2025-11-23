@@ -1,15 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { useSession } from 'next-auth/react';
+
+import { useSession } from '@/auth/client';
 
 import { getAttendancesAction } from '../action';
 
 export const useAttendanceQuery = () => {
-  const session = useSession();
+  const { data: session } = useSession();
 
   return useQuery({
-    queryKey: ['attendance', session.data?.user?.id],
-    enabled: !!session.data?.user,
+    queryKey: ['attendance', session?.user?.id],
+    enabled: !!session?.user,
     queryFn: async () => {
       const [data, error] = await getAttendancesAction();
 
