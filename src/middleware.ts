@@ -1,40 +1,48 @@
-import { NextResponse } from 'next/server';
+import { betterFetch } from '@better-fetch/fetch';
+import { type NextRequest, NextResponse } from 'next/server';
 
-// const PUBLIC_ROUTES = ['/login', '/lectures', '/homeworks', '/test'];
-// const LECTOR_PATHS_PREFIX = ['/lector'];
+import { type auth } from './auth';
 
-// const getIsProtectedPath = (path: string) =>
-//   !PUBLIC_ROUTES.some(route => path.startsWith(route));
+const PUBLIC_ROUTES = ['/login', '/lectures', '/homeworks', '/test'];
+const LECTOR_PATHS_PREFIX = ['/lector'];
 
-const middleware = () =>
-  // const session = await auth.api.getSession({
-  //   headers: request.headers
-  // });
+const getIsProtectedPath = (path: string) =>
+  !PUBLIC_ROUTES.some(route => path.startsWith(route));
 
-  // const isLoggedIn = !!session?.user;
-  // const isProtected = getIsProtectedPath(request.nextUrl.pathname);
+const middleware = async (request: NextRequest) => {
+  const { data: session } = await betterFetch<typeof auth.$Infer.Session>(
+    '/api/auth/get-session',
+    {
+      baseURL: request.nextUrl.origin,
+      headers: {
+        cookie: request.headers.get('cookie') ?? '' // Forward the cookies from the request
+      }
+    }
+  );
 
-  // if (!isLoggedIn && isProtected) {
-  //   const redirectUrl = new URL('/login', request.nextUrl.origin);
-  //   redirectUrl.searchParams.append('callbackUrl', request.nextUrl.href);
+  const isLoggedIn = !!session?.user;
+  const isProtected = getIsProtectedPath(request.nextUrl.pathname);
 
-  //   return NextResponse.redirect(redirectUrl);
-  // }
+  if (!isLoggedIn && isProtected) {
+    const redirectUrl = new URL('/login', request.nextUrl.origin);
+    redirectUrl.searchParams.append('callbackUrl', request.nextUrl.href);
 
-  // const isLector = session?.user?.role === 'lector';
+    return NextResponse.redirect(redirectUrl);
+  }
 
-  // if (
-  //   !isLector &&
-  //   LECTOR_PATHS_PREFIX.some(prefix =>
-  //     request.nextUrl.pathname.startsWith(prefix)
-  //   )
-  // ) {
-  //   const redirectUrl = new URL('/lectures', request.nextUrl.origin);
+  const isLector = session?.user?.role === 'lector';
 
-  //   return NextResponse.redirect(redirectUrl);
-  // }
+  if (
+    !isLector &&
+    LECTOR_PATHS_PREFIX.some(prefix =>
+      request.nextUrl.pathname.startsWith(prefix)
+    )
+  ) {
+    const redirectUrl = new URL('/lectures', request.nextUrl.origin);
 
-  NextResponse.next();
+    return NextResponse.redirect(redirectUrl);
+  }
+};
 
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
