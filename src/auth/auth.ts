@@ -19,7 +19,6 @@ export const auth = betterAuth({
       verification
     }
   }),
-  baseURL: process.env.BETTER_AUTH_URL ?? process.env.NEXTAUTH_URL,
   socialProviders: {
     github: {
       clientId: process.env.AUTH_GITHUB_ID!,

@@ -4,7 +4,8 @@ import { getStudentLoader } from '@/modules/lector/loader';
 
 import { StudentHero, StudentDetailOverviewCard } from './_components';
 
-const Page = async ({ params }: { params: { id: string } }) => {
+const Page = async (props: { params: Promise<{ id: string }> }) => {
+  const params = await props.params;
   const student = await getStudentLoader(params.id);
 
   return (

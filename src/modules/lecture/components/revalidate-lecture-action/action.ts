@@ -4,6 +4,8 @@ import { authLectorServerAction } from '@/server/server-actions';
 
 import { getOrderedLecturesCached } from '../../server';
 
-export const revalidateLecturesAction = authLectorServerAction.handler(() => {
-  getOrderedLecturesCached.revalidate();
-});
+export const revalidateLecturesAction = authLectorServerAction.handler(
+  async () => {
+    getOrderedLecturesCached.revalidate();
+  }
+);

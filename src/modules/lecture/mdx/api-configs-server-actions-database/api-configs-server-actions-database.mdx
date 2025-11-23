@@ -1,3 +1,5 @@
+import CACHE_DIAGRAM from './lecture9-cache-diagram.png';
+
 # API routes, caching, revalidation, server actions, database
 
 In this lesson, we'll look at Next.js again in more depth. Specifically, we'll discuss the ability to create custom API endpoints. We'll learn what route segment configs are and discuss caching and revalidation options
@@ -599,7 +601,7 @@ Next.js has a very aggressive caching model that tries to reduce costs and impro
 
 > What adds even more difficulty to understanding how caching works in Next.js is the fact that most caching is not visible in the development environment. It only manifests itself when the application is run in production mode, which makes it much harder to debug.
 
-![](/assets/lecture9/lecture9-cache-diagram.png)
+<MdxImage src={CACHE_DIAGRAM} />
 
 ### Request Memoization
 

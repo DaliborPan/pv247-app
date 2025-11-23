@@ -5,9 +5,11 @@ import { RichTextEditor } from '@/components/base/rich-text-editor';
 
 import { ProjectStatusCard, ProjectUsersCard } from './_components';
 
-const Page = async ({ params: { id } }: { params: { id: string } }) => {
+const Page = async (props: { params: Promise<{ id: string }> }) => {
+  const params = await props.params;
   const projects = await getProjectsLoader();
-  const project = projects.find(project => project.id === id);
+
+  const project = projects.find(project => project.id === params.id);
 
   if (!project) {
     redirect('/lector/projects');

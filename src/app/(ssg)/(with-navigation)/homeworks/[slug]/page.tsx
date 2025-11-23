@@ -8,7 +8,7 @@ import {
 } from '@/modules/lecture/schema';
 
 type Params = {
-  slug: HomeworkSlugType;
+  slug: string;
 };
 
 export const generateStaticParams = (): Params[] => {
@@ -17,14 +17,15 @@ export const generateStaticParams = (): Params[] => {
   return slugs.filter(slug => slug !== '').map(slug => ({ slug }));
 };
 
-const Page = async ({ params }: { params: Params }) => {
+const Page = async (props: { params: Promise<Params> }) => {
+  const params = await props.params;
   const isAvailable = await getIsHomeworkAvailableLoader(params.slug);
 
   if (!isAvailable) {
     redirect('/homeworks');
   }
 
-  const MdxComponent = getHomeworkMdxComponent(params.slug);
+  const MdxComponent = getHomeworkMdxComponent(params.slug as HomeworkSlugType);
 
   return <MdxComponent />;
 };

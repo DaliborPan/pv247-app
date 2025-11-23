@@ -11,7 +11,8 @@ import { homeworkSlugSchema } from '@/modules/lecture/schema';
 
 import { HomeworksNavigation } from './_components';
 
-const Page = async ({ params }: { params: { slug: string } }) => {
+const Page = async (props: { params: Promise<{ slug: string }> }) => {
+  const params = await props.params;
   const parsedSlug = homeworkSlugSchema.safeParse(
     params.slug ?? homeworkSlugSchema.options[0]
   );

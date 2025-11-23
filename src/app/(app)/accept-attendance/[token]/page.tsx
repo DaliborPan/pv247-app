@@ -6,8 +6,10 @@ import { Button } from '@/components/base/button';
 import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
 import { processAcceptMineAttendanceAction } from '@/modules/student-lecture/action';
 
-const Page = async ({ params }: { params: { token: string } }) => {
+const Page = async (props: { params: Promise<{ token: string }> }) => {
+  const params = await props.params;
   const lectures = await getOrderedLecturesLoader();
+
   const lecture = lectures.find(
     lecture => lecture.attendanceToken === params.token
   );

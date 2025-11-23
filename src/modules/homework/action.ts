@@ -14,7 +14,7 @@ export const getHomeworkPointsAction = authServerAction
       })
       .optional()
   )
-  .handler(({ input, ctx }) =>
+  .handler(async ({ input, ctx }) =>
     getUserHomeworkQuery(ctx.sessionUser, {
       lectureId: input?.lectureId,
       userId: ctx.sessionUser.id
