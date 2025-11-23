@@ -1,7 +1,8 @@
 export {
-  users,
+  user as users,
   type UserInsertType,
-  accounts,
-  sessions,
-  verificationTokens
+  type UserSelectType,
+  account,
+  session,
+  verification
 } from './users';

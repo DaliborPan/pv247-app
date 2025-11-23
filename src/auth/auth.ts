@@ -1,95 +1,66 @@
-import NextAuth, { type NextAuthConfig } from 'next-auth';
-import GitHub from 'next-auth/providers/github';
+import { betterAuth } from 'better-auth';
+import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
-import { getNewStudentLectorIdQuery } from '@/modules/lector/server';
+import { db } from '../db';
 import {
-  getStudentsWithHomeworkCached,
-  updateUser
-} from '@/modules/student/server';
+  users as user,
+  account,
+  session,
+  verification
+} from '../db/schema/users';
 
-import { CustomDrizzleAdapter } from './adapter';
-
-const LECTOR_EMAILS = process.env.LECTOR_EMAILS?.split(';') ?? [];
-
-const PUBLIC_ROUTES = ['/login', '/lectures', '/homeworks', '/test'];
-
-const LECTOR_PATHS_PREFIX = ['/lector'];
-
-const getIsProtectedPath = (path: string) =>
-  !PUBLIC_ROUTES.some(route => path.startsWith(route));
-
-export const authOptions = {
-  providers: [
-    GitHub({
+export const auth = betterAuth({
+  database: drizzleAdapter(db, {
+    provider: 'sqlite',
+    schema: {
+      user,
+      account,
+      session,
+      verification
+    }
+  }),
+  baseURL: process.env.BETTER_AUTH_URL ?? process.env.NEXTAUTH_URL,
+  socialProviders: {
+    github: {
       clientId: process.env.AUTH_GITHUB_ID!,
       clientSecret: process.env.AUTH_GITHUB_SECRET!
-    })
-  ],
-  adapter: CustomDrizzleAdapter,
-
-  pages: {
-    signIn: '/login'
+    }
   },
-
-  trustHost: true,
-
-  events: {
-    /**
-     * At this point, user is already created in the database.
-     * We can update the user role based on the email.
-     */
-    createUser: async ({ user }) => {
-      if (!user.email || !user.id) {
-        return;
-      }
-
-      try {
-        const role = LECTOR_EMAILS.includes(user.email) ? 'lector' : 'student';
-        const lectorId =
-          role === 'student' ? await getNewStudentLectorIdQuery() : undefined;
-
-        await updateUser(user.id, { role, lectorId });
-
-        getStudentsWithHomeworkCached.revalidate();
-      } catch (e) {
-        console.error("ERROR: Couldn't update user role");
-        console.error(e);
+  user: {
+    additionalFields: {
+      role: {
+        type: 'string',
+        defaultValue: 'student'
+      },
+      firstName: {
+        type: 'string'
+      },
+      lastName: {
+        type: 'string'
+      },
+      github: {
+        type: 'string'
+      },
+      lectorId: {
+        type: 'string'
+      },
+      projectId: {
+        type: 'string'
       }
     }
   },
-  callbacks: {
-    session: ({ session, user }) => {
-      session.user.id = user.id;
-      session.user.role = user.role;
-
-      return session;
-    },
-    authorized: async ({ auth, request: { nextUrl } }) => {
-      const isLoggedIn = !!auth?.user;
-
-      const isProtected = getIsProtectedPath(nextUrl.pathname);
-
-      if (!isLoggedIn && isProtected) {
-        const redirectUrl = new URL('/api/auth/signin', nextUrl.origin);
-        redirectUrl.searchParams.append('callbackUrl', nextUrl.href);
-
-        return Response.redirect(redirectUrl);
+  session: {
+    additionalFields: {
+      role: {
+        type: 'string'
       }
-
-      const isLector = auth?.user?.role === 'lector';
-
-      if (
-        !isLector &&
-        LECTOR_PATHS_PREFIX.some(prefix => nextUrl.pathname.startsWith(prefix))
-      ) {
-        const redirectUrl = new URL('/lectures', nextUrl.origin);
-
-        return Response.redirect(redirectUrl);
-      }
-
-      return true;
     }
   }
-} satisfies NextAuthConfig;
-
-export const { handlers, auth, signOut } = NextAuth(authOptions);
+  // TODO: Add plugin or API route middleware to handle user role assignment
+  // after social sign-in. The logic should:
+  // 1. Check if user.email is in LECTOR_EMAILS
+  // 2. Set role to 'lector' or 'student'
+  // 3. If student, assign lectorId via getNewStudentLectorIdQuery()
+  // 4. Update user via updateUser()
+  // 5. Revalidate getStudentsWithHomeworkCached
+});

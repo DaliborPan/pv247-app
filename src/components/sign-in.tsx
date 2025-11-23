@@ -1,16 +1,35 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
 import { Slot } from '@radix-ui/react-slot';
-import { type PropsWithChildren } from 'react';
-import { usePathname } from 'next/navigation';
+import { Suspense, type PropsWithChildren } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
 
-export const SignIn = ({ children }: PropsWithChildren) => {
+import { signIn } from '@/auth/client';
+
+export const InternalSignIn = ({ children }: PropsWithChildren) => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const callbackUrl = pathname.startsWith('/login') ? '/' : pathname;
+  const callbackUrlFromQuery = searchParams.get('callbackUrl');
+  const callbackUrl =
+    callbackUrlFromQuery ?? (pathname.startsWith('/login') ? '/' : pathname);
 
   return (
-    <Slot onClick={() => signIn('github', { callbackUrl })}>{children}</Slot>
+    <Slot
+      onClick={() =>
+        signIn.social({
+          provider: 'github',
+          callbackURL: callbackUrl
+        })
+      }
+    >
+      {children}
+    </Slot>
   );
 };
+
+export const SignIn = ({ children }: PropsWithChildren) => (
+  <Suspense>
+    <InternalSignIn>{children}</InternalSignIn>
+  </Suspense>
+);

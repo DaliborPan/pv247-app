@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { type PropsWithChildren } from 'react';
 import { toast } from 'sonner';
-import { useSession } from 'next-auth/react';
 import { Send } from 'lucide-react';
 
+import { useSession } from '@/auth/client';
 import { Form } from '@/components/form';
 import { Button } from '@/components/base/button';
 
@@ -19,7 +19,7 @@ export const ProjectFormProvider = ({
 }: PropsWithChildren<{
   defaultValues?: Partial<ProjectFormSchema>;
 }>) => {
-  const session = useSession();
+  const { data: session } = useSession();
 
   const form = useForm<ProjectFormSchema>({
     resolver: zodResolver(projectFormSchema),
@@ -35,7 +35,7 @@ export const ProjectFormProvider = ({
   });
 
   const onSubmit = async (data: ProjectFormSchema) => {
-    if (!session?.data?.user) {
+    if (!session?.user) {
       return;
     }
 
@@ -48,7 +48,7 @@ export const ProjectFormProvider = ({
 
     const [_result, error] = await mutation.mutateAsync({
       ...data,
-      students: [...data.students, session.data.user.id]
+      students: [...data.students, session.user.id]
     });
 
     if (error) {

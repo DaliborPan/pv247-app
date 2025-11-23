@@ -1,6 +1,9 @@
 import { cache } from 'react';
+import { headers } from 'next/headers';
 
 import { auth } from '@/auth';
+
+import { type UserRoleType } from '../user/schema';
 
 /**
  * Get the current session user.
@@ -9,7 +12,9 @@ import { auth } from '@/auth';
  * @cache React cache
  */
 export const getSessionUser = cache(async () => {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
 
   if (!session?.user) {
     throw new Error(
@@ -17,5 +22,7 @@ export const getSessionUser = cache(async () => {
     );
   }
 
-  return session.user;
+  return session.user as Omit<typeof session.user, 'role'> & {
+    role: UserRoleType;
+  };
 });

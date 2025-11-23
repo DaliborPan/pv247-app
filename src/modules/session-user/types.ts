@@ -1,10 +1,9 @@
-import { type DefaultSession } from 'next-auth';
+import { type auth } from '@/auth';
+import { type UserRoleType } from '@/modules/user/schema';
 
-import { type UserRoleType, type UserType } from '@/modules/user/schema';
+// export type SessionUserType = UserType;
+export type SessionUserType = (typeof auth.$Infer.Session)['user'];
 
-export type SessionUserType = DefaultSession['user'] & UserType;
-
-export type SessionUserLectorType = DefaultSession['user'] &
-  Omit<UserType, 'role'> & {
-    role: Extract<UserRoleType, 'lector'>;
-  };
+export type SessionUserLectorType = Omit<SessionUserType, 'role'> & {
+  role: Extract<UserRoleType, 'lector'>;
+};
