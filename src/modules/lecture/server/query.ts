@@ -1,3 +1,7 @@
-import { getOrderedLecturesCached } from './cache';
+import { lectureRepository } from './repository';
 
-export const getOrderedLecturesQuery = () => getOrderedLecturesCached();
+const getOrdered = lectureRepository.getOrdered;
+
+export const lectureQueries = {
+  getOrdered
+};

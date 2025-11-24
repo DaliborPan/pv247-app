@@ -1,5 +1,5 @@
 import { cn } from '@/lib/cn';
-import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
+import { lectureLoaders } from '@/modules/lecture/loader';
 import { type UserType } from '@/modules/user/schema';
 
 import { getStudentOverviewLoader } from '../loader';
@@ -8,7 +8,7 @@ import { ListCard } from './list-card';
 import { PointsBadge } from './points-badge';
 
 export const StudentHomeworkCard = async ({ user }: { user: UserType }) => {
-  const lectures = await getOrderedLecturesLoader();
+  const lectures = await lectureLoaders.getOrdered();
 
   const {
     lectures: { userHomeworks, availableLength }

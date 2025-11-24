@@ -3,12 +3,12 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
-import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
 import { processAcceptMineAttendanceAction } from '@/modules/student-lecture/action';
+import { lectureLoaders } from '@/modules/lecture/loader';
 
 const Page = async (props: { params: Promise<{ token: string }> }) => {
   const params = await props.params;
-  const lectures = await getOrderedLecturesLoader();
+  const lectures = await lectureLoaders.getOrdered();
 
   const lecture = lectures.find(
     lecture => lecture.attendanceToken === params.token

@@ -1,6 +1,6 @@
 import { type SessionUserType } from '@/modules/session-user/types';
 import { getHomework } from '@/modules/homework/server';
-import { getOrderedLecturesCached } from '@/modules/lecture/server';
+import { lectureRepository } from '@/modules/lecture/server/repository';
 import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
 import { getProjectsCached } from '@/modules/project/server';
 import { getStudentLecturesCached } from '@/modules/student-lecture/server';
@@ -26,7 +26,7 @@ export const getStudentOverviewQuery = async (
   const userHomeworks = await getHomework({ userId: user.id });
   const awardedHomeworksLength = userHomeworks.length;
 
-  const lectures = await getOrderedLecturesCached();
+  const lectures = await lectureRepository.getOrdered();
   const availableLength = lectures.filter(checkIsAvailable).length;
 
   const totalPoints = userHomeworks.reduce(
