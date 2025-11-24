@@ -8,7 +8,7 @@ export const getOrderedLecturesCached = (() => {
   const handler = () =>
     unstable_cache(getOrderedLectures, [tag], { tags: [tag] })();
 
-  handler.revalidate = () => revalidateTag(tag);
+  handler.revalidate = () => revalidateTag(tag, 'max');
 
   return handler;
 })();

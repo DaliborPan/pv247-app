@@ -16,7 +16,7 @@ export const getStudentsWithHomeworkCached = (() => {
       { tags: [tag] }
     )();
 
-  handler.revalidate = () => revalidateTag(tag);
+  handler.revalidate = () => revalidateTag(tag, 'max');
 
   return handler;
 })();
