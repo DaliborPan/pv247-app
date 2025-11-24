@@ -6,6 +6,7 @@ import {
   homeworkSlugSchema,
   type HomeworkSlugType
 } from '@/modules/lecture/schema';
+import { Suspense } from 'react';
 
 export const generateStaticParams = () => {
   const slugs = homeworkSlugSchema.options;
@@ -13,17 +14,26 @@ export const generateStaticParams = () => {
   return slugs.filter(slug => slug !== '').map(slug => ({ slug }));
 };
 
-const Page = async (props: PageProps<'/homeworks/[slug]'>) => {
-  const params = await props.params;
-  const isAvailable = await lectureLoaders.getIsHomeworkAvailable(params.slug);
+const PageAsync = async (props: { slug: Promise<HomeworkSlugType> }) => {
+  const slug = await props.slug;
+  const isAvailable = await lectureLoaders.getIsHomeworkAvailable(slug);
 
   if (!isAvailable) {
     redirect('/homeworks');
   }
 
-  const MdxComponent = getHomeworkMdxComponent(params.slug as HomeworkSlugType);
+  const MdxComponent = getHomeworkMdxComponent(slug);
 
   return <MdxComponent />;
 };
 
+const Page = ({ params }: PageProps<'/homeworks/[slug]'>) => {
+  return (
+    <Suspense>
+      <PageAsync
+        slug={params.then(params => params.slug as HomeworkSlugType)}
+      />
+    </Suspense>
+  );
+};
 export default Page;

@@ -1,25 +1,29 @@
-import { type PropsWithChildren } from 'react';
+import { Suspense, type PropsWithChildren } from 'react';
 
 import { Navigation } from '@/components/navigation';
 import { OnboardingPage } from '@/modules/student/components/onboarding-page/onboarding-page';
 import { getSession } from '@/modules/session-user';
 import { redirect } from 'next/navigation';
 
-const Layout = async ({ children }: PropsWithChildren) => {
-  const sessionUser = await getSession();
-
-  if (!sessionUser) {
-    redirect('/login');
-  }
-
-  const showOnboarding = !sessionUser.github;
+const Layout = ({ children }: PropsWithChildren) => {
+  const sessionUserPromise = getSession();
 
   return (
     <>
-      <Navigation user={sessionUser} />
+      <Navigation user={sessionUserPromise} />
 
       <div className="my-8">
-        {showOnboarding ? <OnboardingPage /> : children}
+        <Suspense>
+          {sessionUserPromise.then(sessionUser => {
+            if (!sessionUser) {
+              redirect('/login');
+            }
+
+            const showOnboarding = !sessionUser.github;
+
+            return showOnboarding ? <OnboardingPage /> : children;
+          })}
+        </Suspense>
       </div>
     </>
   );

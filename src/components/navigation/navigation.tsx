@@ -12,6 +12,7 @@ import { SignIn } from '../sign-in';
 import { NavigationItem } from './navigation-item';
 import { MobileNavigation } from './mobile-navigation';
 import { Logout } from './logout';
+import { Suspense } from 'react';
 
 const NavigationDelimiter = ({ className }: { className?: string }) => (
   <div className={cn('mx-6 h-5 w-[2px] bg-[#B9BBC6]', className)} />
@@ -27,58 +28,70 @@ const UserMenuItem = ({ user }: { user: UserType }) => (
 
 export const Navigation = ({
   user,
-  isUserLoading = false
+  isUserLoading
 }: {
-  user?: UserType;
+  user?: UserType | Promise<UserType | undefined | null>;
   isUserLoading?: boolean;
-}) => (
-  <header className="sticky top-0 z-20 border-b bg-white py-2 md:px-10 lg:px-4">
-    <div className="container flex items-center gap-x-20 lg:w-full">
-      <Image src={MUNI_LOGO} width={100} alt="muni-logo" />
+}) => {
+  if (user instanceof Promise) {
+    return (
+      <Suspense fallback={<Navigation isUserLoading={true} />}>
+        {user.then(awaitUser => (
+          <Navigation user={awaitUser ?? undefined} />
+        ))}
+      </Suspense>
+    );
+  }
 
-      <MobileNavigation user={user} isUserLoading={isUserLoading} />
+  return (
+    <header className="sticky top-0 z-20 border-b bg-white py-2 md:px-10 lg:px-4">
+      <div className="container flex items-center gap-x-20 lg:w-full">
+        <Image src={MUNI_LOGO} width={100} alt="muni-logo" />
 
-      <div className="hidden grow items-center lg:flex">
-        <nav className="grow">
-          <ul className="flex items-center gap-x-10">
-            <NavigationItem href="/">Home</NavigationItem>
-            <NavigationItem href="/lectures">Lectures</NavigationItem>
-            <NavigationItem href="/homeworks">Homeworks</NavigationItem>
+        <MobileNavigation user={user} isUserLoading={isUserLoading} />
 
-            {user?.role === 'lector' && (
-              <NavigationItem href="/lector/students">Lector</NavigationItem>
-            )}
+        <div className="hidden grow items-center lg:flex">
+          <nav className="grow">
+            <ul className="flex items-center gap-x-10">
+              <NavigationItem href="/">Home</NavigationItem>
+              <NavigationItem href="/lectures">Lectures</NavigationItem>
+              <NavigationItem href="/homeworks">Homeworks</NavigationItem>
 
-            {user?.role === 'student' && (
-              <NavigationItem href="/project">Project</NavigationItem>
-            )}
-          </ul>
-        </nav>
+              {user?.role === 'lector' && (
+                <NavigationItem href="/lector/students">Lector</NavigationItem>
+              )}
 
-        {isUserLoading ? null : user ? (
-          <div className="flex items-center">
-            <UserMenuItem user={user} />
-            <NavigationDelimiter className="mr-4" />
-            <Logout>
+              {user?.role === 'student' && (
+                <NavigationItem href="/project">Project</NavigationItem>
+              )}
+            </ul>
+          </nav>
+
+          {isUserLoading ? null : user ? (
+            <div className="flex items-center">
+              <UserMenuItem user={user} />
+              <NavigationDelimiter className="mr-4" />
+              <Logout>
+                <Button
+                  iconLeft={{ icon: <LogOut /> }}
+                  variant="ghost"
+                  size="sm"
+                />
+              </Logout>
+            </div>
+          ) : (
+            <SignIn>
               <Button
-                iconLeft={{ icon: <LogOut /> }}
-                variant="ghost"
                 size="sm"
-              />
-            </Logout>
-          </div>
-        ) : (
-          <SignIn>
-            <Button
-              size="sm"
-              variant="outline/primary"
-              iconLeft={{ icon: <Github /> }}
-            >
-              Sign in
-            </Button>
-          </SignIn>
-        )}
+                variant="outline/primary"
+                iconLeft={{ icon: <Github /> }}
+              >
+                Sign in
+              </Button>
+            </SignIn>
+          )}
+        </div>
       </div>
-    </div>
-  </header>
-);
+    </header>
+  );
+};
