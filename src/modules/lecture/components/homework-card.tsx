@@ -10,12 +10,14 @@ import { checkIsAvailable } from '../utils/check-is-available';
 import { type LectureType } from '../schema';
 
 import { HomeworkPointsBadge } from './homework-points-badge';
+import { HomeworkType } from '@/modules/homework/schema';
 
 export const HomeworkCard = ({
-  lecture
+  lecture,
+  homework
 }: {
   lecture: LectureType;
-  index: number;
+  homework?: Promise<HomeworkType | undefined>;
 }) => {
   const isAvailable = checkIsAvailable(lecture);
 
@@ -72,7 +74,7 @@ export const HomeworkCard = ({
         <div>
           <HomeworkPointsBadge
             maxPoints={lecture.homeworkMaxPoints}
-            lectureId={lecture.id}
+            homework={homework}
           />
         </div>
       </div>

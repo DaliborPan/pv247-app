@@ -2,7 +2,7 @@ import { type SessionUserType } from '@/modules/session-user/types';
 
 import { homeworkRepository } from './repository';
 
-export const getUserHomeworkQuery = async (
+const getMany = async (
   sessionUser: SessionUserType,
   {
     lectureId,
@@ -18,11 +18,15 @@ export const getUserHomeworkQuery = async (
     );
   }
 
-  const userHomework = await homeworkRepository.getMany({ userId });
+  const homework = await homeworkRepository.getMany({ userId });
 
   if (lectureId) {
-    return userHomework.filter(homework => homework.lectureId === lectureId);
+    return homework.filter(hw => hw.lectureId === lectureId);
   }
 
-  return userHomework;
+  return homework;
+};
+
+export const homeworkQueries = {
+  getMany
 };

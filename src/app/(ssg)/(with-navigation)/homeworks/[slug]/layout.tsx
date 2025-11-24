@@ -1,5 +1,3 @@
-import { type PropsWithChildren } from 'react';
-
 import { NavigationButtonLink } from '@/components/navigation-button-link';
 import { lectureLoaders } from '@/modules/lecture/loader';
 

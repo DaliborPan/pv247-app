@@ -10,8 +10,7 @@ export const getAvailableLecturesLoader = async () => {
 };
 
 /**
- * Get all lectures, that have homework
- * - basically filter out last lecture
+ * Get all lectures, that have homework. Basically filter out last lecture.
  */
 const getAllWithHomework = async () => {
   const lectures = await lectureQueries.getOrdered();
