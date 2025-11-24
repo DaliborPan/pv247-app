@@ -6,27 +6,24 @@ import { studentLoaders } from '../loader';
 
 import { ListCard } from './list-card';
 import { PointsBadge } from './points-badge';
+import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
 
 export const StudentHomeworkCard = async ({ user }: { user: UserType }) => {
   const lectures = await lectureLoaders.getOrdered();
+  const availableLectures = lectures.filter(checkIsAvailable);
 
-  const {
-    lectures: { userHomeworks, availableLength }
-  } = await studentLoaders.getOverview(user);
+  const { homework } = await studentLoaders.getOverview(user);
 
   return (
     <ListCard
       title="Homework"
       className={cn('flex-col items-start gap-2 lg:flex-row lg:items-center')}
       items={lectures
-        .slice(0, availableLength + 1)
+        .slice(0, availableLectures.length + 1)
         .filter(lecture => !!lecture.homeworkSlug)}
       renderItem={(lecture, index) => {
-        const homework = userHomeworks.find(
-          homework => homework.lectureId === lecture.id
-        );
-
-        const points = homework?.points;
+        const userHomework = homework.find(hw => hw.lectureId === lecture.id);
+        const points = userHomework?.points;
 
         return (
           <>

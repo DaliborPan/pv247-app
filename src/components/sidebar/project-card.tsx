@@ -5,9 +5,10 @@ import { Button } from '@/components/base/button';
 import { SidebarCard } from '@/components/sidebar-card';
 import { Icon } from '@/components/base/icon';
 import { projectLoaders } from '@/modules/project/loader';
+import { Suspense } from 'react';
 
-export const ProjectCard = async () => {
-  const project = await projectLoaders.getMine();
+export const ProjectCard = () => {
+  const projectPromise = projectLoaders.getMine();
 
   return (
     <SidebarCard
@@ -20,27 +21,37 @@ export const ProjectCard = async () => {
             <Button
               variant="primary/inverse"
               size="sm"
-              iconLeft={{ icon: project?.name ? <ArrowRight /> : <Plus /> }}
+              iconLeft={{ icon: <ArrowRight /> }}
             />
           </Link>
         </div>
       }
     >
-      {project?.name ? (
-        <div className="flex flex-col gap-y-2">
-          <span className="font-medium text-text-primary-color">
-            {project.name}
-          </span>
+      <Suspense>
+        {projectPromise.then(project => (
+          <>
+            {project ? (
+              <div className="flex flex-col gap-y-2">
+                <span className="font-medium text-text-primary-color">
+                  {project.name}
+                </span>
 
-          <div className="flex items-center text-text-secondary">
-            {/* TODO: Icon based on if project is accepted or not */}
-            <Icon icon={<Users />} className="mr-2" />
-            <span className="truncate">{project.users.length} students</span>
-          </div>
-        </div>
-      ) : (
-        <span className="text-text-terciary">Project not submitted yet.</span>
-      )}
+                <div className="flex items-center text-text-secondary">
+                  {/* TODO: Icon based on if project is accepted or not */}
+                  <Icon icon={<Users />} className="mr-2" />
+                  <span className="truncate">
+                    {project.users.length} students
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <span className="text-text-terciary">
+                Project not submitted yet.
+              </span>
+            )}
+          </>
+        ))}
+      </Suspense>
     </SidebarCard>
   );
 };

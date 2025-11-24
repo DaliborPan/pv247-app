@@ -1,7 +1,6 @@
 import { type SessionUserType } from '@/modules/session-user/types';
 
 import { lectureRepository } from '@/modules/lecture/server/repository';
-import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
 import { projectRepository } from '@/modules/project/server';
 import { studentLectureRepository } from '@/modules/student-lecture/server';
 import { type UserType } from '@/modules/user/schema';
@@ -21,15 +20,14 @@ const getOverview = async (sessionUser: SessionUserType, user: UserType) => {
     );
   }
 
-  const userHomeworks = await homeworkRepository.getMany({ userId: user.id });
-  const awardedHomeworksLength = userHomeworks.length;
-  const totalPoints = userHomeworks.reduce(
-    (acc, homework) => acc + (homework?.points ?? 0),
+  const homework = await homeworkRepository.getMany({ userId: user.id });
+  const awardedHomeworkCount = homework.length;
+  const homeworkTotalPoints = homework.reduce(
+    (acc, h) => acc + (h?.points ?? 0),
     0
   );
 
   const lectures = await lectureRepository.getOrdered();
-  const availableLength = lectures.filter(checkIsAvailable).length;
 
   const project = !user.projectId
     ? undefined
@@ -40,30 +38,16 @@ const getOverview = async (sessionUser: SessionUserType, user: UserType) => {
   const attendances = await studentLectureRepository.getMany(user.id);
 
   return {
-    lectures: {
-      // display: `${availableLength}/${lectures.length}`,
-      totalLength: lectures.length,
-      availableLength,
-      userHomeworks
-    },
-    homeworks: {
-      // display: `${awardedHomeworksLength}/${lectures.length} | ${totalPoints}p`,
-      awardedHomeworksLength,
-      totalPoints
-    },
+    lecturesCount: lectures.length,
+
+    awardedHomeworkCount,
+    homework,
+    homeworkTotalPoints,
+
     project,
-    // display: !project
-    //   ? 'No project'
-    //   : project.status === 'pending'
-    //     ? 'Pending'
-    //     : project.status === 'approved'
-    //       ? 'Approved'
-    //       : 'Submitted',
-    totalPoints: totalPoints + (project?.points ?? 0),
-    attendance: {
-      // display: `${attendances.length}/${lectures.length}`,
-      attendances
-    }
+
+    totalPoints: homeworkTotalPoints + (project?.points ?? 0),
+    attendances
   };
 };
 

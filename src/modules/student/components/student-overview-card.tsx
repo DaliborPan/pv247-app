@@ -7,7 +7,7 @@ import { type UserType } from '@/modules/user/schema';
 type StudentOverviewCardProps = {
   user: UserType;
   otherFields?: (
-    overview: Awaited<ReturnType<typeof studentLoaders.getMineOverview>>
+    overview: Awaited<ReturnType<typeof studentLoaders.getOverview>>
   ) => React.ReactNode;
 };
 
@@ -17,7 +17,7 @@ export const StudentOverviewCard = async ({
 }: StudentOverviewCardProps) => {
   const overview = await studentLoaders.getOverview(user);
 
-  const { homeworks, project, totalPoints } = overview;
+  const { homeworkTotalPoints, project, totalPoints } = overview;
 
   return (
     <DetailCard title="Overview">
@@ -28,7 +28,7 @@ export const StudentOverviewCard = async ({
         )}
       >
         <LabeledValue label="Homework points">
-          {homeworks.totalPoints} points
+          {homeworkTotalPoints} points
         </LabeledValue>
 
         <LabeledValue label="Project points">
