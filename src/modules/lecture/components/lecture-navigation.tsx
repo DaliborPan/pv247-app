@@ -4,12 +4,13 @@ import { lectureLoaders } from '../loader';
 import { type LectureSlugType } from '../schema';
 
 export const LectureNavigation = async ({
-  lectureSlug,
-  baseHref = '/lectures'
+  baseHref = '/lectures',
+  ...props
 }: {
-  lectureSlug: LectureSlugType;
+  lectureSlug: Promise<LectureSlugType>;
   baseHref?: string;
 }) => {
+  const lectureSlug = await props.lectureSlug;
   const lectures = await lectureLoaders.getOrdered();
 
   const slugLectureIndex = lectures.findIndex(
