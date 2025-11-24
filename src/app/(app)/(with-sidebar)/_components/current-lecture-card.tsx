@@ -3,34 +3,44 @@ import { ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { TextPreview } from '@/components/text-preview';
-import { getAvailableLecturesLoader } from '@/modules/lecture/loader';
+import { lectureLoaders } from '@/modules/lecture/loader';
+import { Suspense } from 'react';
 
-export const CurrentLectureCard = async () => {
-  const availableLectures = await getAvailableLecturesLoader();
-  const currentLecture = availableLectures.pop();
-
-  if (!currentLecture) {
-    return null;
-  }
+export const CurrentLectureCard = () => {
+  const currentLecturePromise = lectureLoaders
+    .getAvailable()
+    .then(availableLectures => availableLectures.pop());
 
   return (
-    <div className="rounded-lg border bg-white px-6 py-4">
-      <div className="flex flex-col lg:flex-row lg:items-center">
-        <div className="grow truncate">
-          <span className="mb-1 text-xs text-text-terciary">
-            Current lecture
-          </span>
-          <h3 className="truncate text-xl">{currentLecture.name}</h3>
-        </div>
+    <Suspense>
+      {currentLecturePromise.then(
+        currentLecture =>
+          currentLecture && (
+            <div className="rounded-lg border bg-white px-6 py-4">
+              <div className="flex flex-col lg:flex-row lg:items-center">
+                <div className="grow truncate">
+                  <span className="mb-1 text-xs text-text-terciary">
+                    Current lecture
+                  </span>
 
-        <Link href={`/lectures/${currentLecture.slug}`}>
-          <Button variant="link" size="sm" iconRight={{ icon: <ArrowRight /> }}>
-            Learn more
-          </Button>
-        </Link>
-      </div>
+                  <h3 className="truncate text-xl">{currentLecture.name}</h3>
+                </div>
 
-      <TextPreview>{currentLecture.preview}</TextPreview>
-    </div>
+                <Link href={`/lectures/${currentLecture.slug}`}>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    iconRight={{ icon: <ArrowRight /> }}
+                  >
+                    Learn more
+                  </Button>
+                </Link>
+              </div>
+
+              <TextPreview>{currentLecture.preview}</TextPreview>
+            </div>
+          )
+      )}
+    </Suspense>
   );
 };

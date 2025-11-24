@@ -3,7 +3,7 @@ import { checkIsAvailable } from './utils/check-is-available';
 
 const getOrdered = lectureQueries.getOrdered;
 
-export const getAvailableLecturesLoader = async () => {
+const getAvailable = async () => {
   const lectures = await lectureQueries.getOrdered();
 
   return lectures.filter(checkIsAvailable);
@@ -37,6 +37,7 @@ const getIsHomeworkAvailable = async (homeworkSlug: string) => {
 export const lectureLoaders = {
   getOrdered,
   getAllWithHomework,
+  getAvailable,
   getIsAvailable,
   getIsHomeworkAvailable
 };
