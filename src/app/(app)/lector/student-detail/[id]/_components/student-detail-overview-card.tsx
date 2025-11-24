@@ -14,7 +14,7 @@ export const StudentDetailOverviewCard = ({
 }) => (
   <StudentOverviewCard
     user={student}
-    otherFields={({ project: { project, display: projectDisplayName } }) => (
+    otherFields={({ project }) => (
       <LabeledValue label="Project status">
         <Link
           className={cn(
@@ -23,7 +23,15 @@ export const StudentDetailOverviewCard = ({
           )}
           href={`/lector/projects/${project?.id ?? ''}`}
         >
-          <span className="block">{projectDisplayName}</span>
+          <span className="block">
+            {!project
+              ? 'No project'
+              : project.status === 'pending'
+                ? 'Pending'
+                : project.status === 'approved'
+                  ? 'Approved'
+                  : 'Submitted'}
+          </span>
 
           {project?.id && <Icon icon={<ExternalLink />} />}
         </Link>

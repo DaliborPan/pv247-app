@@ -2,10 +2,15 @@ import { type PropsWithChildren } from 'react';
 
 import { Navigation } from '@/components/navigation';
 import { OnboardingPage } from '@/modules/student/components/onboarding-page/onboarding-page';
-import { getSessionUser } from '@/modules/session-user';
+import { getSession } from '@/modules/session-user';
+import { redirect } from 'next/navigation';
 
 const Layout = async ({ children }: PropsWithChildren) => {
-  const sessionUser = await getSessionUser();
+  const sessionUser = await getSession();
+
+  if (!sessionUser) {
+    redirect('/login');
+  }
 
   const showOnboarding = !sessionUser.github;
 

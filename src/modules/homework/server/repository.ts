@@ -3,7 +3,7 @@ import { and, eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { type HomeworkInsertType, homeworks } from '@/db/schema/homeworks';
 
-export const getHomework = ({ userId }: { userId: string }) =>
+export const getMany = ({ userId }: { userId: string }) =>
   db.query.homeworks.findMany({
     where: (table, { eq }) => eq(table.studentId, userId)
   });
@@ -26,3 +26,7 @@ export const updateHomeworkPoints = (
 
 export const createHomework = (values: Omit<HomeworkInsertType, 'id'>) =>
   db.insert(homeworks).values(values);
+
+export const homeworkRepository = {
+  getMany
+};

@@ -1,6 +1,6 @@
 import { type SessionUserType } from '@/modules/session-user/types';
 
-import { getHomework } from './repository';
+import { homeworkRepository } from './repository';
 
 export const getUserHomeworkQuery = async (
   sessionUser: SessionUserType,
@@ -18,7 +18,7 @@ export const getUserHomeworkQuery = async (
     );
   }
 
-  const userHomework = await getHomework({ userId });
+  const userHomework = await homeworkRepository.getMany({ userId });
 
   if (lectureId) {
     return userHomework.filter(homework => homework.lectureId === lectureId);

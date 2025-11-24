@@ -4,10 +4,10 @@ import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/base/button';
 import { LabeledValue } from '@/components/labeled-value';
 import { DetailCard } from '@/components/detail-card';
-import { getMineProjectLoader } from '@/modules/project/loader';
+import { projectLoaders } from '@/modules/project/loader';
 
 export const ProfileProjectCard = async () => {
-  const project = await getMineProjectLoader();
+  const project = await projectLoaders.getMine();
 
   if (!project) return null;
 

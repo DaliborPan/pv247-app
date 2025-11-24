@@ -1,22 +1,21 @@
 import { DetailCard } from '@/components/detail-card';
 import { LabeledValue } from '@/components/labeled-value';
 import { cn } from '@/lib/cn';
-import {
-  getStudentOverviewLoader,
-  type GetStudentOverviewLoaderResult
-} from '@/modules/student/loader';
+import { studentLoaders } from '@/modules/student/loader';
 import { type UserType } from '@/modules/user/schema';
 
 type StudentOverviewCardProps = {
   user: UserType;
-  otherFields?: (overview: GetStudentOverviewLoaderResult) => React.ReactNode;
+  otherFields?: (
+    overview: Awaited<ReturnType<typeof studentLoaders.getMineOverview>>
+  ) => React.ReactNode;
 };
 
 export const StudentOverviewCard = async ({
   otherFields,
   user
 }: StudentOverviewCardProps) => {
-  const overview = await getStudentOverviewLoader(user);
+  const overview = await studentLoaders.getOverview(user);
 
   const { homeworks, project, totalPoints } = overview;
 
@@ -33,9 +32,7 @@ export const StudentOverviewCard = async ({
         </LabeledValue>
 
         <LabeledValue label="Project points">
-          {project.project?.points
-            ? `${project.project.points} points`
-            : 'No points yet'}
+          {project?.points ? `${project.points} points` : 'No points yet'}
         </LabeledValue>
 
         <LabeledValue label="Total points">{totalPoints} points</LabeledValue>

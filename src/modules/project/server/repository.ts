@@ -11,9 +11,13 @@ export const updateProject = (
   data: Partial<Omit<ProjectInsertType, 'id'>>
 ) => db.update(projects).set(data).where(eq(projects.id, id));
 
-export const getProjects = () =>
+export const getMany = () =>
   db.query.projects.findMany({
     with: {
       users: true
     }
   });
+
+export const projectRepository = {
+  getMany
+};

@@ -2,7 +2,7 @@ import { cn } from '@/lib/cn';
 import { lectureLoaders } from '@/modules/lecture/loader';
 import { type UserType } from '@/modules/user/schema';
 
-import { getStudentOverviewLoader } from '../loader';
+import { studentLoaders } from '../loader';
 
 import { ListCard } from './list-card';
 import { PointsBadge } from './points-badge';
@@ -12,7 +12,7 @@ export const StudentHomeworkCard = async ({ user }: { user: UserType }) => {
 
   const {
     lectures: { userHomeworks, availableLength }
-  } = await getStudentOverviewLoader(user);
+  } = await studentLoaders.getOverview(user);
 
   return (
     <ListCard

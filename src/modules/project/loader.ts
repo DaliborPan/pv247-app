@@ -2,7 +2,7 @@ import { cache } from 'react';
 
 import { getSessionUser } from '@/modules/session-user';
 
-import { getProjectQuery, getProjectsQuery } from './server';
+import { getProjectsQuery, projectQueries } from './server';
 
 export const getProjectsLoader = async () => {
   const sessionUser = await getSessionUser();
@@ -17,7 +17,7 @@ export type GetProjectsLoaderResult = Awaited<
 /**
  * @cache React cache
  */
-export const getMineProjectLoader = cache(async () => {
+const getMine = cache(async () => {
   const sessionUser = await getSessionUser();
   const userProjectId = sessionUser.projectId;
 
@@ -25,9 +25,9 @@ export const getMineProjectLoader = cache(async () => {
     return null;
   }
 
-  return getProjectQuery(sessionUser, userProjectId);
+  return projectQueries.get(sessionUser, userProjectId);
 });
 
-export type GetMineProjectLoaderResult = Awaited<
-  ReturnType<typeof getMineProjectLoader>
->;
+export const projectLoaders = {
+  getMine
+};

@@ -4,10 +4,10 @@ import { ArrowRight, Plus, Users } from 'lucide-react';
 import { Button } from '@/components/base/button';
 import { SidebarCard } from '@/components/sidebar-card';
 import { Icon } from '@/components/base/icon';
-import { getMineProjectLoader } from '@/modules/project/loader';
+import { projectLoaders } from '@/modules/project/loader';
 
 export const ProjectCard = async () => {
-  const project = await getMineProjectLoader();
+  const project = await projectLoaders.getMine();
 
   return (
     <SidebarCard

@@ -3,10 +3,7 @@ import { cache } from 'react';
 import { getSessionUser } from '@/modules/session-user';
 import { type UserType } from '@/modules/user/schema';
 
-import {
-  getProjectFormStudentComboboxQuery,
-  getStudentOverviewQuery
-} from './server';
+import { getProjectFormStudentComboboxQuery, studentQueries } from './server';
 
 /**
  * Loads students, that are not assigned to a project and are not the current user.
@@ -21,18 +18,19 @@ export const getProjectFormStudentComboboxLoader = async (
   return getProjectFormStudentComboboxQuery(sessionUser, projectId);
 };
 
-export const getStudentOverviewLoader = async (user: UserType) => {
+const getOverview = async (user: UserType) => {
   const sessionUser = await getSessionUser();
 
-  return getStudentOverviewQuery(sessionUser, user);
+  return studentQueries.getOverview(sessionUser, user);
 };
 
-export type GetStudentOverviewLoaderResult = Awaited<
-  ReturnType<typeof getStudentOverviewLoader>
->;
-
-export const getMineOverviewLoader = cache(async () => {
+const getMineOverview = cache(async () => {
   const sessionUser = await getSessionUser();
 
-  return getStudentOverviewQuery(sessionUser, sessionUser);
+  return studentQueries.getOverview(sessionUser, sessionUser);
 });
+
+export const studentLoaders = {
+  getMineOverview,
+  getOverview
+};
