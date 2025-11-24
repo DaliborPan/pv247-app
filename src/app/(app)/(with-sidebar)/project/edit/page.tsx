@@ -8,7 +8,9 @@ const Page = async () => {
   const sessionUser = await getSessionUser();
   const project = await projectLoaders.getMine();
 
-  if (!project) return redirect('/project');
+  if (!project) {
+    redirect('/project');
+  }
 
   const defaultValues = {
     id: project.id,
