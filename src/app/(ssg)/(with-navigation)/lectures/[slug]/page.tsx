@@ -1,25 +1,21 @@
 import { redirect } from 'next/navigation';
 
-import { getIsLectureAvailableLoader } from '@/modules/lecture/loader';
+import { lectureLoaders } from '@/modules/lecture/loader';
 import { getLectureMdxComponent } from '@/modules/lecture/mdx';
 import {
   lectureSlugSchema,
   type LectureSlugType
 } from '@/modules/lecture/schema';
 
-type Params = {
-  slug: string;
-};
-
-export const generateStaticParams = (): Params[] => {
+export const generateStaticParams = () => {
   const lectures = lectureSlugSchema.options;
 
   return lectures.map(slug => ({ slug }));
 };
 
-const Page = async (props: { params: Promise<Params> }) => {
+const Page = async (props: PageProps<'/lectures/[slug]'>) => {
   const params = await props.params;
-  const isAvailable = await getIsLectureAvailableLoader(params.slug);
+  const isAvailable = await lectureLoaders.getIsAvailable(params.slug);
 
   if (!isAvailable) {
     redirect('/lectures');

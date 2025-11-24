@@ -13,20 +13,20 @@ export const getAvailableLecturesLoader = async () => {
  * Get all lectures, that have homework
  * - basically filter out last lecture
  */
-export const getLecturesWithHomeworkLoader = async () => {
+const getAllWithHomework = async () => {
   const lectures = await lectureQueries.getOrdered();
 
   return lectures.filter(lecture => !!lecture.homeworkSlug);
 };
 
-export const getIsLectureAvailableLoader = async (slug: string) => {
+const getIsAvailable = async (slug: string) => {
   const lectures = await lectureQueries.getOrdered();
   const lecture = lectures.find(lecture => lecture.slug === slug);
 
   return !!lecture && checkIsAvailable(lecture);
 };
 
-export const getIsHomeworkAvailableLoader = async (homeworkSlug: string) => {
+const getIsHomeworkAvailable = async (homeworkSlug: string) => {
   const lectures = await lectureQueries.getOrdered();
   const lecture = lectures.find(
     lecture => lecture.homeworkSlug === homeworkSlug
@@ -36,5 +36,8 @@ export const getIsHomeworkAvailableLoader = async (homeworkSlug: string) => {
 };
 
 export const lectureLoaders = {
-  getOrdered
+  getOrdered,
+  getAllWithHomework,
+  getIsAvailable,
+  getIsHomeworkAvailable
 };

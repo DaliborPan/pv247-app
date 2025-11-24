@@ -1,25 +1,21 @@
 import { redirect } from 'next/navigation';
 
 import { getHomeworkMdxComponent } from '@/modules/homework/mdx';
-import { getIsHomeworkAvailableLoader } from '@/modules/lecture/loader';
+import { lectureLoaders } from '@/modules/lecture/loader';
 import {
   homeworkSlugSchema,
   type HomeworkSlugType
 } from '@/modules/lecture/schema';
 
-type Params = {
-  slug: string;
-};
-
-export const generateStaticParams = (): Params[] => {
+export const generateStaticParams = () => {
   const slugs = homeworkSlugSchema.options;
 
   return slugs.filter(slug => slug !== '').map(slug => ({ slug }));
 };
 
-const Page = async (props: { params: Promise<Params> }) => {
+const Page = async (props: PageProps<'/homeworks/[slug]'>) => {
   const params = await props.params;
-  const isAvailable = await getIsHomeworkAvailableLoader(params.slug);
+  const isAvailable = await lectureLoaders.getIsHomeworkAvailable(params.slug);
 
   if (!isAvailable) {
     redirect('/homeworks');

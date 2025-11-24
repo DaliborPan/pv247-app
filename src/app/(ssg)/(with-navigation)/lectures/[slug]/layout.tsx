@@ -6,7 +6,7 @@ import { type LectureSlugType } from '@/modules/lecture/schema';
 const Layout = async ({
   children,
   ...props
-}: PropsWithChildren<{ params: Promise<{ slug: string }> }>) => {
+}: LayoutProps<'/lectures/[slug]'>) => {
   const params = await props.params;
 
   return (
