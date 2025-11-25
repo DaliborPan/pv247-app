@@ -1,7 +1,7 @@
 import { DetailCard } from '@/components/detail-card';
 import { lectureLoaders } from '@/modules/lecture/loader';
 import { SetStudentAttendanceAction } from '@/modules/student-lecture/components/set-student-attendance-action';
-import { getStudentLecturesLoader } from '@/modules/student-lecture/loader';
+import { studentLectureLoaders } from '@/modules/student-lecture/loader';
 import { Suspense } from 'react';
 
 const AttendanceCell = ({
@@ -48,7 +48,7 @@ export const StudentAttendanceCard = async (props: {
               <td className="py-2">
                 <Suspense>
                   {props.userId.then(async userId => {
-                    const attendances = await getStudentLecturesLoader({
+                    const attendances = await studentLectureLoaders.getMany({
                       userId
                     });
 

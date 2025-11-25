@@ -4,10 +4,7 @@ import { z } from 'zod';
 
 import { authLectorServerAction } from '@/server/server-actions';
 
-import {
-  getStudentLecturesCached,
-  updateStudentLectureMutation
-} from '../../server';
+import { updateStudentLectureMutation } from '../../server';
 
 export const setStudentAttendanceAction = authLectorServerAction
   .input(
@@ -21,8 +18,6 @@ export const setStudentAttendanceAction = authLectorServerAction
       ctx.sessionUserLector,
       input
     );
-
-    getStudentLecturesCached.revalidate(input.studentId);
 
     return result;
   });

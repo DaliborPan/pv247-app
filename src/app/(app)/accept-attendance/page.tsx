@@ -10,7 +10,7 @@ const Page = async ({ searchParams }: PageProps<'/accept-attendance'>) => {
     (await searchParams).code
   );
 
-  if (!parsedCode.success || parsedCode.data === 'UNAUTHORIZED') {
+  if (!parsedCode.success || parsedCode.data !== 'SUCCESS') {
     redirect('/');
   }
 
@@ -21,7 +21,7 @@ const Page = async ({ searchParams }: PageProps<'/accept-attendance'>) => {
       </h1>
 
       <p className="mb-6 text-sm text-text-secondary md:text-base">
-        Your attendance has been accepted for lecture.
+        Your attendance has been accepted.
       </p>
 
       <Link href="/">

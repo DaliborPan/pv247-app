@@ -8,7 +8,11 @@ export const studentLectureSchema = z.object({
 
 export type StudentLectureType = z.infer<typeof studentLectureSchema>;
 
-export const acceptAttendanceCodeSchema = z.enum(['UNAUTHORIZED', 'SUCCESS']);
+export const acceptAttendanceCodeSchema = z.enum([
+  'UNAUTHORIZED',
+  'SUCCESS',
+  'INVALID_TOKEN'
+]);
 
 export type AcceptAttendanceCodeType = z.infer<
   typeof acceptAttendanceCodeSchema

@@ -1,8 +1,7 @@
 import { type SessionUserType } from '@/modules/session-user/types';
+import { studentLectureRepository } from './repository';
 
-import { getStudentLecturesCached } from './cache';
-
-export const getStudentLecturesQuery = async (
+export const getMany = async (
   sessionUser: SessionUserType,
   { userId }: { userId: string }
 ) => {
@@ -10,5 +9,9 @@ export const getStudentLecturesQuery = async (
     throw new Error('Unauthorized');
   }
 
-  return getStudentLecturesCached(userId);
+  return studentLectureRepository.getMany(userId);
+};
+
+export const studentLectureQueries = {
+  getMany
 };

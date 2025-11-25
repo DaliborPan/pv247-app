@@ -4,14 +4,15 @@ import { z } from 'zod';
 
 import { authServerAction } from '@/server/server-actions';
 
-import { getStudentLecturesQuery } from './server/query';
-import { getStudentLecturesCached } from './server/cache';
 import { processAcceptMineAttendanceMutation } from './server/mutation';
+import { studentLectureQueries } from './server/query';
 
 export const getAttendancesAction = authServerAction
   .input(z.undefined())
   .handler(async ({ ctx }) =>
-    getStudentLecturesQuery(ctx.sessionUser, { userId: ctx.sessionUser.id })
+    studentLectureQueries.getMany(ctx.sessionUser, {
+      userId: ctx.sessionUser.id
+    })
   );
 
 export const processAcceptMineAttendanceAction = authServerAction
@@ -21,8 +22,4 @@ export const processAcceptMineAttendanceAction = authServerAction
       ctx.sessionUser,
       input.lectureId
     );
-
-    if (updated) {
-      getStudentLecturesCached.revalidate(ctx.sessionUser.id);
-    }
   });

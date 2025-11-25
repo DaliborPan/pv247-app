@@ -1,5 +1,6 @@
 /**
  * Client-side due to using in SSG page (lectures).
+ * TODO(pv247): Move to server-side.
  */
 'use client';
 

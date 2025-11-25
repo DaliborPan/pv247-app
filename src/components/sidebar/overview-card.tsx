@@ -4,8 +4,10 @@ import { SidebarCard } from '../sidebar-card';
 import { SidebarCardRow } from './sidebar-card-row';
 import { getProjectStatus } from '@/modules/project/utils/project-status';
 import { Suspense } from 'react';
+import { lectureLoaders } from '@/modules/lecture/loader';
 
-export const OverviewCard = () => {
+export const OverviewCard = async () => {
+  const lectures = await lectureLoaders.getOrdered();
   const overviewPromise = studentLoaders.getMineOverview();
 
   return (
@@ -14,8 +16,7 @@ export const OverviewCard = () => {
         <SidebarCardRow title="Attendance">
           <Suspense>
             {overviewPromise.then(
-              overview =>
-                `${overview.attendances.length}/${overview.lecturesCount}`
+              overview => `${overview.attendances.length}/${lectures.length}`
             )}
           </Suspense>
         </SidebarCardRow>
@@ -24,7 +25,7 @@ export const OverviewCard = () => {
           <Suspense>
             {overviewPromise.then(
               overview =>
-                `${overview.awardedHomeworkCount}/${overview.lecturesCount} | ${overview.totalPoints}p`
+                `${overview.awardedHomeworkCount}/${lectures.length} | ${overview.totalPoints}p`
             )}
           </Suspense>
         </SidebarCardRow>

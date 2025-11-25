@@ -3,16 +3,19 @@ import {
   type SessionUserType
 } from '@/modules/session-user/types';
 
-import { createStudentLecture, deleteStudentLecture } from './repository';
-import { getStudentLecturesCached } from './cache';
+import {
+  createStudentLecture,
+  deleteStudentLecture,
+  studentLectureRepository
+} from './repository';
 
 export const processAcceptMineAttendanceMutation = async (
   sessionUser: SessionUserType,
   lectureId: string
 ) => {
-  const existing = (await getStudentLecturesCached(sessionUser.id)).find(
-    studentLecture => studentLecture.lectureId === lectureId
-  );
+  const existing = (
+    await studentLectureRepository.getMany(sessionUser.id)
+  ).find(studentLecture => studentLecture.lectureId === lectureId);
 
   if (existing) {
     return false;
@@ -33,7 +36,7 @@ export const updateStudentLectureMutation = async (
     studentId: string;
   }
 ) => {
-  const existing = (await getStudentLecturesCached(studentId)).find(
+  const existing = (await studentLectureRepository.getMany(studentId)).find(
     studentLecture => studentLecture.lectureId === lectureId
   );
 

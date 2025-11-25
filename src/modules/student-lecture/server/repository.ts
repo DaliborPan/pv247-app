@@ -6,7 +6,7 @@ import {
   studentLectures
 } from '@/db/schema/studentLecture';
 
-export const getMany = (studentId: string) =>
+const getMany = (studentId: string) =>
   db.query.studentLectures.findMany({
     where: (table, { eq }) => eq(table.studentId, studentId)
   });
