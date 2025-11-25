@@ -3,12 +3,6 @@ import { checkIsAvailable } from './utils/check-is-available';
 
 const getOrdered = lectureQueries.getOrdered;
 
-const getAvailable = async () => {
-  const lectures = await lectureQueries.getOrdered();
-
-  return lectures.filter(checkIsAvailable);
-};
-
 /**
  * Get all lectures, that have homework. Basically filter out last lecture.
  */
@@ -37,7 +31,6 @@ const getIsHomeworkAvailable = async (homeworkSlug: string) => {
 export const lectureLoaders = {
   getOrdered,
   getAllWithHomework,
-  getAvailable,
   getIsAvailable,
   getIsHomeworkAvailable
 };
