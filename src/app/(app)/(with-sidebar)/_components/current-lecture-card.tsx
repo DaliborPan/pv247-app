@@ -9,10 +9,11 @@ import { use } from 'react';
 import { LectureType } from '@/modules/lecture/schema';
 import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
 
-export const CurrentLectureCard = (props: {
-  lectures: Promise<LectureType[]>;
+export const CurrentLectureCard = ({
+  lectures
+}: {
+  lectures: LectureType[];
 }) => {
-  const lectures = use(props.lectures);
   const currentLecture = lectures.filter(checkIsAvailable).pop();
 
   if (!currentLecture) {
