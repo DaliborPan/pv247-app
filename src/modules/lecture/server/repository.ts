@@ -1,8 +1,9 @@
 import { db } from '@/db';
 import { cacheTag } from 'next/cache';
 import { lecturesTag } from './tag';
+import { checkIsAvailable } from '../utils/check-is-available';
 
-export const getOrdered = async () => {
+const getOrdered = async () => {
   'use cache';
   cacheTag(lecturesTag);
 
@@ -14,6 +15,36 @@ export const getOrdered = async () => {
   });
 };
 
+/**
+ * Caching separately due to comparing to new Date()
+ */
+const getIsAvailable = async (slug: string) => {
+  'use cache';
+  cacheTag(lecturesTag);
+
+  const ordered = await getOrdered();
+  const lecture = ordered.find(lecture => lecture.slug === slug);
+
+  return !!lecture && checkIsAvailable(lecture);
+};
+
+/**
+ * Caching separately due to comparing to new Date()
+ */
+const getIsHomeworkAvailable = async (homeworkSlug: string) => {
+  'use cache';
+  cacheTag(lecturesTag);
+
+  const ordered = await getOrdered();
+  const lecture = ordered.find(
+    lecture => lecture.homeworkSlug === homeworkSlug
+  );
+
+  return !!lecture && checkIsAvailable(lecture);
+};
+
 export const lectureRepository = {
-  getOrdered
+  getOrdered,
+  getIsAvailable,
+  getIsHomeworkAvailable
 };
