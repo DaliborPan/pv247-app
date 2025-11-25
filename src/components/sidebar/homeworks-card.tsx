@@ -10,7 +10,7 @@ import { Suspense } from 'react';
 
 export const HomeworksCard = async () => {
   const lectures = await lectureLoaders.getOrdered();
-  const availableLectures = await lectureLoaders.getAvailableLectures();
+  const availableLectures = await lectureLoaders.getAvailable();
 
   const overviewPromise = studentLoaders.getMineOverview();
 

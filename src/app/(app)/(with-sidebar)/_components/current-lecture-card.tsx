@@ -6,7 +6,7 @@ import { TextPreview } from '@/components/text-preview';
 import { lectureLoaders } from '@/modules/lecture/loader';
 
 export const CurrentLectureCard = async () => {
-  const availableLectures = await lectureLoaders.getAvailableLectures();
+  const availableLectures = await lectureLoaders.getAvailable();
   const currentLecture = availableLectures.pop();
 
   if (!currentLecture) {

@@ -4,10 +4,9 @@ import { TextPreview } from '@/components/text-preview';
 import { type LectureType } from '../schema';
 
 import { HomeworkPointsBadge } from './homework-points-badge';
-import { HomeworkType } from '@/modules/homework/schema';
 import { HomeworkCardActions } from './homework-card-actions';
 import { Suspense } from 'react';
-import { homeworkLoader } from '@/modules/homework/server/loader';
+import { homeworkLoader } from '@/modules/homework/loader';
 
 export const HomeworkCard = ({ lecture }: { lecture: LectureType }) => {
   const homeworkPromise = homeworkLoader.getMine();

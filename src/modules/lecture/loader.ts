@@ -6,7 +6,7 @@ const getIsAvailable = lectureQueries.getIsAvailable;
 
 const getIsHomeworkAvailable = lectureQueries.getIsHomeworkAvailable;
 
-const getAvailableLectures = lectureQueries.getAvailableLectures;
+const getAvailable = lectureQueries.getAvailable;
 
 /**
  * Get all lectures, that have homework. Basically filter out last lecture.
@@ -22,5 +22,5 @@ export const lectureLoaders = {
   getAllWithHomework,
   getIsAvailable,
   getIsHomeworkAvailable,
-  getAvailableLectures
+  getAvailable
 };

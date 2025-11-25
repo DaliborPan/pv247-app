@@ -14,7 +14,7 @@ const HomeworkListCard = async ({
   points?: (lecture: LectureType) => ReactNode;
 }) => {
   const lectures = await lectureLoaders.getOrdered();
-  const availableLectures = await lectureLoaders.getAvailableLectures();
+  const availableLectures = await lectureLoaders.getAvailable();
 
   return (
     <ListCard

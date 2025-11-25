@@ -8,7 +8,7 @@ import { SidebarLinkRow } from './sidebar-link-row';
 import { lectureLoaders } from '@/modules/lecture/loader';
 
 export const LecturesCard = async () => {
-  const availableLectures = await lectureLoaders.getAvailableLectures();
+  const availableLectures = await lectureLoaders.getAvailable();
 
   return (
     <SidebarCard title="Lectures" className="hidden lg:block">

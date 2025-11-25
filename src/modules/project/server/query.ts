@@ -1,6 +1,5 @@
 import { type SessionUserType } from '@/modules/session-user/types';
 
-import { getProjectsCached } from './cache';
 import { projectRepository } from './repository';
 
 export const getProjectsQuery = (sessionUser: SessionUserType) => {
@@ -8,7 +7,7 @@ export const getProjectsQuery = (sessionUser: SessionUserType) => {
     throw new Error(`${sessionUser.id} cannot read projects`);
   }
 
-  return getProjectsCached();
+  return projectRepository.getMany();
 };
 
 const get = async (sessionUser: SessionUserType, id: string) => {

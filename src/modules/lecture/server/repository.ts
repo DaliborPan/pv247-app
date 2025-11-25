@@ -15,7 +15,7 @@ const getOrdered = async () => {
   });
 };
 
-const getAvailableLectures = async () => {
+const getAvailable = async () => {
   'use cache';
   cacheLife('minutes');
 
@@ -31,10 +31,9 @@ const getIsAvailable = async (slug: string) => {
   'use cache';
   cacheLife('minutes');
 
-  const ordered = await getOrdered();
-  const lecture = ordered.find(lecture => lecture.slug === slug);
+  const available = await getAvailable();
 
-  return !!lecture && checkIsAvailable(lecture);
+  return available.find(lecture => lecture.slug === slug);
 };
 
 /**
@@ -55,6 +54,6 @@ const getIsHomeworkAvailable = async (homeworkSlug: string) => {
 export const lectureRepository = {
   getOrdered,
   getIsAvailable,
-  getAvailableLectures,
+  getAvailable,
   getIsHomeworkAvailable
 };

@@ -2,21 +2,29 @@ import { cache } from 'react';
 
 import { getSessionUser } from '@/modules/session-user';
 
-import { getProjectsQuery, projectQueries } from './server';
+import { getProjectsQuery, projectQueries, projectRepository } from './server';
 
-export const getProjectsLoader = async () => {
+const getWithPoints = async () => {
   const sessionUser = await getSessionUser();
+  const projects = await getProjectsQuery(sessionUser);
 
-  return getProjectsQuery(sessionUser);
+  return projects.filter(project => !!project.points);
 };
 
-export type GetProjectsLoaderResult = Awaited<
-  ReturnType<typeof getProjectsLoader>
->;
+const getWithoutPoints = async () => {
+  const sessionUser = await getSessionUser();
+  const projects = await getProjectsQuery(sessionUser);
 
-/**
- * @cache React cache
- */
+  return projects.filter(project => !project.points);
+};
+
+const get = async (id: string) => {
+  const sessionUser = await getSessionUser();
+  const projects = await getProjectsQuery(sessionUser);
+
+  return projects.find(project => project.id === id);
+};
+
 const getMine = cache(async () => {
   const sessionUser = await getSessionUser();
   const userProjectId = sessionUser.projectId;
@@ -29,5 +37,8 @@ const getMine = cache(async () => {
 });
 
 export const projectLoaders = {
-  getMine
+  getWithPoints,
+  getWithoutPoints,
+  getMine,
+  get
 };
