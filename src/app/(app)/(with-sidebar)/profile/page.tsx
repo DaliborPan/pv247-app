@@ -7,17 +7,25 @@ import {
   ProfileProjectCard,
   LectorLecturesSection
 } from './_components';
+import { Suspense } from 'react';
 
 const Page = () => {
+  const sessionUserPromise = getSessionUser();
+
   return (
     <>
       <ProfileHero />
 
       <div className="mt-4 flex flex-col gap-y-4 lg:mt-8">
-        <StudentOverviewCard user={getSessionUser()} />
-        <StudentHomeworkCard user={getSessionUser()} />
+        <StudentOverviewCard user={sessionUserPromise} />
+        <StudentHomeworkCard user={sessionUserPromise} />
         <ProfileProjectCard />
-        <LectorLecturesSection />
+
+        <Suspense>
+          {sessionUserPromise.then(
+            user => user.role === 'lector' && <LectorLecturesSection />
+          )}
+        </Suspense>
       </div>
     </>
   );
