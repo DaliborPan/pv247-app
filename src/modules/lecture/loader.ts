@@ -1,3 +1,4 @@
+import { cacheLife } from 'next/cache';
 import { lectureQueries } from './server';
 import { checkIsAvailable } from './utils/check-is-available';
 
@@ -13,6 +14,9 @@ const getAllWithHomework = async () => {
 };
 
 const getIsAvailable = async (slug: string) => {
+  'use cache';
+  cacheLife('hours');
+
   const lectures = await lectureQueries.getOrdered();
   const lecture = lectures.find(lecture => lecture.slug === slug);
 
@@ -20,6 +24,9 @@ const getIsAvailable = async (slug: string) => {
 };
 
 const getIsHomeworkAvailable = async (homeworkSlug: string) => {
+  'use cache';
+  cacheLife('hours');
+
   const lectures = await lectureQueries.getOrdered();
   const lecture = lectures.find(
     lecture => lecture.homeworkSlug === homeworkSlug
