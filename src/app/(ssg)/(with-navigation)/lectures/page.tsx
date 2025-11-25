@@ -13,12 +13,7 @@ const Page = () => {
       <Suspense>
         {lecturesPromise.then(lectures =>
           lectures.map((lecture, index) => (
-            <LectureCard
-              key={lecture.slug}
-              lecture={lecture}
-              index={index}
-              isAvailable={checkIsAvailable(lecture)}
-            />
+            <LectureCard key={lecture.slug} lecture={lecture} index={index} />
           ))
         )}
       </Suspense>

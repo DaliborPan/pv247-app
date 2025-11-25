@@ -12,6 +12,7 @@ const Page = async () => {
           lecture={lecture}
           index={index}
           href={`/lector/lectures/${lecture.slug}`}
+          isAlwaysAvailable={true}
         />
       ))}
     </div>
