@@ -6,7 +6,6 @@ import {
   lectureSlugSchema,
   type LectureSlugType
 } from '@/modules/lecture/schema';
-import { Suspense } from 'react';
 
 export const generateStaticParams = () => {
   const lectures = lectureSlugSchema.options;
@@ -14,9 +13,8 @@ export const generateStaticParams = () => {
   return lectures.map(slug => ({ slug }));
 };
 
-const PageAsync = async (props: { slug: Promise<LectureSlugType> }) => {
-  const slug = await props.slug;
-
+const Page = async ({ params }: PageProps<'/lectures/[slug]'>) => {
+  const slug = (await params).slug as LectureSlugType;
   const isAvailable = await lectureLoaders.getIsAvailable(slug);
 
   if (!isAvailable) {
@@ -26,14 +24,6 @@ const PageAsync = async (props: { slug: Promise<LectureSlugType> }) => {
   const MdxComponent = getLectureMdxComponent(slug);
 
   return <MdxComponent />;
-};
-
-const Page = ({ params }: PageProps<'/lectures/[slug]'>) => {
-  return (
-    <Suspense>
-      <PageAsync slug={params.then(params => params.slug as LectureSlugType)} />
-    </Suspense>
-  );
 };
 
 export default Page;
