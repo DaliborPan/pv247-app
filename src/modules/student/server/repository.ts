@@ -3,6 +3,7 @@ import { and, eq, inArray } from 'drizzle-orm';
 import { db } from '@/db';
 import { type SessionUserType } from '@/modules/session-user/types';
 import { users, type UserInsertType } from '@/db/schema/users';
+import { UserRoleType } from '@/modules/user/schema';
 
 export const updateUser = (
   id: string,
@@ -40,9 +41,9 @@ export const getStudents = ({
       )
   });
 
-export const getStudentsWithHomework = () =>
+const getWithHomework = ({ role }: { role?: UserRoleType }) =>
   db.query.users.findMany({
-    where: (table, { eq }) => eq(table.role, 'student'),
+    ...(role ? { where: (table, { eq }) => eq(table.role, role) } : {}),
     with: {
       homeworksStudent: true
     }
@@ -68,3 +69,7 @@ export const getProjectFormStudents = (
         isNotNull(table.github)
       )
   });
+
+export const studentRepository = {
+  getWithHomework
+};
