@@ -1,22 +1,16 @@
 import { LectureCard } from '@/modules/lecture/components/lecture-card';
 
-import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
 import { CardsLayout } from '../_components/cards-layout';
 import { lectureLoaders } from '@/modules/lecture/loader';
-import { Suspense } from 'react';
 
-const Page = () => {
-  const lecturesPromise = lectureLoaders.getOrdered();
+const Page = async () => {
+  const lectures = await lectureLoaders.getOrdered();
 
   return (
     <CardsLayout title="Lectures">
-      <Suspense>
-        {lecturesPromise.then(lectures =>
-          lectures.map((lecture, index) => (
-            <LectureCard key={lecture.slug} lecture={lecture} index={index} />
-          ))
-        )}
-      </Suspense>
+      {lectures.map((lecture, index) => (
+        <LectureCard key={lecture.slug} lecture={lecture} index={index} />
+      ))}
     </CardsLayout>
   );
 };

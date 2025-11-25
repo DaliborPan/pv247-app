@@ -9,6 +9,7 @@ import { type LectureType } from '../schema';
 
 import { AttendanceBadge } from './attendance-badge';
 import { LectureCardActions } from './lecture-card-actions';
+import { Suspense } from 'react';
 
 const getNumberWithOrdinal = (num: number) => {
   const s = ['th', 'st', 'nd', 'rd'];
@@ -40,11 +41,13 @@ export const LectureCard = ({
     </TextPreview>
 
     <div className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-end">
-      <LectureCardActions
-        lecture={lecture}
-        href={href}
-        isAlwaysAvailable={isAlwaysAvailable}
-      />
+      <Suspense>
+        <LectureCardActions
+          lecture={lecture}
+          href={href}
+          isAlwaysAvailable={isAlwaysAvailable}
+        />
+      </Suspense>
 
       <div className="flex gap-x-2">
         <AttendanceBadge lectureId={lecture.id} />
