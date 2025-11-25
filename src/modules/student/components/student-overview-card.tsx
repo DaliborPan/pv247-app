@@ -3,9 +3,10 @@ import { LabeledValue } from '@/components/labeled-value';
 import { cn } from '@/lib/cn';
 import { studentLoaders } from '@/modules/student/loader';
 import { type UserType } from '@/modules/user/schema';
+import { Suspense } from 'react';
 
 type StudentOverviewCardProps = {
-  user: UserType;
+  user: Promise<UserType>;
   otherFields?: (
     overview: Awaited<ReturnType<typeof studentLoaders.getOverview>>
   ) => React.ReactNode;
@@ -13,32 +14,58 @@ type StudentOverviewCardProps = {
 
 export const StudentOverviewCard = async ({
   otherFields,
-  user
+  ...props
 }: StudentOverviewCardProps) => {
-  const overview = await studentLoaders.getOverview(user);
-
-  const { homeworkTotalPoints, project, totalPoints } = overview;
-
   return (
-    <DetailCard title="Overview">
-      <div
-        className={cn(
-          'grid grid-cols-1 gap-6 lg:gap-4',
-          otherFields ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
-        )}
-      >
-        <LabeledValue label="Homework points">
-          {homeworkTotalPoints} points
-        </LabeledValue>
+    <Suspense fallback={<DetailCard title="Overview" />}>
+      {props.user.then(user => {
+        if (user.role !== 'student') {
+          return null;
+        }
 
-        <LabeledValue label="Project points">
-          {project?.points ? `${project.points} points` : 'No points yet'}
-        </LabeledValue>
+        const overviewPromise = studentLoaders.getOverview(user);
 
-        <LabeledValue label="Total points">{totalPoints} points</LabeledValue>
+        return (
+          <DetailCard title="Overview">
+            <div
+              className={cn(
+                'grid grid-cols-1 gap-6 lg:gap-4',
+                otherFields ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
+              )}
+            >
+              <LabeledValue label="Homework points">
+                <Suspense>
+                  {overviewPromise.then(
+                    overview => `${overview.homeworkTotalPoints} points`
+                  )}
+                </Suspense>
+              </LabeledValue>
 
-        {otherFields?.(overview)}
-      </div>
-    </DetailCard>
+              <LabeledValue label="Project points">
+                <Suspense>
+                  {overviewPromise.then(overview =>
+                    overview.project?.points
+                      ? `${overview.project?.points} points`
+                      : 'No points yet'
+                  )}
+                </Suspense>
+              </LabeledValue>
+
+              <LabeledValue label="Total points">
+                <Suspense>
+                  {overviewPromise.then(
+                    overview => `${overview.totalPoints} points`
+                  )}
+                </Suspense>
+              </LabeledValue>
+
+              <Suspense>
+                {overviewPromise.then(overview => otherFields?.(overview))}
+              </Suspense>
+            </div>
+          </DetailCard>
+        );
+      })}
+    </Suspense>
   );
 };

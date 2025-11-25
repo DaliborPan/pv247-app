@@ -1,5 +1,3 @@
-import { Suspense } from 'react';
-
 import { getSessionUser } from '@/modules/session-user';
 import { StudentOverviewCard } from '@/modules/student/components/student-overview-card';
 import { StudentHomeworkCard } from '@/modules/student/components/student-homework-card';
@@ -15,21 +13,12 @@ const Page = () => {
     <>
       <ProfileHero />
 
-      <Suspense>
-        {getSessionUser().then(sessionUser => (
-          <div className="mt-4 flex flex-col gap-y-4 lg:mt-8">
-            {sessionUser.role === 'student' && (
-              <>
-                <StudentOverviewCard user={sessionUser} />
-                <StudentHomeworkCard user={sessionUser} />
-                <ProfileProjectCard />
-              </>
-            )}
-
-            {sessionUser.role === 'lector' && <LectorLecturesSection />}
-          </div>
-        ))}
-      </Suspense>
+      <div className="mt-4 flex flex-col gap-y-4 lg:mt-8">
+        <StudentOverviewCard user={getSessionUser()} />
+        <StudentHomeworkCard user={getSessionUser()} />
+        <ProfileProjectCard />
+        <LectorLecturesSection />
+      </div>
     </>
   );
 };

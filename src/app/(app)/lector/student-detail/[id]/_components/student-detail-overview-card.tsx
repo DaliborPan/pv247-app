@@ -10,7 +10,7 @@ import { type UserType } from '@/modules/user/schema';
 export const StudentDetailOverviewCard = ({
   student
 }: {
-  student: UserType;
+  student: Promise<UserType>;
 }) => (
   <StudentOverviewCard
     user={student}

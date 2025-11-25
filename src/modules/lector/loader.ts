@@ -8,14 +8,15 @@ const getStudentsWithHomework = async () => {
   return lectorQueries.getStudentsWithHomework(sessionUser);
 };
 
-export const getStudentLoader = async (studentId: string) => {
+const getStudent = async (studentId: Promise<string>) => {
   const sessionUser = await getSessionUser();
 
-  return getStudentQuery(sessionUser, studentId);
+  return getStudentQuery(sessionUser, await studentId);
 };
 
 export const lectorLoaders = {
-  getStudentsWithHomework
+  getStudentsWithHomework,
+  getStudent
 };
 
 export type GetStudentsWithHomeworkLoaderResult = Awaited<
