@@ -9,6 +9,7 @@ const withMDX = nextMDX({
 });
 
 const nextConfig = {
+  cacheComponents: true,
   pageExtensions: ['mdx', 'tsx', 'ts']
 };
 

@@ -1,6 +1,6 @@
 import { revalidateTag, unstable_cache } from 'next/cache';
 
-import { getStudentLectures } from './repository';
+import { studentLectureRepository } from './repository';
 
 /**
  * TODO(dalibor): Possible improvement to use `React.cache` since
@@ -17,7 +17,7 @@ export const getStudentLecturesCached = (() => {
       () => {
         console.log(`[CACHE_MISS]: ${getTag(studentId)}`);
 
-        return getStudentLectures(studentId);
+        return studentLectureRepository.getMany(studentId);
       },
       [getTag(studentId)],
       {

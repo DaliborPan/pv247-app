@@ -1,5 +1,5 @@
 import { type SessionUserType } from '@/modules/session-user/types';
-import { getStudentsWithHomeworkCached } from '@/modules/student/server';
+import { studentRepository } from '@/modules/student/server';
 
 import { getHomeworkReviewers } from './repository';
 
@@ -20,12 +20,12 @@ export const getNewStudentLectorIdQuery = async () => {
   }, reviewers[0]).id;
 };
 
-export const getStudentsWithHomeworkQuery = (sessionUser: SessionUserType) => {
+const getStudentsWithHomework = (sessionUser: SessionUserType) => {
   if (sessionUser.role !== 'lector') {
     throw new Error(`Unauthorized`);
   }
 
-  return getStudentsWithHomeworkCached();
+  return studentRepository.getWithHomework({ role: 'student' });
 };
 
 export const getStudentQuery = async (
@@ -36,13 +36,17 @@ export const getStudentQuery = async (
     throw new Error(`Unauthorized`);
   }
 
-  const student = (await getStudentsWithHomeworkCached()).find(
-    student => student.id === studentId
-  );
+  const student = (
+    await studentRepository.getWithHomework({ role: 'student' })
+  ).find(student => student.id === studentId);
 
   if (!student) {
     throw new Error(`Student ${studentId} not found`);
   }
 
   return student;
+};
+
+export const lectorQueries = {
+  getStudentsWithHomework
 };

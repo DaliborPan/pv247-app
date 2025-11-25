@@ -2,13 +2,16 @@ import { redirect } from 'next/navigation';
 
 import { getSessionUser } from '@/modules/session-user';
 import { ProjectForm } from '@/modules/project/components/project-form';
-import { getMineProjectLoader } from '@/modules/project/loader';
+import { projectLoaders } from '@/modules/project/loader';
+import { Suspense } from 'react';
 
-const Page = async () => {
+const PageAsync = async () => {
   const sessionUser = await getSessionUser();
-  const project = await getMineProjectLoader();
+  const project = await projectLoaders.getMine();
 
-  if (!project) return redirect('/project');
+  if (!project) {
+    redirect('/project');
+  }
 
   const defaultValues = {
     id: project.id,
@@ -22,6 +25,14 @@ const Page = async () => {
   };
 
   return <ProjectForm defaultValues={defaultValues} />;
+};
+
+const Page = () => {
+  return (
+    <Suspense>
+      <PageAsync />
+    </Suspense>
+  );
 };
 
 export default Page;

@@ -1,15 +1,16 @@
-import { getLecturesWithHomeworkLoader } from '@/modules/lecture/loader';
+import { lectureLoaders } from '@/modules/lecture/loader';
 import { HomeworkCard } from '@/modules/lecture/components/homework-card';
+import { CardsLayout } from '../_components/cards-layout';
 
 const Page = async () => {
-  const lectures = await getLecturesWithHomeworkLoader();
+  const lectures = await lectureLoaders.getAllWithHomework();
 
   return (
-    <>
-      {lectures.map((lecture, index) => (
-        <HomeworkCard key={lecture.slug} lecture={lecture} index={index} />
+    <CardsLayout title="Weekly homework">
+      {lectures.map(lecture => (
+        <HomeworkCard key={lecture.slug} lecture={lecture} />
       ))}
-    </>
+    </CardsLayout>
   );
 };
 

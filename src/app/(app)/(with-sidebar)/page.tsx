@@ -1,19 +1,17 @@
-import { Suspense } from 'react';
-
 import { CurrentLectureCard, GeneralInfo } from './_components';
 
-const Page = () => (
-  <>
-    <section className="mb-10 lg:mb-12">
-      <Suspense>
+const Page = () => {
+  return (
+    <>
+      <section className="mb-10 lg:mb-12">
         <CurrentLectureCard />
-      </Suspense>
-    </section>
+      </section>
 
-    <main>
-      <GeneralInfo />
-    </main>
-  </>
-);
+      <main>
+        <GeneralInfo />
+      </main>
+    </>
+  );
+};
 
 export default Page;

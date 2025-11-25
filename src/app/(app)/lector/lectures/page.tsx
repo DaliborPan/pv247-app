@@ -1,8 +1,8 @@
 import { LectureCard } from '@/modules/lecture/components/lecture-card';
-import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
+import { lectureLoaders } from '@/modules/lecture/loader';
 
 const Page = async () => {
-  const lectures = await getOrderedLecturesLoader();
+  const lectures = await lectureLoaders.getOrdered();
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -12,6 +12,7 @@ const Page = async () => {
           lecture={lecture}
           index={index}
           href={`/lector/lectures/${lecture.slug}`}
+          isAlwaysAvailable={true}
         />
       ))}
     </div>

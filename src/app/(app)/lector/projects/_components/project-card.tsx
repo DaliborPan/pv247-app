@@ -6,12 +6,12 @@ import { TextPreview } from '@/components/text-preview';
 import { Button } from '@/components/base/button';
 import { Badge } from '@/components/base/badge';
 import { formatDate } from '@/lib/date';
-import { type GetProjectsLoaderResult } from '@/modules/project/loader';
+import { projectLoaders } from '@/modules/project/loader';
 
 export const ProjectCard = ({
   project
 }: {
-  project: GetProjectsLoaderResult[number];
+  project: NonNullable<Awaited<ReturnType<typeof projectLoaders.get>>>;
 }) => (
   <article className="flex flex-col rounded-lg bg-white p-6 shadow">
     <span className="mb-1 flex items-center truncate text-xs text-text-terciary">

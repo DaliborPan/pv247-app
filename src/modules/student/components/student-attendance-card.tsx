@@ -1,7 +1,8 @@
 import { DetailCard } from '@/components/detail-card';
-import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
+import { lectureLoaders } from '@/modules/lecture/loader';
 import { SetStudentAttendanceAction } from '@/modules/student-lecture/components/set-student-attendance-action';
 import { getStudentLecturesLoader } from '@/modules/student-lecture/loader';
+import { Suspense } from 'react';
 
 const AttendanceCell = ({
   studentId,
@@ -23,9 +24,10 @@ const AttendanceCell = ({
   </div>
 );
 
-export const StudentAttendanceCard = async ({ userId }: { userId: string }) => {
-  const lectures = await getOrderedLecturesLoader();
-  const attendances = await getStudentLecturesLoader({ userId });
+export const StudentAttendanceCard = async (props: {
+  userId: Promise<string>;
+}) => {
+  const lectures = await lectureLoaders.getOrdered();
 
   return (
     <DetailCard title="Attendance">
@@ -44,13 +46,23 @@ export const StudentAttendanceCard = async ({ userId }: { userId: string }) => {
               </td>
 
               <td className="py-2">
-                <AttendanceCell
-                  studentId={userId}
-                  lectureId={lecture.id}
-                  hasAttendance={attendances.some(
-                    attendance => attendance.lectureId === lecture.id
-                  )}
-                />
+                <Suspense>
+                  {props.userId.then(async userId => {
+                    const attendances = await getStudentLecturesLoader({
+                      userId
+                    });
+
+                    return (
+                      <AttendanceCell
+                        studentId={userId}
+                        lectureId={lecture.id}
+                        hasAttendance={attendances.some(
+                          attendance => attendance.lectureId === lecture.id
+                        )}
+                      />
+                    );
+                  })}
+                </Suspense>
               </td>
             </tr>
           ))}

@@ -2,10 +2,10 @@
 
 import { authLectorServerAction } from '@/server/server-actions';
 
-import { getOrderedLecturesCached } from '../../server';
+import { lectureQueries } from '../../server';
 
 export const revalidateLecturesAction = authLectorServerAction.handler(
   async () => {
-    getOrderedLecturesCached.revalidate();
+    // TODO(pv247)
   }
 );

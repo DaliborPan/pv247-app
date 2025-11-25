@@ -1,16 +1,15 @@
-import Link from 'next/link';
-import { BookOpen, Layers, Lock } from 'lucide-react';
+import { Layers } from 'lucide-react';
 
 import { Badge } from '@/components/base/badge';
-import { Button } from '@/components/base/button';
 import { Icon } from '@/components/base/icon';
 import { TextPreview } from '@/components/text-preview';
-import { cn } from '@/lib/cn';
 import { formatDate } from '@/lib/date';
 
 import { type LectureType } from '../schema';
 
 import { AttendanceBadge } from './attendance-badge';
+import { LectureCardActions } from './lecture-card-actions';
+import { Suspense } from 'react';
 
 const getNumberWithOrdinal = (num: number) => {
   const s = ['th', 'st', 'nd', 'rd'];
@@ -22,12 +21,12 @@ const getNumberWithOrdinal = (num: number) => {
 export const LectureCard = ({
   lecture,
   index,
-  isAvailable = true,
+  isAlwaysAvailable = false,
   href = `/lectures/${lecture.slug}`
 }: {
   lecture: LectureType;
   index: number;
-  isAvailable?: boolean;
+  isAlwaysAvailable?: boolean;
   href?: string;
 }) => (
   <article className="flex flex-col rounded-lg bg-white p-6 shadow">
@@ -42,19 +41,13 @@ export const LectureCard = ({
     </TextPreview>
 
     <div className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-end">
-      <Link
-        href={href}
-        className={cn('grow', !isAvailable && 'pointer-events-none')}
-      >
-        <Button
-          className="w-full lg:w-auto"
-          iconLeft={{ icon: !isAvailable ? <Lock /> : <BookOpen /> }}
-          disabled={!isAvailable}
-          size="sm"
-        >
-          Start learning
-        </Button>
-      </Link>
+      <Suspense>
+        <LectureCardActions
+          lecture={lecture}
+          href={href}
+          isAlwaysAvailable={isAlwaysAvailable}
+        />
+      </Suspense>
 
       <div className="flex gap-x-2">
         <AttendanceBadge lectureId={lecture.id} />

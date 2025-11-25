@@ -1,25 +1,21 @@
 import { type SessionUserType } from '@/modules/session-user/types';
 
-import { getProjectsCached } from './cache';
+import { projectRepository } from './repository';
 
 export const getProjectsQuery = (sessionUser: SessionUserType) => {
   if (sessionUser.role !== 'lector') {
     throw new Error(`${sessionUser.id} cannot read projects`);
   }
 
-  return getProjectsCached();
+  return projectRepository.getMany();
 };
 
-export const getProjectQuery = async (
-  sessionUser: SessionUserType,
-  id: string
-) => {
+const get = async (sessionUser: SessionUserType, id: string) => {
   if (sessionUser.role !== 'lector' && sessionUser.projectId !== id) {
     throw new Error(`${sessionUser.id} cannot read project ${id}`);
   }
 
-  const projects = await getProjectsCached();
-
+  const projects = await projectRepository.getMany();
   const project = projects.find(project => project.id === id);
 
   if (!project) {
@@ -29,4 +25,6 @@ export const getProjectQuery = async (
   return project;
 };
 
-export type GetProjectQueryResult = Awaited<ReturnType<typeof getProjectQuery>>;
+export const projectQueries = {
+  get
+};

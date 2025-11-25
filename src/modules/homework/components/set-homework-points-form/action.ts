@@ -1,7 +1,6 @@
 'use server';
 
 import { authLectorServerAction } from '@/server/server-actions';
-import { getStudentsWithHomeworkCached } from '@/modules/student/server';
 
 import {
   createHomeworkMutation,
@@ -19,7 +18,7 @@ export const updateHomeworkPointsAction = authLectorServerAction
       points: input.points
     });
 
-    getStudentsWithHomeworkCached.revalidate();
+    // getStudentsWithHomeworkCached.revalidate();
   });
 
 export const createHomeworkAction = authLectorServerAction
@@ -31,5 +30,5 @@ export const createHomeworkAction = authLectorServerAction
       lectureId: input.lecture.id
     });
 
-    getStudentsWithHomeworkCached.revalidate();
+    // getStudentsWithHomeworkCached.revalidate();
   });

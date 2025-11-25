@@ -1,36 +1,26 @@
-import { checkIsAvailable } from './utils/check-is-available';
-import { getOrderedLecturesQuery } from './server';
+import { lectureQueries } from './server';
 
-export const getOrderedLecturesLoader = getOrderedLecturesQuery;
+const getOrdered = lectureQueries.getOrdered;
 
-export const getAvailableLecturesLoader = async () => {
-  const lectures = await getOrderedLecturesQuery();
+const getIsAvailable = lectureQueries.getIsAvailable;
 
-  return lectures.filter(checkIsAvailable);
-};
+const getIsHomeworkAvailable = lectureQueries.getIsHomeworkAvailable;
+
+const getAvailable = lectureQueries.getAvailable;
 
 /**
- * Get all lectures, that have homework
- * - basically filter out last lecture
+ * Get all lectures, that have homework. Basically filter out last lecture.
  */
-export const getLecturesWithHomeworkLoader = async () => {
-  const lectures = await getOrderedLecturesQuery();
+const getAllWithHomework = async () => {
+  const lectures = await lectureQueries.getOrdered();
 
   return lectures.filter(lecture => !!lecture.homeworkSlug);
 };
 
-export const getIsLectureAvailableLoader = async (slug: string) => {
-  const lectures = await getOrderedLecturesQuery();
-  const lecture = lectures.find(lecture => lecture.slug === slug);
-
-  return !!lecture && checkIsAvailable(lecture);
-};
-
-export const getIsHomeworkAvailableLoader = async (homeworkSlug: string) => {
-  const lectures = await getOrderedLecturesQuery();
-  const lecture = lectures.find(
-    lecture => lecture.homeworkSlug === homeworkSlug
-  );
-
-  return !!lecture && checkIsAvailable(lecture);
+export const lectureLoaders = {
+  getOrdered,
+  getAllWithHomework,
+  getIsAvailable,
+  getIsHomeworkAvailable,
+  getAvailable
 };

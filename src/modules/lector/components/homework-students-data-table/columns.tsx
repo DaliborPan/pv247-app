@@ -10,7 +10,6 @@ import {
   type SetHomeworkPointsFormSchema
 } from '@/modules/homework/components/set-homework-points-form';
 import { orderedHomeworkSlugs } from '@/modules/lecture/const/homework-slug';
-
 import { type GetStudentsWithHomeworkLoaderResult } from '../../loader';
 
 export const columns: ColumnDef<

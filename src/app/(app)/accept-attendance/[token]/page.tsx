@@ -3,22 +3,23 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
-import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
 import { processAcceptMineAttendanceAction } from '@/modules/student-lecture/action';
+import { lectureLoaders } from '@/modules/lecture/loader';
 
-const Page = async (props: { params: Promise<{ token: string }> }) => {
-  const params = await props.params;
-  const lectures = await getOrderedLecturesLoader();
+export const generateStaticParams = () => {
+  return [{ token: '_' }];
+};
 
-  const lecture = lectures.find(
-    lecture => lecture.attendanceToken === params.token
-  );
+const Page = async ({ params }: PageProps<'/accept-attendance/[token]'>) => {
+  const token = (await params).token;
+
+  const lectures = await lectureLoaders.getOrdered();
+  const lecture = lectures.find(lecture => lecture.attendanceToken === token);
 
   if (!lecture) {
     redirect('/');
   }
 
-  // special case of calling action in RSC
   await processAcceptMineAttendanceAction({ lectureId: lecture.id });
 
   return (

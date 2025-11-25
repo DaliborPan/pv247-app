@@ -1,3 +1,16 @@
-import { getOrderedLecturesCached } from './cache';
+import { lectureRepository } from './repository';
 
-export const getOrderedLecturesQuery = () => getOrderedLecturesCached();
+const getOrdered = lectureRepository.getOrdered;
+
+const getIsAvailable = lectureRepository.getIsAvailable;
+
+const getIsHomeworkAvailable = lectureRepository.getIsHomeworkAvailable;
+
+const getAvailable = lectureRepository.getAvailable;
+
+export const lectureQueries = {
+  getOrdered,
+  getIsAvailable,
+  getIsHomeworkAvailable,
+  getAvailable
+};

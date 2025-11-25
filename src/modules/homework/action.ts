@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { authServerAction } from '@/server/server-actions';
 
-import { getUserHomeworkQuery } from './server';
+import { homeworkQueries } from './server';
 
 export const getHomeworkPointsAction = authServerAction
   .input(
@@ -15,7 +15,7 @@ export const getHomeworkPointsAction = authServerAction
       .optional()
   )
   .handler(async ({ input, ctx }) =>
-    getUserHomeworkQuery(ctx.sessionUser, {
+    homeworkQueries.getMany(ctx.sessionUser, {
       lectureId: input?.lectureId,
       userId: ctx.sessionUser.id
     })

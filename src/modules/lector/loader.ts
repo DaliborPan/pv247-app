@@ -1,19 +1,24 @@
 import { getSessionUser } from '@/modules/session-user';
 
-import { getStudentQuery, getStudentsWithHomeworkQuery } from './server';
+import { getStudentQuery, lectorQueries } from './server';
 
-export const getStudentsWithHomeworkLoader = async () => {
+const getStudentsWithHomework = async () => {
   const sessionUser = await getSessionUser();
 
-  return getStudentsWithHomeworkQuery(sessionUser);
+  return lectorQueries.getStudentsWithHomework(sessionUser);
+};
+
+const getStudent = async (studentId: Promise<string>) => {
+  const sessionUser = await getSessionUser();
+
+  return getStudentQuery(sessionUser, await studentId);
+};
+
+export const lectorLoaders = {
+  getStudentsWithHomework,
+  getStudent
 };
 
 export type GetStudentsWithHomeworkLoaderResult = Awaited<
-  ReturnType<typeof getStudentsWithHomeworkLoader>
+  ReturnType<typeof getStudentsWithHomework>
 >;
-
-export const getStudentLoader = async (studentId: string) => {
-  const sessionUser = await getSessionUser();
-
-  return getStudentQuery(sessionUser, studentId);
-};

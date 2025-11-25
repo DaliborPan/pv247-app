@@ -1,17 +1,14 @@
-import { type PropsWithChildren } from 'react';
-
 import { NavigationButtonLink } from '@/components/navigation-button-link';
-import { getLecturesWithHomeworkLoader } from '@/modules/lecture/loader';
+import { lectureLoaders } from '@/modules/lecture/loader';
+import { HomeworkSlugType } from '@/modules/lecture/schema';
+import { Suspense } from 'react';
 
-const Layout = async ({
-  children,
-  ...props
-}: PropsWithChildren<{ params: Promise<{ slug: string }> }>) => {
-  const params = await props.params;
-  const lectures = await getLecturesWithHomeworkLoader();
+const Navigation = async (props: { slug: Promise<HomeworkSlugType> }) => {
+  const slug = await props.slug;
 
+  const lectures = await lectureLoaders.getAllWithHomework();
   const slugLectureIndex = lectures.findIndex(
-    lecture => lecture.homeworkSlug === params.slug
+    lecture => lecture.homeworkSlug === slug
   );
 
   const prevLecture = lectures[slugLectureIndex - 1];
@@ -40,6 +37,18 @@ const Layout = async ({
           )}
         </div>
       </div>
+    </>
+  );
+};
+
+const Layout = ({ params, children }: LayoutProps<'/homeworks/[slug]'>) => {
+  return (
+    <>
+      <Suspense>
+        <Navigation
+          slug={params.then(params => params.slug as HomeworkSlugType)}
+        />
+      </Suspense>
 
       <main className="mx-auto -mt-10 max-w-4xl">{children}</main>
     </>

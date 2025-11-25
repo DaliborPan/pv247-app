@@ -4,6 +4,8 @@ import { headers } from 'next/headers';
 import { auth } from '@/auth';
 
 import { type UserRoleType } from '../user/schema';
+import { tryCatch } from '@/lib/try-catch';
+import { redirect } from 'next/navigation';
 
 /**
  * Get the current session user.
@@ -17,6 +19,8 @@ export const getSessionUser = cache(async () => {
   });
 
   if (!session?.user) {
+    console.log('No user. Redirecting to login');
+    redirect('/login');
     throw new Error(
       'getSessionUser must be called from authenticated pages/components only!'
     );
@@ -25,4 +29,20 @@ export const getSessionUser = cache(async () => {
   return session.user as Omit<typeof session.user, 'role'> & {
     role: UserRoleType;
   };
+});
+
+/**
+ * Get the current session user. If there is no user,
+ * return null.
+ *
+ * @cache React cache
+ */
+export const getSession = cache(async () => {
+  const [user, error] = await tryCatch(getSessionUser());
+
+  if (error) {
+    return null;
+  }
+
+  return user;
 });

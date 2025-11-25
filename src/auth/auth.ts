@@ -54,8 +54,7 @@ export const auth = betterAuth({
         type: 'string'
       }
     }
-  }
-  // TODO: Add plugin or API route middleware to handle user role assignment
+  } // TODO: Add plugin or API route middleware to handle user role assignment
   // after social sign-in. The logic should:
   // 1. Check if user.email is in LECTOR_EMAILS
   // 2. Set role to 'lector' or 'student'

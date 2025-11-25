@@ -2,11 +2,12 @@ import { cache } from 'react';
 
 import { getSessionUser } from '@/modules/session-user';
 import { type UserType } from '@/modules/user/schema';
+import { homeworkQueries } from '@/modules/homework/server';
+import { lectureQueries } from '@/modules/lecture/server';
+import { projectQueries } from '@/modules/project/server';
+import { getStudentLecturesQuery } from '@/modules/student-lecture/server';
 
-import {
-  getProjectFormStudentComboboxQuery,
-  getStudentOverviewQuery
-} from './server';
+import { getProjectFormStudentComboboxQuery } from './server';
 
 /**
  * Loads students, that are not assigned to a project and are not the current user.
@@ -21,18 +22,45 @@ export const getProjectFormStudentComboboxLoader = async (
   return getProjectFormStudentComboboxQuery(sessionUser, projectId);
 };
 
-export const getStudentOverviewLoader = async (user: UserType) => {
+const getOverview = async (user: UserType) => {
   const sessionUser = await getSessionUser();
 
-  return getStudentOverviewQuery(sessionUser, user);
+  const [homework, lectures, attendances] = await Promise.all([
+    homeworkQueries.getMany(sessionUser, { userId: user.id }),
+    lectureQueries.getOrdered(),
+    getStudentLecturesQuery(sessionUser, { userId: user.id })
+  ]);
+
+  // Získání projektu pokud existuje
+  const project = user.projectId
+    ? await projectQueries.get(sessionUser, user.projectId)
+    : undefined;
+
+  // Agregace dat
+  const awardedHomeworkCount = homework.length;
+  const homeworkTotalPoints = homework.reduce(
+    (acc, h) => acc + (h?.points ?? 0),
+    0
+  );
+
+  return {
+    lecturesCount: lectures.length,
+    awardedHomeworkCount,
+    homework,
+    homeworkTotalPoints,
+    project,
+    totalPoints: homeworkTotalPoints + (project?.points ?? 0),
+    attendances
+  };
 };
 
-export type GetStudentOverviewLoaderResult = Awaited<
-  ReturnType<typeof getStudentOverviewLoader>
->;
-
-export const getMineOverviewLoader = cache(async () => {
+const getMineOverview = cache(async () => {
   const sessionUser = await getSessionUser();
 
-  return getStudentOverviewQuery(sessionUser, sessionUser);
+  return getOverview(sessionUser);
 });
+
+export const studentLoaders = {
+  getMineOverview,
+  getOverview
+};

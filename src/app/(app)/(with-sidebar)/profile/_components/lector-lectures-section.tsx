@@ -1,10 +1,10 @@
 import { DetailCard } from '@/components/detail-card';
 import { RevalidateLecturesAction } from '@/modules/lecture/components/revalidate-lecture-action';
-import { getOrderedLecturesLoader } from '@/modules/lecture/loader';
+import { lectureLoaders } from '@/modules/lecture/loader';
 import { ShowAttendanceQrCodeAction } from '@/modules/student-lecture/components/show-attendance-qr-code-action';
 
 export const LectorLecturesSection = async () => {
-  const lectures = await getOrderedLecturesLoader();
+  const lectures = await lectureLoaders.getOrdered();
 
   return (
     <DetailCard

@@ -1,9 +1,59 @@
 import { db } from '@/db';
+import { cacheLife, cacheTag } from 'next/cache';
+import { lecturesTag } from './tag';
+import { checkIsAvailable } from '../utils/check-is-available';
 
-export const getOrderedLectures = () =>
-  db.query.lectures.findMany({
+const getOrdered = async () => {
+  'use cache';
+  cacheTag(lecturesTag);
+
+  return db.query.lectures.findMany({
     orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
     with: {
       homeworks: true
     }
   });
+};
+
+const getAvailable = async () => {
+  'use cache';
+  cacheLife('minutes');
+
+  const lectures = await getOrdered();
+
+  return lectures.filter(checkIsAvailable);
+};
+
+/**
+ * Caching separately due to comparing to new Date()
+ */
+const getIsAvailable = async (slug: string) => {
+  'use cache';
+  cacheLife('minutes');
+
+  const available = await getAvailable();
+
+  return available.find(lecture => lecture.slug === slug);
+};
+
+/**
+ * Caching separately due to comparing to new Date()
+ */
+const getIsHomeworkAvailable = async (homeworkSlug: string) => {
+  'use cache';
+  cacheLife('minutes');
+
+  const ordered = await getOrdered();
+  const lecture = ordered.find(
+    lecture => lecture.homeworkSlug === homeworkSlug
+  );
+
+  return !!lecture && checkIsAvailable(lecture);
+};
+
+export const lectureRepository = {
+  getOrdered,
+  getIsAvailable,
+  getAvailable,
+  getIsHomeworkAvailable
+};

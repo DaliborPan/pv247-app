@@ -1,23 +1,15 @@
-import Link from 'next/link';
-import { NotepadText, Lock, ExternalLink } from 'lucide-react';
-
 import { formatDate } from '@/lib/date';
 import { TextPreview } from '@/components/text-preview';
-import { Button } from '@/components/base/button';
-import { cn } from '@/lib/cn';
 
-import { checkIsAvailable } from '../utils/check-is-available';
 import { type LectureType } from '../schema';
 
 import { HomeworkPointsBadge } from './homework-points-badge';
+import { HomeworkCardActions } from './homework-card-actions';
+import { Suspense } from 'react';
+import { homeworkLoader } from '@/modules/homework/loader';
 
-export const HomeworkCard = ({
-  lecture
-}: {
-  lecture: LectureType;
-  index: number;
-}) => {
-  const isAvailable = checkIsAvailable(lecture);
+export const HomeworkCard = ({ lecture }: { lecture: LectureType }) => {
+  const homeworkPromise = homeworkLoader.getMine();
 
   return (
     <article className="flex flex-col rounded-lg bg-white p-6 shadow">
@@ -32,47 +24,16 @@ export const HomeworkCard = ({
       </TextPreview>
 
       <div className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-end">
-        <div className="flex grow gap-x-2">
-          <Link
-            href={`/homeworks/${lecture.homeworkSlug}`}
-            className={cn(
-              'grow lg:grow-0',
-              !isAvailable && 'pointer-events-none'
-            )}
-          >
-            <Button
-              size="sm"
-              className="w-full lg:w-auto"
-              iconLeft={{ icon: !isAvailable ? <Lock /> : <NotepadText /> }}
-              disabled={!isAvailable}
-            >
-              Learn more
-            </Button>
-          </Link>
-
-          {isAvailable && (
-            <a
-              href={lecture.homeworkClassroomLink}
-              target="_blank"
-              rel="noreferrer"
-              className="grow lg:grow-0"
-            >
-              <Button
-                size="sm"
-                className="w-full lg:w-auto"
-                iconLeft={{ icon: <ExternalLink /> }}
-                variant="outline/primary"
-              >
-                GH classroom
-              </Button>
-            </a>
-          )}
-        </div>
+        <Suspense>
+          <HomeworkCardActions lecture={lecture} />
+        </Suspense>
 
         <div>
           <HomeworkPointsBadge
             maxPoints={lecture.homeworkMaxPoints}
-            lectureId={lecture.id}
+            homework={homeworkPromise.then(homework =>
+              homework.find(hw => hw.lectureId === lecture.id)
+            )}
           />
         </div>
       </div>

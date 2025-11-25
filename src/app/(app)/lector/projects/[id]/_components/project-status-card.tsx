@@ -6,13 +6,9 @@ import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
 import { SetProjectPointsAction } from '@/modules/project/components/set-project-points-action';
 import { ApproveProjectButton } from '@/modules/project/components/approve-project-action';
-import { type GetProjectsLoaderResult } from '@/modules/project/loader';
+import { ProjectType } from '@/modules/project/schema';
 
-export const ProjectStatusCard = ({
-  project
-}: {
-  project: GetProjectsLoaderResult[number];
-}) => {
+export const ProjectStatusCard = ({ project }: { project: ProjectType }) => {
   const status = project.status;
   const hasPoints = !!project.points;
 

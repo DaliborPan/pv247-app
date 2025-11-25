@@ -1,17 +1,15 @@
-import { type PropsWithChildren } from 'react';
-
 import { LectureNavigation } from '@/modules/lecture/components/lecture-navigation';
 import { type LectureSlugType } from '@/modules/lecture/schema';
+import { Suspense } from 'react';
 
-const Layout = async ({
-  children,
-  ...props
-}: PropsWithChildren<{ params: Promise<{ slug: string }> }>) => {
-  const params = await props.params;
-
+const Layout = ({ children, params }: LayoutProps<'/lectures/[slug]'>) => {
   return (
     <>
-      <LectureNavigation lectureSlug={params.slug as LectureSlugType} />
+      <Suspense>
+        <LectureNavigation
+          lectureSlug={params.then(params => params.slug as LectureSlugType)}
+        />
+      </Suspense>
 
       <main className="mx-auto -mt-4 max-w-4xl lg:-mt-10">{children}</main>
     </>
