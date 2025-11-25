@@ -5,6 +5,7 @@ import { auth } from '@/auth';
 
 import { type UserRoleType } from '../user/schema';
 import { tryCatch } from '@/lib/try-catch';
+import { redirect } from 'next/navigation';
 
 /**
  * Get the current session user.
@@ -18,6 +19,8 @@ export const getSessionUser = cache(async () => {
   });
 
   if (!session?.user) {
+    console.log('No user. Redirecting to login');
+    redirect('/login');
     throw new Error(
       'getSessionUser must be called from authenticated pages/components only!'
     );

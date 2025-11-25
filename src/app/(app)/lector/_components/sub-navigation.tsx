@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { type PropsWithChildren } from 'react';
+import { Suspense, type PropsWithChildren } from 'react';
 
 import { cn } from '@/lib/cn';
 import { homeworkSlugSchema } from '@/modules/lecture/schema';
@@ -33,14 +33,17 @@ export const SubNavigation = () => (
   <div className="bg-primary-100">
     <nav className="lg:ml-[calc(7.5rem+100px)]">
       <ul className="flex flex-col gap-x-8 py-3 lg:flex-row">
-        <NavigationItem href="/lector/students">Students</NavigationItem>
-        <NavigationItem
-          href={`/lector/homeworks/${homeworkSlugSchema.options[0]}`}
-        >
-          Homework
-        </NavigationItem>
-        <NavigationItem href="/lector/projects">Projects</NavigationItem>
-        <NavigationItem href="/lector/lectures">Lectures</NavigationItem>
+        {/* Suspense is used because of accessing pathname */}
+        <Suspense>
+          <NavigationItem href="/lector/students">Students</NavigationItem>
+          <NavigationItem
+            href={`/lector/homeworks/${homeworkSlugSchema.options[0]}`}
+          >
+            Homework
+          </NavigationItem>
+          <NavigationItem href="/lector/projects">Projects</NavigationItem>
+          <NavigationItem href="/lector/lectures">Lectures</NavigationItem>
+        </Suspense>
       </ul>
     </nav>
   </div>

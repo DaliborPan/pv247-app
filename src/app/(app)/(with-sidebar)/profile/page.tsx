@@ -10,25 +10,25 @@ import {
   LectorLecturesSection
 } from './_components';
 
-const Page = async () => {
-  const sessionUser = await getSessionUser();
-
+const Page = () => {
   return (
     <>
       <ProfileHero />
 
       <Suspense>
-        <div className="mt-4 flex flex-col gap-y-4 lg:mt-8">
-          {sessionUser.role === 'student' && (
-            <>
-              <StudentOverviewCard user={sessionUser} />
-              <StudentHomeworkCard user={sessionUser} />
-              <ProfileProjectCard />
-            </>
-          )}
+        {getSessionUser().then(sessionUser => (
+          <div className="mt-4 flex flex-col gap-y-4 lg:mt-8">
+            {sessionUser.role === 'student' && (
+              <>
+                <StudentOverviewCard user={sessionUser} />
+                <StudentHomeworkCard user={sessionUser} />
+                <ProfileProjectCard />
+              </>
+            )}
 
-          {sessionUser.role === 'lector' && <LectorLecturesSection />}
-        </div>
+            {sessionUser.role === 'lector' && <LectorLecturesSection />}
+          </div>
+        ))}
       </Suspense>
     </>
   );

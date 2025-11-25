@@ -1,20 +1,13 @@
-'use client';
-
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { TextPreview } from '@/components/text-preview';
-import { use } from 'react';
-import { LectureType } from '@/modules/lecture/schema';
-import { checkIsAvailable } from '@/modules/lecture/utils/check-is-available';
+import { lectureLoaders } from '@/modules/lecture/loader';
 
-export const CurrentLectureCard = ({
-  lectures
-}: {
-  lectures: LectureType[];
-}) => {
-  const currentLecture = lectures.filter(checkIsAvailable).pop();
+export const CurrentLectureCard = async () => {
+  const availableLectures = await lectureLoaders.getAvailableLectures();
+  const currentLecture = availableLectures.pop();
 
   if (!currentLecture) {
     return null;

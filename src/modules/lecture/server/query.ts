@@ -6,8 +6,11 @@ const getIsAvailable = lectureRepository.getIsAvailable;
 
 const getIsHomeworkAvailable = lectureRepository.getIsHomeworkAvailable;
 
+const getAvailableLectures = lectureRepository.getAvailableLectures;
+
 export const lectureQueries = {
   getOrdered,
   getIsAvailable,
-  getIsHomeworkAvailable
+  getIsHomeworkAvailable,
+  getAvailableLectures
 };

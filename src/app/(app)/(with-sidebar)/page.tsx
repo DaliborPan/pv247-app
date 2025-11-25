@@ -1,13 +1,10 @@
-import { lectureLoaders } from '@/modules/lecture/loader';
 import { CurrentLectureCard, GeneralInfo } from './_components';
 
-const Page = async () => {
-  const lectures = await lectureLoaders.getOrdered();
-
+const Page = () => {
   return (
     <>
       <section className="mb-10 lg:mb-12">
-        <CurrentLectureCard lectures={lectures} />
+        <CurrentLectureCard />
       </section>
 
       <main>

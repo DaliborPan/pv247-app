@@ -13,7 +13,7 @@ const Layout = ({ children }: PropsWithChildren) => {
       <Navigation user={sessionUserPromise} />
 
       <div className="my-8">
-        <Suspense>
+        <Suspense fallback={children}>
           {sessionUserPromise.then(sessionUser => {
             if (!sessionUser) {
               redirect('/login');
