@@ -2,13 +2,19 @@ import { and, eq } from 'drizzle-orm';
 
 import { db } from '@/db';
 import { type HomeworkInsertType, homeworks } from '@/db/schema/homeworks';
+import { cacheTag } from 'next/cache';
+import { getHomeworkTag } from './tag';
 
-export const getMany = ({ userId }: { userId: string }) =>
-  db.query.homeworks.findMany({
+const getMany = async ({ userId }: { userId: string }) => {
+  'use cache';
+  cacheTag(getHomeworkTag(userId));
+
+  return db.query.homeworks.findMany({
     where: (table, { eq }) => eq(table.studentId, userId)
   });
+};
 
-export const updateHomeworkPoints = (
+const update = (
   { lectureId, studentId }: { lectureId: string; studentId: string },
   { points }: Pick<HomeworkInsertType, 'points'>
 ) =>
@@ -24,9 +30,11 @@ export const updateHomeworkPoints = (
       )
     );
 
-export const createHomework = (values: Omit<HomeworkInsertType, 'id'>) =>
+const create = (values: Omit<HomeworkInsertType, 'id'>) =>
   db.insert(homeworks).values(values);
 
 export const homeworkRepository = {
-  getMany
+  getMany,
+  update,
+  create
 };
