@@ -4,41 +4,19 @@ import { homeworkRepository } from './repository';
 
 const getMany = async (
   sessionUser: SessionUserType,
-  {
-    lectureId,
-    userId
-  }: {
-    lectureId?: string;
-    userId: string;
-  }
-) => {
-  if (sessionUser.role !== 'lector' && sessionUser.id !== userId) {
-    throw new Error(
-      `User ${sessionUser.id} is not allowed to get homework for user ${userId}`
-    );
-  }
-
-  const homework = await homeworkRepository.getMany({ userId });
-
-  if (lectureId) {
-    return homework.filter(hw => hw.lectureId === lectureId);
-  }
-
-  return homework;
-};
-
-const getManyForLecture = async (
-  sessionUser: SessionUserType,
-  { lectureId }: { lectureId: string }
+  { userId, lectureId }: { userId?: string; lectureId?: string }
 ) => {
   if (sessionUser.role !== 'lector') {
+    if (userId === sessionUser.id) {
+      return homeworkRepository.getMany({ userId });
+    }
+
     throw new Error(`Unauthorized`);
   }
 
-  return homeworkRepository.getManyForLecture({ lectureId });
+  return homeworkRepository.getMany({ lectureId });
 };
 
 export const homeworkQueries = {
-  getMany,
-  getManyForLecture
+  getMany
 };

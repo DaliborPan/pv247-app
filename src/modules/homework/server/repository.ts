@@ -5,7 +5,7 @@ import { type HomeworkInsertType, homeworks } from '@/db/schema/homeworks';
 import { cacheTag } from 'next/cache';
 import { getHomeworkTag } from './tag';
 
-const getMany = async ({ userId }: { userId: string }) => {
+const getManyForStudent = async ({ userId }: { userId: string }) => {
   'use cache';
   cacheTag(getHomeworkTag({ userId }));
 
@@ -24,6 +24,24 @@ const getManyForLecture = async ({ lectureId }: { lectureId: string }) => {
       student: true
     }
   });
+};
+
+const getMany = async ({
+  userId,
+  lectureId
+}: {
+  userId?: string;
+  lectureId?: string;
+}) => {
+  if (userId) {
+    return getManyForStudent({ userId });
+  }
+
+  if (lectureId) {
+    return getManyForLecture({ lectureId });
+  }
+
+  return db.query.homeworks.findMany();
 };
 
 const update = (
@@ -47,7 +65,6 @@ const create = (values: Omit<HomeworkInsertType, 'id'>) =>
 
 export const homeworkRepository = {
   getMany,
-  getManyForLecture,
   update,
   create
 };

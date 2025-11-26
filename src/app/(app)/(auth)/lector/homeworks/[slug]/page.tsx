@@ -39,7 +39,7 @@ const Page = ({ params }: PageProps<'/lector/homeworks/[slug]'>) => {
 
         const [students, homeworkForLecture] = await Promise.all([
           studentLoaders.getMany(),
-          homeworkLoader.getManyForLecture({ lectureId: lecture.id })
+          homeworkLoader.getMany({ lectureId: lecture.id })
         ]);
 
         const sessionUser = await getSessionUser();
