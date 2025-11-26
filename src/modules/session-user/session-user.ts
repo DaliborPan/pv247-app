@@ -5,7 +5,6 @@ import { auth } from '@/auth';
 
 import { type UserRoleType } from '../user/schema';
 import { tryCatch } from '@/lib/try-catch';
-import { redirect } from 'next/navigation';
 
 /**
  * Get the current session user.

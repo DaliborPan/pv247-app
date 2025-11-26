@@ -1,12 +1,12 @@
 import { lectureLoaders } from '@/modules/lecture/loader';
 
-import { studentLoaders } from '../loader';
-
 import { ListCard } from './list-card';
 import { PointsBadge } from './points-badge';
 import { ReactNode, Suspense } from 'react';
 import { LectureType } from '@/modules/lecture/schema';
 import { UserType } from '@/modules/user/schema';
+
+import { homeworkLoader } from '@/modules/homework/loader';
 
 const HomeworkListCard = async ({
   points
@@ -53,17 +53,19 @@ export const StudentHomeworkCard = (props: { user: Promise<UserType> }) => {
           return null;
         }
 
-        const overviewPromise = studentLoaders.getOverview(user);
+        const homeworkPromise = homeworkLoader.getMany({
+          userId: user.id
+        });
 
         return (
           <HomeworkListCard
             points={lecture => (
               <Suspense>
-                {overviewPromise.then(overview => {
-                  const userHomework = overview.homework.find(
+                {homeworkPromise.then(homework => {
+                  const lectureHomework = homework.find(
                     hw => hw.lectureId === lecture.id
                   );
-                  const points = userHomework?.points;
+                  const points = lectureHomework?.points;
 
                   return <PointsBadge points={points} />;
                 })}

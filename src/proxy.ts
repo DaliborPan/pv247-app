@@ -2,12 +2,12 @@ import { type NextRequest, NextResponse } from 'next/server';
 
 import { getSessionCookie } from 'better-auth/cookies';
 
-const PUBLIC_ROUTES = ['/login', '/lectures', '/homeworks', '/test'];
+const PUBLIC_ROUTES = ['/login', '/lectures', '/homeworks'];
 
 const getIsProtectedPath = (path: string) =>
   !PUBLIC_ROUTES.some(route => path.startsWith(route));
 
-const middleware = (request: NextRequest) => {
+const proxy = (request: NextRequest) => {
   const sessionCookie = getSessionCookie(request);
 
   const isLoggedIn = !!sessionCookie;
@@ -38,4 +38,4 @@ export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
 };
 
-export default middleware;
+export default proxy;

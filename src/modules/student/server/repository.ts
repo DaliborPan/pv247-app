@@ -1,9 +1,10 @@
 import { and, eq, inArray } from 'drizzle-orm';
+import { cacheTag } from 'next/cache';
 
 import { db } from '@/db';
 import { type SessionUserType } from '@/modules/session-user/types';
 import { users, type UserInsertType } from '@/db/schema/users';
-import { UserRoleType } from '@/modules/user/schema';
+import { studentsTag } from './tag';
 
 export const updateUser = (
   id: string,
@@ -41,13 +42,14 @@ export const getStudents = ({
       )
   });
 
-const getWithHomework = ({ role }: { role?: UserRoleType }) =>
-  db.query.users.findMany({
-    ...(role ? { where: (table, { eq }) => eq(table.role, role) } : {}),
-    with: {
-      homeworksStudent: true
-    }
+const getManyStudents = async () => {
+  'use cache';
+  cacheTag(studentsTag);
+
+  return db.query.users.findMany({
+    where: (table, { eq }) => eq(table.role, 'student')
   });
+};
 
 export const getProjectFormStudents = (
   sessionUser: SessionUserType,
@@ -71,5 +73,5 @@ export const getProjectFormStudents = (
   });
 
 export const studentRepository = {
-  getWithHomework
+  getManyStudents
 };

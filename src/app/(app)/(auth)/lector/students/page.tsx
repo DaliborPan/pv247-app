@@ -1,13 +1,14 @@
 import { TabsContent } from '@/components/base/tabs';
 import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
 import { StudentsDataTable } from '@/modules/lector/components/students-data-table';
-import { lectorLoaders } from '@/modules/lector/loader';
+
 import { getSessionUser } from '@/modules/session-user';
+import { studentLoaders } from '@/modules/student/loader';
 
 const Page = async () => {
-  const students = await lectorLoaders.getStudentsWithHomework();
-
+  const students = await studentLoaders.getManyWithHomework();
   const sessionUser = await getSessionUser();
+
   const hasOwnStudents = students.some(
     student => student.lectorId === sessionUser.id
   );

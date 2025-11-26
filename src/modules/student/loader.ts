@@ -6,7 +6,7 @@ import { homeworkQueries } from '@/modules/homework/server';
 
 import { projectQueries } from '@/modules/project/server';
 
-import { getProjectFormStudentComboboxQuery } from './server';
+import { getProjectFormStudentComboboxQuery, studentQueries } from './server';
 
 import { studentLectureQueries } from '../student-lecture/server';
 
@@ -57,7 +57,42 @@ const getMineOverview = cache(async () => {
   return getOverview(sessionUser);
 });
 
+const getMany = async () => {
+  const sessionUser = await getSessionUser();
+
+  return studentQueries.getMany(sessionUser);
+};
+
+const get = async (studentId: Promise<string>) => {
+  const sessionUser = await getSessionUser();
+
+  return studentQueries.get(sessionUser, await studentId);
+};
+
+const getManyWithHomework = async () => {
+  const sessionUser = await getSessionUser();
+
+  const students = await studentQueries.getMany(sessionUser);
+
+  return Promise.all(
+    students.map(async student => {
+      // This is cached for each student, okay to call it for each student.
+      const homeworks = await homeworkQueries.getMany(sessionUser, {
+        userId: student.id
+      });
+
+      return {
+        ...student,
+        homeworksStudent: homeworks
+      };
+    })
+  );
+};
+
 export const studentLoaders = {
+  getMany,
+  get,
   getMineOverview,
-  getOverview
+  getOverview,
+  getManyWithHomework
 };

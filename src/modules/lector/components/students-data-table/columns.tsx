@@ -7,10 +7,18 @@ import { ArrowRight, Check, ExternalLink, X } from 'lucide-react';
 import { DataTableColumnHeader } from '@/components/data-table';
 import { Icon } from '@/components/base/icon';
 
-import { type GetStudentsWithHomeworkLoaderResult } from '../../loader';
+import { type studentLoaders } from '@/modules/student/loader';
+import { type homeworkLoader } from '@/modules/homework/loader';
+import { LoaderResult } from '@/types';
+
+type StudentWithHomeworks = LoaderResult<
+  typeof studentLoaders.getMany
+>[number] & {
+  homeworksStudent: LoaderResult<typeof homeworkLoader.getMany>[number][];
+};
 
 export const columns: ColumnDef<
-  GetStudentsWithHomeworkLoaderResult[number] & {
+  StudentWithHomeworks & {
     homeworkPoints: number;
   },
   string

@@ -9,10 +9,6 @@ export const getMany = async (
     throw new Error('Unauthorized');
   }
 
-  if (sessionUser.role === 'lector') {
-    return [];
-  }
-
   return studentLectureRepository.getMany(userId);
 };
 
