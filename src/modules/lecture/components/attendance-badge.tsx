@@ -1,21 +1,21 @@
-/**
- * Client-side due to using in SSG page (lectures).
- * TODO(pv247): Move to server-side.
- */
-'use client';
-
 import { UserCheck } from 'lucide-react';
 
-import { useAttendanceQuery } from '@/modules/student-lecture/hooks';
 import { Badge } from '@/components/base/badge';
 import { Icon } from '@/components/base/icon';
 
-export const AttendanceBadge = ({ lectureId }: { lectureId: string }) => {
-  const { data } = useAttendanceQuery();
+import { getSession } from '@/modules/session-user';
+import { studentLectureLoaders } from '@/modules/student-lecture/loader';
 
-  if (!data) return null;
+export const AttendanceBadge = async ({ lectureId }: { lectureId: string }) => {
+  const sessionUser = await getSession();
 
-  const hasAttendance = data.some(
+  if (!sessionUser) return null;
+
+  const attendances = await studentLectureLoaders.getMany({
+    userId: sessionUser.id
+  });
+
+  const hasAttendance = attendances.some(
     attendance => attendance.lectureId === lectureId
   );
 
