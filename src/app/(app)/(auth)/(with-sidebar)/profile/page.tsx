@@ -2,12 +2,10 @@ import { getSessionUser } from '@/modules/session-user';
 import { StudentOverviewCard } from '@/modules/student/components/student-overview-card';
 import { StudentHomeworkCard } from '@/modules/student/components/student-homework-card';
 
-import {
-  ProfileHero,
-  ProfileProjectCard,
-  LectorLecturesSection
-} from './_components';
 import { Suspense } from 'react';
+import { ProfileHero } from './_components/profile-hero';
+import { ProfileProjectCard } from './_components/profile-project-card';
+import { LectorLecturesSection } from './_components/lector-lectures-section';
 
 const Page = () => {
   const sessionUserPromise = getSessionUser();

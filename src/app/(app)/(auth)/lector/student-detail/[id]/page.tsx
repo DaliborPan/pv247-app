@@ -1,8 +1,8 @@
 import { StudentHomeworkCard } from '@/modules/student/components/student-homework-card';
 import { StudentAttendanceCard } from '@/modules/student/components/student-attendance-card';
 import { lectorLoaders } from '@/modules/lector/loader';
-
-import { StudentHero, StudentDetailOverviewCard } from './_components';
+import { StudentHero } from './_components/student-hero';
+import { StudentDetailOverviewCard } from './_components/student-detail-overview-card';
 
 const Page = ({ params }: PageProps<'/lector/student-detail/[id]'>) => {
   const studentPromise = lectorLoaders.getStudent(params.then(({ id }) => id));

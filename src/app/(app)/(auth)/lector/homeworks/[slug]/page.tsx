@@ -8,7 +8,7 @@ import { lectorLoaders } from '@/modules/lector/loader';
 import { getSessionUser } from '@/modules/session-user';
 import { homeworkSlugSchema } from '@/modules/lecture/schema';
 
-import { HomeworksNavigation } from './_components';
+import { HomeworksNavigation } from './_components/homeworks-navigation';
 import { lectureLoaders } from '@/modules/lecture/loader';
 import { Suspense } from 'react';
 

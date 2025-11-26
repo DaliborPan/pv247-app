@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { ProjectCard } from './_components';
+import { ProjectCard } from './_components/project-card';
 import { projectLoaders } from '@/modules/project/loader';
 
 const Page = async () => {
