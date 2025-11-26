@@ -15,7 +15,7 @@ const Page = async ({ searchParams }: PageProps<'/accept-attendance'>) => {
   }
 
   return (
-    <>
+    <div className="container lg:mt-8">
       <h1 className="mb-4 text-2xl lg:text-5xl lg:font-light">
         Attendance accepted
       </h1>
@@ -33,7 +33,7 @@ const Page = async ({ searchParams }: PageProps<'/accept-attendance'>) => {
           Back to home
         </Button>
       </Link>
-    </>
+    </div>
   );
 };
 

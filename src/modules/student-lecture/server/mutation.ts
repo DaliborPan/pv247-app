@@ -3,13 +3,9 @@ import {
   type SessionUserType
 } from '@/modules/session-user/types';
 
-import {
-  createStudentLecture,
-  deleteStudentLecture,
-  studentLectureRepository
-} from './repository';
+import { studentLectureRepository } from './repository';
 
-export const processAcceptMineAttendanceMutation = async (
+export const createMine = async (
   sessionUser: SessionUserType,
   lectureId: string
 ) => {
@@ -21,12 +17,15 @@ export const processAcceptMineAttendanceMutation = async (
     return false;
   }
 
-  await createStudentLecture({ lectureId, studentId: sessionUser.id });
+  await studentLectureRepository.create({
+    lectureId,
+    studentId: sessionUser.id
+  });
 
   return true;
 };
 
-export const updateStudentLectureMutation = async (
+export const update = async (
   _sessionUserLector: SessionUserLectorType,
   {
     lectureId,
@@ -41,16 +40,21 @@ export const updateStudentLectureMutation = async (
   );
 
   if (existing) {
-    await deleteStudentLecture({ lectureId, studentId });
+    await studentLectureRepository.delete({ lectureId, studentId });
 
     return {
       status: 'deleted'
     } as const;
   }
 
-  await createStudentLecture({ lectureId, studentId });
+  await studentLectureRepository.create({ lectureId, studentId });
 
   return {
     status: 'created'
   } as const;
+};
+
+export const studentLectureMutations = {
+  createMine,
+  update
 };

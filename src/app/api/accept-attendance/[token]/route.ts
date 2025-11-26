@@ -1,7 +1,9 @@
 import { lectureQueries } from '@/modules/lecture/server';
 import { getSession } from '@/modules/session-user';
 import { acceptAttendanceCodeSchema } from '@/modules/student-lecture/schema';
-import { processAcceptMineAttendanceMutation } from '@/modules/student-lecture/server';
+import { studentLectureMutations } from '@/modules/student-lecture/server/mutation';
+import { getStudentLecturesTag } from '@/modules/student-lecture/server/tag';
+import { revalidateTag } from 'next/cache';
 
 export const GET = async (
   request: Request,
@@ -33,15 +35,14 @@ export const GET = async (
     return Response.redirect(url);
   }
 
-  const updated = await processAcceptMineAttendanceMutation(
+  const updated = await studentLectureMutations.createMine(
     sessionUser,
     lecture.id
   );
   url.searchParams.set('code', acceptAttendanceCodeSchema.Values.SUCCESS);
 
   if (updated) {
-    // TODO(pv247)
-    // revalidateTag()
+    revalidateTag(getStudentLecturesTag(sessionUser.id), 'max');
   }
 
   return Response.redirect(url);
