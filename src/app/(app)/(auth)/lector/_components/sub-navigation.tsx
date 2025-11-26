@@ -18,7 +18,7 @@ const NavigationItem = ({
   return (
     <li
       className={cn(
-        'flex px-3 py-2 lg:rounded lg:py-1',
+        'flex rounded-md px-2 py-1 lg:px-3 lg:py-1',
         isActive && 'bg-primary-200'
       )}
     >
@@ -30,9 +30,9 @@ const NavigationItem = ({
 };
 
 export const SubNavigation = () => (
-  <div className="bg-primary-100">
-    <nav className="lg:ml-[calc(7.5rem+100px)]">
-      <ul className="flex flex-col gap-x-8 py-3 lg:flex-row">
+  <div className="mt-2 rounded-lg bg-primary-100 shadow">
+    <nav className="p-2">
+      <ul className="flex flex-col gap-x-1 lg:flex-row">
         {/* Suspense is used because of accessing pathname */}
         <Suspense>
           <NavigationItem href="/lector/students">Students</NavigationItem>
