@@ -1,6 +1,3 @@
-import { type SessionUserType } from '@/modules/session-user/types';
-import { studentRepository } from '@/modules/student/server';
-
 import { getHomeworkReviewers } from './repository';
 
 export const getNewStudentLectorIdQuery = async () => {
@@ -18,23 +15,4 @@ export const getNewStudentLectorIdQuery = async () => {
 
     return acc;
   }, reviewers[0]).id;
-};
-
-export const getStudentQuery = async (
-  sessionUser: SessionUserType,
-  studentId: string
-) => {
-  if (sessionUser.role !== 'lector') {
-    throw new Error(`Unauthorized`);
-  }
-
-  const student = (
-    await studentRepository.getManyWithHomework({ role: 'student' })
-  ).find(student => student.id === studentId);
-
-  if (!student) {
-    throw new Error(`Student ${studentId} not found`);
-  }
-
-  return student;
 };

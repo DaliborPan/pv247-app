@@ -4,7 +4,7 @@ import { TabsContent } from '@/components/base/tabs';
 import { LabeledValue } from '@/components/labeled-value';
 import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
 import { HomeworkStudentsDataTable } from '@/modules/lector/components/homework-students-data-table';
-import { lectorLoaders } from '@/modules/lector/loader';
+
 import { getSessionUser } from '@/modules/session-user';
 import { homeworkSlugSchema } from '@/modules/lecture/schema';
 

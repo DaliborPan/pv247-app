@@ -1,5 +1,5 @@
 import { homeworkQueries } from '@/modules/homework/server';
-import { getSession } from '@/modules/session-user';
+import { getSession, getSessionUser } from '@/modules/session-user';
 
 const getMine = async ({ lectureId }: { lectureId?: string } = {}) => {
   const sessionUser = await getSession();
@@ -19,6 +19,13 @@ const getMine = async ({ lectureId }: { lectureId?: string } = {}) => {
   return homework;
 };
 
+const getMany = async ({ userId }: { userId: string }) => {
+  const sessionUser = await getSessionUser();
+
+  return homeworkQueries.getMany(sessionUser, { userId });
+};
+
 export const homeworkLoader = {
-  getMine
+  getMine,
+  getMany
 };

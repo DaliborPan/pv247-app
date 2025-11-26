@@ -4,6 +4,8 @@ import { db } from '@/db';
 import { type SessionUserType } from '@/modules/session-user/types';
 import { users, type UserInsertType } from '@/db/schema/users';
 import { UserRoleType } from '@/modules/user/schema';
+import { cacheLife, cacheTag } from 'next/cache';
+import { studentsWithHomeworkTag } from './tag';
 
 export const updateUser = (
   id: string,
@@ -41,13 +43,18 @@ export const getStudents = ({
       )
   });
 
-const getManyWithHomework = ({ role }: { role?: UserRoleType }) =>
-  db.query.users.findMany({
-    ...(role ? { where: (table, { eq }) => eq(table.role, role) } : {}),
+const getManyStudentsWithHomework = async () => {
+  'use cache';
+  cacheLife('minutes');
+  cacheTag(studentsWithHomeworkTag);
+
+  return db.query.users.findMany({
+    where: (table, { eq }) => eq(table.role, 'student'),
     with: {
       homeworksStudent: true
     }
   });
+};
 
 export const getProjectFormStudents = (
   sessionUser: SessionUserType,
@@ -71,5 +78,5 @@ export const getProjectFormStudents = (
   });
 
 export const studentRepository = {
-  getManyWithHomework
+  getManyStudentsWithHomework
 };
