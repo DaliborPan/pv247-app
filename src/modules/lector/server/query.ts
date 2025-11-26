@@ -20,14 +20,6 @@ export const getNewStudentLectorIdQuery = async () => {
   }, reviewers[0]).id;
 };
 
-const getStudentsWithHomework = (sessionUser: SessionUserType) => {
-  if (sessionUser.role !== 'lector') {
-    throw new Error(`Unauthorized`);
-  }
-
-  return studentRepository.getWithHomework({ role: 'student' });
-};
-
 export const getStudentQuery = async (
   sessionUser: SessionUserType,
   studentId: string
@@ -37,7 +29,7 @@ export const getStudentQuery = async (
   }
 
   const student = (
-    await studentRepository.getWithHomework({ role: 'student' })
+    await studentRepository.getManyWithHomework({ role: 'student' })
   ).find(student => student.id === studentId);
 
   if (!student) {
@@ -45,8 +37,4 @@ export const getStudentQuery = async (
   }
 
   return student;
-};
-
-export const lectorQueries = {
-  getStudentsWithHomework
 };

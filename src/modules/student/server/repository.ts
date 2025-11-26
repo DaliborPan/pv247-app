@@ -41,7 +41,7 @@ export const getStudents = ({
       )
   });
 
-const getWithHomework = ({ role }: { role?: UserRoleType }) =>
+const getManyWithHomework = ({ role }: { role?: UserRoleType }) =>
   db.query.users.findMany({
     ...(role ? { where: (table, { eq }) => eq(table.role, role) } : {}),
     with: {
@@ -71,5 +71,5 @@ export const getProjectFormStudents = (
   });
 
 export const studentRepository = {
-  getWithHomework
+  getManyWithHomework
 };

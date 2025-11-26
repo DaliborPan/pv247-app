@@ -6,7 +6,7 @@ import { homeworkQueries } from '@/modules/homework/server';
 
 import { projectQueries } from '@/modules/project/server';
 
-import { getProjectFormStudentComboboxQuery } from './server';
+import { getProjectFormStudentComboboxQuery, studentQueries } from './server';
 
 import { studentLectureQueries } from '../student-lecture/server';
 
@@ -57,7 +57,14 @@ const getMineOverview = cache(async () => {
   return getOverview(sessionUser);
 });
 
+const getManyWithHomework = async () => {
+  const sessionUser = await getSessionUser();
+
+  return studentQueries.getManyWithHomework(sessionUser);
+};
+
 export const studentLoaders = {
+  getManyWithHomework,
   getMineOverview,
   getOverview
 };

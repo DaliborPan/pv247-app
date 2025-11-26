@@ -2,15 +2,16 @@ import { DataTable } from '@/components/data-table';
 import { getSessionUser } from '@/modules/session-user';
 import { type LectureType } from '@/modules/lecture/schema';
 
-import { type GetStudentsWithHomeworkLoaderResult } from '../../loader';
+import { type studentLoaders } from '@/modules/student/loader';
 
 import { columns } from './columns';
+import { LoaderResult } from '@/types';
 
 export const HomeworkStudentsDataTable = async ({
   students,
   lecture
 }: {
-  students: GetStudentsWithHomeworkLoaderResult;
+  students: LoaderResult<typeof studentLoaders.getManyWithHomework>;
   lecture?: LectureType;
 }) => {
   const sessionUser = await getSessionUser();
