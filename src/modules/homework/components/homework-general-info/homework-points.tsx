@@ -1,54 +1,37 @@
-'use client';
-
-import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { toast } from 'sonner';
 
-import { useSession } from '@/auth/client';
 import { Button } from '@/components/base/button';
 import { type LectureType } from '@/modules/lecture/schema';
 
-import { getHomeworkPointsAction } from '../../action';
-
 import { LabeledItem } from './labeled-item';
 
-/**
- * Using useQuery because we need to be able to prerender SSG
- */
-const usePersonHomeworkPointsQuery = (lectureId: string) => {
-  const { data: session } = useSession();
+import { getSession } from '@/modules/session-user';
+import { homeworkLoader } from '../../loader';
 
-  return useQuery({
-    queryKey: ['homework-points', lectureId, session?.user?.id],
-    enabled: !!session?.user?.id,
-    queryFn: async () => {
-      const [data, error] = await getHomeworkPointsAction({ lectureId });
+export const HomeworkPoints = async ({ lecture }: { lecture: LectureType }) => {
+  const sessionUser = await getSession();
 
-      if (error) {
-        toast.error(error.message);
-        return;
-      }
+  if (!sessionUser) return null;
 
-      return data.at(0);
-    }
-  });
-};
+  if (sessionUser.role === 'lector') {
+    return (
+      <div className="flex justify-end">
+        <Link href={`/lector/homeworks/${lecture.homeworkSlug}`}>
+          <Button>Set points</Button>
+        </Link>
+      </div>
+    );
+  }
 
-export const HomeworkPoints = ({ lecture }: { lecture: LectureType }) => {
-  const { data: session } = useSession();
-  const { isSuccess, data } = usePersonHomeworkPointsQuery(lecture.id);
+  const homework = (
+    await homeworkLoader.getMine({
+      lectureId: lecture.id
+    })
+  ).at(0);
 
-  if (!isSuccess) return null;
-
-  return session?.user?.role === 'lector' ? (
-    <div className="flex justify-end">
-      <Link href={`/lector/homeworks/${lecture.homeworkSlug}`}>
-        <Button>Set points</Button>
-      </Link>
-    </div>
-  ) : (
+  return (
     <LabeledItem label="Earned points">
-      <div>{!data ? 'Not scored yet' : `${data.points} points`}</div>
+      <div>{!homework ? 'Not scored yet' : `${homework.points} points`}</div>
     </LabeledItem>
   );
 };
