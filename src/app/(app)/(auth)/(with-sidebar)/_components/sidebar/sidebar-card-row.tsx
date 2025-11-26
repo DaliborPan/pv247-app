@@ -5,8 +5,8 @@ export const SidebarCardRow = ({
   children
 }: PropsWithChildren<{ title: string }>) => (
   <div className="flex items-center">
-    <span className="grow text-text-secondary">{title}</span>
-    <span className="text-sm font-medium text-text-primary-color">
+    <span className="inline-block grow text-text-secondary">{title}</span>
+    <span className="inline-block text-sm font-medium text-text-primary-color">
       {children}
     </span>
   </div>

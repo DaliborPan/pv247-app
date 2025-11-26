@@ -1,4 +1,4 @@
-import { SidebarCard } from '../sidebar-card';
+import { SidebarCard } from '@/components/sidebar-card';
 
 import { SidebarCardRow } from './sidebar-card-row';
 

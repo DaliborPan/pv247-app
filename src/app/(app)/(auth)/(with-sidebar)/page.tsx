@@ -1,4 +1,5 @@
-import { CurrentLectureCard, GeneralInfo } from './_components';
+import GeneralInfo from './_components/general-info.mdx';
+import { CurrentLectureCard } from './_components/current-lecture-card';
 
 const Page = () => {
   return (
