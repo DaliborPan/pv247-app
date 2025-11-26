@@ -5,13 +5,19 @@ import {
   type StudentLectureInsertType,
   studentLectures
 } from '@/db/schema/studentLecture';
+import { getStudentLecturesTag } from './tag';
+import { cacheTag } from 'next/cache';
 
-export const getMany = (studentId: string) =>
-  db.query.studentLectures.findMany({
+const getMany = async (studentId: string) => {
+  'use cache';
+  cacheTag(getStudentLecturesTag(studentId));
+
+  return db.query.studentLectures.findMany({
     where: (table, { eq }) => eq(table.studentId, studentId)
   });
+};
 
-export const deleteStudentLecture = ({
+const deleteFn = ({
   lectureId,
   studentId
 }: {
@@ -27,10 +33,11 @@ export const deleteStudentLecture = ({
       )
     );
 
-export const createStudentLecture = (
-  values: Omit<StudentLectureInsertType, 'id'>
-) => db.insert(studentLectures).values(values);
+const create = (values: Omit<StudentLectureInsertType, 'id'>) =>
+  db.insert(studentLectures).values(values);
 
 export const studentLectureRepository = {
-  getMany
+  getMany,
+  create,
+  delete: deleteFn
 };

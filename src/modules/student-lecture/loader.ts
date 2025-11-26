@@ -1,13 +1,13 @@
 import { getSessionUser } from '@/modules/session-user';
 
-import { getStudentLecturesQuery } from './server';
+import { studentLectureQueries } from './server';
 
-export const getStudentLecturesLoader = async ({
-  userId
-}: {
-  userId: string;
-}) => {
+export const getMany = async ({ userId }: { userId: string }) => {
   const sessionUser = await getSessionUser();
 
-  return getStudentLecturesQuery(sessionUser, { userId });
+  return studentLectureQueries.getMany(sessionUser, { userId });
+};
+
+export const studentLectureLoaders = {
+  getMany
 };

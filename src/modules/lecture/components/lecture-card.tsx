@@ -50,7 +50,9 @@ export const LectureCard = ({
       </Suspense>
 
       <div className="flex gap-x-2">
-        <AttendanceBadge lectureId={lecture.id} />
+        <Suspense>
+          <AttendanceBadge lectureId={lecture.id} />
+        </Suspense>
 
         <Badge variant="outline" className="text-text-terciary">
           <Icon icon={<Layers />} className="mr-2" />

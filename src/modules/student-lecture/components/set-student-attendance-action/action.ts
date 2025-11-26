@@ -4,10 +4,9 @@ import { z } from 'zod';
 
 import { authLectorServerAction } from '@/server/server-actions';
 
-import {
-  getStudentLecturesCached,
-  updateStudentLectureMutation
-} from '../../server';
+import { studentLectureMutations } from '../../server/mutation';
+import { updateTag } from 'next/cache';
+import { getStudentLecturesTag } from '../../server/tag';
 
 export const setStudentAttendanceAction = authLectorServerAction
   .input(
@@ -17,12 +16,12 @@ export const setStudentAttendanceAction = authLectorServerAction
     })
   )
   .handler(async ({ input, ctx }) => {
-    const result = await updateStudentLectureMutation(
+    const result = await studentLectureMutations.update(
       ctx.sessionUserLector,
       input
     );
 
-    getStudentLecturesCached.revalidate(input.studentId);
+    updateTag(getStudentLecturesTag(input.studentId));
 
     return result;
   });

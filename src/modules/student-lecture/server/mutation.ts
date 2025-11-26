@@ -3,27 +3,29 @@ import {
   type SessionUserType
 } from '@/modules/session-user/types';
 
-import { createStudentLecture, deleteStudentLecture } from './repository';
-import { getStudentLecturesCached } from './cache';
+import { studentLectureRepository } from './repository';
 
-export const processAcceptMineAttendanceMutation = async (
+export const createMine = async (
   sessionUser: SessionUserType,
   lectureId: string
 ) => {
-  const existing = (await getStudentLecturesCached(sessionUser.id)).find(
-    studentLecture => studentLecture.lectureId === lectureId
-  );
+  const existing = (
+    await studentLectureRepository.getMany(sessionUser.id)
+  ).find(studentLecture => studentLecture.lectureId === lectureId);
 
   if (existing) {
     return false;
   }
 
-  await createStudentLecture({ lectureId, studentId: sessionUser.id });
+  await studentLectureRepository.create({
+    lectureId,
+    studentId: sessionUser.id
+  });
 
   return true;
 };
 
-export const updateStudentLectureMutation = async (
+export const update = async (
   _sessionUserLector: SessionUserLectorType,
   {
     lectureId,
@@ -33,21 +35,26 @@ export const updateStudentLectureMutation = async (
     studentId: string;
   }
 ) => {
-  const existing = (await getStudentLecturesCached(studentId)).find(
+  const existing = (await studentLectureRepository.getMany(studentId)).find(
     studentLecture => studentLecture.lectureId === lectureId
   );
 
   if (existing) {
-    await deleteStudentLecture({ lectureId, studentId });
+    await studentLectureRepository.delete({ lectureId, studentId });
 
     return {
       status: 'deleted'
     } as const;
   }
 
-  await createStudentLecture({ lectureId, studentId });
+  await studentLectureRepository.create({ lectureId, studentId });
 
   return {
     status: 'created'
   } as const;
+};
+
+export const studentLectureMutations = {
+  createMine,
+  update
 };
