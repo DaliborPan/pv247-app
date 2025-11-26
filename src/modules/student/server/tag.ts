@@ -1,1 +1,1 @@
-export const studentsWithHomeworkTag = 'students-with-homework';
+export const studentsTag = 'students';

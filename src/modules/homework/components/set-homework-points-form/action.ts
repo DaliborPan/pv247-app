@@ -17,7 +17,8 @@ export const updateHomeworkPointsAction = authLectorServerAction
       points: input.points
     });
 
-    updateTag(getHomeworkTag(input.studentId));
+    updateTag(getHomeworkTag({ lectureId: input.lecture.id }));
+    updateTag(getHomeworkTag({ userId: input.studentId }));
   });
 
 export const createHomeworkAction = authLectorServerAction
@@ -29,5 +30,6 @@ export const createHomeworkAction = authLectorServerAction
       lectureId: input.lecture.id
     });
 
-    updateTag(getHomeworkTag(input.studentId));
+    updateTag(getHomeworkTag({ lectureId: input.lecture.id }));
+    updateTag(getHomeworkTag({ userId: input.studentId }));
   });

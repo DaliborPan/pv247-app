@@ -27,6 +27,18 @@ const getMany = async (
   return homework;
 };
 
+const getManyForLecture = async (
+  sessionUser: SessionUserType,
+  { lectureId }: { lectureId: string }
+) => {
+  if (sessionUser.role !== 'lector') {
+    throw new Error(`Unauthorized`);
+  }
+
+  return homeworkRepository.getManyForLecture({ lectureId });
+};
+
 export const homeworkQueries = {
-  getMany
+  getMany,
+  getManyForLecture
 };

@@ -1,11 +1,10 @@
 import { and, eq, inArray } from 'drizzle-orm';
+import { cacheTag } from 'next/cache';
 
 import { db } from '@/db';
 import { type SessionUserType } from '@/modules/session-user/types';
 import { users, type UserInsertType } from '@/db/schema/users';
-import { UserRoleType } from '@/modules/user/schema';
-import { cacheLife, cacheTag } from 'next/cache';
-import { studentsWithHomeworkTag } from './tag';
+import { studentsTag } from './tag';
 
 export const updateUser = (
   id: string,
@@ -43,16 +42,12 @@ export const getStudents = ({
       )
   });
 
-const getManyStudentsWithHomework = async () => {
+const getManyStudents = async () => {
   'use cache';
-  cacheLife('minutes');
-  cacheTag(studentsWithHomeworkTag);
+  cacheTag(studentsTag);
 
   return db.query.users.findMany({
-    where: (table, { eq }) => eq(table.role, 'student'),
-    with: {
-      homeworksStudent: true
-    }
+    where: (table, { eq }) => eq(table.role, 'student')
   });
 };
 
@@ -78,5 +73,5 @@ export const getProjectFormStudents = (
   });
 
 export const studentRepository = {
-  getManyStudentsWithHomework
+  getManyStudents
 };

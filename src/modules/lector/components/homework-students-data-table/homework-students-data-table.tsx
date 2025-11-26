@@ -3,15 +3,22 @@ import { getSessionUser } from '@/modules/session-user';
 import { type LectureType } from '@/modules/lecture/schema';
 
 import { type studentLoaders } from '@/modules/student/loader';
+import { type homeworkLoader } from '@/modules/homework/loader';
 
 import { columns } from './columns';
 import { LoaderResult } from '@/types';
+
+type StudentWithHomeworks = LoaderResult<
+  typeof studentLoaders.getMany
+>[number] & {
+  homeworksStudent: LoaderResult<typeof homeworkLoader.getMany>[number][];
+};
 
 export const HomeworkStudentsDataTable = async ({
   students,
   lecture
 }: {
-  students: LoaderResult<typeof studentLoaders.getManyWithHomework>;
+  students: StudentWithHomeworks[];
   lecture?: LectureType;
 }) => {
   const sessionUser = await getSessionUser();

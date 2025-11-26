@@ -25,7 +25,14 @@ const getMany = async ({ userId }: { userId: string }) => {
   return homeworkQueries.getMany(sessionUser, { userId });
 };
 
+const getManyForLecture = async ({ lectureId }: { lectureId: string }) => {
+  const sessionUser = await getSessionUser();
+
+  return homeworkQueries.getManyForLecture(sessionUser, { lectureId });
+};
+
 export const homeworkLoader = {
   getMine,
-  getMany
+  getMany,
+  getManyForLecture
 };

@@ -57,10 +57,10 @@ const getMineOverview = cache(async () => {
   return getOverview(sessionUser);
 });
 
-const getManyWithHomework = async () => {
+const getMany = async () => {
   const sessionUser = await getSessionUser();
 
-  return studentQueries.getManyWithHomework(sessionUser);
+  return studentQueries.getMany(sessionUser);
 };
 
 const get = async (studentId: Promise<string>) => {
@@ -69,9 +69,30 @@ const get = async (studentId: Promise<string>) => {
   return studentQueries.get(sessionUser, await studentId);
 };
 
+const getManyWithHomework = async () => {
+  const sessionUser = await getSessionUser();
+
+  const students = await studentQueries.getMany(sessionUser);
+
+  return Promise.all(
+    students.map(async student => {
+      // This is cached for each student, okay to call it for each student.
+      const homeworks = await homeworkQueries.getMany(sessionUser, {
+        userId: student.id
+      });
+
+      return {
+        ...student,
+        homeworksStudent: homeworks
+      };
+    })
+  );
+};
+
 export const studentLoaders = {
-  getManyWithHomework,
+  getMany,
   get,
   getMineOverview,
-  getOverview
+  getOverview,
+  getManyWithHomework
 };

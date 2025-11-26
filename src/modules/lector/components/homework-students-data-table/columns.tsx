@@ -11,10 +11,17 @@ import {
 } from '@/modules/homework/components/set-homework-points-form';
 import { orderedHomeworkSlugs } from '@/modules/lecture/const/homework-slug';
 import { type studentLoaders } from '@/modules/student/loader';
+import { type homeworkLoader } from '@/modules/homework/loader';
 import { LoaderResult } from '@/types';
 
+type StudentWithHomeworks = LoaderResult<
+  typeof studentLoaders.getMany
+>[number] & {
+  homeworksStudent: LoaderResult<typeof homeworkLoader.getMany>[number][];
+};
+
 export const columns: ColumnDef<
-  LoaderResult<typeof studentLoaders.getManyWithHomework>[number] & {
+  StudentWithHomeworks & {
     defaultValues: Partial<SetHomeworkPointsFormSchema>;
   },
   unknown

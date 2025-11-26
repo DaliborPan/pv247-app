@@ -1,18 +1,19 @@
 import { type SessionUserType } from '@/modules/session-user/types';
 
 import { getProjectFormStudents, studentRepository } from './repository';
+import { homeworkRepository } from '@/modules/homework/server/repository';
 
 export const getProjectFormStudentComboboxQuery = async (
   sessionUser: SessionUserType,
   projectId: string | undefined
 ) => getProjectFormStudents(sessionUser, projectId);
 
-const getManyWithHomework = (sessionUser: SessionUserType) => {
+const getMany = (sessionUser: SessionUserType) => {
   if (sessionUser.role !== 'lector') {
     throw new Error(`Unauthorized`);
   }
 
-  return studentRepository.getManyStudentsWithHomework();
+  return studentRepository.getManyStudents();
 };
 
 const get = async (sessionUser: SessionUserType, studentId: string) => {
@@ -20,20 +21,25 @@ const get = async (sessionUser: SessionUserType, studentId: string) => {
     throw new Error(`Unauthorized`);
   }
 
-  // It's okay to get user from cache, we don't need to get it fresh from db.
-  const student = (await studentRepository.getManyStudentsWithHomework()).find(
-    student => student.id === studentId
-  );
+  const [students, homeworks] = await Promise.all([
+    studentRepository.getManyStudents(),
+    homeworkRepository.getMany({ userId: studentId })
+  ]);
+
+  const student = students.find(student => student.id === studentId);
 
   if (!student) {
     throw new Error(`Student ${studentId} not found`);
   }
 
-  return student;
+  return {
+    ...student,
+    homeworksStudent: homeworks
+  };
 };
 
 export const studentQueries = {
   getProjectFormStudentCombobox: getProjectFormStudentComboboxQuery,
-  getManyWithHomework,
+  getMany,
   get
 };

@@ -7,10 +7,22 @@ import { getHomeworkTag } from './tag';
 
 const getMany = async ({ userId }: { userId: string }) => {
   'use cache';
-  cacheTag(getHomeworkTag(userId));
+  cacheTag(getHomeworkTag({ userId }));
 
   return db.query.homeworks.findMany({
     where: (table, { eq }) => eq(table.studentId, userId)
+  });
+};
+
+const getManyForLecture = async ({ lectureId }: { lectureId: string }) => {
+  'use cache';
+  cacheTag(getHomeworkTag({ lectureId }));
+
+  return db.query.homeworks.findMany({
+    where: (table, { eq }) => eq(table.lectureId, lectureId),
+    with: {
+      student: true
+    }
   });
 };
 
@@ -35,6 +47,7 @@ const create = (values: Omit<HomeworkInsertType, 'id'>) =>
 
 export const homeworkRepository = {
   getMany,
+  getManyForLecture,
   update,
   create
 };
