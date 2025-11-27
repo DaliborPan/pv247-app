@@ -36,6 +36,8 @@ const OverviewSidebarCard = ({
 
 export const OverviewCard = async () => {
   const lectures = await lectureLoaders.getOrdered();
+  const homeworkCount = (await lectureLoaders.getAllWithHomework()).length;
+
   const overviewPromise = studentLoaders.getMineOverview();
 
   return (
@@ -56,7 +58,7 @@ export const OverviewCard = async () => {
                 <Suspense>
                   {overviewPromise.then(
                     overview =>
-                      `${overview.awardedHomeworkCount}/${lectures.length} | ${overview.totalPoints}p`
+                      `${overview.awardedHomeworkCount}/${homeworkCount} | ${overview.totalPoints}p`
                   )}
                 </Suspense>
               }

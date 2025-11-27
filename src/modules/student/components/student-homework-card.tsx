@@ -48,29 +48,24 @@ const HomeworkListCard = async ({
 export const StudentHomeworkCard = (props: { user: Promise<UserType> }) => {
   return (
     <Suspense fallback={<HomeworkListCard />}>
-      {props.user.then(user => {
+      {props.user.then(async user => {
         if (user.role !== 'student') {
           return null;
         }
 
-        const homeworkPromise = homeworkLoader.getMany({
+        const homework = await homeworkLoader.getMany({
           userId: user.id
         });
 
         return (
           <HomeworkListCard
-            points={lecture => (
-              <Suspense>
-                {homeworkPromise.then(homework => {
-                  const lectureHomework = homework.find(
-                    hw => hw.lectureId === lecture.id
-                  );
-                  const points = lectureHomework?.points;
+            points={lecture => {
+              const lectureHomework = homework.find(
+                hw => hw.lectureId === lecture.id
+              );
 
-                  return <PointsBadge points={points} />;
-                })}
-              </Suspense>
-            )}
+              return <PointsBadge points={lectureHomework?.points} />;
+            }}
           />
         );
       })}
