@@ -7,8 +7,8 @@ import { studentLoaders } from '@/modules/student/loader';
 
 const Page = async () => {
   const students = await studentLoaders.getManyWithHomework();
-  const sessionUser = await getSessionUser();
 
+  const sessionUser = await getSessionUser();
   const hasOwnStudents = students.some(
     student => student.lectorId === sessionUser.id
   );

@@ -6,15 +6,22 @@ const getMany = async (
   sessionUser: SessionUserType,
   { userId, lectureId }: { userId?: string; lectureId?: string }
 ) => {
-  if (sessionUser.role !== 'lector') {
-    if (userId === sessionUser.id) {
-      return homeworkRepository.getMany({ userId });
+  if (userId) {
+    if (sessionUser.role !== 'lector' && userId !== sessionUser.id) {
+      throw new Error(`Unauthorized`);
     }
 
-    throw new Error(`Unauthorized`);
+    return homeworkRepository.getMany({ userId });
+  }
+  if (sessionUser.role === 'lector') {
+    if (lectureId) {
+      return homeworkRepository.getMany({ lectureId });
+    }
+
+    return homeworkRepository.getMany({});
   }
 
-  return homeworkRepository.getMany({ lectureId });
+  throw new Error(`Unauthorized`);
 };
 
 export const homeworkQueries = {

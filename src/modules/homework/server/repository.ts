@@ -5,14 +5,10 @@ import { type HomeworkInsertType, homeworks } from '@/db/schema/homeworks';
 import { cacheTag } from 'next/cache';
 import { getHomeworkTag } from './tag';
 
-const getManyForStudent = async ({ userId }: { userId: string }) => {
-  'use cache';
-  cacheTag(getHomeworkTag({ userId }));
-
-  return db.query.homeworks.findMany({
+const getManyForStudent = async ({ userId }: { userId: string }) =>
+  db.query.homeworks.findMany({
     where: (table, { eq }) => eq(table.studentId, userId)
   });
-};
 
 const getManyForLecture = async ({ lectureId }: { lectureId: string }) => {
   'use cache';

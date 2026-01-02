@@ -5,6 +5,7 @@ import { db } from '@/db';
 import { type SessionUserType } from '@/modules/session-user/types';
 import { users, type UserInsertType } from '@/db/schema/users';
 import { studentsTag } from './tag';
+import { HomeworkSlugType } from '@/modules/lecture/schema';
 
 export const updateUser = (
   id: string,
@@ -51,6 +52,18 @@ const getManyStudents = async () => {
   });
 };
 
+const getManyStudentsWithHomework = ({ lectureId }: { lectureId?: string }) =>
+  db.query.users.findMany({
+    where: (table, { eq }) => eq(table.role, 'student'),
+    with: {
+      homeworksStudent: lectureId
+        ? {
+            where: (table, { eq }) => eq(table.lectureId, lectureId)
+          }
+        : true
+    }
+  });
+
 export const getProjectFormStudents = (
   sessionUser: SessionUserType,
   projectId: string | undefined
@@ -73,5 +86,6 @@ export const getProjectFormStudents = (
   });
 
 export const studentRepository = {
-  getManyStudents
+  getManyStudents,
+  getManyStudentsWithHomework
 };
