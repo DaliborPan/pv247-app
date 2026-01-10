@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Plus, Users } from 'lucide-react';
+import { ArrowRight, Users } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { SidebarCard } from '@/components/sidebar-card';

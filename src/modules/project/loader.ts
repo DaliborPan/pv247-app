@@ -27,13 +27,10 @@ const get = async (id: string) => {
 
 const getMine = cache(async () => {
   const sessionUser = await getSessionUser();
-  const userProjectId = sessionUser.projectId;
 
-  if (!userProjectId) {
-    return null;
-  }
-
-  return projectQueries.get(sessionUser, userProjectId);
+  return projectQueries.get(sessionUser, {
+    userId: sessionUser.id
+  });
 });
 
 export const projectLoaders = {

@@ -45,7 +45,7 @@ export const StudentOverviewCard = async ({
                 <Suspense>
                   {overviewPromise.then(overview =>
                     overview.project?.points
-                      ? `${overview.project?.points} points`
+                      ? `${overview.project.points} points`
                       : 'No points yet'
                   )}
                 </Suspense>

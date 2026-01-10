@@ -10,16 +10,21 @@ export const getProjectsQuery = (sessionUser: SessionUserType) => {
   return projectRepository.getMany();
 };
 
-const get = async (sessionUser: SessionUserType, id: string) => {
-  if (sessionUser.role !== 'lector' && sessionUser.projectId !== id) {
-    throw new Error(`${sessionUser.id} cannot read project ${id}`);
+const get = async (
+  sessionUser: SessionUserType,
+  { userId }: { userId: string }
+) => {
+  if (sessionUser.role !== 'lector' && sessionUser.id !== userId) {
+    throw new Error(`${sessionUser.id} cannot read project for user ${userId}`);
   }
 
   const projects = await projectRepository.getMany();
-  const project = projects.find(project => project.id === id);
+  const project = projects.find(project =>
+    project.users.some(projectUser => projectUser.id === userId)
+  );
 
   if (!project) {
-    throw new Error(`Project ${id} not found`);
+    return null;
   }
 
   return project;

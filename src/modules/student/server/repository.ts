@@ -1,11 +1,8 @@
 import { and, eq, inArray } from 'drizzle-orm';
-import { cacheTag } from 'next/cache';
 
 import { db } from '@/db';
 import { type SessionUserType } from '@/modules/session-user/types';
 import { users, type UserInsertType } from '@/db/schema/users';
-import { studentsTag } from './tag';
-import { HomeworkSlugType } from '@/modules/lecture/schema';
 
 export const updateUser = (
   id: string,
@@ -44,9 +41,6 @@ export const getStudents = ({
   });
 
 const getManyStudents = async () => {
-  'use cache';
-  cacheTag(studentsTag);
-
   return db.query.users.findMany({
     where: (table, { eq }) => eq(table.role, 'student')
   });

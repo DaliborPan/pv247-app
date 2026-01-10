@@ -4,21 +4,18 @@ import { homeworkRepository } from './repository';
 
 const getMany = async (
   sessionUser: SessionUserType,
-  { userId, lectureId }: { userId?: string; lectureId?: string }
+  { userId }: { userId?: string }
 ) => {
   if (userId) {
-    if (sessionUser.role !== 'lector' && userId !== sessionUser.id) {
-      throw new Error(`Unauthorized`);
+    if (sessionUser.role === 'lector' || userId === sessionUser.id) {
+      return homeworkRepository.getMany({ userId });
     }
 
-    return homeworkRepository.getMany({ userId });
+    throw new Error(`Unauthorized`);
   }
-  if (sessionUser.role === 'lector') {
-    if (lectureId) {
-      return homeworkRepository.getMany({ lectureId });
-    }
 
-    return homeworkRepository.getMany({});
+  if (sessionUser.role === 'lector') {
+    return homeworkRepository.getMany();
   }
 
   throw new Error(`Unauthorized`);

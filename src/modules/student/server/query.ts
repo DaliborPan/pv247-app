@@ -2,9 +2,8 @@ import { type SessionUserType } from '@/modules/session-user/types';
 
 import { getProjectFormStudents, studentRepository } from './repository';
 import { homeworkRepository } from '@/modules/homework/server/repository';
-import { HomeworkSlugType } from '@/modules/lecture/schema';
 
-export const getProjectFormStudentComboboxQuery = async (
+export const getProjectFormStudentComboboxOptions = async (
   sessionUser: SessionUserType,
   projectId: string | undefined
 ) => getProjectFormStudents(sessionUser, projectId);
@@ -55,7 +54,7 @@ const get = async (sessionUser: SessionUserType, studentId: string) => {
 };
 
 export const studentQueries = {
-  getProjectFormStudentCombobox: getProjectFormStudentComboboxQuery,
+  getProjectFormStudentComboboxOptions,
   getMany,
   getManyWithHomework,
   get

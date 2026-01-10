@@ -27,7 +27,7 @@ const Page = ({ params }: PageProps<'/lector/homeworks/[slug]'>) => {
 
         const paramSlug = parsedSlug.data;
 
-        const lectures = await lectureLoaders.getOrdered();
+        const lectures = await lectureLoaders.getMany();
         const lecture = lectures.find(
           lecture => lecture.homeworkSlug === paramSlug
         );

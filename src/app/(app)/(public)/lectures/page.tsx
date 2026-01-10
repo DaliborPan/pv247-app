@@ -4,7 +4,7 @@ import { CardsLayout } from '../_components/cards-layout';
 import { lectureLoaders } from '@/modules/lecture/loader';
 
 const Page = async () => {
-  const lectures = await lectureLoaders.getOrdered();
+  const lectures = await lectureLoaders.getMany();
 
   return (
     <CardsLayout title="Lectures">

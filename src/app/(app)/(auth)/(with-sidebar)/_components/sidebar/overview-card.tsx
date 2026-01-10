@@ -35,7 +35,7 @@ const OverviewSidebarCard = ({
 };
 
 export const OverviewCard = async () => {
-  const lectures = await lectureLoaders.getOrdered();
+  const lectures = await lectureLoaders.getMany();
   const homeworkCount = (await lectureLoaders.getAllWithHomework()).length;
 
   const overviewPromise = studentLoaders.getMineOverview();

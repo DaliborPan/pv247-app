@@ -27,7 +27,7 @@ const AttendanceCell = ({
 export const StudentAttendanceCard = async (props: {
   userId: Promise<string>;
 }) => {
-  const lectures = await lectureLoaders.getOrdered();
+  const lectures = await lectureLoaders.getMany();
 
   return (
     <DetailCard title="Attendance">

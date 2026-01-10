@@ -5,8 +5,6 @@ import { authLectorServerAction } from '@/server/server-actions';
 import { homeworkMutations } from '../../server/mutation';
 
 import { setHomeworkPointsFormSchema } from './schema';
-import { updateTag } from 'next/cache';
-import { getHomeworkTag } from '../../server/tag';
 
 export const updateHomeworkPointsAction = authLectorServerAction
   .input(setHomeworkPointsFormSchema)
@@ -16,9 +14,6 @@ export const updateHomeworkPointsAction = authLectorServerAction
       studentId: input.studentId,
       points: input.points
     });
-
-    updateTag(getHomeworkTag({ lectureId: input.lecture.id }));
-    updateTag(getHomeworkTag({ userId: input.studentId }));
   });
 
 export const createHomeworkAction = authLectorServerAction
@@ -29,7 +24,4 @@ export const createHomeworkAction = authLectorServerAction
       name: input.lecture.homeworkName,
       lectureId: input.lecture.id
     });
-
-    updateTag(getHomeworkTag({ lectureId: input.lecture.id }));
-    updateTag(getHomeworkTag({ userId: input.studentId }));
   });

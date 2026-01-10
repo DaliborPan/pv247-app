@@ -8,17 +8,11 @@ import { DataTableColumnHeader } from '@/components/data-table';
 import { Icon } from '@/components/base/icon';
 
 import { type studentLoaders } from '@/modules/student/loader';
-import { type homeworkLoader } from '@/modules/homework/loader';
+
 import { LoaderResult } from '@/types';
 
-type StudentWithHomeworks = LoaderResult<
-  typeof studentLoaders.getMany
->[number] & {
-  homeworksStudent: LoaderResult<typeof homeworkLoader.getMany>[number][];
-};
-
 export const columns: ColumnDef<
-  StudentWithHomeworks & {
+  LoaderResult<typeof studentLoaders.getManyWithHomework>[number] & {
     homeworkPoints: number;
   },
   string
@@ -40,7 +34,7 @@ export const columns: ColumnDef<
     )
   },
   {
-    accessorKey: 'fullname',
+    id: 'fullname',
     header: props => <DataTableColumnHeader {...props} title="Full name" />,
     minSize: 300,
     cell: ({ row }) =>
@@ -55,7 +49,7 @@ export const columns: ColumnDef<
     }
   },
   {
-    accessorKey: 'projectId',
+    id: 'projectId',
     header: props => <DataTableColumnHeader {...props} title="Has project" />,
     minSize: 175,
     cell: ({ row }) => (
@@ -65,16 +59,15 @@ export const columns: ColumnDef<
     )
   },
   {
-    accessorKey: 'homeworkPoints',
+    id: 'homeworkPoints',
     header: props => (
       <DataTableColumnHeader {...props} title="Homework points" />
     ),
     minSize: 225,
-    cell: ({ getValue }) => `${getValue()} / 210`
+    cell: ({ row }) => `${row.original.homeworkPoints} / 210`
   },
   {
-    id: 'id',
-    header: '',
+    id: 'open',
     minSize: 100,
     cell: ({ row }) => (
       <Link

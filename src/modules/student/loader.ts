@@ -6,7 +6,7 @@ import { homeworkQueries } from '@/modules/homework/server';
 
 import { projectQueries } from '@/modules/project/server';
 
-import { getProjectFormStudentComboboxQuery, studentQueries } from './server';
+import { studentQueries } from './server';
 
 import { studentLectureQueries } from '../student-lecture/server';
 
@@ -15,12 +15,15 @@ import { studentLectureQueries } from '../student-lecture/server';
  *
  * Students, that are already assigned to the project are also included.
  */
-export const getProjectFormStudentComboboxLoader = async (
+export const getProjectFormStudentComboboxOptions = async (
   projectId: string | undefined
 ) => {
   const sessionUser = await getSessionUser();
 
-  return getProjectFormStudentComboboxQuery(sessionUser, projectId);
+  return studentQueries.getProjectFormStudentComboboxOptions(
+    sessionUser,
+    projectId
+  );
 };
 
 const getOverview = async (user: UserType) => {
@@ -32,7 +35,7 @@ const getOverview = async (user: UserType) => {
   ]);
 
   const project = user.projectId
-    ? await projectQueries.get(sessionUser, user.projectId)
+    ? await projectQueries.get(sessionUser, { userId: user.id })
     : undefined;
 
   const awardedHomeworkCount = homework.length;
@@ -93,5 +96,6 @@ export const studentLoaders = {
   getMineOverview,
   getOverview,
   getManyWithHomework,
-  getStudentsWithHomework
+  getStudentsWithHomework,
+  getProjectFormStudentComboboxOptions
 };

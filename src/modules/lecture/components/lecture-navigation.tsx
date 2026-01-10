@@ -11,7 +11,7 @@ export const LectureNavigation = async ({
   baseHref?: string;
 }) => {
   const lectureSlug = await props.lectureSlug;
-  const lectures = await lectureLoaders.getOrdered();
+  const lectures = await lectureLoaders.getMany();
 
   const slugLectureIndex = lectures.findIndex(
     lecture => lecture.slug === lectureSlug

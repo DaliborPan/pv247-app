@@ -23,7 +23,7 @@ export const GET = async (
     return Response.redirect(url);
   }
 
-  const lectures = await lectureQueries.getOrdered();
+  const lectures = await lectureQueries.getMany();
   const lecture = lectures.find(lecture => lecture.attendanceToken === token);
 
   if (!lecture) {

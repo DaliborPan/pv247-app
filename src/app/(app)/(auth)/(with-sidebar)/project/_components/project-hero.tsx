@@ -6,6 +6,7 @@ import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
 import { Hero } from '@/components/base/hero';
 import { projectLoaders } from '@/modules/project/loader';
+import { LoaderResult } from '@/types';
 
 const GithubLink = ({ href }: { href?: string | null }) => (
   <a
@@ -37,7 +38,7 @@ const EditLink = ({ disabled }: { disabled: boolean }) => (
 export const ProjectHero = ({
   project
 }: {
-  project: NonNullable<Awaited<ReturnType<typeof projectLoaders.getMine>>>;
+  project: NonNullable<LoaderResult<typeof projectLoaders.getMine>>;
 }) => {
   const displayUsers = project.users
     .map(user => `${user.firstName} ${user.lastName}`)
