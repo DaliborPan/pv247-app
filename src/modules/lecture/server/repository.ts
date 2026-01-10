@@ -3,7 +3,7 @@ import { cacheLife, cacheTag } from 'next/cache';
 import { lecturesTag } from './tag';
 import { checkIsAvailable } from '../utils/check-is-available';
 
-const getOrdered = async () => {
+const getMany = async () => {
   'use cache';
   cacheTag(lecturesTag);
 
@@ -15,11 +15,14 @@ const getOrdered = async () => {
   });
 };
 
+/**
+ * Caching separately due to comparing to new Date()
+ */
 const getAvailable = async () => {
   'use cache';
   cacheLife('minutes');
 
-  const lectures = await getOrdered();
+  const lectures = await getMany();
 
   return lectures.filter(checkIsAvailable);
 };
@@ -43,7 +46,7 @@ const getIsHomeworkAvailable = async (homeworkSlug: string) => {
   'use cache';
   cacheLife('minutes');
 
-  const ordered = await getOrdered();
+  const ordered = await getMany();
   const lecture = ordered.find(
     lecture => lecture.homeworkSlug === homeworkSlug
   );
@@ -52,7 +55,7 @@ const getIsHomeworkAvailable = async (homeworkSlug: string) => {
 };
 
 export const lectureRepository = {
-  getOrdered,
+  getMany,
   getIsAvailable,
   getAvailable,
   getIsHomeworkAvailable

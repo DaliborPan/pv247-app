@@ -2,39 +2,15 @@ import { and, eq } from 'drizzle-orm';
 
 import { db } from '@/db';
 import { type HomeworkInsertType, homeworks } from '@/db/schema/homeworks';
-import { cacheTag } from 'next/cache';
-import { getHomeworkTag } from './tag';
 
 const getManyForStudent = async ({ userId }: { userId: string }) =>
   db.query.homeworks.findMany({
     where: (table, { eq }) => eq(table.studentId, userId)
   });
 
-const getManyForLecture = async ({ lectureId }: { lectureId: string }) => {
-  'use cache';
-  cacheTag(getHomeworkTag({ lectureId }));
-
-  return db.query.homeworks.findMany({
-    where: (table, { eq }) => eq(table.lectureId, lectureId),
-    with: {
-      student: true
-    }
-  });
-};
-
-const getMany = async ({
-  userId,
-  lectureId
-}: {
-  userId?: string;
-  lectureId?: string;
-}) => {
+const getMany = async ({ userId }: { userId?: string } = {}) => {
   if (userId) {
     return getManyForStudent({ userId });
-  }
-
-  if (lectureId) {
-    return getManyForLecture({ lectureId });
   }
 
   return db.query.homeworks.findMany();

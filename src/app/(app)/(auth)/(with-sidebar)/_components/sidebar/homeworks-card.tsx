@@ -9,7 +9,7 @@ import { studentLoaders } from '@/modules/student/loader';
 import { Suspense } from 'react';
 
 export const HomeworksCard = async () => {
-  const lectures = await lectureLoaders.getOrdered();
+  const lectures = await lectureLoaders.getMany();
   const availableLectures = await lectureLoaders.getAvailable();
 
   const overviewPromise = studentLoaders.getMineOverview();

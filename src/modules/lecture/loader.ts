@@ -1,24 +1,26 @@
 import { lectureQueries } from './server';
 
-const getOrdered = lectureQueries.getOrdered;
+const getMany = () => lectureQueries.getMany();
 
-const getIsAvailable = lectureQueries.getIsAvailable;
+const getIsAvailable = (slug: string) => lectureQueries.getIsAvailable(slug);
 
-const getIsHomeworkAvailable = lectureQueries.getIsHomeworkAvailable;
+const getIsHomeworkAvailable = (homeworkSlug: string) =>
+  lectureQueries.getIsHomeworkAvailable(homeworkSlug);
 
-const getAvailable = lectureQueries.getAvailable;
+const getAvailable = () => lectureQueries.getAvailable();
 
 /**
- * Get all lectures, that have homework. Basically filter out last lecture.
+ * Get all lectures, that have homework.
+ * Basically filter out last lecture that doesn't have homework.
  */
 const getAllWithHomework = async () => {
-  const lectures = await lectureQueries.getOrdered();
+  const lectures = await lectureQueries.getMany();
 
   return lectures.filter(lecture => !!lecture.homeworkSlug);
 };
 
 export const lectureLoaders = {
-  getOrdered,
+  getMany,
   getAllWithHomework,
   getIsAvailable,
   getIsHomeworkAvailable,
