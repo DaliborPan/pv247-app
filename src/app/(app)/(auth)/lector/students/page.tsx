@@ -6,7 +6,7 @@ import { getSessionUser } from '@/modules/session-user';
 import { studentLoaders } from '@/modules/student/loader';
 
 const Page = async () => {
-  const students = await studentLoaders.getManyWithHomework();
+  const students = await studentLoaders.listStudents();
 
   const sessionUser = await getSessionUser();
   const hasOwnStudents = students.some(

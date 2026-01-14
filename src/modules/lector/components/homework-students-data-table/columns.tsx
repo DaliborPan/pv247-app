@@ -1,6 +1,6 @@
 'use client';
 
-import { type ColumnDef } from '@tanstack/react-table';
+import { createColumnHelper } from '@tanstack/react-table';
 import { ExternalLink, X } from 'lucide-react';
 
 import { DataTableColumnHeader } from '@/components/data-table';
@@ -9,33 +9,28 @@ import {
   SetHomeworkPointsForm,
   type SetHomeworkPointsFormSchema
 } from '@/modules/homework/components/set-homework-points-form';
-import { orderedHomeworkSlugs } from '@/modules/lecture/const/homework-slug';
 import { type studentLoaders } from '@/modules/student/loader';
 import { LoaderResult } from '@/types';
+import { getHomeworkGithubUrl } from '@/modules/homework/utils';
 
-export const columns: ColumnDef<
+const columnHelper = createColumnHelper<
   LoaderResult<typeof studentLoaders.getStudentsWithHomework>[number] & {
     defaultValues: Partial<SetHomeworkPointsFormSchema>;
-  },
-  unknown
->[] = [
-  {
-    id: 'github-link',
+  }
+>();
+
+export const columns = [
+  columnHelper.display({
+    id: 'github-external-link',
     header: props => <DataTableColumnHeader {...props} title="GitHub" />,
-    minSize: 175,
+    minSize: 200,
     cell: ({ row }) => {
       const homeworkSlug = row.original.defaultValues?.lecture?.homeworkSlug;
       const githubName = row.original.github;
-
-      const order = homeworkSlug
-        ? orderedHomeworkSlugs.indexOf(homeworkSlug) + 1
-        : undefined;
-
-      const url =
-        order && githubName
-          ? `https://github.com/FI-PV247/t-0${order}-${homeworkSlug}-${githubName}`
-          : undefined;
-
+      const url = getHomeworkGithubUrl({
+        githubName,
+        homeworkSlug
+      });
       return url ? (
         <a
           href={url}
@@ -47,36 +42,34 @@ export const columns: ColumnDef<
           Link
         </a>
       ) : (
-        <div className="flex items-center gap-x-2 text-text-terciary">
-          <Icon icon={<X />} />
-          No link
+        <div className="italic text-text-terciary">
+          {row.original.name ?? row.original.lastName}
         </div>
       );
     }
-  },
-  {
-    accessorKey: 'lastName',
-    header: props => <DataTableColumnHeader {...props} title="Full name" />,
-    minSize: 300,
-    cell: ({ row }) =>
-      row.original.firstName && row.original.lastName
-        ? `${row.original.firstName} ${row.original.lastName}`
-        : ''
-  },
-  {
-    accessorKey: 'github',
+  }),
+
+  columnHelper.accessor('firstName', {
+    header: props => <DataTableColumnHeader {...props} title="First name" />
+  }),
+
+  columnHelper.accessor('lastName', {
+    header: props => <DataTableColumnHeader {...props} title="Last name" />
+  }),
+
+  columnHelper.accessor('github', {
     header: props => <DataTableColumnHeader {...props} title="Github nick" />,
     minSize: 300,
     cell: ({ row }) => row.original.github
-  },
-  {
-    id: 'defaultValues',
-    header: props => (
-      <DataTableColumnHeader {...props} title="Homework points" />
-    ),
+  }),
+
+  columnHelper.display({
+    id: 'points',
+    header: props => <DataTableColumnHeader {...props} title="Points" />,
     minSize: 225,
-    cell: ({ row }) => (
-      <SetHomeworkPointsForm defaultValues={row.original.defaultValues} />
-    )
-  }
+    cell: ({ row }) =>
+      !!row.original.github && (
+        <SetHomeworkPointsForm defaultValues={row.original.defaultValues} />
+      )
+  })
 ];

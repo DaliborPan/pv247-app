@@ -46,15 +46,23 @@ const getManyStudents = async () => {
   });
 };
 
-const getManyStudentsWithHomework = ({ lectureId }: { lectureId?: string }) =>
+const getManyStudentsWithHomework = ({ lectureId }: { lectureId: string }) =>
   db.query.users.findMany({
     where: (table, { eq }) => eq(table.role, 'student'),
     with: {
-      homeworksStudent: lectureId
-        ? {
-            where: (table, { eq }) => eq(table.lectureId, lectureId)
-          }
-        : true
+      homeworksStudent: {
+        where: (table, { eq }) => eq(table.lectureId, lectureId)
+      }
+    }
+  });
+
+const listStudents = () =>
+  db.query.users.findMany({
+    where: (table, { eq }) => eq(table.role, 'student'),
+    with: {
+      homeworksStudent: true,
+      project: true,
+      studentLectures: true
     }
   });
 
@@ -81,5 +89,6 @@ export const getProjectFormStudents = (
 
 export const studentRepository = {
   getManyStudents,
-  getManyStudentsWithHomework
+  getManyStudentsWithHomework,
+  listStudents
 };

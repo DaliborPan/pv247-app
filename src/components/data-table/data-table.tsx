@@ -2,6 +2,8 @@
 
 import {
   type ColumnDef,
+  type SortingState,
+  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -14,27 +16,36 @@ import { Input } from '../base/input';
 
 type TableProps<TData extends { id: string }> = {
   data: TData[];
-  columns: ColumnDef<TData, string>[];
+  columns: ColumnDef<TData, any>[];
 
   search?: {
     name: string;
   };
+
+  defaultSorting?: SortingState;
+  defaultColumnVisibility?: VisibilityState;
 };
 
 export const DataTable = <TData extends { id: string }>({
   data,
   columns,
-  search
+  search,
+  defaultSorting,
+  defaultColumnVisibility
 }: TableProps<TData>) => {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel()
+    getFilteredRowModel: getFilteredRowModel(),
+    initialState: {
+      sorting: defaultSorting,
+      columnVisibility: defaultColumnVisibility
+    }
   });
 
-  const searchColumn = table.getColumn(search?.name ?? '');
+  const searchColumn = search?.name ? table.getColumn(search.name) : null;
 
   const searchFilterValue = searchColumn?.getFilterValue() as
     | string
@@ -76,11 +87,12 @@ export const DataTable = <TData extends { id: string }>({
               </tr>
             ))}
           </thead>
-          <tbody className="">
+
+          <tbody>
             {table.getRowModel().rows.map(row => (
               <tr
-                className="flex items-center border-b transition-colors odd:bg-white even:bg-white/50"
                 key={row.id}
+                className="flex items-center border-b transition-colors odd:bg-white even:bg-white/50"
               >
                 {row.getVisibleCells().map(cell => (
                   <td

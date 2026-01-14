@@ -7,18 +7,21 @@ import { type studentLoaders } from '@/modules/student/loader';
 export const StudentsDataTable = ({
   students
 }: {
-  students: LoaderResult<typeof studentLoaders.getManyWithHomework>;
+  students: LoaderResult<typeof studentLoaders.listStudents>;
 }) => (
   <DataTable
-    data={students.map(student => ({
-      ...student,
-      homeworkPoints: student.homeworksStudent.reduce(
-        (acc, hw) => acc + hw.points,
-        0
-      )
-    }))}
+    data={students}
     search={{
       name: 'fullname'
+    }}
+    defaultSorting={[
+      {
+        id: 'lastName',
+        desc: false
+      }
+    ]}
+    defaultColumnVisibility={{
+      fullname: false
     }}
     columns={columns}
   />

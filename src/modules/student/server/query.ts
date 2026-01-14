@@ -21,14 +21,38 @@ const getManyWithHomework = (
   {
     lectureId
   }: {
-    lectureId?: string;
-  } = {}
+    lectureId: string;
+  }
 ) => {
   if (sessionUser.role !== 'lector') {
     throw new Error(`Unauthorized`);
   }
 
   return studentRepository.getManyStudentsWithHomework({ lectureId });
+};
+
+const listStudents = async (sessionUser: SessionUserType) => {
+  if (sessionUser.role !== 'lector') {
+    throw new Error(`Unauthorized`);
+  }
+
+  const students = await studentRepository.listStudents();
+
+  return students
+    .map(student => ({
+      ...student,
+      homeworkPoints: student.homeworksStudent.reduce(
+        (acc, hw) => acc + hw.points,
+        0
+      ),
+      attendanceCount: student.studentLectures.length
+    }))
+    .map(student => ({
+      ...student,
+      hasEnoughHomeworkPoints: student.homeworkPoints >= 130,
+      hasEnoughAttendance: student.attendanceCount >= 8
+      // hasProjectCompleted: student.project?.status === 'approved'
+    }));
 };
 
 const get = async (sessionUser: SessionUserType, studentId: string) => {
@@ -57,5 +81,6 @@ export const studentQueries = {
   getProjectFormStudentComboboxOptions,
   getMany,
   getManyWithHomework,
-  get
+  get,
+  listStudents
 };
