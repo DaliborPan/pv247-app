@@ -16,6 +16,7 @@ export const DataTableColumnHeader = <TData, TValue>({
   title,
   className
 }: DataTableColumnHeaderProps<TData, TValue>) => {
+  console.log(title, column.getCanSort());
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }

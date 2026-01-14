@@ -58,6 +58,16 @@ const getManyStudentsWithHomework = ({ lectureId }: { lectureId?: string }) =>
     }
   });
 
+const listStudents = () =>
+  db.query.users.findMany({
+    where: (table, { eq }) => eq(table.role, 'student'),
+    with: {
+      homeworksStudent: true,
+      project: true,
+      studentLectures: true
+    }
+  });
+
 export const getProjectFormStudents = (
   sessionUser: SessionUserType,
   projectId: string | undefined
@@ -81,5 +91,6 @@ export const getProjectFormStudents = (
 
 export const studentRepository = {
   getManyStudents,
-  getManyStudentsWithHomework
+  getManyStudentsWithHomework,
+  listStudents
 };

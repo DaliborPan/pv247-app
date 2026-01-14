@@ -72,10 +72,10 @@ const get = async (studentId: Promise<string>) => {
   return studentQueries.get(sessionUser, await studentId);
 };
 
-const getManyWithHomework = async () => {
+const listStudents = async () => {
   const sessionUser = await getSessionUser();
 
-  return studentQueries.getManyWithHomework(sessionUser);
+  return studentQueries.listStudents(sessionUser);
 };
 
 const getStudentsWithHomework = async ({
@@ -95,7 +95,7 @@ export const studentLoaders = {
   get,
   getMineOverview,
   getOverview,
-  getManyWithHomework,
+  listStudents,
   getStudentsWithHomework,
   getProjectFormStudentComboboxOptions
 };

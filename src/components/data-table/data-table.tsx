@@ -2,6 +2,8 @@
 
 import {
   type ColumnDef,
+  type SortingState,
+  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -14,24 +16,33 @@ import { Input } from '../base/input';
 
 type TableProps<TData extends { id: string }> = {
   data: TData[];
-  columns: ColumnDef<TData, string>[];
+  columns: ColumnDef<TData, any>[];
 
   search?: {
     name: string;
   };
+
+  defaultSorting?: SortingState;
+  defaultColumnVisibility?: VisibilityState;
 };
 
 export const DataTable = <TData extends { id: string }>({
   data,
   columns,
-  search
+  search,
+  defaultSorting,
+  defaultColumnVisibility
 }: TableProps<TData>) => {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel()
+    getFilteredRowModel: getFilteredRowModel(),
+    initialState: {
+      sorting: defaultSorting,
+      columnVisibility: defaultColumnVisibility
+    }
   });
 
   const searchColumn = table.getColumn(search?.name ?? '');
