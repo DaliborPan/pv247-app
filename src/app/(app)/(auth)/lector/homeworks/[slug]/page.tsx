@@ -26,11 +26,7 @@ const Page = ({ params }: PageProps<'/lector/homeworks/[slug]'>) => {
         }
 
         const paramSlug = parsedSlug.data;
-
-        const lectures = await lectureLoaders.getMany();
-        const lecture = lectures.find(
-          lecture => lecture.homeworkSlug === paramSlug
-        );
+        const lecture = await lectureLoaders.get({ homeworkSlug: paramSlug });
 
         if (!lecture) {
           redirect('/');

@@ -45,7 +45,7 @@ export const DataTable = <TData extends { id: string }>({
     }
   });
 
-  const searchColumn = table.getColumn(search?.name ?? '');
+  const searchColumn = search?.name ? table.getColumn(search.name) : null;
 
   const searchFilterValue = searchColumn?.getFilterValue() as
     | string
@@ -87,11 +87,12 @@ export const DataTable = <TData extends { id: string }>({
               </tr>
             ))}
           </thead>
-          <tbody className="">
+
+          <tbody>
             {table.getRowModel().rows.map(row => (
               <tr
-                className="flex items-center border-b transition-colors odd:bg-white even:bg-white/50"
                 key={row.id}
+                className="flex items-center border-b transition-colors odd:bg-white even:bg-white/50"
               >
                 {row.getVisibleCells().map(cell => (
                   <td

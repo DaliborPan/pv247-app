@@ -21,8 +21,8 @@ const getManyWithHomework = (
   {
     lectureId
   }: {
-    lectureId?: string;
-  } = {}
+    lectureId: string;
+  }
 ) => {
   if (sessionUser.role !== 'lector') {
     throw new Error(`Unauthorized`);

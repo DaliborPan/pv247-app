@@ -15,6 +15,12 @@ const getMany = async () => {
   });
 };
 
+const get = async ({ homeworkSlug }: { homeworkSlug: string }) => {
+  return (await getMany()).find(
+    lecture => lecture.homeworkSlug === homeworkSlug
+  );
+};
+
 /**
  * Caching separately due to comparing to new Date()
  */
@@ -56,6 +62,7 @@ const getIsHomeworkAvailable = async (homeworkSlug: string) => {
 
 export const lectureRepository = {
   getMany,
+  get,
   getIsAvailable,
   getAvailable,
   getIsHomeworkAvailable

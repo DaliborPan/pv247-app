@@ -1,13 +1,14 @@
 import { lectureQueries } from './server';
 
-const getMany = () => lectureQueries.getMany();
+const getMany = lectureQueries.getMany;
 
-const getIsAvailable = (slug: string) => lectureQueries.getIsAvailable(slug);
+const get = lectureQueries.get;
 
-const getIsHomeworkAvailable = (homeworkSlug: string) =>
-  lectureQueries.getIsHomeworkAvailable(homeworkSlug);
+const getIsAvailable = lectureQueries.getIsAvailable;
 
-const getAvailable = () => lectureQueries.getAvailable();
+const getIsHomeworkAvailable = lectureQueries.getIsHomeworkAvailable;
+
+const getAvailable = lectureQueries.getAvailable;
 
 /**
  * Get all lectures, that have homework.
@@ -21,6 +22,7 @@ const getAllWithHomework = async () => {
 
 export const lectureLoaders = {
   getMany,
+  get,
   getAllWithHomework,
   getIsAvailable,
   getIsHomeworkAvailable,

@@ -46,15 +46,13 @@ const getManyStudents = async () => {
   });
 };
 
-const getManyStudentsWithHomework = ({ lectureId }: { lectureId?: string }) =>
+const getManyStudentsWithHomework = ({ lectureId }: { lectureId: string }) =>
   db.query.users.findMany({
     where: (table, { eq }) => eq(table.role, 'student'),
     with: {
-      homeworksStudent: lectureId
-        ? {
-            where: (table, { eq }) => eq(table.lectureId, lectureId)
-          }
-        : true
+      homeworksStudent: {
+        where: (table, { eq }) => eq(table.lectureId, lectureId)
+      }
     }
   });
 
