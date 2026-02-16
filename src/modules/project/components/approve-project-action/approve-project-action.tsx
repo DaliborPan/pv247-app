@@ -22,13 +22,14 @@ const useApproveProjectMutation = (project: ProjectType) =>
 export const ApproveProjectButton = ({ project }: { project: ProjectType }) => {
   const mutation = useApproveProjectMutation(project);
 
-  const StatusIcon = project.status === 'pending' ? Check : X;
+  const StatusIcon = project.status === 'CREATED' ? Check : X;
 
   return (
     <Button
       size="sm"
       variant="primary/inverse"
       iconLeft={{ icon: <StatusIcon /> }}
+      isLoading={mutation.isPending}
       onClick={async () => {
         const [_, error] = await mutation.mutateAsync();
 
@@ -40,7 +41,7 @@ export const ApproveProjectButton = ({ project }: { project: ProjectType }) => {
         toast.success('Project approved successfully');
       }}
     >
-      {project.status !== 'pending' ? 'Disapprove' : 'Approve'}
+      {project.status === 'CREATED' ? 'Approve' : 'Disapprove'}
     </Button>
   );
 };

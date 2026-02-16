@@ -6,6 +6,7 @@ import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
 import { StudentOverviewCard } from '@/modules/student/components/student-overview-card';
 import { type UserType } from '@/modules/user/schema';
+import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 
 export const StudentDetailOverviewCard = ({
   student
@@ -23,15 +24,7 @@ export const StudentDetailOverviewCard = ({
           )}
           href={`/lector/projects/${project?.id ?? ''}`}
         >
-          <span className="block">
-            {!project
-              ? 'No project'
-              : project.status === 'pending'
-                ? 'Pending'
-                : project.status === 'approved'
-                  ? 'Approved'
-                  : 'Submitted'}
-          </span>
+          <span className="block">{getProjectStatusLabel(project)}</span>
 
           {project?.id && <Icon icon={<ExternalLink />} />}
         </Link>

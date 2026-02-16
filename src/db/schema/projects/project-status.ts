@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 export const dbProjectStatusSchema = z.enum([
-  'pending',
-  'approved',
-  'submitted'
+  'CREATED',
+  'APPROVED',
+  'COMPLETED',
+  "FAILED"
 ]);

@@ -49,7 +49,7 @@ const getOverview = async (user: UserType) => {
     homework,
     homeworkTotalPoints,
     project,
-    totalPoints: homeworkTotalPoints + (project?.points ?? 0),
+    totalPoints: homeworkTotalPoints,
     attendances
   };
 };

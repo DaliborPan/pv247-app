@@ -3,8 +3,8 @@ import { ProjectCard } from './_components/project-card';
 import { projectLoaders } from '@/modules/project/loader';
 
 const Page = async () => {
-  const projectsWithPoints = await projectLoaders.getWithPoints();
-  const projectsWithoutPoints = await projectLoaders.getWithoutPoints();
+  const projectsCompleted = await projectLoaders.getCompleted();
+  const projectsCreatedOrApproved = await projectLoaders.getCreatedOrApproved();
 
   return (
     <>
@@ -12,8 +12,8 @@ const Page = async () => {
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Suspense>
-          {projectsWithPoints.length ? (
-            projectsWithPoints.map(project => (
+          {projectsCompleted.length ? (
+            projectsCompleted.map(project => (
               <ProjectCard key={project.id} project={project} />
             ))
           ) : (
@@ -25,8 +25,8 @@ const Page = async () => {
       <h2 className="mb-6 mt-12 text-3xl">Projects without points</h2>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        {projectsWithoutPoints.length ? (
-          projectsWithoutPoints.map(project => (
+        {projectsCreatedOrApproved.length ? (
+          projectsCreatedOrApproved.map(project => (
             <ProjectCard key={project.id} project={project} />
           ))
         ) : (

@@ -10,7 +10,8 @@ import { ProjectType } from '@/modules/project/schema';
 
 export const ProjectStatusCard = ({ project }: { project: ProjectType }) => {
   const status = project.status;
-  const hasPoints = !!project.points;
+
+  const isScored = status === 'COMPLETED' || status === 'FAILED';
 
   return (
     <SidebarCard
@@ -19,17 +20,21 @@ export const ProjectStatusCard = ({ project }: { project: ProjectType }) => {
           <h3
             className={cn(
               'grow truncate',
-              project.status === 'pending' ? 'text-sm' : 'text-lg'
+              project.status === 'CREATED' ? 'text-sm' : 'text-lg'
             )}
           >
-            {status === 'approved'
+            {status === 'APPROVED'
               ? 'Approved!'
-              : status === 'pending'
+              : status === 'CREATED'
                 ? 'This project has not been approved yet.'
-                : 'Project submitted!'}
+                : status === 'COMPLETED'
+                  ? 'Project completed!'
+                  : status === 'FAILED'
+                    ? 'Project failed!'
+                    : 'Unknown status'}
           </h3>
 
-          {status === 'submitted' && (
+          {status === 'APPROVED' && (
             <a href={project.github ?? ''} target="_blank" rel="noreferrer">
               <Button
                 size="sm"
@@ -42,18 +47,18 @@ export const ProjectStatusCard = ({ project }: { project: ProjectType }) => {
         </div>
       }
     >
-      {hasPoints && (
+      {isScored && (
         <div className="mt-4">
           <SetProjectPointsAction
             projectId={project.id}
             defaultValues={{
-              points: project.points ?? undefined,
+              status: project.status as never,
               comment: project.comment ?? undefined
             }}
           >
             <button className="flex w-full items-center rounded-md bg-white px-4 py-2 shadow hover:bg-background">
               <span className="grow text-left font-medium text-primary">
-                {project.points} points
+                {project.status === 'COMPLETED' ? 'Completed' : 'Failed'}
               </span>
 
               <Icon icon={<Pencil />} />
@@ -66,7 +71,7 @@ export const ProjectStatusCard = ({ project }: { project: ProjectType }) => {
         </div>
       )}
 
-      {status === 'submitted' && !hasPoints && (
+      {status === 'APPROVED' && (
         <SetProjectPointsAction projectId={project.id}>
           <Button size="sm" iconLeft={{ icon: <SquareArrowOutUpRight /> }}>
             Set points
@@ -74,7 +79,9 @@ export const ProjectStatusCard = ({ project }: { project: ProjectType }) => {
         </SetProjectPointsAction>
       )}
 
-      {status !== 'submitted' && <ApproveProjectButton project={project} />}
+      {(status === 'CREATED' || status === 'APPROVED') && (
+        <ApproveProjectButton project={project} />
+      )}
     </SidebarCard>
   );
 };

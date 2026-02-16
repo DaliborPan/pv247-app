@@ -2,20 +2,22 @@ import { cache } from 'react';
 
 import { getSessionUser } from '@/modules/session-user';
 
-import { getProjectsQuery, projectQueries, projectRepository } from './server';
+import { getProjectsQuery, projectQueries } from './server';
 
-const getWithPoints = async () => {
+const getCompleted = async () => {
   const sessionUser = await getSessionUser();
   const projects = await getProjectsQuery(sessionUser);
 
-  return projects.filter(project => !!project.points);
+  return projects.filter(project => project.status === 'COMPLETED');
 };
 
-const getWithoutPoints = async () => {
+const getCreatedOrApproved = async () => {
   const sessionUser = await getSessionUser();
   const projects = await getProjectsQuery(sessionUser);
 
-  return projects.filter(project => !project.points);
+  return projects.filter(
+    project => project.status === 'CREATED' || project.status === 'APPROVED'
+  );
 };
 
 const get = async (id: string) => {
@@ -34,8 +36,8 @@ const getMine = cache(async () => {
 });
 
 export const projectLoaders = {
-  getWithPoints,
-  getWithoutPoints,
+  getCompleted,
+  getCreatedOrApproved,
   getMine,
   get
 };

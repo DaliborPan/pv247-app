@@ -2,7 +2,7 @@ import { studentLoaders } from '@/modules/student/loader';
 import { SidebarCard } from '@/components/sidebar-card';
 
 import { SidebarCardRow } from './sidebar-card-row';
-import { getProjectStatus } from '@/modules/project/utils/project-status';
+import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 import { ReactNode, Suspense } from 'react';
 import { lectureLoaders } from '@/modules/lecture/loader';
 import { Skeleton } from '@/components/skeleton';
@@ -65,7 +65,7 @@ export const OverviewCard = async () => {
               project={
                 <Suspense>
                   {overviewPromise.then(overview =>
-                    getProjectStatus(overview.project)
+                    getProjectStatusLabel(overview.project)
                   )}
                 </Suspense>
               }

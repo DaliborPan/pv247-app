@@ -1,9 +1,14 @@
 import { ProjectType } from '../schema';
 
-export const getProjectStatus = (project: ProjectType | undefined | null) => {
+export const getProjectStatusLabel = (
+  project: ProjectType | undefined | null
+) => {
   if (!project) return 'No project';
-  if (project.status === 'pending') return 'Pending';
-  if (project.status === 'approved') return 'Approved';
 
-  return 'Submitted';
+  if (project.status === 'COMPLETED') return 'Completed';
+  if (project.status === 'APPROVED') return 'Approved';
+  if (project.status === 'CREATED') return 'Created';
+  if (project.status === 'FAILED') return 'Failed';
+
+  return 'Unknown';
 };

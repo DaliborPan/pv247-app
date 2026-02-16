@@ -17,7 +17,6 @@ export const projectSchema = z.object({
   description: z.string().nullable(),
   shortDescription: z.string().nullable(),
   github: z.string().nullable(),
-  points: z.number().nullable(),
   comment: z.string().nullable(),
   status: projectStatusSchema,
   updatedAt: z.string()

@@ -70,7 +70,7 @@ export const updateProjectStatusMutation = async (
 
 type UpdateProjectPointsMutationValuesType = Pick<
   Parameters<typeof updateProject>[1],
-  'comment' | 'points'
+  'comment' | 'status'
 >;
 
 export const updateProjectPointsMutation = async (

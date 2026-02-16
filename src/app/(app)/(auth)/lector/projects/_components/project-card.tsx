@@ -7,6 +7,7 @@ import { Button } from '@/components/base/button';
 import { Badge } from '@/components/base/badge';
 import { formatDate } from '@/lib/date';
 import { projectLoaders } from '@/modules/project/loader';
+import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 
 export const ProjectCard = ({
   project
@@ -37,16 +38,9 @@ export const ProjectCard = ({
         {formatDate(project.updatedAt)}
       </Badge>
 
-      {project.status === 'submitted' && project.points ? (
-        <Badge className="flex items-center gap-x-1.5">
-          <Icon icon={<Check />} />
-          {project.points} points
-        </Badge>
-      ) : (
-        <Badge variant="outline" className="text-text-secondary">
-          {project.status}
-        </Badge>
-      )}
+      <Badge variant="outline" className="text-text-secondary">
+        {getProjectStatusLabel(project)}
+      </Badge>
     </div>
   </article>
 );
