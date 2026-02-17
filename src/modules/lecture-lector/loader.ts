@@ -2,8 +2,7 @@ import { getSessionUser } from '../session-user';
 import { lectureLectorQueries } from './server';
 
 const getLectorsForLectures = async () => {
-  const sessionUser = await getSessionUser();
-  const lectureLectors = await lectureLectorQueries.getMany({ sessionUser });
+  const lectureLectors = await lectureLectorQueries.getMany();
 
   return lectureLectors.reduce(
     (acc, currentLectureLector) => {
@@ -17,8 +16,7 @@ const getLectorsForLectures = async () => {
 };
 
 const getLectureLectors = async (lectureId: string) => {
-  const sessionUser = await getSessionUser();
-  const lectureLectors = await lectureLectorQueries.getMany({ sessionUser });
+  const lectureLectors = await lectureLectorQueries.getMany();
 
   return lectureLectors.filter(
     lectureLector => lectureLector.lectureId === lectureId
