@@ -8,6 +8,15 @@ import { SetProjectPointsAction } from '@/modules/project/components/set-project
 import { ApproveProjectButton } from '@/modules/project/components/approve-project-action';
 import { ProjectType } from '@/modules/project/schema';
 
+const getStatusText = (status: ProjectType['status']) => {
+  if (status === 'APPROVED') return 'Approved!';
+  if (status === 'CREATED') return 'This project has not been approved yet.';
+  if (status === 'COMPLETED') return 'Project completed!';
+  if (status === 'FAILED') return 'Project failed!';
+
+  return 'Unknown status';
+};
+
 export const ProjectStatusCard = ({ project }: { project: ProjectType }) => {
   const status = project.status;
 
@@ -23,15 +32,7 @@ export const ProjectStatusCard = ({ project }: { project: ProjectType }) => {
               project.status === 'CREATED' ? 'text-sm' : 'text-lg'
             )}
           >
-            {status === 'APPROVED'
-              ? 'Approved!'
-              : status === 'CREATED'
-                ? 'This project has not been approved yet.'
-                : status === 'COMPLETED'
-                  ? 'Project completed!'
-                  : status === 'FAILED'
-                    ? 'Project failed!'
-                    : 'Unknown status'}
+            {getStatusText(status)}
           </h3>
 
           {status === 'APPROVED' && (
