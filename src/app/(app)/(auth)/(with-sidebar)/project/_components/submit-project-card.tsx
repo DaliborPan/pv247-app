@@ -6,31 +6,19 @@ import { DetailCard } from '@/components/detail-card';
 
 import { projectLoaders } from '@/modules/project/loader';
 import { LoaderResult } from '@/types';
+import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 
 export const SubmitProjectCard = ({
   project
 }: {
   project: NonNullable<LoaderResult<typeof projectLoaders.getMine>>;
 }) => {
-  const isCreated = project.status === 'CREATED';
-
-  const statusLabel =
-    project.status === 'CREATED'
-      ? 'Your project is created!'
-      : project.status === 'APPROVED'
-        ? 'Your project is approved!'
-        : project.status === 'COMPLETED'
-          ? 'Your project is completed!'
-          : project.status === 'FAILED'
-            ? 'Your project is failed!'
-            : 'Unknown';
-
   return (
     <DetailCard
-      title={statusLabel}
+      title={`Your project is ${getProjectStatusLabel(project)}`}
       actions={
         !project.github &&
-        isCreated && (
+        project.status === 'CREATED' && (
           <Link href="/project/edit">
             <Button
               size="sm"
