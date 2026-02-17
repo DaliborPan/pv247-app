@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import { ProfileHero } from './_components/profile-hero';
 import { ProfileProjectCard } from './_components/profile-project-card';
 import { LectorLecturesSection } from './_components/lector-lectures-section';
+import { LectorSignUpLecturesSection } from './_components/lector-sign-up-lectures-section';
 
 const Page = () => {
   const sessionUserPromise = getSessionUser();
@@ -21,7 +22,13 @@ const Page = () => {
 
         <Suspense>
           {sessionUserPromise.then(
-            user => user.role === 'lector' && <LectorLecturesSection />
+            user =>
+              user.role === 'lector' && (
+                <>
+                  <LectorLecturesSection />
+                  <LectorSignUpLecturesSection />
+                </>
+              )
           )}
         </Suspense>
       </div>
