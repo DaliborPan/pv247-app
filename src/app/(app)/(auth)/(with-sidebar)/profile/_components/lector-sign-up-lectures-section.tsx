@@ -3,23 +3,9 @@ import { getSessionUser } from '@/modules/session-user';
 import { lectureLoaders } from '@/modules/lecture/loader';
 import { SignOutLectureAction } from '@/modules/lecture-lector/components/sign-out-lecture-action';
 import { SignUpLectureAction } from '@/modules/lecture-lector/components/sign-up-lecture-action';
-import { lectureLectorQueries } from '@/modules/lecture-lector/server';
 import { lectureLectorLoaders } from '@/modules/lecture-lector/loader';
 
-const getLectorDisplayName = (ll: {
-  lector?: {
-    firstName?: string | null;
-    lastName?: string | null;
-    name?: string;
-  } | null;
-}) => {
-  const lector = ll.lector;
-  if (!lector) return 'Lektor';
-  if (lector.firstName && lector.lastName) {
-    return `${lector.firstName} ${lector.lastName}`;
-  }
-  return lector.name ?? 'Lektor';
-};
+import { LectorChip } from '@/modules/lector/components/lector-chip';
 
 export const LectorSignUpLecturesSection = async () => {
   const lectures = await lectureLoaders.getMany();
@@ -60,26 +46,7 @@ export const LectorSignUpLecturesSection = async () => {
               {lectureLectors.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {lectureLectors.map(({ lector, ...lectureLector }) => (
-                    <span
-                      key={lectureLector.id}
-                      className="border-border-primary bg-bg-terciary inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm"
-                    >
-                      {lector.image ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={lector.image}
-                          alt=""
-                          width={20}
-                          height={20}
-                          className="size-5 rounded-full object-cover"
-                        />
-                      ) : (
-                        <span className="bg-bg-secondary flex h-5 w-5 items-center justify-center rounded-full text-xs text-text-secondary">
-                          {(lector.name ?? lector.firstName ?? '?')[0]}
-                        </span>
-                      )}
-                      {getLectorDisplayName({ lector })}
-                    </span>
+                    <LectorChip key={lectureLector.id} lector={lector} />
                   ))}
                 </div>
               ) : (

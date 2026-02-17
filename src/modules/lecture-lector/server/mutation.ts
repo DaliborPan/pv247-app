@@ -7,7 +7,7 @@ export const signUp = async (
   lectureId: string
 ) => {
   const existingLectorLectures =
-    await lectureLectorRepository.findByLectureId(lectureId);
+    await lectureLectorRepository.getByLectureId(lectureId);
 
   const isAlreadySignedUp = existingLectorLectures.some(
     lectorLecture => lectorLecture.lectorId === sessionUserLector.id
@@ -34,7 +34,7 @@ export const signOut = async (
   lectureId: string
 ) => {
   const existingLectorLectures =
-    await lectureLectorRepository.findByLectureId(lectureId);
+    await lectureLectorRepository.getByLectureId(lectureId);
 
   const isSignedUp = existingLectorLectures.some(
     lectorLecture => lectorLecture.lectorId === sessionUserLector.id

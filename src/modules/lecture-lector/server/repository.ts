@@ -13,6 +13,14 @@ const getMany = () =>
     }
   });
 
+const getByLectureId = (lectureId: string) =>
+  db.query.lectureLectors.findMany({
+    where: (table, { eq }) => eq(table.lectureId, lectureId),
+    with: {
+      lector: true
+    }
+  });
+
 const create = (values: Omit<LectureLectorInsertType, 'id'>) =>
   db.insert(lectureLectors).values(values);
 
@@ -35,5 +43,6 @@ const deleteFn = ({
 export const lectureLectorRepository = {
   getMany,
   create,
-  delete: deleteFn
+  delete: deleteFn,
+  getByLectureId
 };
