@@ -12,6 +12,7 @@ import {
   setProjectPointsFormSchema
 } from './schema';
 import { useSetProjectPointsMutation } from './mutation';
+import { FormCombobox } from '@/components/form/form-fields/form-combobox';
 
 export const SetProjectPointsAction = ({
   projectId,
@@ -34,7 +35,14 @@ export const SetProjectPointsAction = ({
       }}
       content={
         <div className="flex flex-col gap-y-4 pt-2">
-          <FormInput type="number" name="points" label="Points" />
+          <FormCombobox
+            name="status"
+            label="Status"
+            options={[
+              { value: 'COMPLETED', label: 'Completed' },
+              { value: 'FAILED', label: 'Failed' }
+            ]}
+          />
           <FormTextarea name="comment" label="Comment" />
         </div>
       }

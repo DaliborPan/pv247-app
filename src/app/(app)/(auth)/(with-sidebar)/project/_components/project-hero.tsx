@@ -49,7 +49,7 @@ export const ProjectHero = ({
       actions={
         <>
           <GithubLink href={project.github} />
-          <EditLink disabled={project.status === 'submitted'} />
+          <EditLink disabled={project.status !== 'CREATED'} />
         </>
       }
     >

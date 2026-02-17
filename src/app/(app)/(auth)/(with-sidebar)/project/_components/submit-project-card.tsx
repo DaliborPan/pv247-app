@@ -3,29 +3,22 @@ import { Pencil } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { DetailCard } from '@/components/detail-card';
-import { SubmitProjectAction } from '@/modules/project/components/submit-project-action';
+
 import { projectLoaders } from '@/modules/project/loader';
 import { LoaderResult } from '@/types';
+import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 
 export const SubmitProjectCard = ({
   project
 }: {
   project: NonNullable<LoaderResult<typeof projectLoaders.getMine>>;
 }) => {
-  const isPending = project.status === 'pending';
-
   return (
     <DetailCard
-      title={
-        isPending
-          ? 'Your project is waiting to be approved.'
-          : project.points
-            ? `Your project is worth ${project.points} points. 🎉`
-            : 'Ready to submit your project?'
-      }
+      title={`Your project is ${getProjectStatusLabel(project)}`}
       actions={
         !project.github &&
-        !isPending && (
+        project.status === 'CREATED' && (
           <Link href="/project/edit">
             <Button
               size="sm"
@@ -38,13 +31,7 @@ export const SubmitProjectCard = ({
         )
       }
     >
-      {isPending ? null : project.github ? (
-        <SubmitProjectAction project={project} />
-      ) : (
-        <p className="text-sm text-text-terciary">
-          You need to set github link first.
-        </p>
-      )}
+      {project.comment}
     </DetailCard>
   );
 };

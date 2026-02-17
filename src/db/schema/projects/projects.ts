@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 
 import { sql } from 'drizzle-orm';
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 import { dbProjectStatusSchema } from './project-status';
 
@@ -11,12 +11,11 @@ export const projects = sqliteTable('project', {
   description: text('description'),
   shortDescription: text('short_description'),
   github: text('github'),
-  points: integer('points'),
   comment: text('comment'),
 
   status: text('status', { enum: dbProjectStatusSchema.options })
     .notNull()
-    .default('pending' as const),
+    .default('CREATED' as const),
   updatedAt: text('updated_at')
     .notNull()
     .default(sql`(CURRENT_TIMESTAMP)`)

@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const setProjectPointsFormSchema = z.object({
   projectId: z.string(),
-  points: z.coerce.number(),
+  status: z.enum(['COMPLETED', 'FAILED']),
   comment: z.string()
 });
 

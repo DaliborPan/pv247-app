@@ -18,6 +18,7 @@ type FormComboboxProps = Omit<ComboboxProps, 'onSelect' | 'value'> & {
   name: string;
   label?: string;
   description?: string;
+  placeholder?: string;
 };
 
 export const FormCombobox = ({
@@ -25,6 +26,7 @@ export const FormCombobox = ({
   label,
   options,
   description,
+  placeholder,
   triggerButtonProps,
   TriggerIcon = ChevronsUpDown,
   ...comboboxProps
@@ -61,7 +63,7 @@ export const FormCombobox = ({
                   {field.value
                     ? options.find(option => option.value === field.value)
                         ?.label
-                    : 'Select language'}
+                    : placeholder ?? 'Select an option'}
                   <TriggerIcon className="ml-2 size-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>

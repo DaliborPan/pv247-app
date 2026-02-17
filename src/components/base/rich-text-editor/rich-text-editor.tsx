@@ -31,6 +31,7 @@ const useRichTextEditor = ({
   useEditor(
     {
       editable: !disabled,
+      immediatelyRender: false,
       extensions: [
         PageBreakExtension,
         StarterKit,
