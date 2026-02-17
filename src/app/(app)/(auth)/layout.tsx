@@ -4,6 +4,11 @@ import { getSession } from '@/modules/session-user';
 import { redirect } from 'next/navigation';
 import { OnboardingPage } from '@/modules/student/components/onboarding-page';
 
+export const metadata = {
+  title: 'Dashboard',
+  description: 'PV247 course dashboard - your lectures, homework and project'
+};
+
 const Layout = ({ children }: LayoutProps<'/'>) => (
   /*
    * We are checking presence of a session cookie in proxy already.

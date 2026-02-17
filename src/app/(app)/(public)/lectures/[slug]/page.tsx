@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import { lectureLoaders } from '@/modules/lecture/loader';
@@ -7,6 +8,26 @@ import {
   type LectureSlugType
 } from '@/modules/lecture/schema';
 import { tryCatch } from '@/lib/try-catch';
+
+const truncateDescription = (text: string, maxLength = 160) =>
+  text.length <= maxLength ? text : `${text.slice(0, maxLength - 3)}...`;
+
+export const generateMetadata = async ({
+  params
+}: PageProps<'/lectures/[slug]'>): Promise<Metadata> => {
+  const slug = (await params).slug as LectureSlugType;
+  const lectures = await lectureLoaders.getMany();
+  const lecture = lectures.find(l => l.slug === slug);
+
+  if (!lecture) {
+    return { title: 'Lecture' };
+  }
+
+  return {
+    title: lecture.name,
+    description: truncateDescription(lecture.preview)
+  };
+};
 
 export const generateStaticParams = () => {
   const lectures = lectureSlugSchema.options;

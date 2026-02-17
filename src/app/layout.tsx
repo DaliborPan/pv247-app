@@ -12,7 +12,12 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'PV247 app'
+  title: {
+    template: 'PV247 | %s',
+    default: 'PV247 | Web Development Course'
+  },
+  description:
+    'Learn web development with React and Next.js. PV247 course materials, lectures and weekly homework.'
 };
 
 const RootLayout = ({

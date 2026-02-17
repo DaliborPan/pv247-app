@@ -4,6 +4,11 @@ import { Book, Github } from 'lucide-react';
 import { Button } from '@/components/base/button';
 import { SignIn } from '@/components/sign-in';
 
+export const metadata = {
+  title: 'Sign in',
+  description: 'Sign in with GitHub to access PV247 course materials'
+};
+
 const Page = () => (
   <main className="grid grow place-items-center">
     <div className="flex flex-col items-center gap-y-4 lg:gap-y-8">
