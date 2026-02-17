@@ -6,6 +6,7 @@ import {
   homeworkSlugSchema,
   type HomeworkSlugType
 } from '@/modules/lecture/schema';
+import { tryCatch } from '@/lib/try-catch';
 
 export const generateStaticParams = () => {
   const slugs = homeworkSlugSchema.options;
@@ -15,7 +16,18 @@ export const generateStaticParams = () => {
 
 const Page = async ({ params }: PageProps<'/homeworks/[slug]'>) => {
   const slug = (await params).slug as HomeworkSlugType;
-  const isAvailable = await lectureLoaders.getIsHomeworkAvailable(slug);
+  const [isAvailable, error] = await tryCatch(
+    lectureLoaders.getIsHomeworkAvailable(slug)
+  );
+
+  if (error) {
+    return (
+      <div className="flex flex-col gap-4">
+        <h1 className="text-xl font-light">Something went wrong...</h1>
+        <p className="text-sm text-text-terciary">{error.message}</p>
+      </div>
+    );
+  }
 
   if (!isAvailable) {
     redirect('/homeworks');
