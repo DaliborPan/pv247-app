@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { LectureType } from '../schema';
 import { cn } from '@/lib/cn';
-import { checkIsAvailable } from '../utils/check-is-available';
+
 import { Button } from '@/components/base/button';
 import { BookOpen, Lock } from 'lucide-react';
 
@@ -16,7 +16,7 @@ export const LectureCardActions = ({
   href: string;
   isAlwaysAvailable: boolean;
 }) => {
-  const isAvailable = isAlwaysAvailable || checkIsAvailable(lecture);
+  const isAvailable = isAlwaysAvailable || lecture.isAvailable;
 
   return (
     <Link
