@@ -11,15 +11,23 @@ import { Button } from '@/components/base/button';
 
 import { onboardingFormSchema, type OnboardingFormSchema } from './schema';
 import { onboardingFormAction } from './action';
+import { SessionUserType } from '@/modules/session-user/types';
 
 const useOnboardingFormMutation = () =>
   useMutation({
     mutationFn: async (data: OnboardingFormSchema) => onboardingFormAction(data)
   });
 
-export const OnboardingForm = () => {
+export const OnboardingForm = ({
+  sessionUser
+}: {
+  sessionUser: SessionUserType;
+}) => {
   const form = useForm<OnboardingFormSchema>({
-    resolver: zodResolver(onboardingFormSchema)
+    resolver: zodResolver(onboardingFormSchema),
+    defaultValues: {
+      github: sessionUser.name
+    }
   });
 
   const mutation = useOnboardingFormMutation();

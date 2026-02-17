@@ -1,16 +1,21 @@
+import { getSessionUser } from '@/modules/session-user';
 import { OnboardingForm } from './onboarding-form';
 
-export const OnboardingPage = () => (
-  <div className="container lg:mt-8">
-    <h1 className="mb-4 text-2xl lg:text-5xl lg:font-light">
-      Welcome to the PV247 course application!
-    </h1>
+export const OnboardingPage = async () => {
+  const sessionUser = await getSessionUser();
 
-    <p className="mb-8 text-sm text-text-secondary md:text-base">
-      In this web application, you will find all information and study
-      materials.{' '}
-    </p>
+  return (
+    <div className="container lg:mt-8">
+      <h1 className="mb-4 text-2xl lg:text-5xl lg:font-light">
+        Welcome to the PV247 course application!
+      </h1>
 
-    <OnboardingForm />
-  </div>
-);
+      <p className="mb-8 text-sm text-text-secondary md:text-base">
+        In this web application, you will find all information and study
+        materials.{' '}
+      </p>
+
+      <OnboardingForm sessionUser={sessionUser} />
+    </div>
+  );
+};
