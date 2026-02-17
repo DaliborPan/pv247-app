@@ -1,7 +1,8 @@
 import { db } from '@/db';
-import { cacheLife, cacheTag } from 'next/cache';
+import { cacheTag } from 'next/cache';
 import { lecturesTag } from './tag';
-import { checkIsAvailable } from '../utils/check-is-available';
+import { lectures } from '@/db/schema/lectures';
+import { gte, lte } from 'drizzle-orm';
 
 const getMany = async () => {
   'use cache';
@@ -16,54 +17,20 @@ const getMany = async () => {
 };
 
 const get = async ({ homeworkSlug }: { homeworkSlug: string }) => {
-  return (await getMany()).find(
-    lecture => lecture.homeworkSlug === homeworkSlug
+  return getMany().then(lectures =>
+    lectures.find(lecture => lecture.homeworkSlug === homeworkSlug)
   );
 };
 
-/**
- * Caching separately due to comparing to new Date()
- */
-const getAvailable = async () => {
-  'use cache';
-  cacheLife('minutes');
-
-  const lectures = await getMany();
-
-  return lectures.filter(checkIsAvailable);
-};
-
-/**
- * Caching separately due to comparing to new Date()
- */
-const getIsAvailable = async (slug: string) => {
-  'use cache';
-  cacheLife('minutes');
-
-  const available = await getAvailable();
-
-  return available.find(lecture => lecture.slug === slug);
-};
-
-/**
- * Caching separately due to comparing to new Date()
- */
-const getIsHomeworkAvailable = async (homeworkSlug: string) => {
-  'use cache';
-  cacheLife('minutes');
-
-  const ordered = await getMany();
-  const lecture = ordered.find(
-    lecture => lecture.homeworkSlug === homeworkSlug
-  );
-
-  return !!lecture && checkIsAvailable(lecture);
+const updateIsAvailable = async () => {
+  return db
+    .update(lectures)
+    .set({ isAvailable: true })
+    .where(lte(lectures.availableFrom, new Date().toISOString()));
 };
 
 export const lectureRepository = {
   getMany,
   get,
-  getIsAvailable,
-  getAvailable,
-  getIsHomeworkAvailable
+  updateIsAvailable
 };

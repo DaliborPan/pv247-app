@@ -155,7 +155,8 @@ export const seed = async () => {
       homeworkPreview:
         "This week's TypeScript assignment involves enhancing an npm project by defining types and implementing four functions. Follow the descriptions in the project files, ensure your code passes linter checks, and matches the provided output.",
       homeworkSlug: 'typescript',
-      homeworkDeadline: '2026-02-23T22:00:00'
+      homeworkDeadline: '2026-02-23T22:00:00',
+      isAvailable: false
     },
     {
       id: 'react',
@@ -171,7 +172,8 @@ export const seed = async () => {
       homeworkPreview:
         'This week, create a React page in Next.js to display and add GitHub repositories. Build a form for new entries and a list to show existing ones, with validation and conditional messages.',
       homeworkSlug: 'react-basics',
-      homeworkDeadline: '2026-03-02T22:00:00'
+      homeworkDeadline: '2026-03-02T22:00:00',
+      isAvailable: false
     },
     {
       id: 'styling',
@@ -187,7 +189,8 @@ export const seed = async () => {
       homeworkPreview:
         'This week, style a responsive page using TailwindCSS to display a GitHub repository description. The layout should include fixed top navigation, sidebars, and main content. Ensure responsiveness and basic accessibility.',
       homeworkSlug: 'styling',
-      homeworkDeadline: '2026-03-09T22:00:00'
+      homeworkDeadline: '2026-03-09T22:00:00',
+      isAvailable: false
     },
     {
       id: 'hooks',
@@ -203,7 +206,8 @@ export const seed = async () => {
       homeworkPreview:
         "This week's task is to develop an interactive 'Task Manager' SPA that allows users to add, delete, and filter tasks using a provided useInitialTasks() hook. Users can reset the application to display tasks from the 'original database' only, without any applied filters or added tasks. The application does not need to be responsive.",
       homeworkSlug: 'state',
-      homeworkDeadline: '2026-03-16T22:00:00'
+      homeworkDeadline: '2026-03-16T22:00:00',
+      isAvailable: false
     },
     {
       id: 'other-hooks-refs-tables',
@@ -219,7 +223,8 @@ export const seed = async () => {
       homeworkPreview:
         'This week, implement a user management application that dynamically updates a table when adding users via a dialog-based form. Optimize performance using memoization, enable sorting for all table columns. Integrate a dialog component from the shadcn library for form submissions',
       homeworkSlug: 'table-memo',
-      homeworkDeadline: '2026-03-23T22:00:00'
+      homeworkDeadline: '2026-03-23T22:00:00',
+      isAvailable: false
     },
     {
       id: 'async-forms',
@@ -235,7 +240,8 @@ export const seed = async () => {
       homeworkPreview:
         "This week, develop a 4-page application that handles user authentication, displays gifts, and allows gift creation via API interactions. Utilize tanstack-query, react-hook-form, and zod. Focus on role-specific functionalities: 'santa' can update gift statuses, while 'user' can add new gifts.",
       homeworkSlug: 'forms-async',
-      homeworkDeadline: '2026-03-30T22:00:00'
+      homeworkDeadline: '2026-03-30T22:00:00',
+      isAvailable: false
     },
     {
       id: 'nextjs',
@@ -251,7 +257,8 @@ export const seed = async () => {
       homeworkPreview:
         'This week, set up routing for a TODO application in Next.js, focusing on handling loading, error, and navigation across pages like /list and /new. Ensure consistent layouts for the todo detail pages using Next.js route groups.',
       homeworkSlug: 'nextjs-basic',
-      homeworkDeadline: '2026-04-06T22:00:00'
+      homeworkDeadline: '2026-04-06T22:00:00',
+      isAvailable: false
     },
     {
       id: 'suspense-streaming-rsc',
@@ -267,7 +274,8 @@ export const seed = async () => {
       homeworkPreview:
         'This week, create a Next.js app for CRUD operations on a movie database. Implement pages for adding movies, listing all movies with edit and delete options using React Server Components, and editing movie details. Use React Hook Form, Zod for validation, and tanstack query for API management.',
       homeworkSlug: 'rsc-forms',
-      homeworkDeadline: '2026-04-13T22:00:00'
+      homeworkDeadline: '2026-04-13T22:00:00',
+      isAvailable: false
     },
     {
       id: 'api-configs-server-actions-database',
@@ -283,7 +291,8 @@ export const seed = async () => {
       homeworkPreview:
         'This week, modify the 6th task to use server actions and React Server Components for data management, ensuring persistent user sessions with server-side storage. Replace API calls with server actions, and manage data using a local sqlite database via Drizzle ORM.',
       homeworkSlug: 'api-actions-database',
-      homeworkDeadline: '2026-04-20T22:00:00'
+      homeworkDeadline: '2026-04-20T22:00:00',
+      isAvailable: false
     },
     {
       id: 'authentication-metadata-deployment',
@@ -300,7 +309,8 @@ export const seed = async () => {
       homeworkName: '',
       homeworkPreview: '',
       homeworkSlug: '',
-      homeworkDeadline: ''
+      homeworkDeadline: '',
+      isAvailable: false
     }
   ];
 

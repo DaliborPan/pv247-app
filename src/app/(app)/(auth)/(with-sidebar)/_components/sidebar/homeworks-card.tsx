@@ -1,4 +1,4 @@
-import { ArrowRight, Lock } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 import { Icon } from '@/components/base/icon';
 import { SidebarCard } from '@/components/sidebar-card';
@@ -20,36 +20,31 @@ export const HomeworksCard = async () => {
         {lectures
           .slice(0, availableLectures.length + 1)
           .filter(lecture => !!lecture.homeworkSlug)
-          .map((lecture, index) => {
-            const isAvailable = index !== availableLectures.length;
-            const IconComponent = isAvailable ? ArrowRight : Lock;
+          .map(lecture => (
+            <SidebarLinkRow
+              key={lecture.slug}
+              href={`/homeworks/${lecture.homeworkSlug}`}
+              lecture={lecture}
+            >
+              <span className="grow">{lecture.homeworkName}</span>
 
-            return (
-              <SidebarLinkRow
-                key={lecture.slug}
-                href={`/homeworks/${lecture.homeworkSlug}`}
-                isAvailable={isAvailable}
-              >
-                <span className="grow">{lecture.homeworkName}</span>
+              <Suspense>
+                {overviewPromise.then(overview => {
+                  const homework = overview.homework.find(
+                    hw => hw.lectureId === lecture.id
+                  );
 
-                <Suspense>
-                  {overviewPromise.then(overview => {
-                    const homework = overview.homework.find(
-                      hw => hw.lectureId === lecture.id
-                    );
-
-                    return homework ? (
-                      <span className="font-medium text-text-primary-color">
-                        {homework.points}/{lecture.homeworkMaxPoints}
-                      </span>
-                    ) : (
-                      <Icon icon={<IconComponent />} />
-                    );
-                  })}
-                </Suspense>
-              </SidebarLinkRow>
-            );
-          })}
+                  return homework ? (
+                    <span className="font-medium text-text-primary-color">
+                      {homework.points}/{lecture.homeworkMaxPoints}
+                    </span>
+                  ) : (
+                    <Icon icon={<ArrowRight />} />
+                  );
+                })}
+              </Suspense>
+            </SidebarLinkRow>
+          ))}
       </div>
     </SidebarCard>
   );
