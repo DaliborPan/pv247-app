@@ -22,6 +22,7 @@ export const lectureSchema = z.object({
   slug: lectureSlugSchema,
   preview: z.string(),
   attendanceToken: z.string(),
+  isAvailable: z.boolean(),
 
   // homework
   homeworkName: z.string(),

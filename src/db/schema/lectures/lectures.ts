@@ -11,6 +11,9 @@ export const lectures = sqliteTable('lecture', {
   slug: text('slug', { enum: dbLectureSlugSchema.options }).notNull(),
   preview: text('preview').notNull().default(''),
   attendanceToken: text('attendanceToken').notNull().default(''),
+  isAvailable: integer('isAvailable', { mode: 'boolean' })
+    .notNull()
+    .default(false),
 
   // homework
   homeworkName: text('homeworkName').notNull().default(''),

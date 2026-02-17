@@ -2,10 +2,14 @@
 
 import { authLectorServerAction } from '@/server/server-actions';
 
-import { lectureQueries } from '../../server';
+import { revalidateTag } from 'next/cache';
+import { lecturesTag } from '../../server/tag';
+import { lectureMutations } from '../../server/mutation';
 
 export const revalidateLecturesAction = authLectorServerAction.handler(
-  async () => {
-    // TODO(pv247)
+  async ({ ctx }) => {
+    await lectureMutations.updateIsAvalable(ctx.sessionUserLector);
+
+    revalidateTag(lecturesTag, 'max');
   }
 );
