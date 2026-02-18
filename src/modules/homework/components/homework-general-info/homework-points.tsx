@@ -7,6 +7,7 @@ import { LabeledItem } from './labeled-item';
 
 import { getSession } from '@/modules/session-user';
 import { homeworkLoader } from '../../loader';
+import { getHomeworkPointsMessage } from '../../utils';
 
 export const HomeworkPoints = async ({ lecture }: { lecture: LectureType }) => {
   const sessionUser = await getSession();
@@ -23,15 +24,21 @@ export const HomeworkPoints = async ({ lecture }: { lecture: LectureType }) => {
     );
   }
 
-  const homework = (
-    await homeworkLoader.getMine({
-      lectureId: lecture.id
-    })
-  ).at(0);
+  const [homework, gradingStatus] = await Promise.all([
+    homeworkLoader.getMine({ lectureId: lecture.id }),
+    homeworkLoader.getGradingStatus(lecture.id)
+  ]);
+
+  const homeworkRecord = homework.at(0);
 
   return (
     <LabeledItem label="Earned points">
-      <div>{!homework ? 'Not scored yet' : `${homework.points} points`}</div>
+      <div>
+        {getHomeworkPointsMessage({
+          points: homeworkRecord?.points,
+          hasGradingStarted: gradingStatus.hasGradingStarted
+        })}
+      </div>
     </LabeledItem>
   );
 };

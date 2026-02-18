@@ -2,6 +2,12 @@ import { type SessionUserType } from '@/modules/session-user/types';
 
 import { homeworkRepository } from './repository';
 
+const hasGradingStarted = async (lectureId: string) => {
+  const count = await homeworkRepository.countByLecture(lectureId);
+
+  return count > 0;
+};
+
 const getMany = async (
   sessionUser: SessionUserType,
   { userId }: { userId?: string }
@@ -22,5 +28,6 @@ const getMany = async (
 };
 
 export const homeworkQueries = {
-  getMany
+  getMany,
+  hasGradingStarted
 };

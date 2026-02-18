@@ -25,7 +25,14 @@ const getMany = async ({ userId }: { userId?: string }) => {
   return homeworkQueries.getMany(sessionUser, { userId });
 };
 
+const getGradingStatus = async (lectureId: string) => {
+  const hasGradingStarted = await homeworkQueries.hasGradingStarted(lectureId);
+
+  return { hasGradingStarted };
+};
+
 export const homeworkLoader = {
   getMine,
-  getMany
+  getMany,
+  getGradingStatus
 };
