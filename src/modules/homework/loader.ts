@@ -31,21 +31,8 @@ const getGradingStatus = async (lectureId: string) => {
   return { hasGradingStarted };
 };
 
-const getGradingStatusForLectures = async (lectureIds: string[]) => {
-  const results = await Promise.all(
-    lectureIds.map(async lectureId =>
-      homeworkQueries.hasGradingStarted(lectureId)
-    )
-  );
-
-  return Object.fromEntries(
-    lectureIds.map((lectureId, index) => [lectureId, results[index] ?? false])
-  );
-};
-
 export const homeworkLoader = {
   getMine,
   getMany,
-  getGradingStatus,
-  getGradingStatusForLectures
+  getGradingStatus
 };
