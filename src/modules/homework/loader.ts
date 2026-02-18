@@ -25,7 +25,27 @@ const getMany = async ({ userId }: { userId?: string }) => {
   return homeworkQueries.getMany(sessionUser, { userId });
 };
 
+const getGradingStatus = async (lectureId: string) => {
+  const hasGradingStarted = await homeworkQueries.hasGradingStarted(lectureId);
+
+  return { hasGradingStarted };
+};
+
+const getGradingStatusForLectures = async (lectureIds: string[]) => {
+  const results = await Promise.all(
+    lectureIds.map(async lectureId =>
+      homeworkQueries.hasGradingStarted(lectureId)
+    )
+  );
+
+  return Object.fromEntries(
+    lectureIds.map((lectureId, index) => [lectureId, results[index] ?? false])
+  );
+};
+
 export const homeworkLoader = {
   getMine,
-  getMany
+  getMany,
+  getGradingStatus,
+  getGradingStatusForLectures
 };

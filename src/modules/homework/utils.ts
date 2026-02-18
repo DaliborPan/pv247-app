@@ -16,3 +16,16 @@ export const getHomeworkGithubUrl = ({
     ? `https://github.com/FI-PV247/t-0${order}-${homeworkSlug}-${githubName}`
     : undefined;
 };
+
+export const getHomeworkPointsMessage = ({
+  points,
+  hasGradingStarted
+}: {
+  points?: number;
+  hasGradingStarted: boolean;
+}) => {
+  if (points !== undefined) return `${points} points`;
+  if (!hasGradingStarted) return "Grading hasn't started yet";
+
+  return "Your submission hasn't been graded yet";
+};

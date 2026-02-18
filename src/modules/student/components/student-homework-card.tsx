@@ -64,7 +64,18 @@ export const StudentHomeworkCard = (props: { user: Promise<UserType> }) => {
                 hw => hw.lectureId === lecture.id
               );
 
-              return <PointsBadge points={lectureHomework?.points} />;
+              return (
+                <Suspense>
+                  {homeworkLoader
+                    .getGradingStatus(lecture.id)
+                    .then(gradingStatus => (
+                      <PointsBadge
+                        points={lectureHomework?.points}
+                        hasGradingStarted={gradingStatus.hasGradingStarted}
+                      />
+                    ))}
+                </Suspense>
+              );
             }}
           />
         );
