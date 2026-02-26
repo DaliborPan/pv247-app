@@ -33,7 +33,7 @@ export const SignOutLectureAction = ({ lectureId }: { lectureId: string }) => {
         toast.success('Logged out of lecture.');
       }}
     >
-      Odhlásit se
+      Sign out
     </Button>
   );
 };

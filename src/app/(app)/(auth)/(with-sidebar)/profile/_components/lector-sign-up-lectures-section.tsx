@@ -10,6 +10,7 @@ import { getLectureLectorStatusLabel } from '@/modules/lecture-lector/utils';
 import { cn } from '@/lib/cn';
 
 import { getLectorDisplayName } from '@/modules/lector/utils/lector-display-name';
+import { formatDate } from '@/lib/date';
 
 export const LectorSignUpLecturesSection = async () => {
   const lectures = await lectureLoaders.getMany();
@@ -19,7 +20,7 @@ export const LectorSignUpLecturesSection = async () => {
   ]);
 
   return (
-    <DetailCard title="Přihlášení na lekce">
+    <DetailCard title="Lecture sign-up">
       <div className="flex flex-col gap-4">
         {lectures.map(lecture => {
           const lectureLectors = lectorsByLectureId[lecture.id] ?? [];
@@ -36,10 +37,10 @@ export const LectorSignUpLecturesSection = async () => {
               className="border-border-primary bg-bg-secondary flex flex-col gap-3 rounded-xl border p-4"
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col gap-1">
                   <span className="font-medium">{lecture.name}</span>
-                  <span className="bg-bg-primary rounded-md px-2 py-1 text-xs text-text-terciary">
-                    Approved {approvedCount}/2
+                  <span className="text-xs text-text-terciary">
+                    Week of {formatDate(lecture.availableFrom)}
                   </span>
                 </div>
                 <div className="flex gap-2">

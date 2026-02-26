@@ -44,7 +44,7 @@ export const SignUpLectureAction = ({
 
   return (
     <Prompt<SignUpLectureFormType>
-      title="Prihlaseni na lekci"
+      title="Sign up for lecture"
       formSchema={signUpLectureFormSchema}
       defaultValues={{ status: 'WANT_TO_TEACH' }}
       content={
@@ -53,11 +53,11 @@ export const SignUpLectureAction = ({
             name="status"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Vase moznosti</FormLabel>
+                <FormLabel>Your availability</FormLabel>
 
                 <div
                   role="radiogroup"
-                  aria-label="Moznost vyucovani"
+                  aria-label="Teaching availability"
                   className="grid grid-cols-1 gap-2 md:grid-cols-2"
                 >
                   {lectureLectorStatusOptions.map(option => {
@@ -98,7 +98,7 @@ export const SignUpLectureAction = ({
           return;
         }
 
-        toast.success('Prihlaseni na lekci probehlo.');
+        toast.success('Successfully signed up for the lecture.');
       }}
     >
       <Button
@@ -107,7 +107,7 @@ export const SignUpLectureAction = ({
         disabled={disabled}
         iconLeft={{ icon: <UserPlus /> }}
       >
-        Prihlasit se
+        Sign up
       </Button>
     </Prompt>
   );
