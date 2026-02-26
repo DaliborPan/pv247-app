@@ -1,4 +1,3 @@
-import { getSessionUser } from '../session-user';
 import { lectureLectorQueries } from './server';
 
 const getLectorsForLectures = async () => {
@@ -16,14 +15,17 @@ const getLectorsForLectures = async () => {
 };
 
 const getLectureLectors = async (lectureId: string) => {
-  const lectureLectors = await lectureLectorQueries.getMany();
+  return lectureLectorQueries.getByLectureId(lectureId);
+};
 
-  return lectureLectors.filter(
-    lectureLector => lectureLector.lectureId === lectureId
-  );
+const getLectureApprovedLectors = async (lectureId: string) => {
+  const lectureLectors = await lectureLectorQueries.getByLectureId(lectureId);
+
+  return lectureLectors.filter(lectureLector => lectureLector.isApproved);
 };
 
 export const lectureLectorLoaders = {
   getLectorsForLectures,
-  getLectureLectors
+  getLectureLectors,
+  getLectureApprovedLectors
 };

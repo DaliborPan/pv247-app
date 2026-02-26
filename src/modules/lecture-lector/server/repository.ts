@@ -4,7 +4,7 @@ import { db } from '@/db';
 import {
   type LectureLectorInsertType,
   lectureLectors
-} from '@/db/schema/lectureLector';
+} from '@/db/schema/lecture-lector';
 
 const getMany = () =>
   db.query.lectureLectors.findMany({
@@ -23,6 +23,25 @@ const getByLectureId = (lectureId: string) =>
 
 const create = (values: Omit<LectureLectorInsertType, 'id'>) =>
   db.insert(lectureLectors).values(values);
+
+const updateIsApproved = ({
+  lectureId,
+  lectorId,
+  isApproved
+}: {
+  lectureId: string;
+  lectorId: string;
+  isApproved: boolean;
+}) =>
+  db
+    .update(lectureLectors)
+    .set({ isApproved })
+    .where(
+      and(
+        eq(lectureLectors.lectureId, lectureId),
+        eq(lectureLectors.lectorId, lectorId)
+      )
+    );
 
 const deleteFn = ({
   lectureId,
@@ -43,6 +62,7 @@ const deleteFn = ({
 export const lectureLectorRepository = {
   getMany,
   create,
+  updateIsApproved,
   delete: deleteFn,
   getByLectureId
 };

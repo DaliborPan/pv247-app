@@ -1,9 +1,10 @@
 import { randomUUID } from 'crypto';
 
-import { sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
 
 import { lectures } from './lectures';
 import { users } from './users';
+import { dbLectureLectorStatusSchema } from './lecture-lector-status';
 
 export const lectureLectors = sqliteTable(
   'lectureLector',
@@ -14,7 +15,13 @@ export const lectureLectors = sqliteTable(
       .references(() => lectures.id),
     lectorId: text('lectorId')
       .notNull()
-      .references(() => users.id)
+      .references(() => users.id),
+    status: text('status', { enum: dbLectureLectorStatusSchema.options })
+      .notNull()
+      .default('CAN_TEACH'),
+    isApproved: integer('isApproved', { mode: 'boolean' })
+      .notNull()
+      .default(false)
   },
   table => [unique().on(table.lectureId, table.lectorId)]
 );

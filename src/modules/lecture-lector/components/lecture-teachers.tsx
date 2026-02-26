@@ -16,7 +16,7 @@ export const LectureTeachers = async ({
 
   if (!lecture) return null;
 
-  const lectureLectors = await lectureLectorLoaders.getLectureLectors(
+  const lectureLectors = await lectureLectorLoaders.getLectureApprovedLectors(
     lecture.id
   );
 
@@ -24,7 +24,7 @@ export const LectureTeachers = async ({
 
   return (
     <div className="mb-6 flex flex-wrap items-center gap-3">
-      <span className="text-sm text-text-terciary">Lecturers:</span>
+      <span className="text-sm text-text-terciary">Teaching lecturers:</span>
 
       {lectureLectors.map(({ lector, ...lectureLector }) => (
         <LectorChip key={lectureLector.id} lector={lector} />

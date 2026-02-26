@@ -6,21 +6,17 @@ import { authLectorServerAction } from '@/server/server-actions';
 
 import { lectureLectorMutations } from '../../server/mutation';
 import { refresh } from 'next/cache';
-import { lectureLectorStatusSchema } from '../../schema';
 
-export const signUpLectureAction = authLectorServerAction
+export const setLectureTeacherApprovalAction = authLectorServerAction
   .input(
     z.object({
       lectureId: z.string(),
-      status: lectureLectorStatusSchema
+      lectorId: z.string(),
+      isApproved: z.boolean()
     })
   )
   .handler(async ({ ctx, input }) => {
-    await lectureLectorMutations.signUp(
-      ctx.sessionUserLector,
-      input.lectureId,
-      input.status
-    );
+    await lectureLectorMutations.setApproved(ctx.sessionUserLector, input);
 
     refresh();
   });

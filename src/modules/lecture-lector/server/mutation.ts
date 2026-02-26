@@ -1,10 +1,12 @@
 import type { SessionUserLectorType } from '@/modules/session-user/types';
+import type { LectureLectorStatusType } from '../schema';
 
 import { lectureLectorRepository } from './repository';
 
 export const signUp = async (
   sessionUserLector: SessionUserLectorType,
-  lectureId: string
+  lectureId: string,
+  status: LectureLectorStatusType
 ) => {
   const existingLectorLectures =
     await lectureLectorRepository.getByLectureId(lectureId);
@@ -19,13 +21,11 @@ export const signUp = async (
     );
   }
 
-  if (existingLectorLectures.length >= 2) {
-    throw new Error(`Lecture ${lectureId} has already 2 lectors`);
-  }
-
   await lectureLectorRepository.create({
     lectureId,
-    lectorId: sessionUserLector.id
+    lectorId: sessionUserLector.id,
+    status,
+    isApproved: false
   });
 };
 
@@ -52,7 +52,50 @@ export const signOut = async (
   });
 };
 
+export const setApproved = async (
+  _sessionUserLector: SessionUserLectorType,
+  {
+    lectureId,
+    lectorId,
+    isApproved
+  }: {
+    lectureId: string;
+    lectorId: string;
+    isApproved: boolean;
+  }
+) => {
+  const existingLectorLectures =
+    await lectureLectorRepository.getByLectureId(lectureId);
+
+  const targetLectorLecture = existingLectorLectures.find(
+    lectorLecture => lectorLecture.lectorId === lectorId
+  );
+
+  if (!targetLectorLecture) {
+    throw new Error(
+      `Lector ${lectorId} is not signed up for lecture ${lectureId}`
+    );
+  }
+
+  if (isApproved) {
+    const approvedLectorsCount = existingLectorLectures.filter(
+      lectorLecture => lectorLecture.isApproved
+    ).length;
+
+    if (!targetLectorLecture.isApproved && approvedLectorsCount >= 2) {
+      throw new Error(`Lecture ${lectureId} already has 2 approved lectors`);
+    }
+  }
+
+  await lectureLectorRepository.updateIsApproved({
+    lectureId,
+    lectorId,
+    isApproved
+  });
+};
+
 export const lectureLectorMutations = {
   signUp,
-  signOut
+  signOut,
+  setApproved
 };

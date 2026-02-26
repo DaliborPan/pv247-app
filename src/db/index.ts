@@ -5,7 +5,7 @@ import { lectures } from './schema/lectures';
 import { projects } from './schema/projects';
 import { users } from './schema/users';
 import { studentLectures } from './schema/studentLecture';
-import { lectureLectors } from './schema/lectureLector';
+import { lectureLectors } from './schema/lecture-lector';
 import * as relations from './schema/relations';
 
 export const db = drizzle({
