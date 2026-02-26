@@ -13,7 +13,7 @@ export const getHomeworkGithubUrl = ({
     : undefined;
 
   return order && githubName
-    ? `https://github.com/FI-PV247/t-0${order}-${homeworkSlug}-${githubName}`
+    ? `https://github.com/FI-PV247/${order === 1 ? 'task-01' : `t-0${order}`}-${homeworkSlug}-${githubName}`
     : undefined;
 };
 
