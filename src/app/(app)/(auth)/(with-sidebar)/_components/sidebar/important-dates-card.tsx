@@ -8,7 +8,7 @@ export const ProjectTimelineCard = () => (
       <SidebarCardRow title="Start thinking">23. 3.</SidebarCardRow>
       <SidebarCardRow title="Submit project spec.">6. 4.</SidebarCardRow>
       <SidebarCardRow title="Progress review">21/22. 4.</SidebarCardRow>
-      <SidebarCardRow title="Presentation">28/29. 4.</SidebarCardRow>
+      <SidebarCardRow title="Presentation">12/13. 5.</SidebarCardRow>
     </div>
   </SidebarCard>
 );
