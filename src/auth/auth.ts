@@ -49,6 +49,7 @@ export const auth = betterAuth({
     }
   },
   session: {
+    expiresIn: 3 * 7 * 24 * 60 * 60 * 1000, // 3 weeks
     additionalFields: {
       role: {
         type: 'string'
