@@ -1,5 +1,5 @@
 import { db } from '@/db';
-import { cacheTag } from 'next/cache';
+import { cacheLife, cacheTag } from 'next/cache';
 import { lecturesTag } from './tag';
 import { lectures } from '@/db/schema/lectures';
 import { gte, lte } from 'drizzle-orm';
@@ -7,6 +7,7 @@ import { gte, lte } from 'drizzle-orm';
 const getMany = async () => {
   'use cache';
   cacheTag(lecturesTag);
+  cacheLife('max');
 
   return db.query.lectures.findMany({
     orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)],
