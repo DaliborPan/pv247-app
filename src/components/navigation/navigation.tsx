@@ -44,9 +44,16 @@ export const Navigation = ({
   }
 
   return (
-    <header className="sticky top-0 z-20 border-b bg-white py-2 md:px-10 lg:px-4">
-      <div className="container flex items-center gap-x-20 lg:w-full">
-        <Image src={MUNI_LOGO} width={100} alt="muni-logo" />
+    <header className="sticky top-0 z-30 border-b bg-white py-2">
+      <div className="container flex items-center gap-x-6 lg:w-full lg:gap-x-20">
+        <Link href="/" aria-label="PV247 home">
+          <Image
+            src={MUNI_LOGO}
+            width={100}
+            alt="Masaryk University"
+            priority
+          />
+        </Link>
 
         <MobileNavigation user={user} isUserLoading={isUserLoading} />
 
@@ -76,6 +83,8 @@ export const Navigation = ({
                   iconLeft={{ icon: <LogOut /> }}
                   variant="ghost"
                   size="sm"
+                  aria-label="Sign out"
+                  title="Sign out"
                 />
               </Logout>
             </div>

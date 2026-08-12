@@ -29,15 +29,19 @@ export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
       {children}
     </p>
   ),
-  a: ({ children, ...props }) => (
-    <a
-      className="ml-px text-primary underline hover:no-underline"
-      {...props}
-      target="_blank"
-    >
-      {children}
-    </a>
-  ),
+  a: ({ children, ...props }) => {
+    const isExternal = props.href?.startsWith('http');
+
+    return (
+      <a
+        className="ml-px text-primary underline hover:no-underline"
+        {...props}
+        {...(isExternal && { target: '_blank', rel: 'noopener noreferrer' })}
+      >
+        {children}
+      </a>
+    );
+  },
   strong: ({ children }) => (
     <strong className="font-semibold text-black">{children}</strong>
   ),
