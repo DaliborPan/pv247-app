@@ -8,7 +8,7 @@ import DOM from './lecture2-dom.png';
 
 # What's React?
 
-In today's lesson, we'll explore the React library. We'll learn how it works and its fundamental principles, explain the components and learn how to work with them. We'll further connect it to typescript and learn the basic constructs when defining a user interface using TSX.
+In today's lesson, we'll explore the React library. We'll learn how it works and its fundamental principles, explain the components and learn how to work with them. We'll further connect it to TypeScript and learn the basic constructs when defining a user interface using TSX.
 
 ---
 
@@ -26,47 +26,45 @@ A Single Page Application (SPA) is a type of web application or website that int
 
 **AJAX** - is often used in combination with SPA. Because all resources the application needs are retrieved on initial load, modern applications often need data to be displayed or submitted.
 
-**Client-side Rendering** - Resources are transmitted only once; only data is transmitted back and forth. By using pure React, you can only achieve client-side rendering. With a framework like Nextjs, there is the possibility of implementing server-side rendering as well.
+**Client-side Rendering** - Resources are transmitted only once; only data is transmitted back and forth. By using pure React, you can only achieve client-side rendering. With a framework like Next.js, there is the possibility of implementing server-side rendering as well.
 
 **Routing** - The traditional approach is about having a lot of links in your application; for each URL, the browser needs to request the server for new resource files. With SPA, routing is handled by JS without making additional requests for resources.
 
 ### When to use
 
-Single Page Application approach has its use cases. We can mention information systems, where all application pages are behind an authentication. However, for webs that are publicly accessible to anyone and that fetch data from public APIs, SPA might not be a good option.
+The Single Page Application approach has its use cases. We can mention information systems, where all application pages are behind authentication. However, for websites that are publicly accessible to anyone and that fetch data from public APIs, an SPA might not be a good option.
 
 ### Disadvantages
 
-**SEO Optimization** - The app's content is loaded dynamically by JS. Crawlers work with the initial HTML page to index your application. With SPA, it always gets a blank page since the content will be rendered after JS gets parsed and executed.
+**Poor SEO** - The app's content is loaded dynamically by JS. Crawlers work with the initial HTML page to index your application. With an SPA, they always get a blank page, since the content is rendered only after JS gets parsed and executed.
 
 **Initial Load Performance** - Since all of the resources for the app need to be retrieved once at the beginning, it might quickly become slow. It does not matter in some applications, but on the e-commerce page, it might be a big deal.
 
 ## React component tree
 
-The resulting UI, composed of components, is organized in a hierarchical tree structure in React. This structure ensures data flows in only one direction through the props. The child Component inside the tree cannot modify the data it has received from its parent. If we need a Child component to be able to modify the data or state of its parent, the parent must provide a function for the child to call to modify the data. Each component defines what will be displayed on the screen where the component is placed or called based on its state and the props received.
+The resulting UI, composed of components, is organized in a hierarchical tree structure in React. This structure ensures data flows in only one direction through the props. The child component inside the tree cannot modify the data it has received from its parent. If we need a child component to be able to modify the data or state of its parent, the parent must provide a function for the child to call to modify the data. Each component defines what will be displayed on the screen where the component is placed or called based on its state and the props received.
 
 <MdxImage src={DATA_FLOW} />
 
-```ts
+```tsx
 type ChildComponentProps = {
-  onClick: () => void
-}
+  onClick: () => void;
+};
 
 function ChildComponent({ onClick }: ChildComponentProps) {
-  return (
-    <button onClick={onClick}>Click me</button>
-  );
+  return <button onClick={onClick}>Click me</button>;
 }
 
 function ParentComponent() {
   const onClick = () => {
-    console.log("Button clicked in parent");
+    console.log('Button clicked in parent');
   };
 
   return <ChildComponent onClick={onClick} />;
 }
 ```
 
-The React component tree plays a vital role in updating the user interface. If a component changes state or gets new props, it must be re-rendered to the screen, and at the same time, all children of that component must be re-rendered as well. This is where the advantage of the tree structure comes in, where it is easy to see which components on the screen need to be updated. At the same time, React uses the VDOM, where it compares its in-memory stored DOM of the current and previous version, and then when it detects that the component has changed not only its state or its props but also its actual UI, it updates it's in the browser DOM.
+The React component tree plays a vital role in updating the user interface. If a component changes state or gets new props, it must be re-rendered to the screen, and at the same time, all children of that component must be re-rendered as well. This is where the advantage of the tree structure comes in, where it is easy to see which components on the screen need to be updated. At the same time, React uses the VDOM, where it compares its in-memory stored DOM of the current and previous version, and then when it detects that the component has changed not only its state or its props but also its actual UI, it updates it in the browser DOM.
 
 <MdxImage src={DOM} />
 

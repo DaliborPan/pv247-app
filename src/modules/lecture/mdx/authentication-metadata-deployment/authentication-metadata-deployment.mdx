@@ -9,42 +9,90 @@ In the last lesson of this course, we will focus on an important part of most we
 
 Many web applications allow the user to log in and continue with the application where authentication is required. As a developer, we need to address access to our application so that those parts of the application where authentication is required are only available to logged in users.
 
-There are many ways we can authenticate users. From simple login using a name and password (or just a password), to logging in using social networks, to authentication using biometrics. In this lesson, we'll demonstrate authentication via GitHub, but the principles are the same for all other authentication methods. We will use the `next-auth` library to easily add authentication to our application.
+There are many ways we can authenticate users. From simple login using a name and password (or just a password), to logging in using social networks, to authentication using biometrics. In this lesson, we'll demonstrate authentication via GitHub, but the principles are the same for all other authentication methods. We will use the `better-auth` library to easily add authentication to our application.
 
 We will store the logged in users in a database, similar to the last lesson. Therefore, we will again use Drizzle and SQLite.
 
-## Auth.js (next-auth)
+## Better Auth
 
-For authentication management we will use the `Auth.js` library, originally known as `NextAuth`. For use with Next.js v14 (the latest version), we need to use Auth.js in beta.
+For authentication management we will use [Better Auth](https://www.better-auth.com/). It is a framework-agnostic authentication library written in TypeScript that works very well with the Next.js App Router. It is also the library that this PV247 application itself is built on, so everything shown here is code you can find in the course repository.
 
-```ts
-pnpm add next-auth@beta
+<MdxComment>
+  You will still find a lot of tutorials that use `next-auth` (Auth.js). We do
+  not use it in this course. The main practical difference is that with Better
+  Auth the database schema, the configuration and all the generated types live
+  in your own project, so there is much less hidden magic.
+</MdxComment>
+
+```bash
+pnpm add better-auth
 ```
 
-After installation we need to set the `.env` variables. Based on which provider we want to use, we set such `.env` variables. In our case, we'll be using GitHub, so we'll set variables for GitHub that are of the form `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`. Next, collectively for all providers, we need `AUTH_SECRET`.
+After installation we need to set the `.env` variables. Two of them belong to the library itself:
 
-Next, we need to import `handlers` and `auth` from the `next-auth` library.
+- `BETTER_AUTH_SECRET` - a random string used to sign and encrypt cookies and tokens. You can generate one with `openssl rand -base64 32`.
+- `BETTER_AUTH_URL` - the base URL of the application, `http://localhost:3000` during development.
 
-- The `handlers` contain route handlers, which are then used as API route handlers for our application. Therefore, we don't have to program them ourselves, but use pre-made hadnlers from the library.
+On top of that, we add the credentials of every provider we want to use. In our case we use GitHub, so we add `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`.
 
-- The `auth` is the function we will use to determine whether there is a logged in user in the application or not.
-
-We create a file `src/auth.ts` and add the following code:
-
-```ts
-import NextAuth from 'next-auth';
-import GitHub from 'next-auth/providers/github';
-
-export const { handlers, auth } = NextAuth({ providers: [GitHub] });
-```
-
-We now need to assign the exported handlers to the correct API handlers of our application. We do this by creating `src/app/api/auth/[...nextauth].ts`, where we export the `handlers` we defined in `src/auth.ts`.
+The whole server-side configuration is a single `betterAuth` call. We create a file `src/auth/auth.ts`:
 
 ```ts
-import { handlers } from '@/src/auth';
+import { betterAuth } from 'better-auth';
+import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
-export const { GET, POST } = handlers;
+import { db } from '../db';
+import { user, session, account, verification } from '../db/schema/users';
+
+export const auth = betterAuth({
+  database: drizzleAdapter(db, {
+    provider: 'sqlite',
+    schema: { user, session, account, verification }
+  }),
+  socialProviders: {
+    github: {
+      clientId: process.env.AUTH_GITHUB_ID!,
+      clientSecret: process.env.AUTH_GITHUB_SECRET!
+    }
+  }
+});
 ```
+
+<MdxComment>
+  The `auth` object is the server side of the library. It contains `auth.handler`
+  (a plain function that takes a `Request` and returns a `Response`) and
+  `auth.api`, which exposes server functions such as `getSession`. It must never
+  be imported into a client component - it talks to the database and reads the
+  secrets.
+</MdxComment>
+
+Better Auth serves all of its endpoints - sign in, sign out, the OAuth callback, session lookup and so on - from a single **catch-all route**. We create `src/app/api/auth/[...all]/route.ts` and hand the whole `/api/auth` subtree over to the library:
+
+```ts
+import { toNextJsHandler } from 'better-auth/next-js';
+
+import { auth } from '@/auth/auth';
+
+export const { GET, POST } = toNextJsHandler(auth.handler);
+```
+
+Finally we need a **client instance**, the counterpart used from client components. It does not contain any secret, it only knows how to call the endpoints above. We create `src/auth/client.ts`:
+
+```ts
+'use client';
+
+import { createAuthClient } from 'better-auth/react';
+
+export const authClient = createAuthClient();
+
+export const { signIn, signOut, useSession } = authClient;
+```
+
+<MdxComment>
+  We import the client from `better-auth/react`, which is the variant that also
+  gives us the reactive `useSession` hook. If we do not pass a `baseURL`, the
+  client uses the origin the page was served from.
+</MdxComment>
 
 ### GitHub OAuth setup
 
