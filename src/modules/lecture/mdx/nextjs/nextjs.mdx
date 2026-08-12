@@ -16,9 +16,9 @@ Next.js is a powerful and versatile framework for building modern web applicatio
 
 React is a JavaScript library for building user interfaces. It focuses on the "view" part of the application and provides a component-based architecture for creating dynamic and interactive web applications.
 
-Next.JS is a **framework** built on top of React. It extends React's capabilities to enable server-side rendering, routing, and other features, making it suitable for building **fullstack** web applications.
+Next.js is a **framework** built on top of React. It extends React's capabilities to enable server-side rendering, routing, and other features, making it suitable for building **fullstack** web applications.
 
-The key difference between Next.js and React is that with Next.js, we can create no just a pure frontend but the whole web application, including the server side. Next.js can be called a framework for developing full-stack web applications. For frontend development, Next.js uses all the power of React, building on its latest technologies and extending its capabilities.
+The key difference between Next.js and React is that with Next.js, we can create not just a pure frontend but the whole web application, including the server side. Next.js can be called a framework for developing full-stack web applications. For frontend development, Next.js uses all the power of React, building on its latest technologies and extending its capabilities.
 
 The primary differences between React and Next.js include:
 
@@ -31,6 +31,7 @@ Other benefits of Next.js include:
 
 - Metadata API - Next.js makes setting up metadata for each page easy, again improving SEO.
 - Incremental static regeneration (ISR) - Next.js allows you to set up scheduled or immediate static page regeneration, useful for pages that change infrequently.
+- Caching - Next.js can cache the result of a data fetch, a component or a whole page with the `'use cache'` directive, and invalidate it on demand.
 - Layouts - Next.js has introduced a new page structure model where individual nested pages can contain their own `layout` components that nest into each other incrementally.
 - ...and more
 
@@ -41,11 +42,11 @@ React primarily renders components on the client-side. React Server Components (
 https://www.joshwcomeau.com/react/server-components/
 https://www.youtube.com/watch?v=VIwWgV3Lc6s
 
-Next.js takes advantage of RSCs and enables server-side rendering. In fact, all components by default server components. This is a fundamentally different from React, as Next.js dispatches pre-rendered HTML, which is already populated with the correct data (fetched from the server, an API, a database, or any other source) or you can decide as a developer, that long-running operation will happen in the background and component will be streamed in once finished, while displaying loading component immediatelly. This approach empowers the potential for achieving excellent SEO performance. Moreover, Next.js offers a metadata API that allows for configuring page-specific elements like titles, descriptions, and tags, further enhancing SEO capabilities.
+Next.js takes advantage of RSCs and enables server-side rendering. In fact, all components are server components by default. This is fundamentally different from React, as Next.js dispatches pre-rendered HTML, which is already populated with the correct data (fetched from the server, an API, a database, or any other source). Alternatively, you can decide as a developer that a long-running operation will happen in the background and the component will be streamed in once finished, while a loading component is displayed immediately. This approach empowers the potential for achieving excellent SEO performance. Moreover, Next.js offers a metadata API that allows for configuring page-specific elements like titles, descriptions, and tags, further enhancing SEO capabilities.
 
 ### Routing
 
-To simulate routes in SPA React application, you need to use 3rd party libraries like React router or Tankstack router. Next.js, on the other hand, comes with a built-in routing system that allows you to create multi page applications with ease. It also supports dynamic routes, which are useful for creating pages that share the same layout but have different content.
+To simulate routes in an SPA React application, you need to use 3rd party libraries like React Router or TanStack Router. Next.js, on the other hand, comes with a built-in routing system that allows you to create multi-page applications with ease. It also supports dynamic routes, which are useful for creating pages that share the same layout but have different content.
 
 ### Data fetching
 
@@ -53,19 +54,21 @@ In React, data retrieval usually occurs on the client side, employing tools such
 
 ### Different ways to render a page
 
-We already know, how pure React application work. In Next.js, you have freedom to choose page rendering strategy per page.
+We already know how a pure React application works. In Next.js, you have the freedom to choose a page rendering strategy per page.
 
-**Static site generation (SSG)** - whole page is rendered at build time. By default, Next.js will try to pre-render all your pages at build time (even if you have some server components with data fetching).
+**Static site generation (SSG)** - the whole page is rendered at build time. By default, Next.js will try to pre-render as much of every page as it can at build time.
 
 **Server-side rendering (SSR)** - used to require the use of the `getServerSideProps` function for an entire page in Next.js, where all data had to be fetched on the server and then sent to the client. However, this approach had its drawbacks in terms of developer experience, as data might be required deep within the component tree, necessitating its passing down to the component. Moreover, if a server request took a significant amount of time, it could block the entire page from rendering, even if only a single component on the page needed that particular data. Starting from Next.js v13, React Server Components (RSC) provide a more granular solution, allowing data to be fetched on the component level, addressing these limitations.
 
 **Incremental static regeneration (ISR)** - pages created using SSG are static, so their content doesn't change until you rebuild the whole application. But sometimes, you want the information on those pages to update regularly or when something specific happens. With ISR, you can set a schedule for when these updates should happen, or you can make them happen whenever you want. A good example is a blog page, where most of the content doesn't change often, but you might want to add new blog posts now and then.
 
+**Partial prerendering (PPR)** - since Next.js v16, these strategies are no longer chosen for a whole page at once. With the `cacheComponents: true` option in `next.config.ts` (which this course app uses), Next.js prerenders a **static shell** of every route at build time and streams the request-specific parts in at request time. Everything that is static, or explicitly cached with the `'use cache'` directive, becomes part of the shell; everything that reads request data (cookies, headers, search params) or fetches uncached data must sit behind a `<Suspense>` boundary and streams in later. We will go through this model in detail in the following lectures.
+
 ## Routing fundamentals
 
-The skeleton of every application is routing. Unlike React, Next.js has built in file based routing. With Next.js v13, it is possible to define common layout for route segments, dynamic routes etc.
+The skeleton of every application is routing. Unlike React, Next.js has built-in file-based routing. With Next.js v13, it became possible to define a common layout for route segments, dynamic routes etc.
 
-In this tutorial, we have not yet discussed any routing method for our application. We can use several libraries created for React to solve routing in SPA. Since Next.js has its own routing system and it doesn't make sense to use any other approach, we haven't talked about any other libraries during the semester, and now we'll focus directly on the build-in solution of React.
+In this tutorial, we have not yet discussed any routing method for our application. We can use several libraries created for React to solve routing in an SPA. Since Next.js has its own routing system and it doesn't make sense to use any other approach, we haven't talked about any other libraries during the semester, and now we'll focus directly on the built-in solution of Next.js.
 
 ### Terminology
 
@@ -90,13 +93,20 @@ In order to create nested route such as `/dashboard/settings`, you need to nest 
 
 Next.js provides a set of special files to create UI with specific behavior in nested routes:
 
-- **layout** - defines shared UI for a segment and its children. Every NextJS application has a root layout, which must include `<html>` and `<body>` tags. Here, you can for example define your context providers or `QueryClientProvider` for React Query.
-- **page** - defines unique UI for a route. For example if you want to have `/dashboard` route, you need to create first create a folder named `dashboard` and inside this folder create `page.tsx` to define UI for this route. Optionally, you can have also `layout.tsx` file inside this folder to wrap UI defined in `page.tsx` with some shared UI.
-- **loading** - your page is by default server component, that can optionally fetch some data, which can obviously take some time. In order to provide instant page for user, you can optionally define `loading.tsx` file, which will be display immediatelly, while your page is fetching data.
-- **not-found** - if you want to define custom 404 page, you can create `not-found.tsx` file, which will be displayed when user navigates to non existing route.
-- **error** - if you want to define custom error page, you can create `error.tsx` file, which will be displayed when error occurs during page rendering.
+- **layout** - defines shared UI for a segment and its children. Every Next.js application has a root layout, which must include the `<html>` and `<body>` tags. Here you can, for example, define your context providers or the `QueryClientProvider` for React Query.
+- **page** - defines unique UI for a route. For example, if you want to have a `/dashboard` route, you first need to create a folder named `dashboard` and inside this folder create `page.tsx` to define the UI for this route. Optionally, you can also have a `layout.tsx` file inside this folder to wrap the UI defined in `page.tsx` with some shared UI.
+- **loading** - your page is by default a server component that can optionally fetch some data, which can obviously take some time. In order to provide an instant page for the user, you can optionally define a `loading.tsx` file, which will be displayed immediately while your page is fetching data. Under the hood it is nothing more than a `<Suspense>` boundary wrapped around the page.
+- **not-found** - if you want to define a custom 404 page, you can create a `not-found.tsx` file, which will be displayed when the user navigates to a non-existing route or when you call `notFound()`.
+- **error** - if you want to define a custom error page, you can create an `error.tsx` file, which will be displayed when an error occurs during page rendering. A `global-error.tsx` file in the root of the `app` directory catches errors thrown by the root layout itself.
 - **template** - similar to layout, but it does not persist state between route changes.
-- **route** - inside `app/api`, you can define folders, which can then contain `route.ts` files, that defines server side API endpoint. For example you want to have GET endpoint `/api/users`, you need to create folder `users` inside `app/api` and inside this folder create `route.ts` file, which will container export function named `GET`.
+- **route** - inside `app/api`, you can define folders which can then contain `route.ts` files that define a server side API endpoint. For example, if you want to have a GET endpoint `/api/users`, you need to create a folder `users` inside `app/api` and inside this folder create a `route.ts` file, which will export a function named `GET`.
+- **default** - a fallback UI for a parallel route slot. Since Next.js v16, every parallel route slot **must** have its `default.tsx` file, otherwise the build fails.
+- **forbidden** / **unauthorized** - UI rendered when you call the `forbidden()` or `unauthorized()` function (403 and 401 responses).
+
+Two more conventions live next to the `app` directory rather than inside it:
+
+- **proxy** - `proxy.ts` (in the project root or in `src`) runs before a request is matched against a route and can rewrite or redirect it. Until Next.js v16 this file was called `middleware.ts` and the exported function was called `middleware`. The name was changed because "middleware" was too easily confused with Express-style middleware, and because this file describes the network boundary of the app. `middleware.ts` still works, but it is deprecated. Note that `proxy` always runs on the Node.js runtime; the edge runtime is not supported there.
+- **instrumentation** - `instrumentation.ts` is used to register observability/monitoring tooling when the server starts.
 
 ### Component Hierarchy
 
@@ -116,11 +126,11 @@ Not only these specific files can occur inside app directory. You can create oth
 
 > This is different from the pages directory, where any file in `pages` is considered a route.
 
-PROJECT ORGANIZATION
+### Project organization
 
 Apart from routing folder and file conventions, Next.js is unopinionated about how you organize and colocate your project files.
 
-**Private folders** - inside app directory, if you define folder starting with `_`, it will be ignored by routing system (example `_components`)
+**Private folders** - inside the app directory, if you define a folder starting with `_`, it will be ignored by the routing system (for example `_components`).
 
 **Route groups**
 
@@ -136,11 +146,11 @@ To organize routes without affecting the URL, create a group to keep related rou
 
 > In this example, we have `/dashboard`, `/dashboard/overview` `/dashboard/settings` routes, all three routes share the same layout, but `/dashboard` and `/dashboard/overview` have another shared layout, which is not applied for `/dashboard/settings`.
 
-- Multiple root layouts - with the same approach as above, you can create multiple root layouts. Normally, when you route between pages, your app is not fully reloaded, NextJS uses something called Soft navigation. However, if you use more root layouts, NextJS will need to reload whole application, since each root layout defines it's own `<html>` tag.
+- Multiple root layouts - with the same approach as above, you can create multiple root layouts. Normally, when you route between pages, your app is not fully reloaded; Next.js uses something called soft navigation. However, if you use more root layouts, Next.js will need to reload the whole application, since each root layout defines its own `<html>` tag.
 
 ## Pages and layouts
 
-You can define new page by creating `page.tsx` file inside some folder in app directory. All components (including page components) are by default server components. You can turn them into client components using `"use client"` directive at the very top of the file. As a server component, page can fetch data by simply making component `async` and awaiting some promise inside a component.
+You can define a new page by creating a `page.tsx` file inside some folder in the app directory. All components (including page components) are server components by default. You can turn them into client components using the `"use client"` directive at the very top of the file. As a server component, a page can fetch data by simply making the component `async` and awaiting some promise inside the component.
 
 ```tsx
 'use client';
@@ -163,11 +173,13 @@ export default async function Page() {
 
 ### Layouts
 
-A layout is UI that is shared between multiple pages. On navigation, layouts preserve state, do not re-render. Layouts can also be nested. It always accepts a `children` prop, which is the page or nested layout. Layout can be either server or client component. Root layout of NextJS application is required and must be server component. Optionally, route segments or route groups can have their own layout as well.
+A layout is UI that is shared between multiple pages. On navigation, layouts preserve state and do not re-render. Layouts can also be nested. A layout always accepts a `children` prop, which is the page or the nested layout. A layout can be either a server or a client component. The root layout of a Next.js application is required and must be a server component. Optionally, route segments or route groups can have their own layout as well.
 
-Layouts can also fetch data, if they are server components (obviously, you can also perform client side fetching using `useQuery` hook, if you mark layout as client component). It is not possible to pass data from layout to page (or children in general). However, you can use the same `fetch` function in both layout and page or any other child component and that `fetch` will be executed just once (more on this later).
+Layouts can also fetch data if they are server components (obviously, you can also perform client side fetching using the `useQuery` hook if you mark the layout as a client component). It is not possible to pass data from a layout to a page (or to children in general). However, you can use the same `fetch` function in both the layout and the page or any other child component, and that `fetch` will be executed just once (more on this later).
 
 ```tsx
+import type { PropsWithChildren } from 'react';
+
 export default function DashboardLayout({
   children // will be a page or nested layout
 }: PropsWithChildren) {
@@ -176,6 +188,19 @@ export default function DashboardLayout({
       {/* Include shared UI here e.g. a header or sidebar */}
       <nav>...</nav>
       {children}
+    </section>
+  );
+}
+```
+
+Since Next.js v15.5, the framework generates a globally available `LayoutProps` type for every route, so you don't have to type `children`, `params` and parallel route slots by hand. The types are generated by `next dev`, `next build` or `next typegen` and do **not** need to be imported.
+
+```tsx
+export default function DashboardLayout(props: LayoutProps<'/dashboard'>) {
+  return (
+    <section>
+      <nav>...</nav>
+      {props.children}
     </section>
   );
 }
@@ -192,7 +217,7 @@ There are two ways to navigate between routes in Next.js:
 
 ### Link component
 
-It's built-in component that extends the HTML `<a>` tag to provide prefetching and client-side navigation between routes. It is **preferred** way to navigate between routes in NextJS.
+It's a built-in component that extends the HTML `<a>` tag to provide prefetching and client-side navigation between routes. It is the **preferred** way to navigate between routes in Next.js.
 
 ```tsx
 import Link from 'next/link';
@@ -202,7 +227,7 @@ export default function Page() {
 }
 ```
 
-You might need to check, on what page the user currently is and want to mark Link as active. You can do that by using `usePathname` hook. As it is a hook, it must be used inside client component only.
+You might need to check which page the user is currently on and mark the corresponding `Link` as active. You can do that by using the `usePathname` hook. As it is a hook, it can only be used inside a client component.
 
 ```tsx
 'use client';
@@ -259,7 +284,7 @@ export default function Page() {
 
 ### redirect
 
-You can use `redirect` function to redirect user to another page. It is useful for example when user is not authenticated and you want to redirect him to login page. This function can be used within server components only. Component does not need to return any JSX, if it's redirecting. Component is terminated at that point.
+You can use the `redirect` function to redirect the user to another page. It is useful, for example, when the user is not authenticated and you want to redirect them to the login page. This function is used in server components, route handlers and server actions. The component does not need to return any JSX if it is redirecting - the render is terminated at that point.
 
 ```tsx
 export default async function Page() {
@@ -277,26 +302,28 @@ export default async function Page() {
 }
 ```
 
-### How does (not) navigation and routing work
+### How navigation and routing work
 
-#### PREFETCHING
+#### Prefetching
 
 Prefetching involves preloading a route in advance, behind the scenes, before the user actually accesses it. This offers the advantage that when a user clicks on a link, the page loads instantly because it was already prefetched. If the page is a server component that involves data fetching, the data is already retrieved in the background, making it instantly accessible when the user clicks the link.
 
-Both Link component and useRouter hook allow to perform route prefetching. Link is prefetched, once page containing a Link is loaded and Link is visible in viewport. With useRouter hook, you can prefetch route using `router.prefetch` method.
+Both the `Link` component and the `useRouter` hook allow you to prefetch a route. A `Link` is prefetched once the page containing it is loaded and the link is visible in the viewport. With the `useRouter` hook, you can prefetch a route using the `router.prefetch` method.
 
-NextJS prefetches every Link by default. You can turn it off by passing `prefetch={false}` prop to Link component. Prefetching behaviour is different based on route type:
+Next.js prefetches every `Link` by default, but **only in production** - prefetching is disabled in `next dev`. You can turn it off by passing the `prefetch={false}` prop to the `Link` component. The prefetching behaviour differs based on the route type:
 
-- Static route - page is prefetched and cached.
-- Dynamic route - only first `loading.tsx` file is prefetched and cached (if it exists).
+- Static route - the whole page is prefetched and kept in the client cache for 5 minutes.
+- Dynamic route - only the part of the tree up to the first `loading.tsx` boundary is prefetched (if it exists), and it is not cached by default.
 
-#### CACHING
+With Cache Components enabled, prefetching works per route rather than per link: Next.js prefetches the route's static shell (its prerendered part), and the request-specific parts stream in after the navigation. Next.js v16 also deduplicates shared layouts across prefetches and only fetches the parts that are not in the cache yet, which means you may see more, but much smaller, prefetch requests than in v15.
 
-Next.js has in-memory client-side cache called the Router cache. Once user visited some page, whole route is cached (payload of RSC with data fetching). This is supposed to improve performance and reduce number of request and data transfer. We will talk about all of the caching layers later. For more information about router cache, see [documentation](https://nextjs.org/docs/app/building-your-application/caching#router-cache).
+#### Caching
 
-> It's not possible to opt out of the Router Cache.
+Next.js keeps an in-memory client-side cache of RSC payloads, called the **client cache** (older documentation calls it the Router Cache). Once the user has visited a route, its payload is cached and reused on the next navigation, which reduces the number of requests and the amount of transferred data. We will talk about all of the caching layers later. For more information, see the [caching documentation](https://nextjs.org/docs/app/getting-started/caching).
 
-This is a big problem, and many developers are complaining about it. If you visit a page where you have a list of items and then you go to another page, where you're able to add a new item, and after adding it, you navigate back to the page, where you see a list of items, you will get cached route, without new item (even that the page listing all items is server component and has set up fetching data per-request).
+How long an entry stays fresh depends on how it got there: a fully prefetched (static) route is reused for 5 minutes, while a dynamic route is not reused at all by default. These durations can be tuned with the experimental [`staleTimes`](https://nextjs.org/docs/app/api-reference/config/next-config-js/staleTimes) option.
+
+Historically this cache was a common source of confusion, because it made a freshly mutated page look stale. Imagine a page listing items and another page for adding a new one. After adding an item and navigating back, you could see the cached route without the new item, even though the listing page is a server component that fetches data per request.
 
 ```tsx
 export default async function Page() {
@@ -363,14 +390,12 @@ Think about a blog website. You want a separate page for each blog post. The lay
 > Specified file path as `app/blog/[slug]/page.tsx`, where the routes in the URL can look like `/blog/a` or `/blog/b`. In this case, the `slug` parameter is passed to the page component with the value `a` or `b`.
 
 ```tsx
-type BlogPostPageProps = {
-  params: {
-    slug: string;
-  };
-};
+export default async function BlogPostPage({
+  params
+}: PageProps<'/blog/[slug]'>) {
+  const { slug } = await params;
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const response = await fetch(`https://example.com/posts/${params.slug}`);
+  const response = await fetch(`https://example.com/posts/${slug}`);
   const post = await response.json();
 
   return (
@@ -378,6 +403,28 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <h1>{post.title}</h1>
     </div>
   );
+}
+```
+
+<MdxComment>
+  Note the two important things here. First, `params` is a **Promise** and has
+  to be awaited — this changed in Next.js v15. Awaiting request data is what
+  tells Next.js that this part of the page cannot be prerendered without a
+  request. Second, we did not write the type by hand: `PageProps<'/blog/[slug]'>`
+  is generated by Next.js from your actual route structure, so if you rename the
+  folder from `[slug]` to `[id]`, TypeScript will tell you.
+</MdxComment>
+
+The same applies to `searchParams`, which is a Promise as well, and to the `params` of a layout, a route handler and `generateMetadata`.
+
+```tsx
+export async function GET(
+  request: Request,
+  { params }: RouteContext<'/api/posts/[slug]'>
+) {
+  const { slug } = await params;
+
+  return Response.json({ slug });
 }
 ```
 
@@ -398,10 +445,10 @@ export async function generateStaticParams() {
 }
 ```
 
-Using `dynamicSegments` property, you can specify, what should happen if unknown slug is provided:
+Using the `dynamicParams` route segment config, you can specify what should happen if an unknown slug is provided:
 
-- **true**: (default) Dynamic segments not included in generateStaticParams are generated on demand.
-- **false**: Dynamic segments not included in generateStaticParams will return a 404
+- **true**: (default) Dynamic segments not included in `generateStaticParams` are generated on demand.
+- **false**: Dynamic segments not included in `generateStaticParams` will return a 404.
 
 ```tsx
 export const dynamicParams = true;
@@ -421,21 +468,19 @@ Dynamic Segments can be extended to catch-all subsequent segments by adding an e
 * app/shop/[...slug]/page.tsx             /shop/a/b/c       { slug: ["a", "b", "c"] }
 ```
 
-This is a common approach when working with authentication using the NextAuth library. More specifically, NextAuth relies on numerous API routes that you must incorporate into your application. While the library already includes these API routes, you must instruct your application to direct any requests to NextAuth's API routes to be processed by the NextAuth library. You can achieve this by establishing a catch-all route.
+This is a common approach when working with authentication. An auth library relies on a number of API routes that must be reachable in your application — sign in, sign out, the OAuth callback, session lookup and so on. Instead of creating a file for each of them, you hand the whole subtree over to the library with a single catch-all route. This is exactly what **better-auth**, the library we will use later in the course, does.
 
 ```tsx
-* /app/api/auth/[...nextAuth]/route.ts
+* /app/api/auth/[...all]/route.ts
 
-import NextAuth from "next-auth";
+import { toNextJsHandler } from 'better-auth/next-js';
 
-const handler = NextAuth({
-  ...
-})
+import { auth } from '@/lib/auth';
 
-export { handler as GET, handler as POST }
+export const { GET, POST } = toNextJsHandler(auth);
 ```
 
-> In this example, all requests that start with `/api/auth` will be handled by this file. In this file, we also import the `handler` from NextAuth, which is internally configured to look at the `nextAuth` slug and perform the appropriate operations depending on what API url was called.
+> In this example, all requests that start with `/api/auth` will be handled by this file. The handler exported by the library is internally configured to look at the rest of the path and perform the appropriate operation depending on which URL was called.
 
 ## Metadata
 
@@ -475,16 +520,14 @@ export default function Page() {
 If we need to include dynamic data in the metadata and get it from the server, we can use the `generateMetadata` function. A typical example might be that on a `/person/<id>` page, we want to include in the metadata the user name that will appear on the page. Statically, however, we don't have access to the name information; we only know the user's ID. Therefore, we can get the data from the API to display it in the metadata.
 
 ```tsx
-* /app/page.tsx
+* /app/person/[id]/page.tsx
 
 import type { Metadata } from 'next'
 
 export async function generateMetadata({
   params,
-}: {
-  params: { id: string };
-}): Promise<Metadata> {
-  const id = params.id;
+}: PageProps<'/person/[id]'>): Promise<Metadata> {
+  const { id } = await params;
 
   // fetch data
   const response = await fetch(`https://.../${id}`);

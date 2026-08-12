@@ -1,49 +1,60 @@
-# React hooks, refs and tables
+import PROP_DRILLING from './prop-drilling-diagram.png';
 
-In this lesson, we will look at a few more hooks, some of which are needed purely for optimization. We will discuss the concepts of `useRef` and `forwardRef,` which may be necessary when creating your own component library. We will discuss the possibility of having a global state that all components can access. Finally, we'll look at creating and working with tables, again using the external `tanstack-table` library.
+# Memoization, refs, context and tables
+
+In this lesson, we will look at how React decides what to re-render and at the tools it gives us to influence that — `useCallback`, `useMemo` and `memo` — and at the React Compiler, which makes most manual memoization unnecessary. We will then discuss `useRef` and how refs are passed into our own components, which is something you will need when building your own component library. Next, we will look at Context, which lets us share a value with a whole subtree of components without passing it through props. Finally, we'll look at creating and working with tables using the external TanStack Table library.
 
 ## useCallback, useMemo, memo
 
+<MdxComment>
+  Everything in this section describes memoization done **by hand**. Since the
+  React Compiler became stable, you should rarely need to write any of it
+  yourself — see the [React Compiler](#react-compiler) section at the end. We
+  still go through it, because you need to understand *what* the compiler
+  automates and *why* React re-renders in the first place, and because you will
+  meet manual memoization in every existing codebase.
+</MdxComment>
+
 ### useCallback
 
-`useCallback` is a hook that returns a memoized version of the callback function. This means that if a value changes, the function is not recreated. This can be useful if the function is passed to another component that would otherwise be re-rendered on each render. As discussed in the last lesson, we know we have types in JS that are passed by reference, not by value. These include objects and arrays, among others. If we define an arrow function inside a component, it is also an object.
+`useCallback` is a hook that returns a memoized version of a callback function. This means that as long as the values in its dependency array do not change, the function is not recreated on re-render. This can be useful if the function is passed to another component that would otherwise be re-rendered on each render. As discussed in the last lesson, we know we have types in JS that are passed by reference, not by value. These include objects and arrays, among others. If we define an arrow function inside a component, it is also an object.
 
 So, if we pass this function to another component, this component will be re-rendered every time a new function is passed. This may be undesirable if this component contains more complex logic or the passed function is part of another dependency array.
 
 ```tsx
 function Child({ onChange }: { onChange: () => void }) {
-	console.log('rendering child');
+  console.log('rendering child');
 
-	return (
-		<div>
-			<button onClick={onChange}>Change</button>
-		</div>
-	);
-}>
+  return (
+    <div>
+      <button onClick={onChange}>Change</button>
+    </div>
+  );
+}
 
 function Parent() {
-	console.log('rendering parent');
+  console.log('rendering parent');
 
-	const [value, setValue] = useState('');
-	const [childClicksCount, setChildClicksCount] = useState(0);
+  const [value, setValue] = useState('');
+  const [childClicksCount, setChildClicksCount] = useState(0);
 
-	const onChange = () => {
-		console.log('Calling onChange');
-		setChildClicksCount(childClicksCount + 1);
-	};
+  const onChange = () => {
+    console.log('Calling onChange');
+    setChildClicksCount(childClicksCount + 1);
+  };
 
-	return (
-		<div>
-			<input
-				onChange={e => {
-					setValue(e.target.value);
-				}}
-				value={value}
-			/>
-			<Child onChange={onChange} />
-			<div>Child clicks count: {childClicksCount}</div>
-		</div>
-	);
+  return (
+    <div>
+      <input
+        onChange={e => {
+          setValue(e.target.value);
+        }}
+        value={value}
+      />
+      <Child onChange={onChange} />
+      <div>Child clicks count: {childClicksCount}</div>
+    </div>
+  );
 }
 ```
 
@@ -56,7 +67,7 @@ function Parent() {
   `Child` component.
 </MdxComment>
 
-The `onChange` function does not need to be rendered every time the `value` changes, but only if the `childClickCount` state has changed. For a better illustration, we can add a "heavy" operation to the `Child` component that causes rendering every time the `value` changes to be blocked by rendering the `Child` component. For testing purposes, we can represent the heavy operation as follows, for example:
+The `onChange` function does not need to be recreated every time the `value` changes, but only when the `childClicksCount` state changes. For a better illustration, we can add a "heavy" operation to the `Child` component, so that every render caused by a change of `value` is blocked by rendering the `Child` component. For testing purposes, we can represent the heavy operation as follows, for example:
 
 ```js
 for (let i = 0; i < 1e9; i++) {
@@ -112,11 +123,11 @@ function Parent() {
   the same function to the `Child` component.
 </MdxComment>
 
-The way React works is that if a `Parent` needs to be rerendered, all its children are rerendered, regardless of whether their properties have changed. We can prevent this behavior by using `React.memo`.
+The way React works is that if a `Parent` needs to be re-rendered, all its children are re-rendered, regardless of whether their properties have changed. We can prevent this behavior by using `memo`.
 
 ### memo
 
-`React.memo` is a function that returns a memoized version of the component. This means that if the properties of the component are not changed, the component will not be rendered again.
+`memo` is a function that returns a memoized version of a component. This means that if the properties of the component do not change, the component will not be rendered again.
 
 Overusing `memo` can cause performance problems rather than prevent them! At the same time, using `memo` the right way can be non-trivial in many cases.
 
@@ -162,11 +173,11 @@ function Parent() {
 
 <MdxComment>
   In this case, we have already achieved what we asked for. The `Child`
-  component is not rendered every time the `value` changes, but only if the
-  `childClickCount` state has changed.
+  component is not rendered every time the `value` changes, but only when the
+  `childClicksCount` state has changed.
 </MdxComment>
 
-Generally, it is better to use `React.memo` only when there is no other way to prevent re-rendering the component. In our case, there is another option, namely, using the composability of React.
+Generally, it is better to use `memo` only when there is no other way to prevent re-rendering the component. In our case, there is another option, namely, using the composability of React.
 
 ```tsx
 function Child({ onChange }: { onChange: () => void }) {
@@ -209,7 +220,13 @@ export default function Home() {
 }
 ```
 
-Alternatives to `React.memo` may be general techniques for "moving state down" or "lifting content up." In this case, we have dropped the `childClickCount` state inside the `Parent` component and created a new `ChildClicksCounter` component. This component is sent to the `Parent` component as children. This way, if the `value` state changes in the parent, the `children` property will not be re-rendered since the `children` remain the same.
+Alternatives to `memo` may be the general techniques of "moving state down" or "lifting content up." In this case, we have moved the `childClicksCount` state out of the `Parent` component into a new `ChildClicksCounter` component. This component is sent to the `Parent` component as `children`. This way, if the `value` state changes in the parent, the `children` property will not be re-rendered since the `children` remain the same.
+
+<MdxComment>
+  Reach for composition before you reach for memoization. Unlike `memo`, this
+  solution cannot be silently broken by a caller passing a new object, and it
+  keeps working no matter what the parent does.
+</MdxComment>
 
 ### useMemo
 
@@ -253,7 +270,7 @@ function PersonTable({ data, filter }: { data: string[]; filter: string }) {
   when either `data` or `filter` is changed.
 </MdxComment>
 
-If we had a separate component for rendering the table, the same rules as for `useCallback` would apply, i.e. we would have to memoize the table component using `React.memo`.
+If we had a separate component for rendering the table, the same rules as for `useCallback` would apply, i.e. we would have to memoize the table component using `memo`.
 
 ```tsx
 function PersonTable({ data }: { data: string[] }) {
@@ -328,8 +345,8 @@ function PersonModule({ data, filter }: { data: string[]; filter: string }) {
 <MdxComment>
   We changed a seemingly small thing, namely that the `PersonModule` component
   can receive `undefined` data, in which case we send an empty array `[]` to the
-  `PersonTable`. However, this array is no longer memoized and causes the
-  memoization with `React.memo` to stop working.
+  `PersonTable`. However, this array is a new instance on every render, so it is
+  no longer memoized and it causes the memoization with `memo` to stop working.
 </MdxComment>
 
 ```tsx
@@ -379,13 +396,33 @@ export default function Home() {
   data in `props` is memoized in the parent component or not.
 </MdxComment>
 
-For more details and examples, we recommend reading [blog post by Dominik Dorfmeister](https://tkdodo.eu/blog/the-uphill-battle-of-memoization).
+For more details and examples, we recommend reading the [blog post by Dominik Dorfmeister](https://tkdodo.eu/blog/the-uphill-battle-of-memoization).
 
-## useRef, forwardRef
+### React Compiler
+
+Everything above is a compromise. Memoization has to be applied by hand, it has to be applied consistently across the whole chain of components, and — as the examples show — a one-line change somewhere else in the tree silently undoes it. React was never happy with that, which is why it built a different solution: the **React Compiler**.
+
+The React Compiler is a build-time tool that analyses your components and inserts the memoization for you. It works out on its own which values and which components need to be memoized and when they need to be recomputed, so you get the benefits of `useCallback`, `useMemo` and `memo` without writing any of them, and without the risk of breaking the chain from a distance.
+
+The compiler is now stable and is used in production. The recommendation for new code is to let the compiler do the memoization and to reach for `useMemo` / `useCallback` only as an escape hatch where you need precise control — the typical example being a value used as an effect dependency, where you want to guarantee the effect does not fire again.
+
+There is a catch: the compiler can only optimize code that follows the [Rules of React](https://react.dev/reference/rules). Components must be pure, props and state must not be mutated, and hooks must be called unconditionally. This is another reason why these rules matter — if you break them, the compiler has to bail out of optimizing that component.
+
+<MdxComment>
+  This does not make the previous sections useless. You still need to understand
+  why a component re-renders, what referential equality is, and what the
+  compiler is doing on your behalf — otherwise you cannot reason about
+  performance at all. You will also keep meeting hand-written memoization in
+  existing codebases.
+</MdxComment>
+
+For details on enabling and configuring it, see the [React Compiler documentation](https://react.dev/learn/react-compiler).
+
+## Refs
 
 ### useRef
 
-The `useRef` is one of the hooks in React that allows you to access DOM element references or store arbitrary values across the lifecycle of a component without causing it to re-render. useRef is useful in several different scenarios:
+The `useRef` is one of the hooks in React that allows you to access DOM element references or store arbitrary values across the lifecycle of a component without causing it to re-render. It is useful in several different scenarios:
 
 **Access to DOM elements**
 
@@ -405,7 +442,7 @@ function App() {
 
 **Storage of values**
 
-The `useRef` can also be used to store values. At the same time, it is not necessary to reflect the change of this value in the resulting JSX. This applies for example to the `<input>` tag, where we can store the value of `input` in `ref` and retrieve this value from `ref.current` when we submite the form.
+The `useRef` can also be used to store values. This is useful when the change of the value does not need to be reflected in the resulting JSX. This applies for example to the `<input>` tag, where we can store the value of the `input` in a `ref` and retrieve this value from `ref.current` when we submit the form.
 
 ```tsx
 function App() {
@@ -432,41 +469,51 @@ function App() {
   to re-render.
 </MdxComment>
 
-The `ref` can also store less common values, such as an interval of type `Timer` that can, for example, perform an action every second.
+The `ref` can also store less common values, such as the ID of an interval that performs an action every second.
 
 ```tsx
 function TimerComponent() {
-  const intervalRef = useRef();
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       console.log('Timer tick');
     }, 1000);
 
-    return () => clearInterval(intervalRef.current);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, []);
 
   return null;
 }
 ```
 
-### forwardRef
+<MdxComment>
+  Note the explicit type. Calling `useRef()` with no argument and no type
+  parameter gives you a ref whose `current` is typed as `undefined`, which
+  TypeScript will not let you assign to.
+</MdxComment>
 
-`forwardRef` is a function that allows you to pass `ref` from a parent component to a child component. This can be useful when we want to be able to access a DOM element that is created in a child component from the parent component.
+### Passing a ref to your own component
+
+Sometimes we want to access, from a parent component, a DOM element that is rendered inside a child component. Since React 19, `ref` is an ordinary prop — you declare it in the component's props and pass it down to the DOM element like any other value.
 
 ```tsx
-const FancyButton = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<object>>(
-  ({ children, ...props }, ref) => {
-    return (
-      <button ref={ref} {...props}>
-        {children}
-      </button>
-    );
-  }
-);
+type FancyButtonProps = ComponentProps<'button'>;
+
+function FancyButton({ children, ref, ...props }: FancyButtonProps) {
+  return (
+    <button ref={ref} {...props}>
+      {children}
+    </button>
+  );
+}
 
 function Home() {
-  const ref = useRef<HTMLButtonElement>();
+  const ref = useRef<HTMLButtonElement>(null);
 
   return (
     <>
@@ -496,9 +543,13 @@ function Home() {
   In the `Home` component we define a `ref`, which we then send to the
   `FancyButton` component. This allows us to control the `FancyButton` in the
   `Home` component using its reference and, for example, trigger its click.
+  Using `ComponentProps<'button'>` for the props means `ref` is already part of
+  the type, together with every other native `<button>` attribute.
 </MdxComment>
 
-In combination with some component libraries, it may be necessary to use forwarRef for the components to work properly. An example is Radix UI, a Dialog component. When using this library and component, Radix provides us with a set of predefined components that need to be put together.
+> Before React 19, this was not possible directly — a component could not receive `ref` as a prop and had to be wrapped in the `forwardRef` function. You will still run into `forwardRef` in older codebases and in libraries that have not migrated yet. It keeps working, but it is deprecated and should not be used in new code.
+
+In combination with some component libraries, it is essential that a component forwards its `ref` in order to work properly. An example is the Dialog component from Radix UI. When using this library, Radix provides us with a set of predefined components that need to be put together.
 
 ```tsx
 import * as Dialog from 'radix-ui/react-dialog';
@@ -518,7 +569,7 @@ export default () => (
 );
 ```
 
-The `DialogTrigger` is configured by the library so that event handlers are defined on it to open the dialog. We only need to provide this component's `children,` and this Trigger will automatically open the dialog. The problem occurs when we want to use some custom component as Trigger.
+The `Dialog.Trigger` is configured by the library so that event handlers are defined on it to open the dialog. We only need to provide this component's `children`, and this trigger will automatically open the dialog. The problem occurs when we want to use some custom component as the trigger.
 
 ```tsx
 function MyDialog() {
@@ -574,19 +625,17 @@ function MyDialog() {
 ```
 
 <MdxComment>
-  In this case the trigger dialog will not work. We do send a button as `children` for `Dialog.Trigger`, but as a custom component that does not pass a `ref` to the DOM `<button>` element. To fix this, we need to wrap the `Button` component with a `forwardRef` and pass the `ref` to the `<button>` element.
+  In this case the dialog trigger will not work. We do send a button as `children` for `Dialog.Trigger`, but as a custom component that does not pass a `ref` down to the DOM `<button>` element. To fix this, the `Button` component has to accept `ref` as a prop and pass it to the `<button>` element.
 </MdxComment>
 
 ```tsx
-const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<object>>(
-  function Button({ children, ...props }, ref) {
-    return (
-      <button ref={ref} {...props}>
-        {children}
-      </button>
-    );
-  }
-);
+function Button({ children, ref, ...props }: ComponentProps<'button'>) {
+  return (
+    <button ref={ref} {...props}>
+      {children}
+    </button>
+  );
+}
 
 function MyDialog() {
   return (
@@ -602,9 +651,21 @@ function MyDialog() {
 
 ## Context
 
-The `Context` is used to store values that are global for the scope we define. This scope can be, for example, the whole application or just some part of the application. This hook is useful when we need to pass a value to several components that are not in a direct parent relationship. This avoids "prop drilling," where we would have to pass the value through several components that don't actually need it.
+### Why global state
 
-To create a context, we use the `createContext` function, which returns an object with two properties - `Provider` and `Consumer.` The `Provider` is the component that wraps all the components with access to the value we want to share. The `Consumer` is typically not used since we use the `useContext` hook to access the value that the Provider shares.
+While having components self-sufficient and not relying on their surroundings is great, there are cases where you need to share some data across your whole application. Some examples may include user preferences, your app theme, translations, or a backend data cache.
+
+### Prop drilling
+
+Let's say that our application must be translated into English and Czech. The whole application has to know whether to output Czech or English texts. Last but not least, we need a component allowing the user to switch between languages. If we did not use Context or another form of global state, we would have to pass the language information to all components that need it. This would mean passing a `language` prop from the root component down to every component that needs it — through components that have no use for it themselves. This problem is called **prop drilling** and it is one of the main reasons why global state is used.
+
+<MdxImage src={PROP_DRILLING} />
+
+### createContext, Provider, useContext
+
+Context is used to store values that are global for the scope we define. This scope can be, for example, the whole application or just some part of it. It is useful when we need to pass a value to several components that are not in a direct parent-child relationship.
+
+To create a context, we use the `createContext` function. The context itself can be rendered as a component — everything inside it has access to the value we pass to its `value` prop.
 
 ```tsx
 type UserContextType = {
@@ -617,7 +678,7 @@ const UserContext = createContext<UserContextType | null>(null);
 
 For each context, we define its type, which is actually the value we want to share. This type can contain any values, just like the props of a component.
 
-We use the created Context to create a Provider that wraps all components that have access to the value. This Provider can wrap any number of components. If it is a global application state, it can be directly in the root component of the application. If it is a Context that maintains information about, for example, a form, this Context will wrap only components that relate to that form.
+We use the created context to create a provider that wraps all components that should have access to the value. This provider can wrap any number of components. If it is a global application state, it can be directly in the root component of the application. If it is a context that maintains information about, for example, a form, it will wrap only the components that relate to that form.
 
 ```tsx
 type UserContextType = {
@@ -630,13 +691,21 @@ const UserContext = createContext<UserContextType | null>(null);
 function UserContextProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState({ name: 'John', age: 25 });
 
-  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+  return <UserContext value={user}>{children}</UserContext>;
 }
 ```
 
-Typically, a new component is created as `Provider`, which takes care of what value is sent to `Context.Provider`. In this case, we create a `user` state, which is then sent to the `UserContext.Provider`.
+<MdxComment>
+  Since React 19, you render the context itself as the provider — `<UserContext
+  value={...}>`. In older code you will see `<UserContext.Provider
+  value={...}>`, which still works but is deprecated. You may also come across
+  `Context.Consumer`; it has been superseded by the `useContext` hook and should
+  not be used in new code.
+</MdxComment>
 
-Last, we miss the ability to access the `user` value from components that are inside the `UserContextProvider`. We do this by using the `useContext` hook, which returns a value that is sent to `UserContext.Provider`.
+Typically, a new component is created as the provider, which takes care of what value is sent to the context. In this case, we create a `user` state, which is then passed down.
+
+Last, we miss the ability to access the `user` value from components that are inside the `UserContextProvider`. We do this by using the `useContext` hook, which returns the value that was passed to the provider.
 
 ```tsx
 type UserContextType = {
@@ -649,7 +718,7 @@ const UserContext = createContext<UserContextType | null>(null);
 function UserContextProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState({ name: 'John', age: 25 });
 
-  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+  return <UserContext value={user}>{children}</UserContext>;
 }
 
 function UserDetails() {
@@ -698,7 +767,7 @@ function useUserContext() {
 function UserContextProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState({ name: 'John', age: 25 });
 
-  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+  return <UserContext value={user}>{children}</UserContext>;
 }
 
 function UserDetails() {
@@ -787,6 +856,29 @@ function UserPage() {
   re-rendered since it does not depend on the `user` value at all.
 </MdxComment>
 
+### Multiple context providers
+
+It is common for an application to need to define multiple global states. It is also common that a library requires its own context provider to be defined, while at the same time we need our own global provider within the application. In this case, for clarity, it is useful to create a custom component that defines all global providers and then use this single provider in the root component of our application.
+
+```tsx
+function AppProvider({ children }: PropsWithChildren) {
+  return (
+    <SomeComponentLibraryProvider>
+      <UserContextProvider>
+        <SettingsProvider>{children}</SettingsProvider>
+      </UserContextProvider>
+    </SomeComponentLibraryProvider>
+  );
+}
+```
+
+<MdxComment>
+  Note that the order matters — the `SettingsProvider` component can read the
+  context from `UserContextProvider`, but not the other way around. We can use
+  `AppProvider` in the root component of our application, with the rest of our
+  application as `children`.
+</MdxComment>
+
 ### Use cases, when to use context
 
 A typical use of context is to define the global state of a React application. This can be related to, for example, the state of a user, whether a user is logged in. Application state can also define the theme, language, or text translations. These settings are typically immutable, being defined once at the beginning. As for the theme, it is possible to provide an option to set light/dark mode, which will change the appearance of the whole application.
@@ -795,33 +887,37 @@ An example of a state that is not available to the whole application is a contex
 
 A similar use case is a table implementation. It can have a state regarding sorting, pagination, or filtering. If we have a context that maintains the state of the table, we can have different components that can manipulate that state without having to pass the value through the props. This is just about setting the filter value, sorting, or pagination.
 
-The Tanstack Query library also works on the principle of maintaining data in the context, not only for getting data from the API or managing any async operation. The state of this operation is further available via hooks for all components, which are wrapped by `QueryClientProvider.` We will learn more about this library in the next lesson.
+The TanStack Query library also works on the principle of maintaining data in a context, not only for getting data from an API but for managing any async operation. The state of this operation is further available via hooks to all components wrapped by `QueryClientProvider`. We will learn more about this library in the next lesson.
 
-## Planned changes to React 19
+### use(Context)
 
-On February 15, 2024, React released an article about planned changes to React in the next major release, which will be React 19. In this article, we can read about upcoming changes to some of the hooks and features we covered in this lesson. The full blog post can be found [here](https://react.dev/blog/2024/02/15/react-labs-what-we-have-been-working-on-february-2024)
+Since React 19 there is a second way to read a context — the `use` function. Unlike `useContext`, `use` is not a hook, which means it can be called conditionally, for example inside an `if` block or after an early return.
 
-### useContext(Context) -> use(Context), Context.Provider -> Context
+```tsx
+function UserDetails({ showDetails }: { showDetails: boolean }) {
+  if (!showDetails) {
+    return null;
+  }
 
-There is a change coming in React 19 to simplify working with context. Currently, if we want to get a value from a context, we have to use the `useContext` hook, which takes `Context` as a parameter. This hook is to be simplified to `use(Context)`. At the same time, a change is in the works to allow us to use `Context` as `Provider` so we don't have to use `Context.Provider`.
+  // Not possible with useContext - hooks cannot be called conditionally
+  const user = use(UserContext);
 
-### useMemo / useCallback / React.memo
+  return <p>Name: {user?.name}</p>;
+}
+```
 
-There is going to be a change in React 19 where you will not need to use `useMemo`, `useCallback` and `React.memo`. This change is intended to simplify working with React while avoiding potential errors that can occur when using these hooks. In this lesson, we've shown a few examples of how it's easy to make a mistake that causes memoization to not work the way we want it to.
+<MdxComment>
+  Both are valid; `useContext` is not deprecated. Reach for `use` when you
+  genuinely need to read the context conditionally — otherwise the two are
+  interchangeable. The `use` function can also unwrap a promise, which we will
+  come back to in a later lesson.
+</MdxComment>
 
-The biggest update within React 19 concerns the React Compiler. Up until now, React only serves as a library that doesn't care about how you write the code and doesn't do any optimizations on it. That will change with the arrival of the React Compiler, which should take care of what needs to be memized, when a component needs to be rebuilt, etc. Manual memoization was always just a compromise that React wasn't happy with and worked on a different solution because of that.
+## TanStack Table
 
-### React.lazy
+In a large number of applications it is necessary to display a list of several entities whose best presentation is a table. This table can be more complex, containing for example filtering, sorting, or pagination options. Creating such a table can be challenging, and care must be taken to ensure that it is as optimized as possible, as it can contain large amounts of data. At the same time, we can either work with the displayed data purely on the client, including filtering, or we can get the data from an API and call the API again on every filter change to get new data.
 
-In the current version of React we have the possibility to specify which component is not loaded immediately when the application is loaded, using React.lazy. This feature is useful to use if we are initially rendering only part of the components that are contained in a screen component to the screen. Subsequently, based on some state, other components are conditionally rendered. These are just convenient to wrap in React.lazy, as they are not loaded immediately, but only when they are needed.
-
-As with memoization, this is an optimization that we as developers control. In the future, the React Compiler could decide for us which components are needed immediately and which can be retrieved later to optimize the loading of the application.
-
-## Tanstack Table
-
-In a large number of applications it is necessary to display a list of several entities, when their best display is in a table. This table can be more complex, containing for example filtering, sorting, or pagination options. Creating such a table can be challenging, and care must be taken to ensure that it is as optimized as possible, as it can contain large amounts of data. At the same time, we have the options of working with the data we display in the table only on the client, including the possibility of filtering, etc., or we can get the data from the API and call the API again when filtering to get new data.
-
-Tanstack table is a Headless UI library that provides no components as far as rendering the table is concerned, but provides all the functionality to work with the table. Compared to a component library that provides a complete component that takes care of the entire table, this library is useful for creating a custom component that has exactly the functionality we need and looks exactly the way we want it to look.
+TanStack Table is a headless UI library that provides no components as far as rendering the table is concerned, but provides all the functionality to work with the table. Compared to a component library that provides a complete component taking care of the entire table, this library is useful for creating a custom component that has exactly the functionality we need and looks exactly the way we want it to look.
 
 ### Creating first table
 
@@ -898,7 +994,7 @@ function Table() {
 }
 ```
 
-Now, we have the default setup of our table. A good starting point is to pick basic table implementation provided by the library [here](https://tanstack.com/table/v8/docs/framework/react/examples/basic). Here's a basic example of the data and columns we are working with:
+Now we have the default setup of our table. A good starting point is the basic table implementation provided by the library [here](https://tanstack.com/table/v8/docs/framework/react/examples/basic). Here's a basic example of the data and columns we are working with:
 
 ```tsx
 type User = {
@@ -1042,13 +1138,13 @@ function UserTable() {
   });
 
   return (
-    <TableContext.Provider value={table}>
+    <TableContext value={table}>
       <table>
         ...
       </table>
 
       <NameFilter />
-    </TableContext.Provider>
+    </TableContext>
   );
 }
 ```
@@ -1090,15 +1186,15 @@ function UserTable() {
   });
 
   return (
-    <TableContext.Provider value={table}>
+    <TableContext value={table}>
       <table>
         ...
       </table>
 
       <NameFilter />
-    </TableContext.Provider>
+    </TableContext>
   );
-
+}
 ```
 
 <MdxComment>
@@ -1107,11 +1203,18 @@ function UserTable() {
   a change in filter state by ensuring that the data is filtered.
 </MdxComment>
 
-This works similarly with sorting, hiding some columns or pagination. See the [library documentation](https://tanstack.com/table/latest/docs/introduction) for more information.
+This works similarly with sorting, hiding some columns or pagination. See the [library documentation](https://tanstack.com/table/v8/docs/introduction) for more information.
+
+<MdxComment>
+  This course uses TanStack Table **v8**. Version 9 was released in August 2026
+  and brings a different, tree-shakable architecture, so make sure you are
+  reading the v8 documentation — the examples above will not work as-is against
+  the v9 API.
+</MdxComment>
 
 ## Next lecture
 
-In the next lesson, we'll come back to Context a bit, as knowing it is key to explaining other things. We will describe in detail the asynchronous behavior in javascript and then in React. We'll discuss the Tanstack Query library for working with asynchronous operations, explain the importance of runtime data management, and finally describe how to work with forms using the React Hook Form library.
+In the next lesson, we will describe in detail the asynchronous behavior in JavaScript and then in React. We'll discuss the TanStack Query library for working with asynchronous operations, explain the importance of runtime data validation with Zod, and finally describe how to work with forms using the React Hook Form library.
 
 ## Assignment
 
