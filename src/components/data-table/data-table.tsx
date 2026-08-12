@@ -54,7 +54,7 @@ export const DataTable = <TData extends { id: string }>({
   return (
     <div className="flex flex-col gap-y-4">
       {searchColumn && (
-        <div className="w-96">
+        <div className="w-full max-w-96">
           <Input
             placeholder="Adam Grygar"
             value={searchFilterValue ?? ''}
