@@ -11,7 +11,7 @@ const Layout = ({ children }: PropsWithChildren) => (
   <div className="-mt-8">
     <SubNavigation />
 
-    <main className="mt-8">{children}</main>
+    <main className="container mt-8">{children}</main>
   </div>
 );
 
