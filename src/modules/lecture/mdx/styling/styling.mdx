@@ -7,7 +7,7 @@ import MATERIAL_UI from './lecture3-materialui.png';
 import SEMANTIC_TAGS from './lecture3-semantic-tags.png';
 import TAILWIND_VS_INLINE from './lecture3-tailwind-vs-inline.png';
 
-# Styling your app, Tailwindcss, Accessibility.
+# Styling Your App, Tailwind CSS, Accessibility
 
 Styling is an essential element of any web application, dramatically influencing the user experience. Whether you're building a SaaS product or another basic information system, design is crucial in determining how users perceive and interact with your application. A well-thought-out design can impact user satisfaction and even influence their choice between your service and competitors. Effective styling isn't just about aesthetics; it's also about providing an intuitive user interface. Even if your application has excellent functionality, users need help understanding how to navigate and interact with it to make it more useful.
 
@@ -17,14 +17,14 @@ These are common approaches to styling your web application:
 - Sass/Less
 - CSS-in-JS
 
-Traditional CSS, Sass/Less, CSS-in-JS, and Utility-first approach are suitable for projects that do not rely on any JavaScript framework.
+Traditional CSS, Sass/Less, CSS-in-JS, and the utility-first approach are suitable for projects that do not rely on a JavaScript framework.
 
 - CSS modules
 - Component library
 - Headless libraries
 - Utility-first
 
-## Traditional css
+## Traditional CSS
 
 <MdxImage src={CSS} />
 
@@ -105,7 +105,7 @@ export default class Counter extends React.Component {
 }
 ```
 
-## CSS modules
+## CSS Modules
 
 CSS Modules aims to solve some of the challenges associated with traditional CSS. With CSS Modules, styles are scoped to specific components, preventing global scope pollution and potential style conflicts. Each CSS Module is a standalone file that encapsulates styles for a particular component. Developers can import and use these styles in their JavaScript or TypeScript files, ensuring a tight coupling between styles and components. Additionally, it supports features like local scoping and composition, allowing for creating modular and reusable styles. This approach (should) improve maintainability and reduce the chance of unintended style side effects.
 
@@ -179,7 +179,7 @@ Headless React component libraries offer a high degree of flexibility and custom
 
 Examples: [HeadlessUI](https://headlessui.com/), [RadixUI](https://www.radix-ui.com/)
 
-## Utility first approach - Tailwindcss
+## Utility-First Approach: Tailwind CSS
 
 <MdxComment className="mb-8">
   Rapidly build modern websites without ever leaving your HTML.
@@ -187,9 +187,9 @@ Examples: [HeadlessUI](https://headlessui.com/), [RadixUI](https://www.radix-ui.
 
 [Here is a perfect description of utility-first approach](https://tailwindcss.com/docs/utility-first)
 
-A utility-first CSS framework provides a variety of predefined CSS classes that you can utilize to construct your own components. These classes look like `flex mt-2 rounded-full shadow whitespace-nowrap` etc. Many developers consider creating new applications with a tailwind as the fastest approach. The essential advantage lies in eliminating the need to navigate between numerous CSS files, enabling immediate visual feedback as you make changes.
+A utility-first CSS framework provides a variety of predefined CSS classes that you can utilize to construct your own components. These classes look like `flex mt-2 rounded-full shadow whitespace-nowrap`, for example. Many developers consider Tailwind CSS the fastest approach for new applications. The essential advantage lies in eliminating the need to navigate between numerous CSS files, enabling immediate visual feedback as you make changes.
 
-```tsx
+```html
 <div class="flex font-sans">
   <div class="relative w-48 flex-none">
     <img
@@ -332,9 +332,9 @@ You can't do media queries in inline styles or define different states.
   post](https://arindam1729.hashnode.dev/tailwind-css-vs-inline-css-are-they-the-same).
 </MdxComment>
 
-## DaisyUI - a component library based on tailwindcss
+## DaisyUI: A Component Library Based on Tailwind CSS
 
-Component libraries based on tailwindcss aim to make development even faster. Again, the prerequisite is that you must not be tied to a very specific design, so you probably shouldn't use any component library and go for a Headless library with some styling approach. But if you can use any design you want among various projects, it might be a very good choice to pick some of the component libraries based on tailwindcss.
+Component libraries based on Tailwind CSS aim to make development even faster. Again, the prerequisite is that you must not be tied to a very specific design. Otherwise, you should avoid a component library and use a headless library with your own styling approach. If you can use one of the provided designs across projects, a Tailwind CSS component library can be a good choice.
 
 These types of libraries do not provide you with pre-built components that you need to import, such as
 
@@ -475,4 +475,4 @@ In the next lesson, we'll look at the interactivity of a React application. We w
 
 ## Assignment
 
-This week, style a responsive page using TailwindCSS to display a GitHub repository description. The layout should include fixed top navigation, sidebars, and main content. Ensure responsiveness and basic accessibility.
+This week, style a responsive page using Tailwind CSS to display a GitHub repository description. The layout should include fixed top navigation, sidebars, and main content. Ensure responsiveness and basic accessibility.

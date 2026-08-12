@@ -1,7 +1,7 @@
 import { IncorrectState } from './incorrect-state';
 import { CorrectState } from './correct-state';
 
-# Component lifecycle, working with state
+# Component Lifecycle, Working with State
 
 In this lesson, we will cover the topic of interactivity in our application. Until now, we have implemented mostly static components that failed to change the UI dynamically based on external or internal events. A modern web application implemented with React benefits precisely from being able to respond quickly to user input. First, we'll look at the basic concept of the component lifecycle, discuss hooks and their usage rules, take a detailed look at defining and updating state, and look at the most used hooks you're very likely to encounter in practice. Some of them are also used to optimize application performance. Finally, we will show how to create a custom hook.
 
@@ -37,7 +37,7 @@ The `Clock` component accepts `time` as its property. Consider that this propert
 
 ## Hooks
 
-Hooks are specials functions that are only available while React is rendering. They let you "hook into" different React features.
+Hooks are special functions that are only available while React is rendering. They let you "hook into" different React features.
 
 There are a few rules we must follow when using hooks:
 
@@ -118,7 +118,7 @@ function PersonForm() {
 </IncorrectState>
 
 <MdxComment className="mt-2">
-  This updates the local variable `name.` Between re-renders, local variables
+  This updates the local variable `name`. Between re-renders, local variables
   are not kept. In addition, changing a local variable does not trigger a
   re-render of the component. If we want to display the new state each time the
   component changes state, we must use the `useState` hook.

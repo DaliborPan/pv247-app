@@ -10,7 +10,7 @@ Hello and welcome to the _PV247 Modern Web Development_ course!
 
 ---
 
-We are here to deliver you a good set of basics for modern frontend development, mainly in the React framework, with a particular focus on Next.js. Halfway through the course, you should have enough knowledge to create your own simple React applications. To pass this course, you should demonstrate that you can build a full-stack application with TypeScript and the Next.js framework so that it can be professionally built upon after the course is finished.
+This course provides a solid foundation in modern frontend development, primarily using React, with a particular focus on Next.js. Halfway through the course, you should have enough knowledge to create your own simple React applications. To pass the course, you must demonstrate that you can build a full-stack application with TypeScript and Next.js that can be professionally extended after the course.
 
 ## Topics
 
@@ -18,14 +18,14 @@ We are here to deliver you a good set of basics for modern frontend development,
 2. React
 3. Styling your app, Tailwind, accessibility
 4. Component lifecycle, state & effect
-5. Other React hooks, memoization, and tables
-6. Context, Async, React Query, Forms
-7. Next.js - The React Framework For The Web
-8. Next.js - Loading UI & Streaming, API routes, React Server Components
-9. Next.js - Caching, Database, Server actions, API routes
+5. Memoization, refs, context and tables
+6. Async, TanStack Query, forms and Zod
+7. Next.js - The React Framework for the Web
+8. Next.js - Loading UI and streaming, API routes, React Server Components
+9. Next.js - Caching, database, Server Actions, API routes
 10. Authentication, metadata, deployment
 
-We are experienced developers who actively work in the technologies that this course teaches. We all have a portfolio of applications we've created either as personal, hobby projects or typically larger projects at work. Some of us still work at InQool, an industry partner of the Faculty of Informatics and operator of this course.
+We are experienced developers who actively work with the technologies taught in this course. We all have portfolios of applications created as personal or hobby projects, as well as larger projects at work. Some of us work at InQool, an industry partner of the Faculty of Informatics and the course provider.
 
 #### Dalibor Pantlík
 
@@ -53,17 +53,17 @@ The PV247 course at Masaryk University's Faculty of Informatics was not previous
 
 ## Course organization
 
-The course covers ten weeks of lectures, with a 2.5-hour block each week. Typically, the first hour and a half (the lecture) discusses the new technology. In the following hour (the practicum), students have space to implement the weekly assignment, with teachers remaining available. Students are required to attend the first block (lecture). They can work out the weekly assignment independently at home if they want. It is recommended that they work on the assignment immediately after class, as the teachers remain available to them for any questions.
+The course consists of ten weekly 2.5-hour blocks. Typically, the first hour and a half is a lecture introducing new technology. During the following hour, the practicum, students can work on the weekly assignment while teachers remain available. Students must attend the lecture. They may complete the weekly assignment independently at home, but we recommend working on it immediately after class while teachers are available to answer questions.
 
 ### Prerequisites
 
-The prerequisite for this course is a basic knowledge of web development and scripting language programming. Suppose students have not taken PB138 "Web Development and Markup Language Fundamentals," which includes an intro to web development and React programming. In that case, students are required to study the very basics of JavaScript, TypeScript, React, how REST APIs work, etc., independently. Going into great detail on all aspects of web development is impossible, so these prerequisites are required.
+This course requires a basic knowledge of web development and programming in a scripting language. Students who have not taken PB138 "Web Development and Markup Language Fundamentals," which introduces web development and React programming, must independently study the basics of JavaScript, TypeScript, React, and REST APIs. It is not possible to cover every aspect of web development in detail, so these prerequisites are necessary.
 
 ### Course objective
 
 > The course's main objective is to provide enough information and knowledge to enable students to develop a complete full-stack web application at the end of the course.
 
-The main focus will, of course, be the frontend part of the application; however, thanks to the Next.js framework, the server and database part of the web application development will also be partially covered. Nevertheless, the output knowledge of this course includes more than just the ability to create an application; it also includes an overall understanding of modern web principles, especially on the client frontend part.
+The main focus is the frontend part of the application. However, thanks to Next.js, the course also partially covers server-side and database development. The course outcomes include more than the ability to create an application: they also include an overall understanding of modern web principles, especially on the client side.
 
 ### Evaluation
 
@@ -81,15 +81,15 @@ The final project can have any topic and must meet the basic requirements for th
 
 # Today's lecture
 
-In today's lesson, we will cover an introduction to frontend development. We'll explore who a frontend developer is and place this domain within the context of the overall development of modern (not only web) applications. Next, we'll discuss the web platform and all the terms we'll encounter here. Then, we'll move precisely to the programming language that will guide us throughout the course, first JavaScript and then TypeScript. Aside from the language itself, we'll also discuss other things related to the entire frontend ecosystem, as well as tools for improving code.
+In today's lesson, we will introduce frontend development. We will explore who a frontend developer is and place this role in the broader context of developing modern applications, not only web applications. Next, we will discuss the web platform and the terms we will encounter throughout the course. We will then focus on the programming languages that will guide us through the course: JavaScript and TypeScript. Finally, we will discuss the frontend ecosystem and tools for improving code quality.
 
-## Who is a Frontend developer?
+## Who is a frontend developer?
 
 <MdxImage src={FRONTEND_DEVELOPER} />
 
-Front-end web development, also known as client-side development, is the practice of producing HTML, CSS, and JavaScript for a website or Web Application that a user can see and interact with directly. The frontend developer position is critical as it not only describes the coverage of the implementation of the website design but also its functionality and responsibility.
+Frontend web development, also known as client-side development, is the practice of producing HTML, CSS, and JavaScript for a website or web application that users can see and interact with directly. Frontend developers are responsible for implementing both a website's design and its functionality.
 
-The work of a frontend developer is not only about programming the application itself. Since he develops what the end user, or customer, sees, it is essential to have a certain feel for design and to know the principles of user experience (UX) and user interfaces (UI). Large companies often have dedicated experts and designers for these purposes. However, it is common practice for the developer to devise and design parts of the UI or some complete pages. It should be noted that a web application can only be successful with an attractive, clear, and intuitive user interface.
+The work of a frontend developer is not limited to programming the application. Because they develop what end users or customers see, it is essential to understand design and the principles of user experience (UX) and user interface (UI) design. Large companies often have dedicated experts and designers for these purposes. However, developers commonly devise and design parts of the UI or entire pages. An attractive, clear, and intuitive user interface is essential to a successful web application.
 
 ### Goal
 
@@ -105,13 +105,13 @@ There are multiple platforms on which a frontend programmer can develop applicat
 
 ### HTML, CSS, JS
 
-HTML and CSS are basically used to create the user interface and place the elements on the screen.
+HTML and CSS are used to create the user interface and position elements on the screen.
 
 **HTML (HyperText Markup Language)** serves as the backbone of any web application. It defines the structure of the actual page, and the semantics of the elements are determined based on HTML tags. These tags have a predefined appearance that may vary slightly from browser to browser. Tags can be dynamically added, removed, and modified using JavaScript and have styling assigned using CSS to achieve a modern and intuitive user interface.
 
-**The CSS (Cascading Style Sheets)** language ensures that elements are correctly placed and look good on the page. It works by defining classes that are then assigned to individual HTML tags.
+**CSS (Cascading Style Sheets)** ensures that elements are correctly positioned and look good on the page. It can style elements through selectors, including classes assigned to HTML elements.
 
-**JavaScript (JS)** is a scripting language that enables interactivity on a page. In order for a button on a page to perform an action or for various elements to be reordered, hidden, etc., based on some conditions, we need this language to do so.
+**JavaScript (JS)** is a scripting language that enables interactivity on a page. It lets buttons perform actions and lets elements be reordered or hidden based on conditions.
 
 ### DOM
 
@@ -121,7 +121,7 @@ The Document Object Model (DOM) represents the structure of a webpage as a logic
 
 ### Web API
 
-A Web API is a set of tools to interact with a web application. One of the APIs is the DOM mentioned above. Other well-known APIs include `fetch` (used to retrieve data from external sources - such as the backend via the network interface), `file` (for working with files), `history` (for retrieving information from the browser's history, manipulating it or navigating back) and `window` (for accessing the browser's storage such as `localStorage` or `sessionStorage`, opening a new window, etc.).
+A Web API is a set of browser-provided interfaces for interacting with the web platform. The DOM mentioned above is one such API. Other well-known APIs include `fetch` (for retrieving data over the network, for example from a backend), the File API (for working with files), the History API (for inspecting and manipulating the browser history), and `window` (for accessing browser storage such as `localStorage` or `sessionStorage`, opening a new window, and more).
 
 ### Frontend frameworks
 
@@ -141,15 +141,15 @@ Here is a list of general advice for working with JavaScript:
 - Prefer using optional chaining `?.` together with nullish coalescing `??`. Since type coercion in JavaScript works the way it does, using these operators is safer.
 - Learn how array methods like `map`, `join`, `filter`, and `reduce` work. They are great for keeping your code without side effects caused by mutating your data and are also more compact and readable than general `for` or `while` loops.
 
-JavaScript is still evolving as a language. New versions are coming, and browsers must always cover these new features and changes. Be aware of using the latest features since they might only work in some browsers. The big update came in 2015, called ES6 — [here's](https://www.w3schools.com/js/js_es6.asp) a list of features. You should become familiar with most of them. In June 2023, ES2023 was released with interesting [updates to array methods](https://www.w3schools.com/js/js_2023.asp); take a look at them.
+JavaScript continues to evolve. New language versions introduce features that may not be supported in every browser, so check browser compatibility before using them. The 2015 release, known as ES6, introduced many foundational features; review [this list](https://www.w3schools.com/js/js_es6.asp) and become familiar with most of them. ES2023 also introduced useful [array-method updates](https://www.w3schools.com/js/js_2023.asp).
 
 ### Node
 
 <MdxImage src={NODEJS} />
 
-In order to run JavaScript, we need a runtime. Node.js is an open-source, cross-platform runtime environment for executing JS code. It's been widely used for server-side programming, achieving the same programming language on both server and client.
+To run JavaScript outside a browser, we need a runtime. Node.js is an open-source, cross-platform runtime environment for executing JavaScript code. It is widely used for server-side programming, allowing the same programming language to be used on both the server and client.
 
-We will meet it when we discuss the Next.js framework later in the semester, which uses the Node runtime by default. Node was introduced in 2009, and since then, with the advent of several technologies, its complexity has increased, and its efficiency and speed have slowed down. That's why alternatives were created; specifically, in 2023, it was **Bun**.
+We will encounter Node.js when we discuss Next.js later in the semester; Next.js uses the Node.js runtime by default. Node.js was introduced in 2009. Alternatives, including **Bun**, have since emerged with different trade-offs and goals.
 
 ### Bun
 
@@ -157,17 +157,17 @@ We will meet it when we discuss the Next.js framework later in the semester, whi
 
 <MdxImage src={BUN} />
 
-The goal of this tool is to unify, speed up, and change the complexity of the JavaScript runtime while not throwing away all compatibility with the large ecosystem around Node and npm. If you've ever used Node before, learning how to use Bun is relatively easy. You'll basically get rid of the other tools you used when using Node since Bun has them built-in.
+Bun aims to provide a fast, unified JavaScript runtime while maintaining compatibility with much of the Node.js and npm ecosystem. If you have used Node.js before, learning Bun is relatively easy. Bun includes tooling that can replace several tools commonly used with Node.js.
 
-Bun serves not only as a JavaScript runtime but also as a **transpiler** (converting from one language to another, in this case, TypeScript to JavaScript), **bundler** (handling all the code in your project, including installed packages; more later), and **package manager**. We will not use it in our course since it is still in its first production version. But it is a technology that is definitely worth following.
+Bun serves not only as a JavaScript runtime but also as a **transpiler** (converting one language to another, in this case TypeScript to JavaScript), **bundler** (handling the code in your project, including installed packages), and **package manager**. We will not use it in this course, but it is a technology worth following.
 
 ## Node Package Manager
 
-Npm is the world's largest software registry, similar to NuGet in the C# world. Open-source developers from all around the globe use npm to share and use packages, and many organizations use npm to manage their private development as well.
+npm is the world's largest software registry, similar to NuGet in the C# ecosystem. Open-source developers around the globe use npm to share and use packages, and many organizations also use npm to manage private packages.
 
 ### package.json
 
-The `package.json` file is a crucial element that serves as a manifest of an application. It contains various metadata that is relevant to the project. Creating a `package.json` file in your project gives you access to dependency management, allowing you to install dependencies easily. You also get access to the `scripts` section where you can put commands you need to run from CLI, like building your app, running it in dev mode, or running linter. By centralizing this information, `package.json` ensures a well-organized, manageable, and consistent development environment, helps with collaborative development, and ensures integrity across different development stages and among other team members.
+The `package.json` file is an application's manifest. It contains project metadata and enables dependency management. It also has a `scripts` section for commands run from the command line, such as building the app, running it in development mode, or running a linter. By centralizing this information, `package.json` helps maintain an organized and consistent development environment and supports collaboration.
 
 ```json
 {
@@ -202,11 +202,11 @@ From version `npm@5.2.0`, alongside **npm**, a binary called **npx** is also ins
 
 ### Creating packages
 
-While npm provides public free package hosting, they also offer the CLI tool for working with the packages locally. Every project with `package.json` is also a publishable package you can import into other projects. You can use `npm init` to create a minimal viable `package.json` following a few prompts. After that, you are ready to install dependencies and add scripts.
+While npm provides free public package hosting, it also provides a CLI for working with packages locally. Every project with a `package.json` can be published as a package and imported into other projects. You can use `npm init` to create a minimal `package.json` by following a few prompts. After that, you can install dependencies and add scripts.
 
 ### Other package managers
 
-`Yarn` is an alternative to using npm as your package manager. Historically, it was created because npm had many issues, but nowadays, the difference is slight, and it's more of a preference.
+`Yarn` is an alternative package manager to npm. Historically, it was created because npm had many issues, but nowadays the differences are small and the choice is largely a matter of preference.
 
 There is also `pnpm`, which boasts its ability to save disk space by using a single `node_modules` cache and linking to it from your packages instead of making a copy for each project.
 
@@ -337,7 +337,7 @@ const name = 'John';
 const name: string = 'John';
 ```
 
-Only provide type declarations when necessary. An inferred type can never be wrong; a type you add manually can.
+Only provide type declarations when necessary. Inferred types are based on the assigned values; manually written annotations can become incorrect as code changes.
 
 ```typescript
 /** TypeScript */
@@ -470,7 +470,7 @@ These features make TypeScript a compelling choice for developers looking to imp
 
 ## Next lecture
 
-In the next lecture, we will dive into the React framework. We will cover the basics of React, including components, props, TSX, imports, and responding to events. We will also explore the benefits of using TypeScript with React.
+In the next lecture, we will dive into the React library. We will cover the basics of React, including components, props, TSX, imports, and responding to events. We will also explore the benefits of using TypeScript with React.
 
 ## Assignment
 

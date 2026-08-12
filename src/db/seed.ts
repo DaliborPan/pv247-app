@@ -300,7 +300,7 @@ export const seed = async () => {
       name: 'Authentication, metadata, deployment',
       slug: 'authentication-metadata-deployment',
       preview:
-        "This final lesson, we'll delve into user authentication, leveraging metadata for better visibility, and explore simple deployment options with Vercel. We'll also demonstrate practical authentication implementation using the next-auth library with GitHub.",
+        "This final lesson explores user authentication, metadata and deployment options with Vercel. We'll also demonstrate practical GitHub authentication with Better Auth.",
       availableFrom: '2026-04-20T06:00:00',
 
       // No homework for last lesson
