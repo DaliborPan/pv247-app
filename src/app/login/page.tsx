@@ -23,15 +23,13 @@ const Page = () => (
       </p>
 
       <div className="mt-2 flex flex-col-reverse items-center gap-2 md:flex-row lg:mt-0 lg:gap-4">
-        <Link href="/lectures" className="w-full md:w-auto">
-          <Button
-            variant="outline/primary"
-            iconLeft={{ icon: <Book /> }}
-            className="w-full"
-          >
-            Start Learning
-          </Button>
-        </Link>
+        <Button
+          variant="outline/primary"
+          iconLeft={{ icon: <Book /> }}
+          className="w-full"
+        >
+          <Link href="/lectures">Start Learning</Link>
+        </Button>
 
         <SignIn>
           <Button iconLeft={{ icon: <Github /> }}>Sign in with GitHub</Button>

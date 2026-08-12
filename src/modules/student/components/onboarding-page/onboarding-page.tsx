@@ -5,7 +5,7 @@ export const OnboardingPage = async () => {
   const sessionUser = await getSessionUser();
 
   return (
-    <div className="lg:mt-8">
+    <div className="container lg:mt-8">
       <h1 className="mb-4 text-2xl lg:text-5xl lg:font-light">
         Welcome to the PV247 course application!
       </h1>
