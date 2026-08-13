@@ -14,13 +14,19 @@ In today's lesson, we will explore the React library. We will learn how it works
 
 React is a JavaScript library for building user interfaces. A UI consists of small elements such as buttons, text, or images. With React, we can create small, reusable UI parts called _components_ to build complex, maintainable web interfaces. These components are the building blocks of an application, enabling us to assemble user interfaces quickly. React's component-based architecture promotes code reuse and better organization.
 
-<MdxImage src={MUI_COMPONENTS} />
+<MdxImage
+  src={MUI_COMPONENTS}
+  alt="Examples of reusable Material UI components"
+/>
 
 ## Single Page Application (SPA)
 
 A Single-Page Application (SPA) is a web application or website that dynamically updates the current page rather than loading entirely new pages from the server. The initial page load retrieves the necessary HTML, JavaScript, and CSS; additional resources may be loaded as needed, usually in response to user actions. The document does not perform a full page reload; JavaScript dynamically updates the content and DOM.
 
-<MdxImage src={SPA_MPA} />
+<MdxImage
+  src={SPA_MPA}
+  alt="Comparison of navigation in a multi-page application and a single-page application"
+/>
 
 **User Experience** - An SPA can provide smooth transitions and rich interactivity. When users perform an action, the page can update without a full refresh.
 
@@ -44,7 +50,10 @@ The Single Page Application approach has its use cases. We can mention informati
 
 The resulting UI, composed of components, is organized in a hierarchical tree structure in React. This structure ensures data flows in only one direction through the props. The child component inside the tree cannot modify the data it has received from its parent. If we need a child component to be able to modify the data or state of its parent, the parent must provide a function for the child to call to modify the data. Each component defines what will be displayed on the screen where the component is placed or called based on its state and the props received.
 
-<MdxImage src={DATA_FLOW} />
+<MdxImage
+  src={DATA_FLOW}
+  alt="Component tree showing one-way data flow from parent components to children"
+/>
 
 ```tsx
 type ChildComponentProps = {
@@ -66,7 +75,10 @@ function ParentComponent() {
 
 The React component tree plays a vital role in updating the user interface. If a component changes state or gets new props, it must be re-rendered to the screen, and at the same time, all children of that component must be re-rendered as well. This is where the advantage of the tree structure comes in, where it is easy to see which components on the screen need to be updated. At the same time, React uses the VDOM, where it compares its in-memory stored DOM of the current and previous version, and then when it detects that the component has changed not only its state or its props but also its actual UI, it updates it in the browser DOM.
 
-<MdxImage src={DOM} />
+<MdxImage
+  src={DOM}
+  alt="Diagram comparing React's virtual DOM with the browser DOM"
+/>
 
 ## React component
 

@@ -26,7 +26,7 @@ Traditional CSS, Sass/Less, CSS-in-JS, and the utility-first approach are suitab
 
 ## Traditional CSS
 
-<MdxImage src={CSS} />
+<MdxImage src={CSS} alt="CSS logo" />
 
 Traditional CSS, or Cascading Style Sheets, is the foundational approach to styling web applications. With CSS, developers have the ability to define and control the visual presentation of HTML elements, from fonts and colors to layouts and animations. It offers a level of customization that allows developers to craft unique and tailored user interfaces.
 
@@ -34,7 +34,7 @@ Traditional CSS, or Cascading Style Sheets, is the foundational approach to styl
 
 Although it's mighty, traditional CSS can become unwieldy in larger projects, as maintaining consistency and avoiding conflicts can be challenging. Also, thinking about suitable class names is HARD. There are some standards that developers can follow, for example, [BEM](https://getbem.com/).
 
-<MdxImage src={BEM} />
+<MdxImage src={BEM} alt="BEM naming convention for CSS classes" />
 
 Nonetheless, it continues to be a foundational skill for web developers, and interestingly, all the other styling approaches ultimately rely on traditional CSS, as it is the only language browsers can interpret and render.
 
@@ -141,7 +141,7 @@ A component library in React is a collection of pre-designed and reusable user i
 
 To most popular component libraries belong [Material-ui](https://mui.com/), [Ant design](https://ant.design/) or [Chakra UI](https://chakra-ui.com/)
 
-<MdxImage src={MATERIAL_UI} />
+<MdxImage src={MATERIAL_UI} alt="Examples of Material UI components" />
 
 ### Advantages of using component libraries
 
@@ -295,7 +295,7 @@ Here's another benefit: Tailwind CSS has established its classes according to in
 
 **PERFORMANCE - IT'S TINY ON PRODUCTION**
 
-When using Sass or even plain CSS, it's common to accumulate unused CSS classes and encounter duplicated styling over time. Similarly, when working with a component library, it often comes with extensive styling, much of which may be outside of your project. While tailwind may seem even worse because it provides an insane amount of predefined classes, you never need them all.
+When using Sass or even plain CSS, it's common to accumulate unused CSS classes and encounter duplicated styling over time. Similarly, when working with a component library, it often comes with extensive styling, much of which may be outside of your project. While Tailwind may seem even worse because it provides an insane amount of predefined classes, you never need them all.
 
 Tailwind CSS features a JIT (Just-in-Time) compiler. During the project build process, Tailwind scans your source files to identify the classes you've actually used. It then generates only those necessary classes for your final CSS bundle, effectively reducing the amount of unused CSS to nearly zero.
 
@@ -309,11 +309,14 @@ By default, the `flex-direction` is set to `column,` but once the screen size ex
 
 **HOVER, FOCUS and more**
 
-With modifiers like `hover:` `focus:` `disabled:` and others, you can achieve even better UX when interacting with all your elements. To see all possibilities, take a look at tailwind's documentation: https://tailwindcss.com/docs/hover-focus-and-other-states
+With modifiers like `hover:` `focus:` `disabled:` and others, you can achieve even better UX when interacting with all your elements. To see all possibilities, take a look at Tailwind's documentation: https://tailwindcss.com/docs/hover-focus-and-other-states
 
 **WHY NOT INLINE STYLES?**
 
-<MdxImage src={TAILWIND_VS_INLINE} />
+<MdxImage
+  src={TAILWIND_VS_INLINE}
+  alt="Comparison of Tailwind utility classes and inline CSS styles"
+/>
 
 A frequent response to the utility-first approach is questioning whether it's essentially equivalent to inline styles. In certain respects, it resembles inline styles because you're directly applying styles to elements instead of creating a class and styling it separately.
 
@@ -321,7 +324,7 @@ Few important advantages
 
 **Consistent design, no magic number\***
 
-Using inline styles, every value is a magic number. With tailwindcss you use predefined utilities leading to consistent design. However, you can create your own utility class if you need, even you can inline magic value `bg-[#ffffff]`
+Using inline styles, every value is a magic number. With Tailwind CSS you use predefined utilities leading to consistent design. However, you can create your own utility class if you need, even you can inline magic value `bg-[#ffffff]`
 
 **Responsive design & hover, focus, and other states**
 
@@ -342,7 +345,7 @@ These types of libraries do not provide you with pre-built components that you n
 import { Button } from 'library.';
 ```
 
-DaisyUI specifically provides, similarly to tailwind, utility classes that you can apply directly to HTML tags.
+DaisyUI specifically provides, similarly to Tailwind, utility classes that you can apply directly to HTML tags.
 
 For example, styling a button to have it look like a DaisyUI button looks like this:
 
@@ -356,7 +359,7 @@ For example, styling a button to have it look like a DaisyUI button looks like t
 
 DaisyUI has created a utility classes for button, such as `btn btn-primary btn-outline btn-disabled` so it is enough to assign just few utility classes and have your HTML cleaner.
 
-Installation of this library is straightforward. First, you need to have tailwind already installed. Then you add DaisyUI as a dev dependency to your npm project and then add it as a plugin in `tailwind.config.js.` See https://daisyui.com/docs/install/.
+Installation of this library is straightforward. First, you need to have Tailwind already installed. Then you add DaisyUI as a dev dependency to your npm project and then add it as a plugin in `tailwind.config.js.` See https://daisyui.com/docs/install/.
 
 ## Shadcn/ui
 
@@ -369,7 +372,36 @@ Shadcn UI is a collection of beautifully designed and accessible UI components t
 
 The idea behind this is to give you ownership and control over the code, allowing you to decide how the components are built and styled.
 
-It has been so far the best approach we have already tried and we recommend using it in your projects. When copy pasting components, they are pre-styled, but you can easily change the styling by modifying the tailwind classes directly in the source code.
+It has been so far the best approach we have already tried and we recommend using it in your projects. When copy pasting components, they are pre-styled, but you can easily change the styling by modifying the Tailwind classes directly in the source code.
+
+
+# UI standards
+
+Teaching UI standards could be a standalone course. We want to motivate you to build systems that look good and are easy to use, therefore we want to at least touch upon some rules which help you to achieve that. We also provide sources for further reading.
+
+It is not about learning one design system (such as [Material Design](https://m3.material.io/) or [Glassmorphism](https://www.nngroup.com/articles/glassmorphism/)) but about general principles.
+
+## Main rules
+
+https://www.nngroup.com/articles/ten-usability-heuristics/
+https://refactoringui.com/
+
+Consistency - spacing, colors etc. 
+
+color paletes - e.g. http://coolors.co/
+
+fonts - e.g. [Google fonts](https://fonts.google.com/)
+
+accessibility (addressed later)
+
+## Agentic development
+
+Use skills e.g. https://vercel.com/design/guidelines
+
+## Further reading
+
+https://lawsofux.com/
+
 
 # Accessibility
 
@@ -445,7 +477,10 @@ You can clearly see the title of this page; you can also see it has two sub-sect
 
 These three tags define the top-level structure of your website. The header usually contains a common website name, general navigation, or logged-in user info. Not all sites require a footer, but you should expect to find contact info, terms and conditions links, business opening hours, or other helpful links. The main tag then wraps the actual content of the given page you are currently on.
 
-<MdxImage src={SEMANTIC_TAGS} />
+<MdxImage
+  src={SEMANTIC_TAGS}
+  alt="Semantic HTML elements in a typical page layout"
+/>
 
 A good practice is also to add a [Skip to Content link](https://css-tricks.com/how-to-create-a-skip-to-content-link/) that allows keyboard users to skip over header navigation directly into the main section of your page.
 
