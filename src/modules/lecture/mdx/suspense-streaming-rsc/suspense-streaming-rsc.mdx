@@ -55,13 +55,19 @@ This approach is one of many approaches. The page does not have to be created on
 
 We have two ways we can get data for our application. The first one we discussed in previous lessons, and it is called client-side data fetching.
 
-<MdxImage src={CSR_GRAPH} />
+<MdxImage
+  src={CSR_GRAPH}
+  alt="Client-side rendering flow from initial page load through client data fetching"
+/>
 
 > The first step is for the client (for example, a browser) to access the URL where the application is running. The server intercepts this request and returns all the files the application needs to run. After the client receives these files, a blank page is presented. Now it needs to parse the JavaScript files, which can then render something. JavaScript will typically render some loading state initially and send an asynchronous request back to the server to get the data. The server again catches the request, performs database calls, and returns the data. The client processes the data and renders it to the page.
 
 We may notice unnecessary sending of requests back and forth. By simple reasoning, we can figure out that it might be better to move the database call before sending anything to the client. Since we can know what data is on the page, we can get it directly on the server without the need for an API call.
 
-<MdxImage src={SSR_GRAPH} />
+<MdxImage
+  src={SSR_GRAPH}
+  alt="Server-side rendering flow with data fetching before the response is sent"
+/>
 
 > Instead of having the server and client exchange requests back and forth, we do all the work needed for the first render immediately on the server before sending it to the client for the first time. However, this model is only possible with the ability to get the data directly on the server while rendering the React component only on the server. Until recently, this model was the only one regarding SSR capabilities in React.
 
@@ -179,7 +185,10 @@ First, we'll look at the motivation for creating a loading state on the screen i
 
 Providing an instant loading state, such as a spinner or skeleton UI, is crucial in web development, particularly in frameworks like Next.js, where server-side rendering and dynamic content are common. It ensures a seamless and user-friendly experience by reducing perceived latency. When a page requires time-consuming operations, like fetching data or rendering dynamic content, users might otherwise perceive the page as slow or unresponsive. By displaying an instant loading state, you communicate to users that their request is being processed, keeping them engaged and informed, which in turn enhances the overall user experience. This practice not only makes your application appear faster but also demonstrates a commitment to user-centric design, which is essential for retaining and satisfying your audience.
 
-<MdxImage src={LOADING_UI} />
+<MdxImage
+  src={LOADING_UI}
+  alt="Examples of loading UI, including spinners and skeleton placeholders"
+/>
 
 > There are many ways to present a loading state. A skeleton that matches the shape and the size of the final content is usually the best choice, because the layout does not jump once the real content arrives (this is what the Cumulative Layout Shift metric measures).
 
@@ -338,7 +347,10 @@ export default function Loading() {
 
 Let's summarize how traditional SSR works - one where all the data is loaded before anything is displayed to the user. The user is then presented with the complete page, without any data fetching on the client.
 
-<MdxImage src={SSR_GRAPH} />
+<MdxImage
+  src={SSR_GRAPH}
+  alt="Traditional server-side rendering flow with data fetching before the response is sent"
+/>
 
 - First, all data for a given page is fetched on the server.
 - The server then renders the HTML for the page (executes React code on the server).
@@ -350,7 +362,10 @@ These steps are sequential and blocking, meaning the server can only render the 
 
 **STREAMING** allows us to break down the page's HTML into smaller chunks and progressively send those chunks from the server to the client. Technically, this is done using [chunked transfer encoding](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Transfer-Encoding), and React produces the HTML chunks aligned with the `<Suspense>` boundaries you placed in the tree.
 
-<MdxImage src={SUSPENDED_COMPONENTS_GRAPH} />
+<MdxImage
+  src={SUSPENDED_COMPONENTS_GRAPH}
+  alt="Streaming server-rendered components as Suspense boundaries finish"
+/>
 
 This enables parts of the page to be displayed sooner, without waiting for all the data to load before any UI can be rendered. Every `<Suspense>` boundary is an independent streaming point. Since not all of the components require data fetching, we can send parts of the application immediately while the other components do their data fetching. Once they have finished, their HTML is streamed to the client and swapped in place of the fallback. This primarily reduces Time To First Byte (TTFB) and First Contentful Paint (FCP). It also improves Interaction to Next Paint (INP), because each Suspense boundary is a separate hydration unit — React can hydrate the components as they arrive (so-called selective hydration) instead of hydrating the whole page in one blocking pass.
 
@@ -410,7 +425,10 @@ export default function Page() {
 
 > This is what the code for the above diagram might look like. The individual products take different lengths of time to load, but once one product is loaded, it is immediately streamed to the client and displayed. It doesn't wait for the slowest one to display everything at once. Notice that the navigation and the sidebar are outside of every boundary, so they are part of the initial HTML and are painted straight away.
 
-<MdxImage src={MULTIPLE_SUSPENSE_GRAPH} />
+<MdxImage
+  src={MULTIPLE_SUSPENSE_GRAPH}
+  alt="Components streaming independently as separate Suspense boundaries resolve"
+/>
 
 > In this picture, we can see the difference in ordering between traditional SSR and streaming components. The first component to appear on the client's screen is component C, which is not asynchronous, so it doesn't have to make any calls to the database or any other resource. It just renders its HTML, which is then sent to the client. Meanwhile, components A and B have started their data retrieval in parallel. Component B finishes after 1s, renders its content, and sends it to the client, where it is displayed in place of its loading state defined in the `Suspense` `fallback`. The same thing then happens with component A.
 
@@ -578,7 +596,10 @@ The directive declares a **boundary** between the server and the client module g
 
 To use server components in combination with client components, you need to think about them slightly differently. Before the advent of RSC, one could look at components as independent pieces of UI that could be used anywhere in the application. With RSC, we can't look at components that way. Let's explain this with a concrete example.
 
-<MdxImage src={SERVER_COUNTER_BASE} />
+<MdxImage
+  src={SERVER_COUNTER_BASE}
+  alt="Server component tree containing an interactive counter"
+/>
 
 > As long as all components are RSC, there is no problem. However, as the name suggests, the `Counter` component has to be marked with `'use client'`, since we need to keep the current value of the counter in its state.
 
@@ -636,7 +657,10 @@ export const ServerText = async () => {
 
 As we already know, when a component changes its state (in this case, the `Counter` component), it re-renders itself and all the components it renders. However, as we have covered in this lesson, RSCs do not re-render on the client.
 
-<MdxImage src={SERVER_COUNTER_WITH_BORDER} />
+<MdxImage
+  src={SERVER_COUNTER_WITH_BORDER}
+  alt="Client boundary around an interactive counter and its direct imports"
+/>
 
 > In this diagram, we can see that the `Counter` component opens the `Client boundary`, i.e., all components that this component imports and renders directly become client components.
 
@@ -647,7 +671,10 @@ However, we would need the `ServerText` component to get data from the server, s
 - However, a client component **can** accept props, `children` among them. This prop is typed as `{ children: ReactNode }`, and it can indeed contain any React node, including a rendered server component. Such a component is not part of the client module graph — it is rendered on the server and only its output is passed to the client component.
 - Note: the prop does not have to be named `children`; it can have any name. The important thing is that its type is `ReactNode`.
 
-<MdxImage src={SERVER_COUNTER_FINAL_GRAPH} />
+<MdxImage
+  src={SERVER_COUNTER_FINAL_GRAPH}
+  alt="Server component passed as children to an interactive client counter"
+/>
 
 > In this case, we moved the rendering from the `Counter` component directly to the `Page` component, which is not a client component and can therefore render server components. We pass the rendered `ServerText` component as a prop to the `Counter` component.
 

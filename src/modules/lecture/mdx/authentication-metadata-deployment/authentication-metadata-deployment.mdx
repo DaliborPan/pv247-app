@@ -98,7 +98,10 @@ export const { signIn, signOut, useSession } = authClient;
 
 We decided to use GitHub, so we need to create an OAuth application. In GitHub account settings, open `Developer settings`. [Create a new OAuth application](https://github.com/settings/applications/new). Use `http://localhost:3000` for the `Homepage URL` and `http://localhost:3000/api/auth/callback/github` for the `Authorization callback URL`.
 
-<MdxImage src={GITHUB_PROVIDER_SETUP} />
+<MdxImage
+  src={GITHUB_PROVIDER_SETUP}
+  alt="GitHub OAuth application form with homepage and callback URL fields"
+/>
 
 <MdxComment>
   This OAuth application is exclusively for development. For production, create
@@ -186,7 +189,10 @@ When a user logs in, Better Auth creates the required user, account and session 
 
 Drizzle provides `drizzle-kit studio`, a tool for inspecting database data and performing CRUD operations. Run it with `npx drizzle-kit studio` to see the users, accounts and sessions that Better Auth created.
 
-<MdxImage src={DRIZZLE_STUDIO} />
+<MdxImage
+  src={DRIZZLE_STUDIO}
+  alt="Drizzle Studio interface showing database tables and records"
+/>
 
 ## Drizzle - 1:M relationship
 

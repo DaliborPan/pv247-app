@@ -659,7 +659,10 @@ While having components self-sufficient and not relying on their surroundings is
 
 Let's say that our application must be translated into English and Czech. The whole application has to know whether to output Czech or English texts. Last but not least, we need a component allowing the user to switch between languages. If we did not use Context or another form of global state, we would have to pass the language information to all components that need it. This would mean passing a `language` prop from the root component down to every component that needs it — through components that have no use for it themselves. This problem is called **prop drilling** and it is one of the main reasons why global state is used.
 
-<MdxImage src={PROP_DRILLING} />
+<MdxImage
+  src={PROP_DRILLING}
+  alt="A language setting passed through several component levels to a nested component that needs it"
+/>
 
 ### createContext, Provider, useContext
 

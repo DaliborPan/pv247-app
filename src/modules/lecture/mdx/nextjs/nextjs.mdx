@@ -72,7 +72,10 @@ In this tutorial, we have not yet discussed any routing method for our applicati
 
 ### Terminology
 
-<MdxImage src={TERMINOLOGY} />
+<MdxImage
+  src={TERMINOLOGY}
+  alt="Next.js App Router terminology for route segments, routes and URL paths"
+/>
 
 **URL segment** - part of the URL path delimited by slashes,
 **URL path** - Whole path that comes after the domain (composed segments)
@@ -85,7 +88,10 @@ Before Next.js v13, the only way to define routes was to use `pages` directory, 
 
 Next.js has router based on folder structure. Each **folder** in a route represents a route segment. Each route segment is mapped to a corresponding segment in a URL path.
 
-<MdxImage src={FOLDERS_ROLES} />
+<MdxImage
+  src={FOLDERS_ROLES}
+  alt="Roles of special files and folders in the Next.js app directory"
+/>
 
 In order to create nested route such as `/dashboard/settings`, you need to nest folders inside each other.
 
@@ -112,11 +118,17 @@ Two more conventions live next to the `app` directory rather than inside it:
 
 As in React, the components form a tree hierarchy. The basic hierarchy of a single page in Next.js looks like this:
 
-<MdxImage src={COMPONENT_HIERARCHY} />
+<MdxImage
+  src={COMPONENT_HIERARCHY}
+  alt="Component hierarchy for a Next.js route"
+/>
 
 > If we look at the page from the inside out, first, there is an error boundary in the tree that renders the `NotFound` component if the route the user accessed does not exist. If it exists and the component is an asynchronous RSC, the `Loading` component is displayed if specified. The' Error' component is displayed if there is an error on the page. The most external component is then the `Layout` component, which wraps the entire page. This means that if the page loads, the `Layout` is already rendered.
 
-<MdxImage src={NESTED_COMPONENT_HIERARCHY} />
+<MdxImage
+  src={NESTED_COMPONENT_HIERARCHY}
+  alt="Nested layout and page component hierarchy for a Next.js route"
+/>
 
 > In the case of the `/dashboard/settings` nested route, note that if `/dashboard/settings` does not have its `Loading` component defined, but `/dashboard` does, this loading will be used when joining `/dashboard/settings`. At the same time, note the hierarchy, where the `Layout` components of both routes nest within each other.
 
@@ -136,13 +148,19 @@ Apart from routing folder and file conventions, Next.js is unopinionated about h
 
 To organize routes without affecting the URL, create a group to keep related routes together. The folders in parenthesis will be omitted from the URL (e.g. (marketing) or (shop)).
 
-<MdxImage src={ROUTE_GROUPS} />
+<MdxImage
+  src={ROUTE_GROUPS}
+  alt="Next.js route groups organizing routes without changing their URLs"
+/>
 
 - You can create a folder using parenthesis `(folderName)`, which indicates that this folder is for organizational purposes and should not be considered a route segment.
 
 - Route groups are not used only for colocation purposes. You can also use them to define shared layout for multiple routes.
 
-<MdxImage src={ROUTE_GROUP_EXAMPLE} />
+<MdxImage
+  src={ROUTE_GROUP_EXAMPLE}
+  alt="Example file structure and URLs created with Next.js route groups"
+/>
 
 > In this example, we have `/dashboard`, `/dashboard/overview` `/dashboard/settings` routes, all three routes share the same layout, but `/dashboard` and `/dashboard/overview` have another shared layout, which is not applied for `/dashboard/settings`.
 
@@ -367,7 +385,10 @@ PARTIAL RENDERING
 
 Partial rendering means only the route segments that change on navigation re-render on the client, and any shared segments are preserved.
 
-<MdxImage src={PARTIAL_RENDERING} />
+<MdxImage
+  src={PARTIAL_RENDERING}
+  alt="Partial rendering preserves shared route segments during navigation"
+/>
 
 > If we access our application for the first time, page `/a`, no router cache is defined, so all the code is executed in the `/` layout and `/a` page. Next, the cache for the `/` layout and `/a` page is set. When navigating between `/a` and `/b`, only the code in the `/b` page is executed, but not in the `/` layout, since the latter is already cached.
 
