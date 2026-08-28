@@ -473,15 +473,6 @@ export default async function BlogPostPage({
 }
 ```
 
-<MdxComment>
-  Older tutorials solve this with the `dynamicParams` route segment config
-  (`export const dynamicParams = false` to return a 404 for unlisted slugs).
-  That option, together with `dynamic`, `revalidate` and `fetchCache`, no longer
-  exists in projects with Cache Components enabled - which is the case for this
-  course application - and using it fails the build. We will explain why in
-  lecture 9.
-</MdxComment>
-
 ### Catch-all Segments
 
 Dynamic Segments can be extended to catch-all subsequent segments by adding an ellipsis inside the brackets `[...folderName]`.
