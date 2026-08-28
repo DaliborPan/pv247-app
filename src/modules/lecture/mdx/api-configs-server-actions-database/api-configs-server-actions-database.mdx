@@ -503,7 +503,10 @@ export const SubmitFormButton = () => {
 <MdxComment>
   In this case we have the server action extracted into its own file, which is
   marked as `use server`, which means that this code will safely run only on the
-  server and not even sent to the client.
+  server and not even sent to the client. `useFormStatus` reports whether the
+  surrounding form is being submitted and has to be called from a component that
+  is **inside** the `<form>` — that is why `SubmitFormButton` is a separate
+  client component.
 </MdxComment>
 
 ```ts
@@ -541,44 +544,6 @@ export default async function Page() {
 <MdxComment>
   In this case, we have a server action defined directly within the component
   where the form that invokes the action occurs.
-</MdxComment>
-
-### Pending state and the action result
-
-`useFormStatus` from `react-dom`, which we used above, only reports whether the surrounding form is being submitted. It has to be called from a component that is **inside** the `<form>`, which is why `SubmitFormButton` is a separate client component.
-
-If we also need the value the action returned - a validation error, for example - we use React 19's `useActionState` hook. It takes the action and an initial state, and returns the current state, a wrapped action to pass to the form, and a `pending` flag.
-
-```tsx
-// src/app/server-action/add-todo-form.tsx
-
-'use client';
-
-import { useActionState } from 'react';
-
-import { addTodoAction } from '@src/server-actions';
-
-export const AddTodoForm = () => {
-  const [state, action, pending] = useActionState(addTodoAction, null);
-
-  return (
-    <form action={action}>
-      <input name="title" type="text" />
-      <button disabled={pending} type="submit">
-        {pending ? 'Adding todo...' : 'Add todo'}
-      </button>
-      {state?.error && <p>{state.error}</p>}
-    </form>
-  );
-};
-```
-
-<MdxComment>
-  The action passed to `useActionState` receives the previous state as its first
-  parameter and the `FormData` as its second one. In React 18 this hook was
-  called `useFormState` and was imported from `react-dom`; it was renamed to
-  `useActionState` and moved to `react` in React 19, and it now also returns the
-  `pending` flag.
 </MdxComment>
 
 ### Security
@@ -620,58 +585,7 @@ export const deleteTodoAction = async (todoId: string) => {
 
 ### Type safety
 
-One of the drawbacks of plain server actions is that the `formData` implicitly sent to the server action is not typed, and we have to validate this data ourselves, for example, using `zod`.
-
-This course application uses the [zsa](https://zsa.vercel.app/docs/introduction) library, which wraps a server action into a typed procedure: the input is described by a `zod` schema and validated automatically, and authentication and authorization can be factored out into a reusable procedure that every action builds on. This is exactly the "authorize on every action" rule from the previous section, enforced by construction.
-
-```ts
-// src/server/server-actions.ts
-
-import { createServerActionProcedure } from 'zsa';
-
-import { getSessionUser } from '@/modules/session-user';
-
-const authServerProcedure = createServerActionProcedure().handler(async () => {
-  const sessionUser = await getSessionUser();
-
-  if (!sessionUser) {
-    throw new Error('User not authenticated');
-  }
-
-  return { sessionUser };
-});
-
-export const authServerAction = authServerProcedure.createServerAction();
-```
-
-```ts
-// src/modules/project/components/project-form/action.ts
-
-'use server';
-
-import { revalidatePath } from 'next/cache';
-
-import { authServerAction } from '@/server/server-actions';
-
-import { createProjectMutation } from '../../server';
-
-import { projectFormSchema } from './schema';
-
-export const createProjectAction = authServerAction
-  .input(projectFormSchema)
-  .handler(async ({ input: { students, ...input }, ctx }) => {
-    await createProjectMutation(ctx.sessionUser, students, input);
-
-    revalidatePath('/project');
-  });
-```
-
-<MdxComment>
-  The `input` is parsed with the `projectFormSchema`, so the handler receives
-  fully typed and validated data, and `ctx.sessionUser` comes from the shared
-  authentication procedure. The [next-safe-action](https://next-safe-action.dev)
-  library solves the same problem with a very similar API.
-</MdxComment>
+One of the drawbacks of plain server actions is that the `formData` sent to them is not typed, and we have to validate it ourselves, typically with `zod`. Libraries such as [next-safe-action](https://next-safe-action.dev) go one step further and wrap an action into a typed procedure: the input is described by a schema and validated automatically, and authentication can be factored out into a reusable procedure that every action builds on — the "authorize on every action" rule from the previous section, enforced by construction.
 
 ## Revalidation
 
