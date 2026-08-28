@@ -322,27 +322,6 @@ By placing the boundaries, you decide which parts of your UI should always "pop 
 
 As a general best practice, it is not recommended to wrap every single component with its own Suspense boundary. Instead, it's more efficient and better organized to design the loading states of your application first and place the Suspense boundaries according to those states.
 
-### loading.tsx
-
-As we saw in the previous lecture, Next.js also has the `loading.tsx` file convention. It is nothing more than syntactic sugar for a Suspense boundary: Next.js automatically wraps `page.tsx` (and everything nested below it) in a `<Suspense>` boundary whose `fallback` is the component exported from `loading.tsx`.
-
-```tsx
-// app/dashboard/loading.tsx
-export default function Loading() {
-  return <DashboardSkeleton />;
-}
-```
-
-<MdxComment>
-  Two things follow from this. First, `loading.tsx` wraps `page.tsx` but **not**
-  the `layout.tsx` of the same segment — a layout that awaits data is not covered
-  by it. Second, because the boundary sits at the very top of the page, the whole
-  page falls back to one big skeleton. Explicit `<Suspense>` boundaries placed
-  close to the components that actually fetch data give you a much better result,
-  so prefer them and reach for `loading.tsx` only when there is genuinely nothing
-  meaningful to show until the page data resolves.
-</MdxComment>
-
 ### Streaming
 
 Let's summarize how traditional SSR works - one where all the data is loaded before anything is displayed to the user. The user is then presented with the complete page, without any data fetching on the client.

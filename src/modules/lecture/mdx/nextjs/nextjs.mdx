@@ -37,10 +37,7 @@ Other benefits of Next.js include:
 
 ### SSR & SEO
 
-React primarily renders components on the client-side. React Server Components (RSC) were unveiled by the React team in December 2020. However, employing them with the vanilla React library isn't straightforward, as it necessitates supplementary configurations and setup. Since React is still mostly client-side, achieving robust SEO performance remains an issue. This is because an empty HTML page is transmitted to the client initially, and it's the responsibility of JavaScript to render the content.
-
-https://www.joshwcomeau.com/react/server-components/
-https://www.youtube.com/watch?v=VIwWgV3Lc6s
+React primarily renders components on the client-side. React Server Components (RSC) were unveiled by the React team in December 2020. However, employing them with the vanilla React library isn't straightforward, as it necessitates supplementary configurations and setup. Since React is still mostly client-side, achieving robust SEO performance remains an issue. This is because an empty HTML page is transmitted to the client initially, and it's the responsibility of JavaScript to render the content. You can dive deeper into the topic or RSC [in this article](https://www.joshwcomeau.com/react/server-components/) or [in this video](https://www.youtube.com/watch?v=VIwWgV3Lc6s).
 
 Next.js takes advantage of RSCs and enables server-side rendering. In fact, all components are server components by default. This is fundamentally different from React, as Next.js dispatches pre-rendered HTML, which is already populated with the correct data (fetched from the server, an API, a database, or any other source). Alternatively, you can decide as a developer that a long-running operation will happen in the background and the component will be streamed in once finished, while a loading component is displayed immediately. This approach empowers the potential for achieving excellent SEO performance. Moreover, Next.js offers a metadata API that allows for configuring page-specific elements like titles, descriptions, and tags, further enhancing SEO capabilities.
 
@@ -62,7 +59,7 @@ We already know how a pure React application works. In Next.js, you have the fre
 
 **Incremental static regeneration (ISR)** - pages created using SSG are static, so their content doesn't change until you rebuild the whole application. But sometimes, you want the information on those pages to update regularly or when something specific happens. With ISR, you can set a schedule for when these updates should happen, or you can make them happen whenever you want. A good example is a blog page, where most of the content doesn't change often, but you might want to add new blog posts now and then.
 
-**Partial prerendering (PPR)** - since Next.js v16, these strategies are no longer chosen for a whole page at once. With the `cacheComponents: true` option in `next.config.ts` (which this course app uses), Next.js prerenders a **static shell** of every route at build time and streams the request-specific parts in at request time. Everything that is static, or explicitly cached with the `'use cache'` directive, becomes part of the shell; everything that reads request data (cookies, headers, search params) or fetches uncached data must sit behind a `<Suspense>` boundary and streams in later. We will go through this model in detail in the following lectures.
+**Partial prerendering (PPR)** - since Next.js v16, the other strategies are no longer chosen for a whole page at once. With the `cacheComponents: true` option in `next.config.ts` (not `true` by default), Next.js prerenders a **static shell** of every route at build time and streams the request-specific parts in at request time. Everything that is static, or explicitly cached with the `'use cache'` directive, becomes part of the shell; everything that reads request data (cookies, headers, search params) or fetches uncached data must sit behind a `<Suspense>` boundary and streams in later. We will go through this model in detail in the following lectures.
 
 ## Routing fundamentals
 
@@ -333,7 +330,7 @@ Next.js prefetches every `Link` by default, but **only in production** - prefetc
 - Static route - the whole page is prefetched and kept in the client cache for 5 minutes.
 - Dynamic route - only the part of the tree up to the first `loading.tsx` boundary is prefetched (if it exists), and it is not cached by default.
 
-With Cache Components enabled, prefetching works per route rather than per link: Next.js prefetches the route's static shell (its prerendered part), and the request-specific parts stream in after the navigation. Next.js v16 also deduplicates shared layouts across prefetches and only fetches the parts that are not in the cache yet, which means you may see more, but much smaller, prefetch requests than in v15.
+With Cache Components enabled, prefetching works per route rather than per link: Next.js prefetches the route's static shell (its prerendered part), and the request-specific parts stream in after the navigation.
 
 #### Caching
 
@@ -381,9 +378,9 @@ export default function Page() {
 
 This is something that we can fix by using server actions, which we will briefly talk about later.
 
-PARTIAL RENDERING
+#### Partial rendering
 
-Partial rendering means only the route segments that change on navigation re-render on the client, and any shared segments are preserved.
+Partial rendering means only the route segments that change on navigation re-render on the client, and any shared segments are preserved. Despite the similar name, this is not Partial Prerendering: PPR decides which parts of a page ship in the static shell and which stream in at request time, while partial rendering decides how much work a client-side navigation can skip.
 
 <MdxImage
   src={PARTIAL_RENDERING}
@@ -436,18 +433,7 @@ export default async function BlogPostPage({
   folder from `[slug]` to `[id]`, TypeScript will tell you.
 </MdxComment>
 
-The same applies to `searchParams`, which is a Promise as well, and to the `params` of a layout, a route handler and `generateMetadata`.
-
-```tsx
-export async function GET(
-  request: Request,
-  { params }: RouteContext<'/api/posts/[slug]'>
-) {
-  const { slug } = await params;
-
-  return Response.json({ slug });
-}
-```
+The same applies to `searchParams`, and to the `params` of a layout or `generateMetadata` — all of them are Promises that have to be awaited.
 
 ### Generate Static Params
 

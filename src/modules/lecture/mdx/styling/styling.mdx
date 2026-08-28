@@ -374,33 +374,52 @@ The idea behind this is to give you ownership and control over the code, allowin
 
 It has been so far the best approach we have already tried and we recommend using it in your projects. When copy pasting components, they are pre-styled, but you can easily change the styling by modifying the Tailwind classes directly in the source code.
 
+Shadcn components were very popular at the beginning of agentic development (for obvious reasons), and they still are. But before long all new websites and apps started to look way too similar. That was the motivation for creating [shadcn/create](https://ui.shadcn.com/create). Shadcn components are built on semantic CSS tokens — `background`, `foreground`, `primary`, `border`, `radius` and a handful of others — so overriding those tokens restyles the whole application at once, and dark mode is nothing more than the same tokens redefined under a `.dark` selector. Tweaking the presets once, before you write your first screen, is the cheapest way to distinguish yourself and to get the consistency we talk about in the next section.
 
-# UI standards
 
-Teaching UI standards could be a standalone course. We want to motivate you to build systems that look good and are easy to use, therefore we want to at least touch upon some rules which help you to achieve that. We also provide sources for further reading.
+# UI, UX and usability
 
-It is not about learning one design system (such as [Material Design](https://m3.material.io/) or [Glassmorphism](https://www.nngroup.com/articles/glassmorphism/)) but about general principles.
+Teaching UI/UX could be a standalone course. We want to motivate you to build systems that look good and are easy to use, therefore we want to at least touch upon some rules which help you to achieve that. We also provide sources for further reading.
+
+It is not about learning one design system (such as [Material Design](https://m3.material.io/) or [Glassmorphism](https://www.nngroup.com/articles/glassmorphism/)) but about general principles. Most of what makes an interface feel "professional" comes down to a handful of decisions you make once and then apply consistently.
 
 ## Main rules
 
-https://www.nngroup.com/articles/ten-usability-heuristics/
-https://refactoringui.com/
+**BE CONSISTENT**
 
-Consistency - spacing, colors etc. 
+Pick a spacing scale, a small set of colors and a couple of font sizes, then stick to them. Tailwind CSS already pushes you in this direction — its predefined scale means you won't end up with `margin-top: 19.5px` sitting next to `margin-top: 22px`.
 
-color paletes - e.g. http://coolors.co/
+**CREATE HIERARCHY**
 
-fonts - e.g. [Google fonts](https://fonts.google.com/)
+Not everything on the page is equally important. Use size, font weight and color to say what matters. A common beginner mistake is letting every element compete for attention — the result is that nothing stands out at all.
 
-accessibility (addressed later)
+**GIVE FEEDBACK**
+
+Every action needs a visible reaction: loading states, disabled buttons, error messages, focus rings. The user should never wonder whether their click did anything. This is the very first of Nielsen's usability heuristics, and it is the one most often ignored.
+
+**USE FEWER THINGS**
+
+One accent color, one font family, one border radius. Constraints make a design look intentional. If you need a palette, generate one at [coolors.co](https://coolors.co/) and preview it on a real layout with [Realtime Colors](https://www.realtimecolors.com/); for typography, [Google Fonts](https://fonts.google.com/) is more than enough. Accessibility is a part of usability too — we cover it in the next section.
+
+**CONVENTIONS HAVE A SHELF LIFE**
+
+Conventions are not laws. Recent example: The CSS specification has always defined [`pointer`](https://www.w3.org/TR/css-ui-4/#cursor) as the cursor that "indicates a link", and browsers have always given a plain `<button>` an arrow — yet for two decades the web taught everyone that a hand means "clickable". [Tailwind CSS v4](https://tailwindcss.com/docs/upgrade-guide) sided with the specification and stopped putting `cursor: pointer` on buttons, and the argument has not stopped since; plenty of projects paste the old behavior straight back. Both sides have a point, which is exactly why it is worth knowing about: a flat button, unlike the chunky OS buttons the rule was written for, has little else left to signal that it can be pressed. When a convention shifts, find out which problem it was solving before you decide to follow it — or to ignore it.
+
+<MdxComment>
+  Worth your time: [Nielsen Norman Group's 10 usability
+  heuristics](https://www.nngroup.com/articles/ten-usability-heuristics/) — the
+  short list every designer knows — and [visual design rules you can safely
+  follow every time](https://anthonyhobday.com/sideprojects/saferules/), which
+  is as concrete as design advice gets. If you want to go deeper, [Refactoring
+  UI](https://refactoringui.com/) have great examples, and [Laws of UX](https://lawsofux.com/)
+  collects the psychology behind these rules.
+</MdxComment>
 
 ## Agentic development
 
-Use skills e.g. https://vercel.com/design/guidelines
+AI agents are good at producing UI that looks finished and bad at producing UI that behaves well — they optimize for a screenshot, and a screenshot does not show what happens when you press Tab, when the list comes back empty, or when the request takes four seconds. The defects are the ones you don't see while looking at the page: a removed focus ring, a clickable `div` where a `button` belongs, a form that blocks paste, content that jumps once the data arrives.
 
-## Further reading
-
-https://lawsofux.com/
+The fix is an explicit checklist instead of taste. [Vercel's Web Interface Guidelines](https://vercel.com/design/guidelines) are a good starting point — keep rules like these in your repository so every prompt starts from them, and review the result by keyboard, not just by eye.
 
 
 # Accessibility
@@ -503,6 +522,16 @@ The abovementioned elements work out of the box because of the `role` attribute 
 ## WAI-ARIA
 
 The role attribute is a part of the Accessible Rich Internet Applications (ARIA) set of rules that help make the web more accessible. ARIA also defines how to use attributes other than the role that can describe the current state of various interactable elements like dialogs, draggable elements, etc. This is why often using existing UI libraries is advantageous because they should have all these accessibility features covered.
+
+<MdxComment>
+  Before you submit, walk through the [A11Y Project
+  checklist](https://www.a11yproject.com/checklist/) — it turns WCAG into
+  something you can actually tick off — and verify your colors in the [WebAIM
+  contrast checker](https://webaim.org/resources/contrastchecker/). For building
+  accessible components yourself, [Inclusive
+  Components](https://inclusive-components.design/) by Heydon Pickering works
+  through the common patterns one by one.
+</MdxComment>
 
 ## Next lecture
 

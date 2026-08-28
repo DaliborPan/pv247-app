@@ -1,4 +1,4 @@
-import PROP_DRILLING from './prop-drilling-diagram.png';
+import PROP_DRILLING from './lecture5-prop-drilling.png';
 
 # Memoization, refs, context and tables
 
@@ -12,7 +12,7 @@ In this lesson, we will look at how React decides what to re-render and at the t
   yourself — see the [React Compiler](#react-compiler) section at the end. We
   still go through it, because you need to understand *what* the compiler
   automates and *why* React re-renders in the first place, and because you will
-  meet manual memoization in every existing codebase.
+  meet manual memoization in many existing codebases.
 </MdxComment>
 
 ### useCallback
@@ -406,7 +406,7 @@ The React Compiler is a build-time tool that analyses your components and insert
 
 The compiler is now stable and is used in production. The recommendation for new code is to let the compiler do the memoization and to reach for `useMemo` / `useCallback` only as an escape hatch where you need precise control — the typical example being a value used as an effect dependency, where you want to guarantee the effect does not fire again.
 
-There is a catch: the compiler can only optimize code that follows the [Rules of React](https://react.dev/reference/rules). Components must be pure, props and state must not be mutated, and hooks must be called unconditionally. This is another reason why these rules matter — if you break them, the compiler has to bail out of optimizing that component.
+There is a catch: the compiler can only optimize code that follows the Rules of React, discussed in the [hooks lecture](/lectures/hooks). Components must be pure, props and state must not be mutated, and hooks must be called unconditionally. This is another reason why these rules matter — if you break them, the compiler has to bail out of optimizing that component.
 
 <MdxComment>
   This does not make the previous sections useless. You still need to understand
@@ -416,7 +416,7 @@ There is a catch: the compiler can only optimize code that follows the [Rules of
   existing codebases.
 </MdxComment>
 
-For details on enabling and configuring it, see the [React Compiler documentation](https://react.dev/learn/react-compiler).
+For details on enabling and configuring it, see the [React Compiler documentation](https://react.dev/learn/react-compiler). In our projects, we specifically need the [Next.js reference](https://nextjs.org/docs/app/api-reference/config/next-config-js/reactCompiler).
 
 ## Refs
 
@@ -661,7 +661,7 @@ Let's say that our application must be translated into English and Czech. The wh
 
 <MdxImage
   src={PROP_DRILLING}
-  alt="A language setting passed through several component levels to a nested component that needs it"
+  alt="Component tree in which the language prop travels from App through Layout and Header down to LanguageSwitcher, while the Sidebar branch never receives it"
 />
 
 ### createContext, Provider, useContext
@@ -1209,7 +1209,7 @@ function UserTable() {
 This works similarly with sorting, hiding some columns or pagination. See the [library documentation](https://tanstack.com/table/v8/docs/introduction) for more information.
 
 <MdxComment>
-  This course uses TanStack Table **v8**. Version 9 was released in August 2026
+  This course uses TanStack Table v8. Version 9 was released in August 2026
   and brings a different, tree-shakable architecture, so make sure you are
   reading the v8 documentation — the examples above will not work as-is against
   the v9 API.
