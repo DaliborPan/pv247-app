@@ -9,7 +9,7 @@ In the last lesson of this course, we will focus on an important part of most we
 
 Many web applications allow the user to log in and continue with the application where authentication is required. As a developer, we need to address access to our application so that those parts of the application where authentication is required are only available to logged in users.
 
-There are many ways we can authenticate users. From simple login using a name and password (or just a password), to logging in using social networks, to authentication using biometrics. In this lesson, we'll demonstrate authentication via GitHub, but the principles are the same for all other authentication methods. We will use the `better-auth` library to easily add authentication to our application.
+There are many ways we can authenticate users. From simple login using a name and password (or just a password), to logging in using social networks, to authentication using biometrics. In this lesson, we'll demonstrate authentication via GitHub, but the principles are the same for all other authentication methods. We will use the `better-auth` library to easily add authentication to our application. It is generally not a good idea to implement your own authentication system, but rather use a well-tested library.
 
 We will store the logged in users in a database, similar to the last lesson. Therefore, we will again use Drizzle and SQLite.
 
@@ -18,10 +18,11 @@ We will store the logged in users in a database, similar to the last lesson. The
 For authentication management we will use [Better Auth](https://www.better-auth.com/). It is a framework-agnostic authentication library written in TypeScript that works very well with the Next.js App Router. It is also the library that this PV247 application itself is built on, so everything shown here is code you can find in the course repository.
 
 <MdxComment>
-  You will still find a lot of tutorials that use `next-auth` (Auth.js). We do
-  not use it in this course. The main practical difference is that with Better
-  Auth the database schema, the configuration and all the generated types live
-  in your own project, so there is much less hidden magic.
+  You will still find a lot of tutorials that use `next-auth` (or Auth.js).
+  It is not the recommended approach anymore, Better Auth became the new standard.
+  The main practical difference is that with Better Auth the database schema, the
+  configuration and all the generated types live in your own project, so there
+  is much less hidden magic.
 </MdxComment>
 
 ```bash
@@ -42,7 +43,7 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
 import { db } from '../db';
-import { users as user, session, account, verification } from '../db/schema/users';
+import { user, session, account, verification } from '../db/schema/users';
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -75,6 +76,27 @@ import { auth } from '@/auth/auth';
 
 export const { GET, POST } = toNextJsHandler(auth.handler);
 ```
+
+Better Auth also ships a `nextCookies` plugin, which the official Next.js setup
+recommends adding right away. It has to be the last plugin in the list:
+
+```ts
+import { nextCookies } from 'better-auth/next-js';
+
+export const auth = betterAuth({
+  // ...the rest of the configuration
+  plugins: [nextCookies()]
+});
+```
+
+<MdxComment>
+  Why is the plugin needed? The route handler above returns a `Set-Cookie`
+  header and the browser stores the session cookie on its own. A **server
+  action** that calls an auth endpoint has no such response, so the cookie
+  would be dropped. The plugin hooks into the response and writes the cookie
+  through `next/headers` instead. The GitHub flow in this lesson works without
+  it, but anything signing users in from a server action does not.
+</MdxComment>
 
 Finally we need a **client instance**, the counterpart used from client components. It does not contain any secret, it only knows how to call the endpoints above. We create `src/auth/client.ts`:
 
@@ -164,6 +186,27 @@ The `user.id` is the value we use as a foreign key in tables owned by our applic
 
 The `drizzleAdapter` imported from `better-auth/adapters/drizzle` connects Better Auth to our Drizzle schema. The adapter is part of `better-auth`; no separate `@auth/*` packages are needed. It needs the four tables `user`, `session`, `account` and `verification`, which we pass explicitly in the configuration shown at the beginning of this lesson.
 
+We do not have to write those four tables by hand. Better Auth ships a CLI that
+reads our `auth.ts` and generates the schema for the adapter we configured:
+
+```bash
+npx auth@latest generate
+```
+
+For Drizzle it writes the `user`, `session`, `account` and `verification` tables
+into a schema file, which we then apply to the database with Drizzle itself:
+
+```bash
+npx drizzle-kit push
+```
+
+<MdxComment>
+  The CLI is published as `auth`; the older `@better-auth/cli` name is
+  deprecated. Note that `npx auth@latest migrate` only works with the built-in
+  Kysely adapter - with Drizzle we always apply the schema through
+  `drizzle-kit`.
+</MdxComment>
+
 The tables belong in our project, so we can extend the `user` table with application-specific columns. This course application, for example, adds `role`, `firstName`, `lastName` and `github`:
 
 ```ts
@@ -232,7 +275,7 @@ import { headers } from 'next/headers';
 import { auth } from '@/auth';
 import { db } from '@/db';
 import { events } from '@/db/schema';
-import CreateEventForm from '../components/create-event-form';
+import { CreateEventForm } from '@/components/create-event-form';
 
 export default async function Page() {
   const session = await auth.api.getSession({
@@ -264,7 +307,7 @@ export default async function Page() {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { createEventAction } from '@src/server-actions';
+import { createEventAction } from '@/server-actions';
 
 const formSchema = z.object({
   name: z.string()
@@ -322,14 +365,14 @@ export async function createEventAction(input: { name: string }) {
 
 ## User signout
 
-If the app offers a login option, the user must also be able to log out. Better Auth exposes `signOut` from the client instance, which clears the session and refreshes session state. The implementation might look like this.
+If the app offers a login option, the user must also be able to log out. Better Auth exposes `signOut` from the client instance, which deletes the session on the server and clears the client session state. The implementation might look like this.
 
 ```tsx
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 
 import { auth } from '@/auth';
-import SignoutButton from '../components/signout-button';
+import { SignoutButton } from '@/components/signout-button';
 
 export default async function Page() {
   const session = await auth.api.getSession({
@@ -351,12 +394,22 @@ export default async function Page() {
 ```tsx
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import { signOut } from '@/auth/client';
 
 export function SignoutButton() {
+  const router = useRouter();
+
   return (
     <button
-      onClick={() => signOut()}
+      onClick={() =>
+        signOut({
+          fetchOptions: {
+            onSuccess: () => router.push('/login')
+          }
+        })
+      }
       type="button"
     >
       Sign out
@@ -366,8 +419,12 @@ export function SignoutButton() {
 ```
 
 <MdxComment>
-  For a standard navigation bar button, calling `signOut()` without options is
-  enough.
+  Note the `onSuccess` callback. `signOut()` only clears the session - it does
+  not navigate anywhere and it does not re-render the server component that
+  wrapped this button. Without the explicit `router.push`, the page we are
+  standing on keeps showing the already rendered content of a logged in user
+  until the next navigation, even though the session is gone. `router.refresh()`
+  is the alternative when we want to stay on the same route.
 </MdxComment>
 
 ## Protected pages
@@ -429,7 +486,7 @@ export function UserMenu() {
 }
 ```
 
-On its first render the hook retrieves the session from Better Auth's endpoint, so `data` is initially undefined and `isPending` is true. Once it has finished, `data` is either the session or `null`. Do not use this as the only protection for data: client-side checks happen after JavaScript has loaded and can be bypassed.
+On its first render the hook retrieves the session from Better Auth's endpoint, so `data` is initially `null` and `isPending` is true. Once it has finished, `data` is either the session or `null`. Do not use this as the only protection for data: client-side checks happen after JavaScript has loaded and can be bypassed.
 
 ## Metadata
 
@@ -559,7 +616,7 @@ These metadata conventions use file-based routing, like `opengraph-image`. `robo
 Example of `src/app/robots.txt`:
 
 ```md
-User-Agent: \*
+User-Agent: *
 Allow: /
 Disallow: /private/
 
@@ -597,7 +654,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
 ## Deployment
 
-The easiest way to host a Next.js project is [Vercel](https://vercel.com), since both products come from the same company. Vercel supports all Next.js features and provides cloud services such as KV and Blob storage, Cron Jobs and preview deployments with comments. Its free tier is useful for personal and small projects, subject to its current usage limits.
+The easiest way to host a Next.js project is [Vercel](https://vercel.com), since both products come from the same company. Vercel supports all Next.js features and provides cloud services such as Blob storage, Cron Jobs, databases and caches from the Vercel Marketplace, and preview deployments with comments. Its free tier is useful for personal and small projects, subject to its current usage limits.
 
 ### Hosting on Vercel
 
