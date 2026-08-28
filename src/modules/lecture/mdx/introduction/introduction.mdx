@@ -153,6 +153,8 @@ To run JavaScript outside a browser, we need a runtime. Node.js is an open-sourc
 
 We will encounter Node.js when we discuss Next.js later in the semester; Next.js uses the Node.js runtime by default. Node.js was introduced in 2009. Alternatives, including **Bun**, have since emerged with different trade-offs and goals.
 
+Install the current **LTS** release - Next.js 16 requires at least Node.js 20.9, and the tooling around it (ESLint 10 among others) has already moved past Node 18. Check what you have with `node --version`. If you need to switch between versions on the same machine, use a version manager such as [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), and pin the version for a project in an `.nvmrc` file.
+
 ### Bun
 
 [https://bun.sh/](https://bun.sh/)
@@ -180,7 +182,7 @@ The `package.json` file is an application's manifest. It contains project metada
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "next": "16.2.3",
@@ -191,7 +193,8 @@ The `package.json` file is an application's manifest. It contains project metada
     "@types/node": "^24",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "eslint": "^8.57.0",
+    "eslint": "^10.0.0",
+    "eslint-config-next": "16.2.3",
     "prettier": "^3.2.5",
     "typescript": "^5.9.3"
   }
@@ -268,58 +271,44 @@ export function KeyDemo() {
 
 ESLint is the most popular linting tool for JavaScript and TypeScript code. It is highly configurable; many custom plugins extend the functionality by providing custom rules, and there are also many configs that you can use as-is or extend with your own preferred rules. You can find some interesting configs [here](https://github.com/dustinspecker/awesome-eslint#configs).
 
-Like Prettier, you can install it via npm, and after setting it up, you will have an `.eslintrc` file in your directory, which you can then configure as desired.
+Like Prettier, you install it via npm. The configuration lives in an `eslint.config.mjs` file, which exports an array of config objects - the so-called **flat config**. It was introduced in ESLint 9, became the default there, and since ESLint 10 it is the only supported format. If you open an older project (or an older tutorial) and find an `.eslintrc.json` or `.eslintrc.js` file with an `extends` array, you are looking at the previous format.
+
+For a Next.js application we install `eslint` together with `eslint-config-next`, which already bundles the recommended rules for React, React Hooks and Next.js itself:
+
+```bash
+npm i -D eslint eslint-config-next eslint-config-prettier
+```
 
 ```js
-/** eslintrc.js */
+/** eslint.config.mjs */
 
-const { resolve } = require('node:path');
-const { JAVASCRIPT_FILES } = require('@vercel/style-guide/eslint/constants');
+import { defineConfig, globalIgnores } from 'eslint/config';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
+import prettier from 'eslint-config-prettier/flat';
 
-const project = resolve(__dirname, 'tsconfig.json');
-
-/** @type {import('eslint').Linter.Config} */
-module.exports = {
-  root: true,
-  extends: [
-    require.resolve('@vercel/style-guide/eslint/browser'),
-    require.resolve('@vercel/style-guide/eslint/react'),
-    require.resolve('@vercel/style-guide/eslint/next'),
-    require.resolve('@vercel/style-guide/eslint/node'),
-    require.resolve('@vercel/style-guide/eslint/typescript')
-  ],
-  parserOptions: { project },
-  settings: {
-    'import/resolver': { typescript: { project } }
-  },
-  rules: {
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/consistent-type-definitions': 'off',
-    '@typescript-eslint/no-misused-promises': 'off',
-    'no-console': 'off'
-  },
-  overrides: [
-    {
-      files: JAVASCRIPT_FILES,
-      extends: ['plugin:@typescript-eslint/disable-type-checked']
-    },
-    {
-      files: [
-        '**/*.d.ts',
-        'next.config.js',
-        'prettier.config.js',
-        'src/app/**/page.tsx',
-        'src/app/**/layout.tsx',
-        'tailwind.config.ts',
-        'next.config.mjs'
-      ],
-      rules: {
-        'import/no-default-export': 'off'
-      }
+export default defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // turns off the ESLint rules that would fight with Prettier
+  prettier,
+  {
+    rules: {
+      'no-console': 'off'
     }
-  ]
-};
+  },
+  globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts'])
+]);
 ```
+
+<MdxComment>
+  The `core-web-vitals` config raises the rules that affect Core Web Vitals from
+  warnings to errors, and `eslint-config-next/typescript` adds the rules from
+  [typescript-eslint](https://typescript-eslint.io/). Both are what
+  `create-next-app` sets up for a new TypeScript project.
+</MdxComment>
+
+The linter is run through the ESLint CLI - `npx eslint .`, or `pnpm exec eslint .`. Next.js used to wrap it in a `next lint` command, but that command was **removed in Next.js 16**, and so was the `eslint` option in `next.config.ts`. If you meet `next lint` in a tutorial, replace it with `eslint .`.
 
 <MdxImage
   src={ESLINT_ERRORS_DEMO}

@@ -92,10 +92,10 @@ export const auth = betterAuth({
 <MdxComment>
   Why is the plugin needed? The route handler above returns a `Set-Cookie`
   header and the browser stores the session cookie on its own. A **server
-  action** that calls an auth endpoint has no such response, so the cookie
-  would be dropped. The plugin hooks into the response and writes the cookie
-  through `next/headers` instead. The GitHub flow in this lesson works without
-  it, but anything signing users in from a server action does not.
+  action** that calls an auth endpoint has no such response, so the cookie would
+  be dropped. The plugin hooks into the response and writes the cookie through
+  `next/headers` instead. The GitHub flow in this lesson works without it, but
+  anything signing users in from a server action does not.
 </MdxComment>
 
 Finally we need a **client instance**, the counterpart used from client components. It does not contain any secret, it only knows how to call the endpoints above. We create `src/auth/client.ts`:
@@ -615,7 +615,7 @@ These metadata conventions use file-based routing, like `opengraph-image`. `robo
 
 Example of `src/app/robots.txt`:
 
-```md
+```txt
 User-Agent: *
 Allow: /
 Disallow: /private/

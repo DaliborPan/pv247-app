@@ -97,11 +97,11 @@ Props allow the parent to pass read-only data to the child component to modify i
 
 Basic example of component accepting props:
 
-```ts
+```tsx
 type MyComponentProps = {
   onClick: () => void;
   label: string;
-}
+};
 
 function MyComponent(props: MyComponentProps) {
   const onClick = props.onClick;
@@ -113,11 +113,11 @@ function MyComponent(props: MyComponentProps) {
 
 With ES6 destructuring, we can destructure the props object directly in the function parameters.
 
-```ts
+```tsx
 type MyComponentProps = {
   onClick: () => void;
   label: string;
-}
+};
 
 function MyComponent({ onClick, label }: MyComponentProps) {
   return <button onClick={onClick}>{label}</button>;
@@ -126,10 +126,10 @@ function MyComponent({ onClick, label }: MyComponentProps) {
 
 We can also extend existing props with additional props. For example, React already defines props for `<button>`, and we can extend them with `label`.
 
-```ts
+```tsx
 type MyComponentProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   label: string;
-}
+};
 
 function MyComponent({ label, ...props }: MyComponentProps) {
   return <button {...props}>{label}</button>;
@@ -138,10 +138,10 @@ function MyComponent({ label, ...props }: MyComponentProps) {
 
 When using a component as a wrapper, meaning we want to include content inside it, we can use the `children` prop. This special prop contains the component's children. React provides the `PropsWithChildren` type to include it in a props type.
 
-```ts
+```tsx
 type MyComponentProps = React.PropsWithChildren<{
   color: string;
-}>
+}>;
 
 function MyComponent({ children, color }: MyComponentProps) {
   return <button className={`${color}`}>{children}</button>;
@@ -214,7 +214,8 @@ A frequently used construct within TSX is conditional rendering. This is the ren
 
 Example using `&&`:
 
-```ts
+{/* prettier-ignore */}
+```tsx
 {isLoggedIn && <LogoutButton />}
 ```
 
@@ -222,13 +223,14 @@ The logout button is only rendered if `isLoggedIn` is a truthy value. If `isLogg
 
 Example of using the ternary operator:
 
-```ts
+{/* prettier-ignore */}
+```tsx
 {isLoggedIn ? <LogoutButton /> : <LoginButton />}
 ```
 
 If we want a component not to render anything based on a condition, it is typical to use an `if` statement.
 
-```ts
+```tsx
 function Banner({ hidden }: { hidden: boolean }) {
   if (hidden) {
     return null;
@@ -240,7 +242,7 @@ function Banner({ hidden }: { hidden: boolean }) {
 
 An alternative is to use the ternary operator again.
 
-```ts
+```tsx
 function Banner({ hidden }: { hidden: boolean }) {
   return hidden ? null : <div>Banner!</div>;
 }
@@ -250,17 +252,18 @@ function Banner({ hidden }: { hidden: boolean }) {
 
 It is often necessary to render several identical components based on a provided array of items. To do this, we use functional methods over an array, mainly the `map` function.
 
-```ts
+{/* prettier-ignore */}
+```tsx
 {items.map(item => <Item key={item.id} {...item} />)}
 ```
 
-```ts
+```tsx
 type Item = { id: string; label: string };
 
 function MyListComponent({ items }: { items: Item[] }) {
   return (
     <ul>
-      {items.map((item) => (
+      {items.map(item => (
         <li key={item.id}>
           <span>{item.label}</span>
         </li>
@@ -279,7 +282,7 @@ When mapping over elements, it is essential to provide a `key` explicitly. `key`
 <IncorrectUsageOfKeys>
 
 {/* prettier-ignore-start */}
-```ts
+```tsx
 const IncorrectUsageOfKeys = () => {
 
   const [items, setItems] = useState(['Item 1', 'Item 2', 'Item 3']);
@@ -316,7 +319,7 @@ const IncorrectUsageOfKeys = () => {
 <CorrectUsageOfKeys>
 
 {/* prettier-ignore-start */}
-```ts
+```tsx
 const CorrectUsageOfKeys = () => {
   
   const [items, setItems] = useState(['Item 1', 'Item 2', 'Item 3']);
@@ -370,7 +373,7 @@ React provides a cross-browser event system that normalizes browser events for R
 
 ### Basic example
 
-```typescript
+```tsx
 function MyComponent() {
   const onClick = () => {
     console.log('Button clicked');
@@ -382,7 +385,7 @@ function MyComponent() {
 
 We define `onClick` as an arrow function and pass it to the `<button>` element as its event handler. Unlike a `function` declaration, an arrow function assigned to a `const` cannot be called before its declaration. This is not possible:
 
-```typescript
+```tsx
 function MyComponent({ param }: { param: string | undefined }) {
   if (param === undefined) return null;
 
@@ -399,7 +402,7 @@ function MyComponent({ param }: { param: string | undefined }) {
 
 If we used a `function` declaration, this would be possible.
 
-```ts
+```tsx
 function MyComponent({ param }: { param: string | undefined }) {
   if (param === undefined) return null;
 
@@ -417,7 +420,7 @@ This behavior is called hoisting. Function declarations are available throughout
 
 Arrow functions can also preserve TypeScript's control-flow narrowing. In this example, TypeScript infers `param` as `string` within `onClick`, rather than `string | undefined`, because the component returns early when `param` is `undefined`.
 
-```typescript
+```tsx
 // TypeScript
 function MyComponent({ param }: { param: string | undefined }) {
   if (param === undefined) return null;
@@ -435,7 +438,7 @@ function MyComponent({ param }: { param: string | undefined }) {
 
 Often, you want a child component to communicate back to the parent. We can do this by passing functions from the parent to the child that the child can call.
 
-```ts
+```tsx
 type ChildComponentProps = {
   onChildClick: (data: string) => void;
 };
@@ -457,7 +460,7 @@ function ParentComponent() {
 
 When we work with native elements such as `<button>`, their event handlers receive events. React provides a `SyntheticEvent` object with a cross-browser interface. We can call methods such as `stopPropagation()` or `preventDefault()` on this event. For example, submitting a form triggers a page navigation by default. Call `preventDefault()` in the submit handler to prevent this behavior.
 
-```typescript
+```tsx
 import type { FormEvent } from 'react';
 
 const PreventDefaultExample = () => {

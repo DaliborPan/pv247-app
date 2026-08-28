@@ -9,20 +9,19 @@ import TAILWIND_VS_INLINE from './lecture3-tailwind-vs-inline.png';
 
 # Styling Your App, Tailwind CSS, Accessibility
 
-Styling is an essential element of any web application, dramatically influencing the user experience. Whether you're building a SaaS product or another basic information system, design is crucial in determining how users perceive and interact with your application. A well-thought-out design can impact user satisfaction and even influence their choice between your service and competitors. Effective styling isn't just about aesthetics; it's also about providing an intuitive user interface. Even if your application has excellent functionality, users need help understanding how to navigate and interact with it to make it more useful.
+Styling is an essential element of any web application, dramatically influencing the user experience. Whether you're building a SaaS product or another basic information system, design is crucial in determining how users perceive and interact with your application. A well-thought-out design can impact user satisfaction and even influence their choice between your service and competitors. Effective styling isn't just about aesthetics; it's also about providing an intuitive user interface. Even if your application has excellent functionality, it is of little use when people cannot work out how to navigate it.
 
 These are common approaches to styling your web application:
 
 - Traditional CSS
 - Sass/Less
 - CSS-in-JS
-
-Traditional CSS, Sass/Less, CSS-in-JS, and the utility-first approach are suitable for projects that do not rely on a JavaScript framework.
-
 - CSS modules
 - Component library
 - Headless libraries
 - Utility-first
+
+Traditional CSS and Sass/Less work on any website. CSS modules and the utility-first approach need a build step, but are otherwise framework-agnostic. CSS-in-JS, component libraries and headless libraries are tied to a JavaScript framework - in our case React. We will go through all of them and then settle on the combination we recommend for this course.
 
 ## Traditional CSS
 
@@ -66,13 +65,6 @@ render(
 );
 ```
 
-<MdxComment>
-  Note: There is demonstrated usage of class component in this example. We don't
-  recommend using class components in your projects! This example comes from
-  [documentation](https://styled-components.com/docs/basics#how-do-styled-components-work-within-a-component)
-  of styled-components.
-</MdxComment>
-
 ```tsx
 import React from 'react';
 import styled from 'styled-components';
@@ -105,41 +97,52 @@ export default class Counter extends React.Component {
 }
 ```
 
+<MdxComment>
+  Both examples come from the [styled-components
+  documentation](https://styled-components.com/docs/basics#how-do-styled-components-work-within-a-component),
+  which is why the second one is written as a class component - we do not
+  recommend writing components that way in your projects.
+</MdxComment>
+
 ## CSS Modules
 
 CSS Modules aims to solve some of the challenges associated with traditional CSS. With CSS Modules, styles are scoped to specific components, preventing global scope pollution and potential style conflicts. Each CSS Module is a standalone file that encapsulates styles for a particular component. Developers can import and use these styles in their JavaScript or TypeScript files, ensuring a tight coupling between styles and components. Additionally, it supports features like local scoping and composition, allowing for creating modular and reusable styles. This approach (should) improve maintainability and reduce the chance of unintended style side effects.
 
 ```tsx
-import React from 'react';
-import styles from './styles.css';
+import { useState } from 'react';
 
-export default class Counter extends React.Component {
-  state = { count: 0 };
+import styles from './counter.module.css';
 
-  increment = () => this.setState({ count: this.state.count + 1 });
-  decrement = () => this.setState({ count: this.state.count - 1 });
+export const Counter = () => {
+  const [count, setCount] = useState(0);
 
-  render() {
-    return (
-      <div className={styles.counter}>
-        <p className={styles.paragraph}>{this.state.count}</p>
-        <button className={styles.button} onClick={this.increment}>
-          +
-        </button>
-        <button className={styles.button} onClick={this.decrement}>
-          -
-        </button>
-      </div>
-    );
-  }
-}
+  return (
+    <div className={styles.counter}>
+      <p className={styles.paragraph}>{count}</p>
+      <button className={styles.button} onClick={() => setCount(count + 1)}>
+        +
+      </button>
+      <button className={styles.button} onClick={() => setCount(count - 1)}>
+        -
+      </button>
+    </div>
+  );
+};
 ```
+
+<MdxComment>
+  Note the file name. The `.module.css` suffix is what turns an ordinary
+  stylesheet into a CSS module - it is the signal for the bundler to generate
+  unique class names and hand them to you as an object. Importing plain
+  `./counter.css` would apply the styles globally and `styles.counter` would be
+  `undefined`.
+</MdxComment>
 
 ## Component library
 
 A component library in React is a collection of pre-designed and reusable user interface elements (components) that can be easily integrated into your React application. These components are created to maintain consistency in design and functionality across the application, saving development time and ensuring a cohesive user experience. Developers can use these pre-built components to develop user interfaces more efficiently and maintain design consistency throughout their applications, simplifying the development process.
 
-To most popular component libraries belong [Material-ui](https://mui.com/), [Ant design](https://ant.design/) or [Chakra UI](https://chakra-ui.com/)
+The best known component libraries are [Material UI](https://mui.com/), [Ant Design](https://ant.design/) and [Chakra UI](https://chakra-ui.com/).
 
 <MdxImage src={MATERIAL_UI} alt="Examples of Material UI components" />
 
@@ -151,7 +154,7 @@ If you're satisfied with the majority of what a specific component library offer
 
 **Don't worry about styling at all**
 
-Thanks to its pre-designed and well-tested components, You can bypass the need to worry about styling. Libraries follow established design principles and best practices, offering a consistent and visually appealing user interface out of the box. This eliminates the time-consuming and error-prone process of manually crafting styles.
+Thanks to its pre-designed and well-tested components, you can largely stop worrying about styling. Libraries follow established design principles and best practices, offering a consistent and visually appealing user interface out of the box. This eliminates the time-consuming and error-prone process of manually crafting styles.
 
 **Consistency, Reusability, Efficiency**
 
@@ -165,7 +168,7 @@ If you're not building your own personal project, where you don't mind your desi
 
 **Dependencies, Complexity**
 
-Component libraries come with a set of pre-designed components and styles, which can contribute to a larger bundle size. This can impact page load times, especially for users with slower internet connections or on mobile devices. Overall, almost 100 % of you'll add unused code to your project when introducing the component library.
+Component libraries come with a set of pre-designed components and styles, which can contribute to a larger bundle size. This can impact page load times, especially for users with slower internet connections or on mobile devices. And whatever you do, introducing a component library means shipping code you never use.
 
 You also must manage the library's dependencies, updates, and potential conflicts, which can add complexity to your project's maintenance.
 
@@ -187,7 +190,7 @@ Examples: [HeadlessUI](https://headlessui.com/), [RadixUI](https://www.radix-ui.
 
 [Here is a perfect description of utility-first approach](https://tailwindcss.com/docs/utility-first)
 
-A utility-first CSS framework provides a variety of predefined CSS classes that you can utilize to construct your own components. These classes look like `flex mt-2 rounded-full shadow whitespace-nowrap`, for example. Many developers consider Tailwind CSS the fastest approach for new applications. The essential advantage lies in eliminating the need to navigate between numerous CSS files, enabling immediate visual feedback as you make changes.
+A utility-first CSS framework provides a variety of predefined CSS classes that you can utilize to construct your own components. These classes look like `flex mt-2 rounded-full shadow-sm whitespace-nowrap`, for example. Many developers consider Tailwind CSS the fastest approach for new applications. The essential advantage lies in eliminating the need to navigate between numerous CSS files, enabling immediate visual feedback as you make changes.
 
 ```html
 <div class="flex font-sans">
@@ -289,27 +292,61 @@ A utility-first CSS framework provides a variety of predefined CSS classes that 
 
 With the utility-first approach, you have the flexibility to create basically any design you desire without being limited to a single predefined stylesheet. Tailwind has predefined classes for the most fundamental styling elements. However, a prerequisite is a basic **understanding of CSS**. The advantage is that you don't need to recall the exact CSS syntax.
 
-For instance, if you want to add a subtle shadow to an element, you only need to remember that Tailwind offers the shadow class with different "sizes," such as `shadow-sm shadow shadow-md shadow-lg.` In contrast, using plain CSS would require you to remember a syntax like `box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);`
+For instance, if you want to add a subtle shadow to an element, you only need to remember that Tailwind offers the shadow class with different "sizes," such as `shadow-xs shadow-sm shadow-md shadow-lg`. In contrast, using plain CSS would require you to remember a syntax like `box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);`
 
 Here's another benefit: Tailwind CSS has established its classes according to industry standards and best practices. Consequently, you won't encounter unconventional values like `margin-top: 19.5px`. Your task is effectively utilizing these classes while considering the predefined rules for spacing, font sizes, font weights, and other styling elements.
+
+<MdxComment>
+  Watch out when reading older articles and older projects: Tailwind v4 renamed
+  the smallest step of several scales. What used to be `shadow` is now
+  `shadow-sm` and the old `shadow-sm` is now `shadow-xs`; the same shift
+  happened to `rounded`, `blur` and `drop-shadow`. `outline-none` became
+  `outline-hidden`, and `ring` is now 1px in the current color instead of 3px
+  blue.
+</MdxComment>
 
 **PERFORMANCE - IT'S TINY ON PRODUCTION**
 
 When using Sass or even plain CSS, it's common to accumulate unused CSS classes and encounter duplicated styling over time. Similarly, when working with a component library, it often comes with extensive styling, much of which may be outside of your project. While Tailwind may seem even worse because it provides an insane amount of predefined classes, you never need them all.
 
-Tailwind CSS features a JIT (Just-in-Time) compiler. During the project build process, Tailwind scans your source files to identify the classes you've actually used. It then generates only those necessary classes for your final CSS bundle, effectively reducing the amount of unused CSS to nearly zero.
+During the build, Tailwind scans your source files, identifies the classes you have actually used and generates only those into the final CSS bundle, which reduces the amount of unused CSS to nearly zero.
 
 **RESPONSIVE**
 
 More than half of users prefer accessing the web via mobile devices. Tailwind CSS simplifies the task of achieving responsiveness compared to other approaches. It offers well-established predefined screen sizes, allowing you to apply different classes based on these screen sizes.
 
-A typical example is arranging elements side by side on desktop screens while stacking them vertically on mobile screens. Achieving this is as straightforward as using `<div className="flex flex-col lg:flex-row">{children}</div>.`
+A typical example is arranging elements side by side on desktop screens while stacking them vertically on mobile screens. Achieving this is as straightforward as using `<div className="flex flex-col lg:flex-row">{children}</div>`.
 
-By default, the `flex-direction` is set to `column,` but once the screen size exceeds the `lg` breakpoint, it seamlessly switches to a `row direction,` all while utilizing standard CSS media queries to accomplish this responsive behavior.
+By default, the `flex-direction` is set to `column`, but once the screen size exceeds the `lg` breakpoint, it switches to `row`, all while utilizing standard CSS media queries to accomplish this responsive behavior.
 
 **HOVER, FOCUS and more**
 
-With modifiers like `hover:` `focus:` `disabled:` and others, you can achieve even better UX when interacting with all your elements. To see all possibilities, take a look at Tailwind's documentation: https://tailwindcss.com/docs/hover-focus-and-other-states
+With modifiers like `hover:`, `focus-visible:` or `disabled:` you can achieve even better UX when interacting with all your elements. To see all the possibilities, take a look at [Tailwind's documentation](https://tailwindcss.com/docs/hover-focus-and-other-states).
+
+**CONFIGURATION LIVES IN CSS**
+
+Since version 4, Tailwind is set up in the stylesheet rather than in a JavaScript config file. A new Next.js project installs `tailwindcss` together with `@tailwindcss/postcss`, and the whole framework is pulled in with a single import:
+
+```css
+/* src/app/globals.css */
+
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: #4338ca;
+  --font-display: 'Poppins', sans-serif;
+  --breakpoint-3xl: 120rem;
+}
+```
+
+Every design token is a CSS variable. Defining `--color-primary` in `@theme` is what generates `bg-primary`, `text-primary`, `border-primary` and the rest, and the same variable can be read from plain CSS as `var(--color-primary)`.
+
+<MdxComment>
+  A `tailwind.config.ts` file with a `theme.extend` object - which you will see
+  in most tutorials and in every project older than 2025 - is the version 3
+  approach. It still works if you point at it with `@config`, but for a new
+  project use `@theme`.
+</MdxComment>
 
 **WHY NOT INLINE STYLES?**
 
@@ -322,9 +359,9 @@ A frequent response to the utility-first approach is questioning whether it's es
 
 Few important advantages
 
-**Consistent design, no magic number\***
+**Consistent design, no magic numbers**
 
-Using inline styles, every value is a magic number. With Tailwind CSS you use predefined utilities leading to consistent design. However, you can create your own utility class if you need, even you can inline magic value `bg-[#ffffff]`
+Using inline styles, every value is a magic number. With Tailwind CSS you use predefined utilities leading to consistent design. You can still define your own utility class when you need one, and an arbitrary value can be inlined as `bg-[#ffffff]` - but it stands out as the exception it should be.
 
 **Responsive design & hover, focus, and other states**
 
@@ -342,7 +379,7 @@ Component libraries based on Tailwind CSS aim to make development even faster. A
 These types of libraries do not provide you with pre-built components that you need to import, such as
 
 ```ts
-import { Button } from 'library.';
+import { Button } from 'some-library';
 ```
 
 DaisyUI specifically provides, similarly to Tailwind, utility classes that you can apply directly to HTML tags.
@@ -350,16 +387,25 @@ DaisyUI specifically provides, similarly to Tailwind, utility classes that you c
 For example, styling a button to have it look like a DaisyUI button looks like this:
 
 ```tsx
-<button className="focus:visible:outline-none focus:visible:ring-2 focus:visible:ring-indigo-600 focus:visible:ring-offset-2 inline-block cursor-pointer rounded-md bg-indigo-600 px-4 py-3 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-indigo-700 active:scale-95">
+<button className="inline-block cursor-pointer rounded-md bg-indigo-600 px-4 py-3 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-indigo-700 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2 active:scale-95">
   Tailwind Button
 </button>
 ```
 
 <DaisyUiButton />
 
-DaisyUI has created a utility classes for button, such as `btn btn-primary btn-outline btn-disabled` so it is enough to assign just few utility classes and have your HTML cleaner.
+DaisyUI defines its own utility classes for a button, such as `btn btn-primary btn-outline btn-disabled`, so the same result takes a handful of classes instead of the wall of them above, and the markup stays readable.
 
-Installation of this library is straightforward. First, you need to have Tailwind already installed. Then you add DaisyUI as a dev dependency to your npm project and then add it as a plugin in `tailwind.config.js.` See https://daisyui.com/docs/install/.
+```tsx
+<button className="btn btn-primary">DaisyUI Button</button>
+```
+
+Installation is straightforward. Tailwind has to be installed first, then you add DaisyUI as a dev dependency and register it as a plugin - and since version 5 that happens in your CSS, next to the Tailwind import, not in `tailwind.config.js`. See the [DaisyUI documentation](https://daisyui.com/docs/install/).
+
+```css
+@import 'tailwindcss';
+@plugin 'daisyui';
+```
 
 ## Shadcn/ui
 
@@ -372,7 +418,7 @@ Shadcn UI is a collection of beautifully designed and accessible UI components t
 
 The idea behind this is to give you ownership and control over the code, allowing you to decide how the components are built and styled.
 
-It has been so far the best approach we have already tried and we recommend using it in your projects. When copy pasting components, they are pre-styled, but you can easily change the styling by modifying the Tailwind classes directly in the source code.
+It is the best approach we have tried so far and we recommend it for your projects. When copy pasting components, they are pre-styled, but you can easily change the styling by modifying the Tailwind classes directly in the source code.
 
 Shadcn components were very popular at the beginning of agentic development (for obvious reasons), and they still are. But before long all new websites and apps started to look way too similar. That was the motivation for creating [shadcn/create](https://ui.shadcn.com/create). Shadcn components are built on semantic CSS tokens — `background`, `foreground`, `primary`, `border`, `radius` and a handful of others — so overriding those tokens restyles the whole application at once, and dark mode is nothing more than the same tokens redefined under a `.dark` selector. Tweaking the presets once, before you write your first screen, is the cheapest way to distinguish yourself and to get the consistency we talk about in the next section.
 
@@ -424,7 +470,7 @@ The fix is an explicit checklist instead of taste. [Vercel's Web Interface Guide
 
 # Accessibility
 
-Accessibility is an important part of web development that is often glanced over. It would help if you thought about it from the start for many good reasons.
+Accessibility is an important part of web development that is often glossed over. It would help if you thought about it from the start for many good reasons.
 
 1. **Inclusivity:** Accessibility ensures that everyone, regardless of disabilities, can use your app.
 1. **Better User Experience:** Accessibility features improve overall user satisfaction.
@@ -438,7 +484,7 @@ Thankfully, modern HTML has many accessibility features built right into the ele
 
 While you can build your whole website out of `div` elements that are styled and hooked up with JS to do whatever you need, this approach is far from optimal. It's better to use correct HTML tags for the purposes they were made for. Let's take this awful HTML snippet as an example:
 
-```tsx
+```html
 <span style="font-size: 3em">My heading</span> <br /><br />
 This is the first section of my document.
 <br /><br />
@@ -456,12 +502,12 @@ This is the first subsection of my document. I'd love people to be able to find 
 <br /><br />
 <span style="font-size: 2.5em">My 2nd subheading</span>
 <br /><br />
-This is the second subsection of my content. I think is more interesting than the last one.
+This is the second subsection of my content, which I think is more interesting than the last one.
 ```
 
 While this page may look fine when you look at it in your browser, any visually impaired user would need help trying to understand the information contained within. Another place where this snippet would perform poorly is SEO since search engines wouldn't know how to parse and index this content. Now compare it to semantically correct markup:
 
-```tsx
+```html
 <h1>My heading</h1>
 
 <p>This is the first section of my document.</p>
@@ -505,23 +551,23 @@ A good practice is also to add a [Skip to Content link](https://css-tricks.com/h
 
 #### `<h1>`, `<h2>`, `<h3>`
 
-Heading tags are most valuable for a proper SEO of your page. There should always be only one `h1` tag, followed by `h2` tags, which can also have `h3` tags. You shouldn't skip from `h1` directly to `h3.` Lower heading tags should also be used sparingly since overly structuring your content may make it harder to follow.
+Heading tags are most valuable for a proper SEO of your page. There should always be only one `h1` tag, followed by `h2` tags, which can also have `h3` tags. You shouldn't skip from `h1` directly to `h3`. Lower heading tags should also be used sparingly since overly structuring your content may make it harder to follow.
 
 #### `<nav>`
 
-Navigation should contain a list of links used to navigate your website. Usually, the main navigation is inside the `header,` but you can also have other nav elements that handle navigation within separate subparts of your website. You can use `ul`and`li` elements to semantically structure the links as a list for screen readers that you can then style any way you want for general users.
+Navigation should contain a list of links used to navigate your website. Usually, the main navigation is inside the `header`, but you can also have other nav elements that handle navigation within separate subparts of your website. You can use `ul` and `li` elements to semantically structure the links as a list for screen readers that you can then style any way you want for general users.
 
 #### `<button>` and `<a>`
 
-While you can style any element to look like a button and add JavaScript event handlers, screen readers won't be able to detect that it's intractable. That's why you should always prefer to use a `button` element for interactable parts of your website and an `a` tag for any links that trigger navigation.
+While you can style any element to look like a button and add JavaScript event handlers, screen readers will not recognise it as something you can interact with. That's why you should always prefer a `button` element for the interactive parts of your website and an `a` tag for any links that trigger navigation.
 
 ## Role attribute
 
-The abovementioned elements work out of the box because of the `role` attribute they have all defined. While these can cover many common use cases, there are a lot more roles that website elements can have. For example, different inputs have roles like `radio` or `combobox,` or you can use more specific roles like `tab` or `menu` instead of generic `button.`
+The elements above work out of the box because each of them already carries an **implicit** role - a `<button>` is announced as a button without anyone writing `role="button"`. Those implicit roles cover most common cases, but there are many more roles an element can have: inputs come with roles such as `radio` or `combobox`, and for a custom widget you may need a more specific role like `tab` or `menu` instead of the generic `button`. Setting a `role` by hand only makes sense when no HTML element expresses what you are building - and it changes nothing about the behaviour, only what assistive technology announces.
 
 ## WAI-ARIA
 
-The role attribute is a part of the Accessible Rich Internet Applications (ARIA) set of rules that help make the web more accessible. ARIA also defines how to use attributes other than the role that can describe the current state of various interactable elements like dialogs, draggable elements, etc. This is why often using existing UI libraries is advantageous because they should have all these accessibility features covered.
+The role attribute is a part of the Accessible Rich Internet Applications (ARIA) set of rules that help make the web more accessible. ARIA also defines how to use attributes other than the role that can describe the current state of various interactive elements such as dialogs or draggable elements. This is why often using existing UI libraries is advantageous because they should have all these accessibility features covered.
 
 <MdxComment>
   Before you submit, walk through the [A11Y Project

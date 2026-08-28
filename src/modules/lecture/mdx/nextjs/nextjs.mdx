@@ -374,7 +374,7 @@ export default function Page() {
 }
 ```
 
-> On the other hand, This `/add-todo` page allows you to add a new todo to the database (the addition is done via `useMutation`, which calls the API that adds the todo). After adding a new todo, we have the option to go back to the `/` page, where we would ideally like to see the updated todos list, including the new todo. In this case, the only way to update the Router cache, which holds the old todos list, is to call `router.refresh()`.
+> On the other hand, this `/add-todo` page allows you to add a new todo to the database (the addition is done via `useMutation`, which calls the API that adds the todo). After adding a new todo, we have the option to go back to the `/` page, where we would ideally like to see the updated todos list, including the new todo. In this case, the only way to update the client cache, which still holds the old todos list, is to call `router.refresh()`.
 
 This is something that we can fix by using server actions, which we will briefly talk about later.
 
@@ -452,18 +452,35 @@ export async function generateStaticParams() {
 }
 ```
 
-Using the `dynamicParams` route segment config, you can specify what should happen if an unknown slug is provided:
+You do not have to list every URL. A slug that `generateStaticParams` does not return is not an error: the visitor is served the prerendered part of the route immediately, the rest is rendered in the background once the params are known, and the next visitor to the same URL gets that upgraded result from the cache. This is what Incremental Static Regeneration means today, and we will come back to it in the lecture on caching.
 
-- **true**: (default) Dynamic segments not included in `generateStaticParams` are generated on demand.
-- **false**: Dynamic segments not included in `generateStaticParams` will return a 404.
+If a slug should not exist at all, handle it where you load the data and call `notFound()`, which renders the closest `not-found.tsx`.
 
 ```tsx
-export const dynamicParams = true;
+import { notFound } from 'next/navigation';
 
-export async function generateStaticParams() {
-  ...
+export default async function BlogPostPage({
+  params
+}: PageProps<'/blog/[slug]'>) {
+  const { slug } = await params;
+  const post = await getPost(slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  return <h1>{post.title}</h1>;
 }
 ```
+
+<MdxComment>
+  Older tutorials solve this with the `dynamicParams` route segment config
+  (`export const dynamicParams = false` to return a 404 for unlisted slugs).
+  That option, together with `dynamic`, `revalidate` and `fetchCache`, no longer
+  exists in projects with Cache Components enabled - which is the case for this
+  course application - and using it fails the build. We will explain why in
+  lecture 9.
+</MdxComment>
 
 ### Catch-all Segments
 
