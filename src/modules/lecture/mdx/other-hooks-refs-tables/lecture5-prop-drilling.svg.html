@@ -1,0 +1,85 @@
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; padding: 0; background: #f7f7fa; }
+  svg { display: block; }
+</style>
+<svg width="1100" height="460" viewBox="0 0 1100 460" xmlns="http://www.w3.org/2000/svg"
+     font-family="ui-sans-serif, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <rect width="1100" height="460" fill="#f7f7fa"/>
+
+  <defs>
+    <marker id="a-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0000d2"/>
+    </marker>
+    <marker id="a-grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b4b4c4"/>
+    </marker>
+  </defs>
+
+  <!-- ============ edges (drawn first, under the boxes) ============ -->
+
+  <!-- App -> Sidebar (grey, prop does not travel here) -->
+  <path d="M 400 82 L 400 111 L 195 111 L 195 134" fill="none" stroke="#b4b4c4" stroke-width="2" marker-end="url(#a-grey)"/>
+  <!-- App -> Layout (blue, carries language) -->
+  <path d="M 400 82 L 400 111 L 605 111 L 605 134" fill="none" stroke="#0000d2" stroke-width="2.5" marker-end="url(#a-blue)"/>
+
+  <!-- Sidebar -> Filters / UserCard -->
+  <path d="M 195 192 L 195 221 L 105 221 L 105 244" fill="none" stroke="#b4b4c4" stroke-width="2" marker-end="url(#a-grey)"/>
+  <path d="M 195 192 L 195 221 L 285 221 L 285 244" fill="none" stroke="#b4b4c4" stroke-width="2" marker-end="url(#a-grey)"/>
+
+  <!-- Layout -> Content (grey) / Header (blue) -->
+  <path d="M 605 192 L 605 221 L 515 221 L 515 244" fill="none" stroke="#b4b4c4" stroke-width="2" marker-end="url(#a-grey)"/>
+  <path d="M 605 192 L 605 221 L 695 221 L 695 244" fill="none" stroke="#0000d2" stroke-width="2.5" marker-end="url(#a-blue)"/>
+
+  <!-- Header -> LanguageSwitcher (blue) -->
+  <path d="M 695 302 L 695 331 L 835 331 L 835 354" fill="none" stroke="#0000d2" stroke-width="2.5" marker-end="url(#a-blue)"/>
+
+  <!-- ============ edge labels ============ -->
+  <text x="616" y="106" fill="#0000a3" font-size="13" font-weight="600">language</text>
+  <text x="706" y="216" fill="#0000a3" font-size="13" font-weight="600">language</text>
+  <text x="846" y="326" fill="#0000a3" font-size="13" font-weight="600">language</text>
+
+  <!-- ============ nodes ============ -->
+
+  <!-- L1: App -->
+  <rect x="325" y="30" width="150" height="52" rx="9" fill="#0000d2"/>
+  <text x="400" y="62" text-anchor="middle" fill="#ffffff" font-size="14.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">App</text>
+
+  <!-- L2: Sidebar (off path) -->
+  <rect x="120" y="140" width="150" height="52" rx="9" fill="#ffffff" stroke="#d4d4dd" stroke-width="2"/>
+  <text x="195" y="172" text-anchor="middle" fill="#9a9aab" font-size="14.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Sidebar</text>
+
+  <!-- L2: Layout (forwards) -->
+  <rect x="530" y="140" width="150" height="52" rx="9" fill="#ffffff" stroke="#0000d2" stroke-width="2.5"/>
+  <text x="605" y="172" text-anchor="middle" fill="#262626" font-size="14.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Layout</text>
+
+  <!-- L3: Filters / UserCard (off path) -->
+  <rect x="30" y="250" width="150" height="52" rx="9" fill="#ffffff" stroke="#d4d4dd" stroke-width="2"/>
+  <text x="105" y="282" text-anchor="middle" fill="#9a9aab" font-size="14.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Filters</text>
+
+  <rect x="210" y="250" width="150" height="52" rx="9" fill="#ffffff" stroke="#d4d4dd" stroke-width="2"/>
+  <text x="285" y="282" text-anchor="middle" fill="#9a9aab" font-size="14.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">UserCard</text>
+
+  <!-- L3: Content (off path) -->
+  <rect x="440" y="250" width="150" height="52" rx="9" fill="#ffffff" stroke="#d4d4dd" stroke-width="2"/>
+  <text x="515" y="282" text-anchor="middle" fill="#9a9aab" font-size="14.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Content</text>
+
+  <!-- L3: Header (forwards) -->
+  <rect x="620" y="250" width="150" height="52" rx="9" fill="#ffffff" stroke="#0000d2" stroke-width="2.5"/>
+  <text x="695" y="282" text-anchor="middle" fill="#262626" font-size="14.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Header</text>
+
+  <!-- L4: LanguageSwitcher (consumer) -->
+  <rect x="760" y="360" width="150" height="52" rx="9" fill="#0000d2"/>
+  <text x="835" y="391" text-anchor="middle" fill="#ffffff" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">LanguageSwitcher</text>
+  <text x="926" y="392" fill="#0000a3" font-size="15" font-weight="600" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">{language}</text>
+
+  <!-- ============ legend ============ -->
+  <rect x="30" y="352" width="18" height="18" rx="4" fill="#0000d2"/>
+  <text x="58" y="366" fill="#262626" font-size="13.5">owns or reads the value</text>
+
+  <rect x="30" y="382" width="18" height="18" rx="4" fill="#ffffff" stroke="#0000d2" stroke-width="2.5"/>
+  <text x="58" y="396" fill="#262626" font-size="13.5">only forwards it — never reads it</text>
+
+  <rect x="30" y="412" width="18" height="18" rx="4" fill="#ffffff" stroke="#d4d4dd" stroke-width="2"/>
+  <text x="58" y="426" fill="#6b6b80" font-size="13.5">never sees the prop at all</text>
+</svg>

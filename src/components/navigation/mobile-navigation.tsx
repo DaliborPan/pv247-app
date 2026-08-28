@@ -49,6 +49,7 @@ export const MobileNavigation = ({
           size="sm"
           variant="outline/primary"
           iconLeft={{ icon: <Menu /> }}
+          aria-label="Open menu"
         />
       </DropdownMenuTrigger>
 

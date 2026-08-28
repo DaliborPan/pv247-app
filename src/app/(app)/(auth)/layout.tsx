@@ -5,7 +5,10 @@ import { redirect } from 'next/navigation';
 import { OnboardingPage } from '@/modules/student/components/onboarding-page';
 
 export const metadata = {
-  title: 'Dashboard',
+  title: {
+    default: 'Dashboard',
+    template: 'PV247 | %s'
+  },
   description: 'PV247 course dashboard - your lectures, homework and project'
 };
 

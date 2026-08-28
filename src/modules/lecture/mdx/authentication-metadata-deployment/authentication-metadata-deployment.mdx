@@ -9,73 +9,148 @@ In the last lesson of this course, we will focus on an important part of most we
 
 Many web applications allow the user to log in and continue with the application where authentication is required. As a developer, we need to address access to our application so that those parts of the application where authentication is required are only available to logged in users.
 
-There are many ways we can authenticate users. From simple login using a name and password (or just a password), to logging in using social networks, to authentication using biometrics. In this lesson, we'll demonstrate authentication via GitHub, but the principles are the same for all other authentication methods. We will use the `next-auth` library to easily add authentication to our application.
+There are many ways we can authenticate users. From simple login using a name and password (or just a password), to logging in using social networks, to authentication using biometrics. In this lesson, we'll demonstrate authentication via GitHub, but the principles are the same for all other authentication methods. We will use the `better-auth` library to easily add authentication to our application. It is generally not a good idea to implement your own authentication system, but rather use a well-tested library.
 
 We will store the logged in users in a database, similar to the last lesson. Therefore, we will again use Drizzle and SQLite.
 
-## Auth.js (next-auth)
+## Better Auth
 
-For authentication management we will use the `Auth.js` library, originally known as `NextAuth`. For use with Next.js v14 (the latest version), we need to use Auth.js in beta.
+For authentication management we will use [Better Auth](https://www.better-auth.com/). It is a framework-agnostic authentication library written in TypeScript that works very well with the Next.js App Router. It is also the library that this PV247 application itself is built on, so everything shown here is code you can find in the course repository.
 
-```ts
-pnpm add next-auth@beta
+<MdxComment>
+  You will still find a lot of tutorials that use `next-auth` (or Auth.js).
+  It is not the recommended approach anymore, Better Auth became the new standard.
+  The main practical difference is that with Better Auth the database schema, the
+  configuration and all the generated types live in your own project, so there
+  is much less hidden magic.
+</MdxComment>
+
+```bash
+pnpm add better-auth
 ```
 
-After installation we need to set the `.env` variables. Based on which provider we want to use, we set such `.env` variables. In our case, we'll be using GitHub, so we'll set variables for GitHub that are of the form `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`. Next, collectively for all providers, we need `AUTH_SECRET`.
+After installation we need to set the `.env` variables. Two of them belong to the library itself:
 
-Next, we need to import `handlers` and `auth` from the `next-auth` library.
+- `BETTER_AUTH_SECRET` - a random string used to sign and encrypt cookies and tokens. You can generate one with `openssl rand -base64 32`.
+- `BETTER_AUTH_URL` - the base URL of the application, `http://localhost:3000` during development.
 
-- The `handlers` contain route handlers, which are then used as API route handlers for our application. Therefore, we don't have to program them ourselves, but use pre-made hadnlers from the library.
+On top of that, we add the credentials of every provider we want to use. In our case we use GitHub, so we add `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`.
 
-- The `auth` is the function we will use to determine whether there is a logged in user in the application or not.
-
-We create a file `src/auth.ts` and add the following code:
-
-```ts
-import NextAuth from 'next-auth';
-import GitHub from 'next-auth/providers/github';
-
-export const { handlers, auth } = NextAuth({ providers: [GitHub] });
-```
-
-We now need to assign the exported handlers to the correct API handlers of our application. We do this by creating `src/app/api/auth/[...nextauth].ts`, where we export the `handlers` we defined in `src/auth.ts`.
+The whole server-side configuration is a single `betterAuth` call. We create a file `src/auth/auth.ts`:
 
 ```ts
-import { handlers } from '@/src/auth';
+import { betterAuth } from 'better-auth';
+import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
-export const { GET, POST } = handlers;
+import { db } from '../db';
+import { user, session, account, verification } from '../db/schema/users';
+
+export const auth = betterAuth({
+  database: drizzleAdapter(db, {
+    provider: 'sqlite',
+    schema: { user, session, account, verification }
+  }),
+  socialProviders: {
+    github: {
+      clientId: process.env.AUTH_GITHUB_ID!,
+      clientSecret: process.env.AUTH_GITHUB_SECRET!
+    }
+  }
+});
 ```
+
+<MdxComment>
+  The `auth` object is the server side of the library. It contains `auth.handler`
+  (a plain function that takes a `Request` and returns a `Response`) and
+  `auth.api`, which exposes server functions such as `getSession`. It must never
+  be imported into a client component - it talks to the database and reads the
+  secrets.
+</MdxComment>
+
+Better Auth serves all of its endpoints - sign in, sign out, the OAuth callback, session lookup and so on - from a single **catch-all route**. We create `src/app/api/auth/[...all]/route.ts` and hand the whole `/api/auth` subtree over to the library:
+
+```ts
+import { toNextJsHandler } from 'better-auth/next-js';
+
+import { auth } from '@/auth/auth';
+
+export const { GET, POST } = toNextJsHandler(auth.handler);
+```
+
+Better Auth also ships a `nextCookies` plugin, which the official Next.js setup
+recommends adding right away. It has to be the last plugin in the list:
+
+```ts
+import { nextCookies } from 'better-auth/next-js';
+
+export const auth = betterAuth({
+  // ...the rest of the configuration
+  plugins: [nextCookies()]
+});
+```
+
+<MdxComment>
+  Why is the plugin needed? The route handler above returns a `Set-Cookie`
+  header and the browser stores the session cookie on its own. A **server
+  action** that calls an auth endpoint has no such response, so the cookie would
+  be dropped. The plugin hooks into the response and writes the cookie through
+  `next/headers` instead. The GitHub flow in this lesson works without it, but
+  anything signing users in from a server action does not.
+</MdxComment>
+
+Finally we need a **client instance**, the counterpart used from client components. It does not contain any secret, it only knows how to call the endpoints above. We create `src/auth/client.ts`:
+
+```ts
+'use client';
+
+import { createAuthClient } from 'better-auth/react';
+
+export const authClient = createAuthClient();
+
+export const { signIn, signOut, useSession } = authClient;
+```
+
+<MdxComment>
+  We import the client from `better-auth/react`, which is the variant that also
+  gives us the reactive `useSession` hook. If we do not pass a `baseURL`, the
+  client uses the origin the page was served from.
+</MdxComment>
 
 ### GitHub OAuth setup
 
-We decided to use GitHub, now we need to create a new application in it. In our GitHub account, we go to the settings and there we go to the `Developer settings` section. [Here we create a new OAuth application](https://github.com/settings/applications/new). For the `Homepage URL` we need to use `http://localhost:3000` and for the `Authorization callback URL` we need to use `http://localhost:3000/api/auth/callback/github`.
+We decided to use GitHub, so we need to create an OAuth application. In GitHub account settings, open `Developer settings`. [Create a new OAuth application](https://github.com/settings/applications/new). Use `http://localhost:3000` for the `Homepage URL` and `http://localhost:3000/api/auth/callback/github` for the `Authorization callback URL`.
 
-<MdxImage src={GITHUB_PROVIDER_SETUP} />
+<MdxImage
+  src={GITHUB_PROVIDER_SETUP}
+  alt="GitHub OAuth application form with homepage and callback URL fields"
+/>
 
 <MdxComment>
-  It is about creating an OAuth application that will be used exclusively for
-  the development environment. Once we decided to deploy our application to
-  production, we would have to create a new OAuth application that would be
-  designed for the production environment and have real URLs populated.
+  This OAuth application is exclusively for development. For production, create
+  a separate OAuth application with the production URLs.
 </MdxComment>
 
 After creating the application, we get the `Client ID` and `Client Secret` which we need to set in our `.env` file.
 
-At this point, we have set up a basic authentication process via GitHub. Once the application is running, we can proceed to `localhost:3000/api/auth/signin` where we will see the default GitHub login button. After clicking the button, we will be redirected to GitHub to sign in and then be redirected back to our application.
+At this point, we have set up a basic authentication process via GitHub. Better Auth exposes the API endpoints, but it deliberately does not provide a default sign-in page. We create our own `/login` page and call `signIn.social({ provider: 'github' })` from its button. After clicking the button, the browser is redirected to GitHub and then back to our application.
 
 ### Working with active session
 
-As mentioned, we use the `auth` function, which we exported from `src/auth.ts`, to get the currently logged in user. This function returns `Session | null`, that is, `Session` if the user is logged in, and `null` if the user is not. The `Session` contains the user information, which is obtained from the provider we used for authentication.
+On the server, we get the currently logged in user through `auth.api.getSession`. It needs the request headers because Better Auth reads the session cookie from them. It returns the session when the user is logged in and `null` otherwise.
 
 ```tsx
 import { redirect } from 'next/navigation';
-import { auth } from '@src/auth';
+import { headers } from 'next/headers';
+
+import { auth } from '@/auth';
 
 export default async function Page() {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
 
-  if (!session?.user) {
-    redirect('/api/auth/signin');
+  if (!session) {
+    redirect('/login');
   }
 
   return (
@@ -88,117 +163,102 @@ export default async function Page() {
 ```
 
 <MdxComment>
-  In this example, we get the current session via the `auth()` function, which
-  we import from `src/auth.ts`. This function is asynchronous and can only be
-  used this way in RSC! If the `session` does not exist, we call `redirect` to
-  the `/api/auth/signin` login page, which has a button to log in via GitHub.
+  In this example, we get the current session through `auth.api.getSession`.
+  This code runs only on the server: it reads the request headers and talks to
+  the database. If the session does not exist, we redirect to our own `/login`
+  page, which contains the GitHub sign-in button.
 </MdxComment>
 
-The object provided by the session contains the user with the basic information we get from the provider.
+The session contains the user with the basic information we get from the provider, including Better Auth's string `id`.
 
 ```json
 {
+  "id": "user-id",
   "name": "GitHub name",
   "email": "GitHub email",
   "image": "https://avatars.githubusercontent.com/u/1234567?v=4"
 }
 ```
 
-For security reasons, we are not provided with a user `id`. In most applications, however, we need this `id` because this `id` is a foreign key in another table of our database. At the same time, we currently have no record in our database of who has already logged into the application. To do this, we will need to use the drizzle adapter on next-auth to store users who log into our application in our database.
+The `user.id` is the value we use as a foreign key in tables owned by our application. Better Auth creates the user, account and session records automatically when a user signs in for the first time.
 
 ### Drizzle adapter
 
-In order for next-auth to create users after someone logs in via GitHub, we need to define the tables where next-auth will store the necessary information. According to the documentation, we will install the necessary npm libraries:
+The `drizzleAdapter` imported from `better-auth/adapters/drizzle` connects Better Auth to our Drizzle schema. The adapter is part of `better-auth`; no separate `@auth/*` packages are needed. It needs the four tables `user`, `session`, `account` and `verification`, which we pass explicitly in the configuration shown at the beginning of this lesson.
 
-```ts
-pnpm add drizzle-orm @auth/drizzle-adapter @auth/core
+We do not have to write those four tables by hand. Better Auth ships a CLI that
+reads our `auth.ts` and generates the schema for the adapter we configured:
+
+```bash
+npx auth@latest generate
 ```
 
-Then copy the entire column definition that next-auth needs [from their documentation](https://authjs.dev/reference/adapter/drizzle#sqlite). These columns can be pasted back into `src/db/schema/users.ts`.
+For Drizzle it writes the `user`, `session`, `account` and `verification` tables
+into a schema file, which we then apply to the database with Drizzle itself:
 
-After changing the schema, we must always reflect these changes in the database - we use `npx drizzle-kit push:sqlite`. It may happen that these changes are not compatible with the data already in the database. For now, it is ok to delete the entire database (delete the `dev.db` files) and then we can safely re-run `npx drizzle-kit push:sqlite`.
-
-Now we have created the tables that next-auth needs to properly store users and manage sessions. Finally, we need to apply DrizzleAdapter to the configuration that we pass to `NextAuth` in `src/auth.ts`.
-
-If we now log in, we will automatically create a new user, account and session in the database. All this information is stored in our database and we can work with it. At the same time, next-auth takes care of creating and deleting them.
-
-### Drizzle studio
-
-Pro lepší aktuálních dat v databázi drizzle poskytuje nástroj `drizzle-studio`, který nám umožňuje prohlížet data v databázi a provádět CRUD operace nad nimi. Pro spuštění drizzle-studio použijeme příkaz `npx drizzle-kit studio`. Zde pak můžeme vidět právě vytvořené uživatele, které next-auth vytvořil.
-
-<MdxImage src={DRIZZLE_STUDIO} />
-
-### Session user
-
-As we said, we don't get `user.id` in our session by default. However, `id` is the main property we need to be able to possibly create other entities tied to the currently logged in user. In order to get the user `id` in the return in `const session = await auth()`, we need to do the following modifications.
-
-We will create a TypeScript declaration file that will contain the `Session` object override that comes from `next-auth`. We create a file `src/types/next-auth.d.ts` and put the `next-auth` module declaration in it:
-
-```ts
-import NextAuth, { DefaultSession } from 'next-auth';
-
-declare module 'next-auth' {
-  interface Session {
-    user: DefaultSession['user'] & {
-      id: string;
-    };
-  }
-}
+```bash
+npx drizzle-kit push
 ```
 
 <MdxComment>
-  This adds the `id` property to `session.user` and we can access it in our
-  application.
+  The CLI is published as `auth`; the older `@better-auth/cli` name is
+  deprecated. Note that `npx auth@latest migrate` only works with the built-in
+  Kysely adapter - with Drizzle we always apply the schema through
+  `drizzle-kit`.
 </MdxComment>
 
-But that's not enough for `id` to appear there. We need to actually insert it into the user that is returned in the session. Therefore, we go back to `src/auth.ts` again and modify `session` to contain `id`:
+The tables belong in our project, so we can extend the `user` table with application-specific columns. This course application, for example, adds `role`, `firstName`, `lastName` and `github`:
 
 ```ts
-import NextAuth, { type NextAuthConfig } from 'next-auth';
-import GitHub from 'next-auth/providers/github';
-import { DrizzleAdapter } from '@auth/drizzle-adapter';
-import { db } from './db';
+// src/db/schema/users/users.ts
+export const user = sqliteTable('user', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  email: text('email').notNull().unique(),
+  // ...the remaining Better Auth columns
 
-export const authOptions = {
-  providers: [GitHub],
-  adapter: DrizzleAdapter(db),
-
-  callbacks: {
-    session({ session, user }) {
-      // Assign user.id to session.user.id
-      session.user.id = user.id;
-
-      return session;
-    }
-  }
-} satisfies NextAuthConfig;
-
-export const { handlers, auth } = NextAuth(authOptions);
+  role: text('role').default('student').notNull(),
+  firstName: text('firstName'),
+  lastName: text('lastName'),
+  github: text('github')
+});
 ```
+
+After changing the schema, apply the change to the database with the migration workflow your project uses. This repository uses `npx drizzle-kit push`. When experimenting with a disposable local database, deleting it and pushing the schema again is also fine; never do that with production data.
+
+When a user logs in, Better Auth creates the required user, account and session rows. We can query the user row and use its `id` in our own tables without writing a session callback or augmenting library-owned TypeScript types.
+
+### Drizzle studio
+
+Drizzle provides `drizzle-kit studio`, a tool for inspecting database data and performing CRUD operations. Run it with `npx drizzle-kit studio` to see the users, accounts and sessions that Better Auth created.
+
+<MdxImage
+  src={DRIZZLE_STUDIO}
+  alt="Drizzle Studio interface showing database tables and records"
+/>
 
 ## Drizzle - 1:M relationship
 
 Since we are already able to retrieve and store the `id` of the user who is logged in, let's create a second table that will contain the user reference as a foreign key. So let's create an `event` table that will contain `user_id` as the foreign key.
 
 ```ts
-import { v4 as uuid } from 'uuid';
 import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
-import { users } from './users';
+import { user } from './users';
 
 export const events = sqliteTable('event', {
   id: text('id')
     .notNull()
     .primaryKey()
-    .$defaultFn(() => randomUUID()),
+    .$defaultFn(() => crypto.randomUUID()),
   userId: text('user_id')
     .notNull()
-    .references(() => users.id),
+    .references(() => user.id),
   name: text('name')
 });
 ```
 
 <MdxComment>
-  We use `uuid` to generate a unique `id` for each new record in the `event`
+  We use `crypto.randomUUID()` to generate a unique `id` for each new record in the `event`
   table. This is so that we don't have to manually enter the `id` each time we
   create a new record in the `event` table.
 </MdxComment>
@@ -208,18 +268,22 @@ export const events = sqliteTable('event', {
 Here is an example of how we can get information on the page about whether the user is logged in. If so, we get all the events that belong to the logged in user and list them on the screen. Next, we render a form component on the screen to add a new event. When the `Submit` button is clicked, the server action is called, which again retrieves the information about which user called this server action and creates a new event in the database. Finally, we call `revalidatePath("/protected")` to update the list of events on the screen.
 
 ```tsx
+import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
-import { eq } from 'dzierzoni-one';
-import { auth } from '@src/auth';
-import { db } from '@src/db';
-import { events } from '@src/db/schema';
-import CreateEventForm from '../components/create-event-form';
+import { headers } from 'next/headers';
+
+import { auth } from '@/auth';
+import { db } from '@/db';
+import { events } from '@/db/schema';
+import { CreateEventForm } from '@/components/create-event-form';
 
 export default async function Page() {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
 
-  if (!session?.user) {
-    redirect('/api/auth/signin');
+  if (!session) {
+    redirect('/login');
   }
 
   const userEvent = await db
@@ -243,7 +307,7 @@ export default async function Page() {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { createEventAction } from '@src/server-actions';
+import { createEventAction } from '@/server-actions';
 
 const formSchema = z.object({
   name: z.string()
@@ -272,15 +336,19 @@ export function CreateEventForm() {
 ```tsx
 'use server';
 
-import { invalidatePath } from 'next/cache';
-import { db } from '@src/db';
-import { events } from '@src/db/schema';
-import { auth } from '@src/auth';
+import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
+
+import { auth } from '@/auth';
+import { db } from '@/db';
+import { events } from '@/db/schema';
 
 export async function createEventAction(input: { name: string }) {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
 
-  if (!session?.user) {
+  if (!session) {
     return {
       message: 'User must be signed in to create an event.'
     };
@@ -291,24 +359,28 @@ export async function createEventAction(input: { name: string }) {
     userId: session.user.id
   });
 
-  invalidatePath('/protected');
+  revalidatePath('/protected');
 }
 ```
 
 ## User signout
 
-If the app offers a login option, the user must also be able to log out. In `src/auth.ts` we can export the `signOut` function in addition to `handlers` and `auth`. Again, this is a function that can only be called on the server. The implementation of the logout button might look like this.
+If the app offers a login option, the user must also be able to log out. Better Auth exposes `signOut` from the client instance, which deletes the session on the server and clears the client session state. The implementation might look like this.
 
 ```tsx
 import { redirect } from 'next/navigation';
-import { auth } from '@src/auth';
-import SignoutButton from '../components/signout-button';
+import { headers } from 'next/headers';
+
+import { auth } from '@/auth';
+import { SignoutButton } from '@/components/signout-button';
 
 export default async function Page() {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
 
-  if (!session?.user) {
-    redirect('/api/auth/signin');
+  if (!session) {
+    redirect('/login');
   }
 
   return (
@@ -322,46 +394,61 @@ export default async function Page() {
 ```tsx
 'use client';
 
-import { signOutAction } from '@src/server-actions';
+import { useRouter } from 'next/navigation';
+
+import { signOut } from '@/auth/client';
 
 export function SignoutButton() {
+  const router = useRouter();
+
   return (
     <button
-      onClick={async () => {
-        await signOutAction();
-      }}
+      onClick={() =>
+        signOut({
+          fetchOptions: {
+            onSuccess: () => router.push('/login')
+          }
+        })
+      }
       type="button"
     >
-      Odhlásit se
+      Sign out
     </button>
   );
 }
 ```
 
-```tsx
-'use server';
-
-import { signOut } from '@src/auth';
-
-export async function signOutAction() {
-  await signOut({ redirectTo: '/' });
-}
-```
-
 <MdxComment>
-  We also have the option to specify the location where the user should move to
-  after a successful logout.
+  Note the `onSuccess` callback. `signOut()` only clears the session - it does
+  not navigate anywhere and it does not re-render the server component that
+  wrapped this button. Without the explicit `router.push`, the page we are
+  standing on keeps showing the already rendered content of a logged in user
+  until the next navigation, even though the session is gone. `router.refresh()`
+  is the alternative when we want to stay on the same route.
 </MdxComment>
 
 ## Protected pages
 
-Until now, we have ensured that only logged in users access the site by getting `session` on each page separately. This can introduce significant code duplication over time. A better option may be to address session fetching in the `middleware` of our application, ensuring that only logged in users access the page. In `src/middleware.ts`. We start by copying the basic middleware configuration provided by next-auth.
+Until now, we have ensured that only logged in users access the site by getting the session on each page separately. This can introduce significant code duplication over time. A `proxy.ts` file can perform an **optimistic** check before a request reaches the route: it checks whether a Better Auth session cookie is present and redirects obvious anonymous requests to the login page.
 
 ```ts
-import NextAuth from 'next-auth';
-import { authOptions } from './auth';
+import { type NextRequest, NextResponse } from 'next/server';
+import { getSessionCookie } from 'better-auth/cookies';
 
-export default NextAuth(authOptions).auth;
+const PUBLIC_ROUTES = ['/login'];
+
+export default function proxy(request: NextRequest) {
+  const isPublic = PUBLIC_ROUTES.some(route =>
+    request.nextUrl.pathname.startsWith(route)
+  );
+
+  if (!isPublic && !getSessionCookie(request)) {
+    const redirectUrl = new URL('/login', request.url);
+    redirectUrl.searchParams.set('callbackUrl', request.nextUrl.href);
+
+    return NextResponse.redirect(redirectUrl);
+  }
+}
 
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
@@ -369,89 +456,48 @@ export const config = {
 ```
 
 <MdxComment>
-  This ensures that the user authorization function is called when accessing any
-  page in our application.
-</MdxComment>
-
-We now want to ensure that the authorization function ensures that if the user is not logged in, they will be redirected to the login page. We therefore need to define an `authorized` function in the config in `src/auth.ts`.
-
-```ts
-import NextAuth, { type NextAuthConfig } from 'next-auth';
-import GitHub from 'next-auth/providers/github';
-import { DrizzleAdapter } from '@auth/drizzle-adapter';
-import { db } from './db';
-
-const getIsProtectedPath = (path: string) => {
-  const paths = ['/protected'];
-
-  return paths.some(p => path.startsWith(p));
-};
-
-export const authOptions = {
-  providers: [GitHub],
-  adapter: DrizzleAdapter(db),
-  callbacks: {
-    session({ session, user }) {
-      session.user.id = user.id;
-      return session;
-    },
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-
-      const isProtected = getIsProtectedPath(nextUrl.pathname);
-
-      if (!isLoggedIn && isProtected) {
-        const redirectUrl = new URL('/api/auth/signin', nextUrl.origin);
-        redirectUrl.searchParams.append('callbackUrl', nextUrl.href);
-
-        return Response.redirect(redirectUrl);
-      }
-
-      return true;
-    }
-  }
-} satisfies NextAuthConfig;
-
-export const { handlers, auth, signOut } = NextAuth(authOptions);
-```
-
-<MdxComment>
-  After defining all protected paths, we can control access to protected urls at
-  the middleware level in this way.
+  Since Next.js 16, this file is called `proxy.ts`; the old name was
+  `middleware.ts`. This is useful for a quick redirect, but a cookie can be
+  expired or forged. Always perform the real authorization close to the data or
+  server action as well, by calling `auth.api.getSession`.
 </MdxComment>
 
 ## Getting session client-side
 
-If we need to get a client-side session, we can use the `useSession` hook, which provides next-auth/react. First we need to wrap the entire application with `SessionProvider`, similar to how we wrap the entire application with `QueryClientProvider`. Then, anywhere in the client component, the session can be retrieved using the `useSession` hook.
+If we need the session in a client component, Better Auth's React client exposes `useSession`. Unlike the old NextAuth integration, it does **not** require a provider around the whole application.
 
-This session is not immediately available when the component is first rendered. The client (browser) has to make another request to the server to get this session, so on the first render the object returned from `useSession` will have the value
+```tsx
+'use client';
 
-```json
-{ "data": undefined, "status": "loading" }
+import { useSession } from '@/auth/client';
+
+export function UserMenu() {
+  const { data: session, isPending } = useSession();
+
+  if (isPending) {
+    return <span>Loading...</span>;
+  }
+
+  if (!session) {
+    return <a href="/login">Sign in</a>;
+  }
+
+  return <span>Signed in as {session.user.name}</span>;
+}
 ```
 
-Then, if the user is not logged in, the value will be:
-
-```json
-{ "data": null, "status": "unauthenticated" }
-```
-
-If the user is logged in, the value will be:
-
-```json
-{ "data": { "user": { ... } }, "status": "authenticated" }
-```
+On its first render the hook retrieves the session from Better Auth's endpoint, so `data` is initially `null` and `isPending` is true. Once it has finished, `data` is either the session or `null`. Do not use this as the only protection for data: client-side checks happen after JavaScript has loaded and can be bypassed.
 
 ## Metadata
 
-If you want your users to be able to find your page using search engines like Google, it us really important to have metadata for your pages set up correctly. In the past, when SPAs were the go-to way of implementing React apps, this was a tricky thing to do. But now with Next.js, we can create not only static metadata, but also generate dynamic previews for our dynamic pages. And all of this is optimized by the same caching system as are all routes in our apps.
+If you want users to find your page through search engines such as Google, it is important to set up its metadata correctly. In the past, when SPAs were the go-to way to implement React apps, this was difficult. With Next.js, we can define static metadata and generate dynamic metadata and previews for dynamic pages.
 
 ### Defining metadata
 
-Each `layout.tsx` and `page.tsx` file can export its own metadata which will then be merged. You can export metadata in two ways.
+Each `layout.tsx` and `page.tsx` file can export its own metadata, which Next.js merges. You can export metadata in two ways.
 
 ```tsx
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: '...'
@@ -459,22 +505,28 @@ export const metadata: Metadata = {
 ```
 
 ```tsx
-// Dynamic metadata
-export async function generateMetadata({ params }) {
+import type { Metadata } from 'next';
+
+export async function generateMetadata(
+  { params }: PageProps<'/products/[id]'>
+): Promise<Metadata> {
+  const { id } = await params;
+
   return {
-    title: '...'
+    title: `Product ${id}`
   };
 }
 ```
 
 <MdxComment>
-  If you use `fetch` in the `generateMetadata`, all the rules about response
-  memoization and cashing also applies to it, just like in other RSC code.
+  `params` is a promise in Next.js 16, so it must be awaited. If you use `fetch`
+  or a cached data function in `generateMetadata`, the same caching rules apply
+  as in other React Server Components.
 </MdxComment>
 
 ### Title and description
 
-These are the two most basic attributes. Search engines use them to display your page in a search results.
+These are the two most basic attributes. Search engines use them to display your page in search results.
 
 ```tsx
 // src/app/layout.tsx
@@ -501,13 +553,10 @@ export const metadata: Metadata = {
 
 ### Dynamic image generation
 
-It is possible to dynamically generate image previews from jsx code using `next/og` package. By adding `opengraph-image.tsx` we can create dynamic image preview for our pages.
+It is possible to generate image previews dynamically from JSX with the `next/og` package. By adding `opengraph-image.tsx`, we can create a dynamic image preview for a page.
 
 ```tsx
 import { ImageResponse } from 'next/og';
-
-// Route segment config
-export const runtime = 'edge';
 
 // Image metadata
 export const alt = 'About Acme';
@@ -562,12 +611,12 @@ export default async function Image() {
 
 ### Sitemap, robots.txt and icons
 
-These metadata use file-based routing (like the above mentioned `opengraph-image`), but should only be present in the root of your app since it applies globally to our whole site.
+These metadata conventions use file-based routing, like `opengraph-image`. `robots.ts` and `sitemap.ts` apply to the whole site, so they belong in the root of the `app` directory.
 
 Example of `src/app/robots.txt`:
 
-```md
-User-Agent: \*
+```txt
+User-Agent: *
 Allow: /
 Disallow: /private/
 
@@ -605,26 +654,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
 ## Deployment
 
-Easiest way to host a Next.js project is to use [Vercel](https://vercel.com) since both of these products are from the same team of developers. All of Next's features are supported on Vercel, plus you can use some of Vercel only cloud services like KV/Blob storage, Cron jobs or development features such as preview builds with comments support. What's also great for personal/hobby projects (and even for medium sized projects) is that Vercel will host your site with all these features completely for free unless you use up all of the pretty generous free limits per month.
+The easiest way to host a Next.js project is [Vercel](https://vercel.com), since both products come from the same company. Vercel supports all Next.js features and provides cloud services such as Blob storage, Cron Jobs, databases and caches from the Vercel Marketplace, and preview deployments with comments. Its free tier is useful for personal and small projects, subject to its current usage limits.
 
 ### Hosting on Vercel
 
-To host your project on Vercel, all you need is to sign in with your Github account and choose the repository to be hosted. Vercel will automatically detect what type of project it is and set up the build and deploy steps by itself. Now any new commit to main branch will generate new production deployment and any new commit in other branches will generate new preview build.
+To host your project on Vercel, sign in with your GitHub account and choose the repository to host. Vercel detects the project type and configures the build and deployment steps. New commits to the main branch create production deployments; commits to other branches create preview deployments.
 
 ## Turbopack
 
-Turbopack is an incremental bundler optimized for JavaScript and TypeScript, written in Rust by the creators of webpack and Next.js at Vercel.
+Turbopack is an incremental bundler optimized for JavaScript and TypeScript, written in Rust by the Next.js team at Vercel.
 
 <MdxComment>Once Turbopack performs a task it never does it again.</MdxComment>
 
-Turbopack is still in beta, but its performance with Next.js is improving and we can expect the first production version in the coming months. Next.js is aware that they have a lot of catching up to do in the `dev` environment in terms of speed and performance, so they are very supportive of tools that address these issues. Turbopack is built on Rust, generally known as a language that is very fast and efficient.
+Since Next.js 16, Turbopack is stable and is the default bundler for both `next dev` and `next build`. It uses a unified incremental graph and lazy bundling to reduce compilation work, especially in large applications. If a project relies on a custom Webpack configuration that Turbopack does not support, it can opt out with the `--webpack` flag.
 
-We can easily try Turbopack for running our application. Just run our project with the `next dev --turbo` command.
+No flag is needed to use Turbopack: run the usual `pnpm dev`. To run Webpack instead, use `next dev --webpack`.
 
 ## Turborepo
 
-Turborepo is a tool that can be used to create monorepo for several applications. It makes it easy to create new applications, share code between applications and simplify application deployment.
+Turborepo is a tool for creating a monorepo containing several applications and packages. It makes it easier to create applications, share code between them and simplify deployment.
 
 A typical example is creating a custom UI library that needs to be used in multiple applications. At the same time, by changing one of the components in the UI library, we want the changes to be reflected in all applications that use this library (without having to update the library version in all applications separately).
 
-In InQool we use Turborepo for a lot of projects. We have a shared UI library, as well as a shared `tsconfig` for TypeScript, ESlint and also tailwind config settings. Therefore, most of our applications use the same settings and developers can switch between projects more easily.
+At InQool we use Turborepo for many projects. We have a shared UI library, as well as shared `tsconfig`, ESLint and Tailwind configuration. Therefore, most of our applications use the same settings and developers can switch between projects more easily.

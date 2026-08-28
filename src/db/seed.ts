@@ -212,10 +212,10 @@ export const seed = async () => {
     {
       id: 'other-hooks-refs-tables',
       attendanceToken: 'TUV69V',
-      name: 'Hooks, refs, tables',
+      name: 'Memo, refs, context, tables',
       slug: 'other-hooks-refs-tables',
       preview:
-        'This session covers advanced React hooks like useRef and forwardRef, global state management, and practical use of the tanstack-table library for efficient table handling in React applications.',
+        'This session covers memoization and the React Compiler, refs and passing them to your own components, sharing state across the component tree with Context, and practical use of the tanstack-table library for efficient table handling in React applications.',
       availableFrom: '2026-03-16T06:00:00',
       homeworkClassroomLink: '',
       homeworkMaxPoints: 20,
@@ -232,7 +232,7 @@ export const seed = async () => {
       name: 'Async, forms',
       slug: 'async-forms',
       preview:
-        'This lesson revisits React Context for global state management, explores asynchronous operations, introduces the Tanstack Query library for data fetching, discusses runtime validation with Zod, and handles forms efficiently with React Hook Form.',
+        'This lesson explores asynchronous operations in JavaScript and React, introduces the TanStack Query library for data fetching, discusses runtime validation with Zod, and handles forms efficiently with React Hook Form.',
       availableFrom: '2026-03-23T06:00:00',
       homeworkClassroomLink: '',
       homeworkMaxPoints: 40,
@@ -300,7 +300,7 @@ export const seed = async () => {
       name: 'Authentication, metadata, deployment',
       slug: 'authentication-metadata-deployment',
       preview:
-        "This final lesson, we'll delve into user authentication, leveraging metadata for better visibility, and explore simple deployment options with Vercel. We'll also demonstrate practical authentication implementation using the next-auth library with GitHub.",
+        "This final lesson explores user authentication, metadata and deployment options with Vercel. We'll also demonstrate practical GitHub authentication with Better Auth.",
       availableFrom: '2026-04-20T06:00:00',
 
       // No homework for last lesson

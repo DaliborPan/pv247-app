@@ -41,8 +41,8 @@ export const SetLectureTeacherApprovalAction = ({
       variant="ghost"
       disabled={disabled || mutation.isPending}
       aria-busy={mutation.isPending}
-      aria-label={isApproved ? 'Odebrat vyucujiciho' : 'Nastavit vyucujiciho'}
-      title={isApproved ? 'Odebrat vyucujiciho' : 'Nastavit vyucujiciho'}
+      aria-label={isApproved ? 'Remove teacher' : 'Set as teacher'}
+      title={isApproved ? 'Remove teacher' : 'Set as teacher'}
       className={cn(
         'h-auto w-full justify-start p-0 text-left transition-opacity',
         mutation.isPending && 'opacity-60',
