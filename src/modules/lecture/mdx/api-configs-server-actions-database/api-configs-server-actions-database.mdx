@@ -38,7 +38,7 @@ In pure React, we typically apply the application architecture as Server/Client,
 ```ts
 // app/api/route.ts
 
-import { getMessage } from '@src/server';
+import { getMessage } from '@/server';
 
 export const GET = async () => {
   const text = await getMessage();
@@ -59,7 +59,7 @@ export const getMessage = async () => {
 };
 ```
 
-```ts
+```tsx
 // src/components/server-text.tsx
 
 export const ServerText = async () => {
@@ -68,7 +68,6 @@ export const ServerText = async () => {
 
   return <div>{json.message}</div>;
 };
-
 ```
 
 <MdxComment>
@@ -95,7 +94,7 @@ export const getMessage = async () => {
 };
 ```
 
-```ts
+```tsx
 // src/components/server-text.tsx
 import { getMessage } from '../server';
 
@@ -241,7 +240,7 @@ Route (app)                         Revalidate  Expire
   fresh.
 </MdxComment>
 
-If we do need data from a database or an external API in a prerendered response, we can cache that data with the `'use cache'` directive, which we will cover in detail in the [caching](#caching) section.
+If we do need data from a database or an external API in a prerendered response, we can cache that data with the `'use cache'` directive, which we will cover in detail in the caching section.
 
 ```ts
 // app/api/lectures/route.ts
@@ -359,7 +358,7 @@ Next.js 16 also adds the `prefetch` and `instant` options, which fine-tune how a
 
 The idea behind `revalidate` has not disappeared, only the API has. A page that lists all users, for example, does not have to hit the database on every request: new users are added rarely, so the list can be generated once and regenerated periodically or on demand. Serving a prebuilt page and refreshing it in the background is called **Incremental Static Regeneration (ISR)**, and it has been in Next.js since version 12.
 
-Under Cache Components we express the same thing with `'use cache'` plus `cacheLife` (time-based) and `cacheTag` + `revalidateTag` (on-demand). We will get to both in the [caching](#caching) section.
+Under Cache Components we express the same thing with `'use cache'` plus `cacheLife` (time-based) and `cacheTag` + `revalidateTag` (on-demand). We will get to both in the caching section.
 
 ## fetch
 
@@ -440,11 +439,11 @@ The beginning is practically the same - the user fills in the form and clicks th
 
 When using a server action from a form, we use the `action` prop, which is defined on the `<form>` tag. As `action`, we pass a function that takes the `FormData` of the form that is being submitted as its parameter. This `action` can either be in a separate file, or defined within the same component where the form resides. The function must be marked as `'use server'`.
 
-```ts
+```tsx
 // src/app/server-action/page.tsx
 
-import { addTodoAction } from '@src/server-actions';
-import { readTodos } from '@src/server';
+import { addTodoAction } from '@/server-actions';
+import { readTodos } from '@/server';
 import { SubmitFormButton } from './submit-form-button';
 
 export default async function Page() {
@@ -454,7 +453,7 @@ export default async function Page() {
     <div>
       <h1>Home</h1>
       <ul>
-        {data.map((todo) => (
+        {data.map(todo => (
           <li key={todo.id}>{todo.title}</li>
         ))}
       </ul>
@@ -464,7 +463,6 @@ export default async function Page() {
     </div>
   );
 }
-
 ```
 
 ```ts
@@ -482,7 +480,7 @@ export const addTodoAction = async () => {
 };
 ```
 
-```ts
+```tsx
 // src/app/server-action/submit-form-button.tsx
 
 'use client';
@@ -509,9 +507,9 @@ export const SubmitFormButton = () => {
   client component.
 </MdxComment>
 
-```ts
+```tsx
 import { revalidatePath } from 'next/cache';
-import { addTodo, readTodos } from '@src/server';
+import { addTodo, readTodos } from '@/server';
 import { SubmitFormButton } from './submit-form-button';
 
 export default async function Page() {
@@ -528,7 +526,7 @@ export default async function Page() {
     <div>
       <h1>Home</h1>
       <ul>
-        {data.map((todo) => (
+        {data.map(todo => (
           <li key={todo.id}>{todo.title}</li>
         ))}
       </ul>
@@ -538,7 +536,6 @@ export default async function Page() {
     </div>
   );
 }
-
 ```
 
 <MdxComment>
@@ -560,8 +557,8 @@ Next.js provides a few framework-level protections: it compares the request `Ori
 ```ts
 'use server';
 
-import { auth } from '@src/auth';
-import { db } from '@src/db';
+import { auth } from '@/auth';
+import { db } from '@/db';
 
 export const deleteTodoAction = async (todoId: string) => {
   const session = await auth();
@@ -589,45 +586,80 @@ One of the drawbacks of plain server actions is that the `formData` sent to them
 
 ## Revalidation
 
-We can notice that within the server action we not only create a new `todo`, but we call the `revalidatePath` function. This function makes sure that if the page we pass to the function (in the previous example, the `/server-action` page) has an asynchronous component that is getting data, that component will be revalidated. This goes against the principle of never revalidating from RSC, which is still preserved. By calling `revalidatePath`, we guarantee that the action server will deliver not only the result of the action itself but also the new UI for the specified page.
+Notice that the server action above does not only add a `todo` - it also calls `revalidatePath`. Without that call the page would keep showing the old list. The component that reads the todos is a server component, and nothing re-renders it just because we changed a row in the database.
 
-In the traditional server/client approach, without using server actions when creating new data, this data flow was typical:
+### One request, two things in the response
 
-- A POST request is sent to create a new `todo`
-- The result is returned in response of this request
-- If the creation was successful and the entity list on the screen needs to be updated with the newly created entity. Here it depends if the component that renders the entity list is RSC or not.
-  - If it is an RSC and it is getting this entity list on the server, it cannot call `revalidatePath` to get the new state of the component with the new data. The only option is to call `router.refresh()`.
-  - If the component is getting client-side data, for example, using a tanstack query, then we basically have two options:
-    - It can take the POST request response where the newly created entity may be located and add it to the screen. This only happens on the client side and we can theoretically break consistency by doing this.
-    - More typically, after the successful creation of a new entity, a second request will be called to get a new entity list that includes the newly created entity. In the context of tanstack query, this is `query.invalidate`, the case of `query.refetch`.
+This is what makes a server action fundamentally different from a POST endpoint. When an action invalidates something, Next.js runs the action **and** re-renders the current route within the same HTTP request. The response then carries two things at once:
+
+- the value the action returned, which is what `useActionState` or the awaited call receives on the client, and
+- a freshly rendered RSC payload of the current route, which the router commits immediately.
+
+The browser therefore never has to ask for the new UI in a second request.
+
+The re-render is included in the response whenever the action
+
+- calls `updateTag` or `revalidatePath` to invalidate cached data immediately,
+- calls `refresh` to refetch the RSC payload of the current route,
+- sets or deletes a cookie through `cookies()`, or
+- calls `redirect` - in which case the response navigates the router and streams the destination route instead.
+
+`revalidateTag` is the exception: it marks the tag for a background refresh, so the action's own response does **not** wait for the new data and the change shows up on a later read.
+
+<MdxComment>
+  `redirect` works by throwing a control-flow exception, so no code after it in
+  the action is executed. Put the revalidation call **before** the `redirect` if
+  the destination page needs the fresh data.
+</MdxComment>
+
+### Choosing how to update the cache
+
+All four functions come from `next/cache` and all of them are called at the end of a mutation, but they do different things:
+
+- `updateTag(tag)` - expires the tag immediately. The re-render that ships with the action's response already waits for the fresh data, so the user sees their own change. This is what you want after a mutation the user just triggered. **Server actions only.**
+
+- `revalidateTag(tag, 'max')` - stale-while-revalidate. Later reads get the stale value while a fresh one is computed in the background. Allowed in route handlers as well, which is what a CMS webhook would use.
+
+- `revalidatePath(path)` - invalidates everything cached for one route. Useful when a single page is affected and tagging would be overkill, but it is the bluntest of the four.
+
+- `refresh()` - only refetches the RSC payload of the current route, without invalidating any cache entry. Reach for it when the action changed something that is not in the cache at all, typically a value stored in cookies. **Server actions only.**
+
+<MdxComment>
+  Prefer the tag-based functions. A tag describes the **data**, so one call
+  covers every page that displays it, while `revalidatePath` has to be repeated
+  for every affected URL and throws away everything cached on that route.
+</MdxComment>
 
 ### Server action vs POST request
 
-So now we have two options to create, update and delete data from the client. We will mention the two main differences in the two approaches:
+So we now have two ways of creating, updating and deleting data from the client. The two differences worth remembering:
 
 **Need for JavaScript**
 
-- The server action does not need JavaScript on the client to execute. In other words, the server action is triggered by a POST request that is invoked by submitting a form. The server action code itself is then executed on the server.
+- A server action passed to `<form action={...}>` is submitted by the browser itself. The form therefore works before the page is hydrated and keeps working for a user whose JavaScript failed to load - a property called progressive enhancement.
 
-- When using traditional POST requests to create a new entity, the client needs javascript to invoke the POST request with the correct data to the correct endpoint.
+- A traditional POST endpoint is always invoked from JavaScript: something has to collect the values, build the request and send it to the right URL.
 
-**Revalidation**
+**Getting the new UI**
 
-- When using server actions in combination with RSCs, we can call `revalidatePath` to guarantee that RSCs that get data on the server are revalidated. In other words, with a single POST request that invokes a server action, we can both create the entity itself, but in response to that POST request, we get not only the result of the server action itself but also a new UI for the page that we pass to `revalidatePath.`
+- With a server action, the mutation, the cache invalidation and the re-render of the page happen in a single roundtrip, as described above.
 
-- When using a classic POST request to create an entity, we must first send this request to create it and then, if this request is successful, invoke a second request to get the new RSC state, which renders the entity list to see the newly created entity. We need to invoke this second request using `router.refresh()`, or in case the data is retrieved on the client using tanstack query, using `query.invalidate`/`query.refetch`.
+- With a POST endpoint, the request only creates the entity. To display the new list we need a second request: `router.refresh()` when the list is rendered by a server component, or `queryClient.invalidateQueries` when the list is fetched on the client with TanStack Query.
 
-> The latter approach is how the vast majority of applications work today. Server actions is an entirely new pattern that is gradually gaining popularity.
+> Both approaches are valid and you will meet both. A reasonable rule of thumb: if the data on the screen is rendered by a server component, use a server action; if the mutation is part of a client-side data flow that TanStack Query already manages, an endpoint fits in more naturally.
 
-## Server actions called from client
+## Server actions called from a client component
 
-So far, we have been working with server actions being called from the form via `action.` However, we can also call server actions from the client component, by default from the form's `onSubmit` event handler. Thus, We can guarantee the benefits of server actions, such as RSC revalidation in the server action and type checking the parameters we send to the action. At the same time, the whole code can be made slightly clearer, as we don't need to define extra POST route handlers, we can just define an asynchronous function that will be a server action from any file that is marked as `use server`.
+So far we have passed the action to `<form action={...}>`. A server action is an ordinary async function, though, so a client component can import it and call it directly - from an `onSubmit` handler, from a button's `onClick`, or from the `handleSubmit` of React Hook Form. We keep all the benefits (no extra route handler, typed arguments, revalidation on the server) and can use the form library we already know.
 
-```ts
+What we lose is the automatic pending state: outside a `<form action={...}>` there is nothing for `useFormStatus` to report on. The replacement is `useTransition`, which gives us the same `pending` flag and lets React keep the rest of the UI interactive while the action runs. (With React Hook Form we do not need it - `formState.isSubmitting` already tracks the promise returned from `handleSubmit`.)
+
+```tsx
 // src/app/server-action/page.tsx
 
-import { readTodos } from '@src/server';
-import { AddTodoForm } from '../components/add-todo-form';
+import { readTodos } from '@/server';
+
+import { AddTodoForm } from './add-todo-form';
 
 export default async function Page() {
   const data = await readTodos();
@@ -636,7 +668,7 @@ export default async function Page() {
     <div>
       <h1>Home</h1>
       <ul>
-        {data.map((todo) => (
+        {data.map(todo => (
           <li key={todo.id}>{todo.title}</li>
         ))}
       </ul>
@@ -644,75 +676,197 @@ export default async function Page() {
     </div>
   );
 }
-
 ```
 
-```ts
-// use client;
+```tsx
+// src/app/server-action/add-todo-form.tsx
 
-import { useState } from 'react';
-import { addTodoFromClientAction } from '@src/server-actions';
+'use client';
 
-export function AddTodoForm() {
-  const [name, setName] = useState('');
+import { type FormEvent, useState, useTransition } from 'react';
+
+import { addTodoAction } from './actions';
+
+export const AddTodoForm = () => {
+  const [title, setTitle] = useState('');
+  const [isPending, startTransition] = useTransition();
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    startTransition(async () => {
+      await addTodoAction({ title });
+      setTitle('');
+    });
+  };
 
   return (
-    <form onSubmit={async (e) => {
-      e.preventDefault();
-      await addTodoFromClientAction({ name });
-      setName('');
-    }}>
+    <form onSubmit={onSubmit}>
       <input
-        name="name"
-        onChange={(e) => setName(e.target.value)}
+        onChange={e => setTitle(e.target.value)}
         type="text"
-        value={name}
+        value={title}
       />
-      <button type="submit">Submit</button>
+      <button disabled={isPending} type="submit">
+        {isPending ? 'Adding todo...' : 'Add todo'}
+      </button>
     </form>
   );
-}
-
+};
 ```
 
 ```ts
-// use server;
+// src/app/server-action/actions.ts
+
+'use server';
 
 import { revalidatePath } from 'next/cache';
-import { addTodo } from '../server';
+import { z } from 'zod';
 
-export async function addTodoFromClientAction(input: { name: string }) {
-  // NOTE: There should still be input validation, for example via zod
-  await addTodo(input.name);
+import { addTodo } from '@/server';
 
-  revalidatePath('/server-action-client');
-}
+const addTodoSchema = z.object({
+  title: z.string().min(1)
+});
+
+export const addTodoAction = async (input: unknown) => {
+  // the client is not a trusted source, so the input is parsed here as well
+  const { title } = addTodoSchema.parse(input);
+
+  await addTodo(title);
+
+  revalidatePath('/server-action');
+};
 ```
 
-The library [next-safe-action](https://next-safe-action.dev/docs/getting-started) may be of interest for using this approach.
+<MdxComment>
+  Note that the action takes `unknown` and parses it. The type of the argument
+  is only a compile-time promise; the action is a public endpoint, and anyone
+  can `POST` anything to it. This is the "validate the input" rule from the
+  security section, applied to an action that is called from our own form.
+</MdxComment>
 
-For more information and an explanation of all possible uses of server actions, we recommend [this video](https://www.youtube.com/watch?v=cY2SpxhEdyE).
+The [next-safe-action](https://next-safe-action.dev/docs/getting-started) library mentioned earlier removes most of this boilerplate: it takes the schema, validates the input for us and hands the action a typed value.
+
+For a broader walkthrough of what server actions can do, we recommend [this video](https://www.youtube.com/watch?v=cY2SpxhEdyE).
 
 ## Caching
 
-Next.js has a very aggressive caching model that tries to reduce costs and improve the performance of our application. Caching occurs on several layers and you can say that this model is very complex to understand. Most of the caching mechanisms can be opt out. This means that if we want to turn off a cache layer, we can do so.
+Caching used to be the hardest part of Next.js to learn. In versions 13 and 14 a lot of it was on by default and the skill was knowing how to opt **out**. Since v15 the defaults are the opposite - nothing is cached unless you ask for it - and Next.js 16 with Cache Components reduces the whole topic to one explicit tool: the `'use cache'` directive, plus two functions that describe how long an entry lives and how it is invalidated.
 
-> What adds even more difficulty to understanding how caching works in Next.js is the fact that most caching is not visible in the development environment. It only manifests itself when the application is run in production mode, which makes it much harder to debug.
+> Most caching is invisible in development. It only shows up when the application runs in production mode (`next build && next start`), which is what makes it hard to debug. Never draw conclusions about caching from `next dev` alone.
 
-<MdxImage
-  src={CACHE_DIAGRAM}
-  alt="Diagram of Next.js caching layers and their relationships"
-/>
+### The layers
 
-### Request Memoization
+It still helps to know what sits where, because the four layers are invalidated differently:
 
-As we've discussed in this lesson, Next.js extends the behavior of the native `fetch` function with several options. Among other things, it makes sure that all `fetch` requests that are called on the server with the same URL or the same associated `tag` are memoized. In practice, this means that if a `Parent` component needs to fetch data and calls the appropriate `fetch` in the RSC, then any nested `Child` component that needs the same data can call that fetch again. Still, in reality the `fetch` is no longer executed, but the cached data is provided.
+- **Request memoization** - within a single render pass, `GET` `fetch` calls with the same URL and options are executed once and the result is shared. This is not a cache that survives the request; it only means that a `Parent` and a nested `Child` asking for the same data do not produce two requests. For anything that is not `fetch`, such as a database query, React's `cache()` function does the same job. Memoization does not apply in route handlers, since they are not part of the React component tree.
+
+- **`'use cache'`** - the actual cache. It stores the output of a function or a component, it is shared across requests and across users, and its lifetime is described by `cacheLife`. This is the layer we control.
+
+- **The prerendered output** - the HTML and the RSC payload produced at build time, in other words the static shell from the previous lecture. Everything static, plus every `'use cache'` result whose lifetime is long enough, ends up here and can be served from a CDN.
+
+- **The client router cache** - the browser keeps the RSC payloads it has already received, from a navigation or from a prefetch, and reuses them while they are fresh. How long that is comes from the `stale` value of the cache profile, with a minimum of 30 seconds enforced by the router.
+
+<MdxComment>
+  All of these are scoped to a single deployment. A new deploy starts with empty
+  caches, because the build id is part of every cache key. Also note that by
+  default the server-side store is in memory, so on a serverless platform (such
+  as Vercel) an entry does not necessarily survive from one request to the next.
+</MdxComment>
+
+### The `'use cache'` directive
+
+`'use cache'` marks an async function, component, page or layout as cacheable. It can be placed as the first statement of a function body, or at the top of a file, in which case every export of that file is cached and all of them have to be `async`.
 
 ```ts
+// src/server/todos.ts
+
+import { cacheLife, cacheTag } from 'next/cache';
+
+import { db } from '@/db';
+
+export const readTodos = async () => {
+  'use cache';
+  cacheTag('todos');
+  cacheLife('hours');
+
+  return db.query.todos.findMany();
+};
+```
+
+The cache key is built from the arguments of the function **and** from every value it closes over, so `readTodos(userId)` produces a separate entry for each user. This is also why the arguments and the return value have to be serializable - a class instance or a function cannot be part of a cache entry.
+
+There are two ways of using the directive and both are common:
+
+- **data-level** caching, as above: a function that reads data is cached, and any component may call it.
+- **UI-level** caching: `'use cache'` at the top of a component, page or layout, so the rendered output is cached, not just the data.
+
+<MdxComment>
+  A cached function must not read request data. Calling `cookies()`, `headers()`
+  or awaiting `searchParams` inside a `'use cache'` scope is an error - and so
+  is calling a helper that does it. Read the value outside the cached scope and
+  pass it in as an argument; it then becomes part of the cache key.
+</MdxComment>
+
+### cacheLife
+
+`cacheLife` sets how long an entry is usable. It takes the name of a profile, or an object for full control. The built-in profiles are:
+
+- `seconds` - refreshed after 1 second, expires after a minute
+- `minutes` - refreshed after a minute, expires after an hour
+- `hours` - refreshed after an hour, expires after a day
+- `days` - refreshed after a day, expires after a week
+- `weeks` - refreshed after a week, expires after 30 days
+- `max` - refreshed after 30 days, expires after a year
+- `default` - what applies when you do not call `cacheLife` at all: refreshed after 15 minutes, never expires
+
+Each profile actually carries three values - `stale` (how long the **browser** reuses it), `revalidate` (after how long the **server** recomputes it) and `expire` (when the entry may no longer be served at all) - and you can set them directly in seconds:
+
+```ts
+'use cache';
+cacheLife({ stale: 3600, revalidate: 7200, expire: 86400 });
+```
+
+<MdxComment>
+  Always write an explicit `cacheLife`; it makes the behaviour visible at the
+  call site. Note that a very short lifetime (the `seconds` profile) is
+  deliberately excluded from prerendering - such an entry would be stale before
+  anyone could read it, so it becomes a dynamic hole in the shell instead.
+</MdxComment>
+
+### cacheTag and on-demand invalidation
+
+Time-based expiry is not enough for data that changes when a user does something. `cacheTag` labels the entry, and a server action then invalidates every entry with that label using the functions from the [revalidation](#revalidation) section:
+
+```ts
+// src/app/server-action/actions.ts
+
+'use server';
+
+import { updateTag } from 'next/cache';
+
+import { addTodo } from '@/server';
+
+export const addTodoAction = async (title: string) => {
+  await addTodo(title);
+
+  // every 'use cache' entry tagged 'todos' is expired,
+  // and the page re-rendered in this same response reads fresh data
+  updateTag('todos');
+};
+```
+
+This pairing - a long `cacheLife` plus a `cacheTag` invalidated on demand - is the recommended default for data that only changes when someone edits it. It is exactly what this course application does with the list of lectures: it is cached with the `max` profile and tagged, and publishing a lecture invalidates the tag, without rebuilding the application.
+
+### Request memoization
+
+Finally, a short demonstration of the layer we cannot turn off. The same `fetchData` function is called by two components in the same tree:
+
+```tsx
 import { Suspense } from 'react';
 import { z } from 'zod';
 
-export const dynamic = 'force-dynamic';
 const url = 'https://api-example.com/users';
 
 async function fetchData() {
@@ -745,7 +899,7 @@ async function Parent() {
   return (
     <div>
       <div className="flex gap-x-2">
-        {data.slice(0, 2).map((user) => (
+        {data.slice(0, 2).map(user => (
           <div key={user.id}>{user.id}</div>
         ))}
       </div>
@@ -763,101 +917,97 @@ export default function Page() {
     </Suspense>
   );
 }
-
 ```
 
 <MdxComment>
-  In this case the custom `fetch` is executed only once, inside the `Parent`
-  component. Because of this, we will see a `Loading` fallback that is defined
-  inside `Page`. Once `Parent` gets the data from the API, it starts rendering,
-  where it finds the `Child` component, which is also asynchronous. Therefore,
-  it first starts rendering the `Child loading...` fallback, which is hardly
-  noticeable on the page since the `Child` component, although asynchronous,
-  occupies the same `fetch` as `Parent` and thus gets the data almost
-  immediately from the cache.
+  The `fetch` is executed only once, in the `Parent` component. The page first
+  shows the `Loading...` fallback defined in `Page`. Once `Parent` has the data
+  it starts rendering, reaches the asynchronous `Child` and renders the `Child
+  loading...` fallback - but that one is barely visible, because `Child` calls
+  the very same `fetch` and gets the memoized result immediately.
 </MdxComment>
 
-A few rules apply to make request memoization work properly:
+Two rules to keep in mind:
 
-- Only apply to `fetch` with the `GET` method.
+- Memoization applies to `fetch` with the `GET` method and only within one render pass. It is not a cache: the next request starts from scratch.
 
-- Applies only to React Component Tree. This means that requests are memoized inside all components within the React Component Tree, which means, for example, that requests called in the route handler will not be memoized.
+- It only works inside the React component tree, so a `fetch` called in a route handler is not memoized. If we talk to the database directly instead of using `fetch`, React's `cache()` function does the same deduplication for our own function.
 
-- In many cases we want to communicate directly with the database, in which case we can't use `fetch`. A `cache` function is implemented directly in React to memoize direct database queries. Next.js is working on its own version of this function, currently available as `unstable_cache` as of version 14.0. Next.js again adds options to revalidate and add a custom tag.
+### The previous model, for context
 
-### Data cache
+You will find a lot of blog posts, tutorials and even AI answers describing Next.js caching as four separate mechanisms: Request Memoization, Data Cache, Full Route Cache and Router Cache.
 
-Data cache is again related to `fetch` request, where we can specify how the requests will be cached. By default, Next.js caches all `fetch` requests, which is something we very likely don't want. Typically, we have a site where you need to get the most recent data. Suppose we leave the default behavior when we build the application. In that case, Next.js will call these `fetch` requests and generate a component with the correct data already, expecting all clients to be provided with this result. This means that if the data changes, it will only change at the next build of the application.
+<MdxImage
+  src={CACHE_DIAGRAM}
+  alt="Diagram of the four caching layers of the previous Next.js model"
+/>
 
-We use the aforementioned `cache` and `next.revalidate` options to modify this behavior.
-
-- When using `cache: "no-store"`, new data will be retrieved each time. At the same time, at the request memoization level, fetch requests will still be deduplicated within a single React Component Tree.
-
-- Setting `export const dynamic = "force-dynamic"` will also guarantee that new data will be fetched each time.
-
-### Full route cache
-
-Next.js tries to render each page statically at build time so it doesn't have to render at runtime. Of course, this doesn't work for all pages needing actual data retrieved at runtime or request time. Despite this, Next.js renders everything static on the server, and then this static is served to the client, with dynamic content being fetched at runtime. This dynamic content is called a React Server Component Payload, a special form of JSON sent to the client, which can process this payload and modify the DOM. Once this RSC Payload is processed on the client, it is cached in what is called the Router cache. If we leave to another page within the application and then come back, Next.js will detect that this RSC Payload is already in the Router cache, and therefore, there is no need to send a request to the server. This behavior can cause problems because if the RSC Payload may have changed (for example, a new entity was created), we will be shown the old RSC Payload. Therefore, it is necessary to use `revalidatePath` or `revalidateTag` to prevent this cache from being used.
-
-### Router cache
-
-This cache is purely client-side. The difference from Full Route Cache is that Full Route Cache stores RSC Payload and HTML on the server and serves all users of our application. The router cache is purely for a single user. If a user moves within the application, all retrieved RSC Payloads are stored in the Router cache. If the user returns to a page that has already been visited, the RSC Payload is retrieved from the Router cache, and there is no need to send a request to the server.
-
-This cache can only be invalidated in two ways:
-
-- `revalidatePath` and `revalidateTag` - this is called during a server action to guarantee that the RSC Payload for the page is retrieved and updated. Furthermore, using dynamic functions such as `cookies` also invalidates the Router cache.
-
-- `router.refresh()` - this function is called on the client to guarantee that the RSC Payload for the page is retrieved and updated. This throws away the entire Router cache and sends the request to the server, which is not always optimal.
+That model is what Next.js 13 and 14 did, and the reason it had such a bad reputation is visible in the diagram: four layers with different lifetimes, different invalidation rules and mostly enabled by default. Cache Components replaces the two middle layers with the single `'use cache'` directive that you place where the data actually is. If you ever work on a project that has not opted into Cache Components, Next.js keeps the old behaviour documented in the [Caching and Revalidating (Previous Model)](https://nextjs.org/docs/app/guides/caching-without-cache-components) guide.
 
 ## Database
 
-Since Next.js is [(by default)](https://nextjs.org/docs/app/building-your-application/rendering/edge-and-nodejs-runtimes) running fully fledged Node.js environment in the server code, it can server your app as a complete backend. One of the things that backends usually take care of is a database access. Just like with any other feature, there are multiple options to pick from in javascript, that allow you to easily access your database and many of them even provide amazing tools that let you infer types from tables and use optimized type safe functions instead of writing raw SQL.
+The server part of a Next.js application runs in a full Node.js environment, so it can act as a complete backend - and one of the things a backend usually takes care of is database access. As with everything else in JavaScript there are several options to choose from, and most of them can infer types from your tables, so you write type-safe queries instead of raw SQL.
 
 ### Drizzle
 
-Drizzle is an Object-Relational Mapping (ORM) library designed for use with TypeScript and environments like Next.js. ORM tools are crucial in the development process as they provide an efficient way to interact with databases by mapping database tables to objects in code, making database operations more intuitive and reducing the amount of SQL code developers need to write and maintain.
+Drizzle is an Object-Relational Mapping (ORM) library designed for TypeScript and for environments like Next.js. An ORM maps database tables to objects in code, which makes database operations more readable and reduces the amount of SQL that has to be written and maintained by hand.
 
-Nowadays, prisma is a trendy technology. However, we have chosen Drizzle for this course as there is no need to learn a specific prisma language. We only need TypeScript to use Drizzle.
+The best known alternative is Prisma. We have picked Drizzle for this course because its schema is written in plain TypeScript - there is no separate schema language to learn and no code generation step, and the query builder stays close to the SQL it produces.
 
-At the same time, we will be using `Turso`, which is a database provider that provides a free tier for creating a database. Therefore, we also recommend it for your final project. It also includes good support for ORMs like Drizzle.
+For the database itself we use `Turso`, a provider with a free tier and good support for Drizzle. We recommend it for your final project as well.
 
-```ts
+```bash
 npm i drizzle-orm @libsql/client
 npm i -D drizzle-kit
 ```
 
-We will use SQLite, and it is recommended for your projects. It's a quick and easy way to get started with prism and databases. In case you eventually need a different database, prisma makes it easy to achieve this by changing only the configuration.
+Turso is built on SQLite, which is more than enough for the applications we build in this course. Should you ever need a different database, Drizzle supports PostgreSQL and MySQL as well - the schema and the queries stay in the same style, you only import the column types from a different module.
 
-We will need one instance of the database that we can use throughout the application. We can create this instance, for example, in `src/db/index.ts`
+To work with the database we first need to define our tables (models, schemas). We create them in `src/db/schema/*`, one file per model.
+
+```ts
+// src/db/schema/todos.ts
+
+import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
+
+export const todos = sqliteTable('todos', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  title: text('title').notNull()
+});
+```
+
+<MdxComment>
+  For all the column types supported in SQLite, see the [drizzle
+  documentation](https://orm.drizzle.team/docs/column-types/sqlite).
+</MdxComment>
+
+Then we need one database instance that the whole application shares, typically in `src/db/index.ts`. Note that we pass the schema to `drizzle` - that is what gives us the fully typed `db.query` API.
 
 ```ts
 // src/db/index.ts
 
 import { drizzle } from 'drizzle-orm/libsql';
-import { createClient } from '@libsql/client';
 
-const client = createClient({
-  url: process.env.DATABASE_URL!,
-  authToken: process.env.AUTH_TOKEN
-});
+import { todos } from './schema/todos';
 
-export const db = drizzle(client);
-```
-
-The `db` instance represents a drizzle client communicating with our database and acting simply as an ORM.
-
-To work with the database, we need to define our tables (models, schemas). We can create these in `src/db/schema/*` files, where we define one file for each model.
-
-```ts
-// src/db/schema/users.ts
-
-import { text, integer, sqliteTable } from 'drizzle-orm/sqlite-core';
-
-export const users = sqliteTable('users', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  name: text('name')
+export const db = drizzle({
+  connection: {
+    url: process.env.DATABASE_URL!,
+    authToken: process.env.AUTH_TOKEN
+  },
+  schema: { todos }
 });
 ```
+
+<MdxComment>
+  With the schema passed in, we can write `db.query.todos.findMany()` - the
+  relational API, which returns typed rows and can load relations with `with`.
+  Without it, only the SQL-like builder (`db.select().from(todos)`) is
+  available. You can find exactly this setup in `src/db/index.ts` of this course
+  application.
+</MdxComment>
 
 <MdxComment>
   In this way we create tables that we will then use within our application. For
@@ -868,119 +1018,191 @@ export const users = sqliteTable('users', {
 
 ### Turso
 
-Turso is a database provider that provides a free database creation tier. To create a database, you need to create an account on their site and then create a database. After making the database, we get a `DATABASE_URL` which we can use in our application.
+Turso offers a free tier, which is all we need for the homework and for the final project. After creating an account, install their CLI and create a database:
 
-We recommend [Turso documentation](https://docs.turso.tech/quickstart) for basic Turso setup.
+```bash
+turso db create pv247-app
+turso db show pv247-app --url
+turso db tokens create pv247-app -e none
+```
 
-- To generate a token for our database, we use `turso db tokens create <db_name> -e none`.
-
-- We store both **DATABASE_URL** and **AUTH_TOKEN** in the `.env` file.
+The URL and the token are the two values our client needs, so we store them in `.env` as **DATABASE_URL** and **AUTH_TOKEN** - the names we read in `src/db/index.ts` above. See the [Turso documentation](https://docs.turso.tech/quickstart) for the full setup.
 
 #### Local development
 
-It is not necessary to interact with the actual database during development. Still, because we use SQlite, Turso allows you to create your local database via CLI and work with it during development. Once we want to use the deployed, actual database, we just need to change the `DATABASE_URL` in the `.env` file.
+We do not have to talk to the deployed database while developing. Because Turso is built on SQLite, the CLI can run a local database for us, and switching to the real one is a matter of changing `DATABASE_URL`.
 
-- We set the `DATABASE_URL` to `http://localhost:8080` for development. Turso starts the database on this port by default.
+- Start the local database with `turso dev --db-file dev.db`. Without `--db-file` the data lives only in memory and is lost when you stop the server.
 
-- To start the local version of the database, we use the CLI `turso dev --db-file dev.db`.
+- Set `DATABASE_URL` to `http://127.0.0.1:8080`, the address the local server uses by default. The local server needs no token, so `AUTH_TOKEN` stays empty.
 
 #### Migrations
 
-To apply the schemas we have created, we need to create migrations. Drizzle provides us with a `drizzle-kit` tool that we can use to enter schema changes into the database.
-
-To start, we need to create a `drizzle.config.ts` file where we define the path to our schemas and migrations. This file must exist in the root directory of our application (next to `package.json` for example).
+The tables described in `src/db/schema` do not exist in the database until we apply them. That is the job of `drizzle-kit`, which needs a `drizzle.config.ts` file in the root of the project (next to `package.json`).
 
 ```ts
 // drizzle.config.ts
 
-import type { Config } from 'drizzle-kit';
+import { defineConfig } from 'drizzle-kit';
 
-export default {
-  schema: './src/db/schema',
-  driver: 'turso',
+export default defineConfig({
+  schema: ['./src/db/schema/*'],
+  out: '.drizzle',
+  dialect: 'turso',
   dbCredentials: {
     url: process.env.DATABASE_URL!,
     authToken: process.env.AUTH_TOKEN
-  },
-  out: '.drizzle'
-} satisfies Config;
+  }
+});
 ```
 
-Then we can create the first migration using the CLI `npx drizzle-kit push:sqlite`. To create it, we need to have the database running, of course.
+<MdxComment>
+  Older tutorials pass a `driver` option instead of `dialect`, which current
+  versions of `drizzle-kit` no longer accept. The config above is the one this
+  course application uses.
+</MdxComment>
 
-Any time we change the schema, we have to call this CLI command again otherwise the changes will not be reflected in the database.
+There are two ways of getting the schema into the database:
 
-## Complete example - server actions, database
+```bash
+# applies the current schema directly, without creating migration files
+npx drizzle-kit push
 
-Now we have all the means to create a CRUD application, that is, to define an entity that we can create, delete, edit, and display. For the sake of demonstration, we will only show the acquisition and creation of a new user.
+# or: generate a migration file and apply it afterwards
+npx drizzle-kit generate
+npx drizzle-kit migrate
+```
+
+`push` is the fast path and it is what we use during the semester: it compares the schema with the database and applies the difference. For a real project you eventually want `generate` + `migrate`, because the migration files are versioned in git and give you a reproducible history of the schema.
+
+Either way, the command has to be run again after every schema change, otherwise the database will not match the TypeScript definitions - and Drizzle will happily let you write a query against a column that does not exist in the database yet.
+
+## Complete example - server actions, database, caching
+
+We now have everything needed for a small CRUD application. The example below puts the three topics of this lesson together: the list is read by a server component through a cached function, the form is a client component built with React Hook Form, and the mutation is a server action that validates its input and invalidates the cache tag.
 
 ```ts
-import { db } from '@src/db';
-import { users } from '@src/db/schema';
-import { AddPersonForm } from '../components/add-person-form';
+// src/server/todos.ts
+
+import { cacheLife, cacheTag } from 'next/cache';
+
+import { db } from '@/db';
+import { todos } from '@/db/schema/todos';
+
+export const readTodos = async () => {
+  'use cache';
+  cacheTag('todos');
+  cacheLife('max');
+
+  return db.query.todos.findMany();
+};
+
+export const createTodo = async (title: string) => {
+  await db.insert(todos).values({ title });
+};
+```
+
+```tsx
+// src/app/todos/page.tsx
+
+import { readTodos } from '@/server/todos';
+
+import { AddTodoForm } from './add-todo-form';
 
 export default async function Page() {
-  const data = await db.select().from(users).all();
+  const data = await readTodos();
 
   return (
     <div>
-      {data.map((user) => (
-        <div key={user.id}>{user.name}</div>
-      ))}
-      <AddPersonForm />
+      <ul>
+        {data.map(todo => (
+          <li key={todo.id}>{todo.title}</li>
+        ))}
+      </ul>
+
+      <AddTodoForm />
     </div>
   );
 }
-
 ```
 
 ```ts
-'use client';
+// src/app/todos/schema.ts
 
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { addPerson } from '@src/server-actions';
 
-const formSchema = z.object({
-  name: z.string(),
+export const todoFormSchema = z.object({
+  title: z.string().min(1, 'Title is required')
 });
 
-type FormSchema = z.infer<typeof formSchema>;
+export type TodoFormSchema = z.infer<typeof todoFormSchema>;
+```
 
-export function AddPersonForm() {
-  const form = useForm<FormSchema>({
-    resolver: zodResolver(formSchema),
+```tsx
+// src/app/todos/add-todo-form.tsx
+
+'use client';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+
+import { addTodoAction } from './actions';
+import { type TodoFormSchema, todoFormSchema } from './schema';
+
+export const AddTodoForm = () => {
+  const form = useForm<TodoFormSchema>({
+    resolver: zodResolver(todoFormSchema),
+    defaultValues: { title: '' }
   });
 
-  const onSubmit = async (values: FormSchema) => {
-    await addPerson(values);
+  const onSubmit = async (values: TodoFormSchema) => {
+    await addTodoAction(values);
     form.reset();
   };
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
-      <input {...form.register('name')} type="text" />
-      <button type="submit">Submit</button>
+      <input {...form.register('title')} type="text" />
+      {form.formState.errors.title && (
+        <p>{form.formState.errors.title.message}</p>
+      )}
+
+      <button disabled={form.formState.isSubmitting} type="submit">
+        Submit
+      </button>
     </form>
   );
-}
-
+};
 ```
 
 ```ts
+// src/app/todos/actions.ts
+
 'use server';
 
-import { revalidatePath } from 'next/cache';
-import { db } from '@src/db';
-import { users } from '@src/db/schema/users';
+import { updateTag } from 'next/cache';
 
-export async function addPerson({ name }: { name: string }) {
-  await db.insert(users).values({ name });
+import { createTodo } from '@/server/todos';
 
-  revalidatePath('/server-action-client-person');
-}
+import { todoFormSchema } from './schema';
+
+export const addTodoAction = async (input: unknown) => {
+  const { title } = todoFormSchema.parse(input);
+
+  await createTodo(title);
+
+  updateTag('todos');
+};
 ```
+
+<MdxComment>
+  The schema lives in its own file for a reason: a file marked `'use server'`
+  may only export async functions, so the schema and its type cannot be exported
+  from `actions.ts`. Both the form and the action then import the same schema,
+  which is what keeps the client-side and the server-side validation in sync.
+</MdxComment>
+
+Follow what happens after the button is clicked. React Hook Form validates the input on the client and calls the action. The action parses the input again - it is a public endpoint, so the client is not a source we can trust - writes the row and expires the `todos` tag. Because `updateTag` runs inside a server action, Next.js re-renders the page within the same response, `readTodos` misses the cache and reads the new row, and the browser gets the updated list without ever sending a second request.
 
 ## Next lecture
 

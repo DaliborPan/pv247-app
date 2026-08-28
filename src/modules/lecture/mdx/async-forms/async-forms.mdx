@@ -4,7 +4,7 @@ In this lesson, we'll look at asynchronous functions and how to work with them i
 
 ## Async
 
-Asynchronous programming is a key component of modern JavaScript and React, allowing efficient processing of operations that may take a long time - for example, retrieving data from an API. Traditionally, callbacks were used in JS; now, async/await is used.
+Asynchronous programming is a key component of modern JavaScript and React, allowing efficient processing of operations that may take a long time - for example, retrieving data from an API. The oldest approach was to pass a callback that runs once the operation finishes, which nests badly as soon as one asynchronous step depends on another. ES6 (2015) introduced promises and `.then()` chains, and ES2017 added `async`/`await`, which is what we use today.
 
 ```tsx
 const fetchData = () => {
@@ -16,8 +16,8 @@ const fetchData = () => {
 ```
 
 <MdxComment>
-  This is what data retrieval looked like before the advent of ES6 and
-  async/await.
+  A promise chain. This is how data was fetched between ES6 and the arrival of
+  `async`/`await`.
 </MdxComment>
 
 ```tsx
@@ -127,9 +127,9 @@ What's going on:
 
 ### Setting state in async functions
 
-It is common in React that we need to set the state of a component in an asynchronous function. For example, when retrieving data from the API, we want to put the `loading` state to `true` before we start loading the data and then to `false` again when the data is loaded. As we know from the lesson on state, if we call `setState` inside a function, the state change is not triggered immediately but only after the entire function is complete.
+It is common in React that we need to set the state of a component in an asynchronous function. For example, when retrieving data from the API, we want to put the `loading` state to `true` before we start loading the data and then to `false` again when the data is loaded. As we know from the lesson on state, calling a setter does not change the value immediately - it schedules an update, and React batches all the updates scheduled during one task into a single re-render.
 
-However, this is different for asynchronous functions. If we call `setState` in an asynchronous function, the state change is performed before the first occurrence of `await`. After the asynchronous function is complete, we can call `setState` again, which is executed after the entire function is complete. That is, all state changes that are called before the first `await` are executed before this `await`, and all state changes that are called after the `await` are executed after the entire function has been completed.
+An `await` splits the function into exactly such tasks. Everything up to the first `await` runs in the task that started the function, so those updates are rendered together as soon as the function yields at the `await`. The code after the `await` continues in a later task, so the updates it schedules are rendered together in their own pass. Since React 18 this is the same automatic batching that applies everywhere else - the `await` does not disable it, it only marks where one batch ends and the next begins.
 
 ```tsx
 function Home() {
@@ -158,15 +158,15 @@ What happens step by step in this code:
 
 - The `onClick` function is executed when the button is clicked.
 
-- There is first a call to the `setLoading(true)` function, but that does not produce an immediate rerender. It only schedules the update state of the component.
+- `setLoading(true)` is called first, but it does not produce an immediate rerender. It only schedules a state update. The `loading` variable in this run of `onClick` stays `false`.
 
-- Execution of the function hits `await`.At this point, the JS engine releases control of the thread, allowing the browser to execute other tasks, such as updating the UI.
+- Execution reaches the `await`. At this point the function yields control, and the browser is free to do other work.
 
-- One UI update is scheduled thanks to `setLoading(true)`, which was called before `await`. So now the rerender takes place, and the browser displays "Loading...".
+- React now processes the scheduled update, re-renders the component and the browser paints "Loading...".
 
-- After 2 seconds have passed, the `onClick` function execution returns to the event loop and continues. Now `setLoading(false)` is called, which again schedules the component state update.
+- After 2 seconds the promise resolves and the rest of `onClick` continues in a new task. `setLoading(false)` schedules another update.
 
-- Since this ends the `onClick` function, the rerender takes place and displays "Not loading" in the browser.
+- The function ends, React processes that update and the browser displays "Not loading" again.
 
 ### Error handling in async functions
 
@@ -196,9 +196,10 @@ function Home() {
 <MdxComment>
   In this case, we just print the error to the console and return null from the
   function. However, we can work with the error in any way we want, for example,
-  by displaying it to the user or logging it to the server. If we didn't use the
-  try/catch block, the error would be displayed in the console, causing the
-  whole application to crash.
+  by displaying it to the user or logging it to the server. Without the
+  try/catch block the promise would simply be rejected: the browser reports an
+  unhandled rejection in the console, the user gets no feedback at all, and
+  everything we expected to happen after the call never runs.
 </MdxComment>
 
 ## TanStack Query
@@ -245,23 +246,37 @@ After installing the library, we need to register a `queryClient` to be availabl
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { type PropsWithChildren, useState } from 'react';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 0,
-      refetchOnWindowFocus: false,
-      staleTime: Infinity
-    }
-  }
-});
+export const QueryProvider = ({ children }: PropsWithChildren) => {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: 0,
+            refetchOnWindowFocus: false,
+            staleTime: 60 * 1000
+          }
+        }
+      })
+  );
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <Home />
-  </QueryClientProvider>
-);
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+};
 ```
+
+<MdxComment>
+  Note that the client is created inside the component with `useState`, not next
+  to it at module level. In an application that renders on the server - which
+  ours does, as we will see with Next.js - a module-level client would be
+  created once per server process and therefore **shared between requests and
+  between users**. Creating it in `useState` gives every browser its own client,
+  and the initializer function makes sure it is created only on the first
+  render.
+</MdxComment>
 
 ### useQuery
 
@@ -271,7 +286,7 @@ A `useQuery` is a hook used to retrieve data from an asynchronous source, such a
 
 The `queryKey` defines the key under which the retrieved data will be cached. If two components access the data under the same key, they will only realistically retrieve it once, and the other component will use the cached data. The `queryKey` must be an array, and the reason for this is that we can form our keys hierarchically.
 
-For example, I have one queryKey to retrieve all users, which we define as `[users]`. We also have a custom `queryKey` for each user, which is defined as `["users", userId]`. In case we need to invalidate all users, we just need to call `queryClient.invalidateQueries(["users"])`, which invalidates all queryKeys that start with `["users"]`, including all queryKeys that are defined as `["users", userId]`.
+For example, I have one queryKey to retrieve all users, which we define as `[users]`. We also have a custom `queryKey` for each user, which is defined as `["users", userId]`. In case we need to invalidate all users, we just need to call `queryClient.invalidateQueries({ queryKey: ['users'] })`, which invalidates every query key that starts with `['users']`, including all the keys defined as `['users', userId]`.
 
 **Query function**
 
@@ -279,7 +294,7 @@ The `queryFn` is a function that is called when the cache data cannot be retriev
 
 ```tsx
 export default function Home({ category }: { category: string }) {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ['category', category],
     queryFn: async () => {
       const response = await fetch(`https://api.example.com/${category}`);
@@ -323,7 +338,7 @@ function useCategoryQuery(category: string) {
 }
 
 function Home({ category }: { category: string }) {
-  const { data, isLoading, isError } = useCategoryQuery(category);
+  const { data, isPending, isError } = useCategoryQuery(category);
 
   return (
     // ...
@@ -639,10 +654,8 @@ function Home() {
 ```
 
 <MdxComment>
-  In this example we have a controlled form where we have control over the
-  `name` value in `<input />
-  `. We hold the value in a state where we update this state every time we change
-  it using the `setName` function.
+  In this example we have a controlled form: the input's value is held in a
+  state, and every change updates that state through the `setName` function.
 </MdxComment>
 
 ```tsx
@@ -665,10 +678,12 @@ function Home() {
 ```
 
 <MdxComment>
-  In this example, we have an uncontrolled form where we have no control over
-  the `name` value in `<input />
-  `. We retrieve the value via event after submitting the form. As we can see, without
-  proper event typing, TypeScript will not be happy with this entry
+  In this example, we have an uncontrolled form: the value lives in the DOM and
+  we only read it from the event once the form is submitted. Note that
+  TypeScript is not happy with this - `e.target` is typed as a generic
+  `EventTarget`. Typing the handler as `(e: FormEvent<HTMLFormElement>)` and
+  reading `e.currentTarget.name.value` instead makes it work, as we saw in the
+  lecture on React.
 </MdxComment>
 
 ```tsx
@@ -696,7 +711,7 @@ function Home() {
   function to pull the value from this reference.
 </MdxComment>
 
-In all cases, if we had multiple fields, we would have to perform validation over individual values, react dynamically to changes in individual field values, etc., and it would be tough to scale these solutions. That's why libraries for implementing forms were created, where the most popular ones are Formik and React Hook Form. In this tutorial, we will be looking at React Hook Form.
+In all cases, if we had multiple fields, we would have to perform validation over individual values, react dynamically to changes in individual field values, etc., and it would be tough to scale these solutions. That's why libraries for implementing forms were created. The most widely used one today is React Hook Form, which we will look at in this lecture; the other name worth knowing is TanStack Form, a newer library from the authors of TanStack Query and TanStack Table with first-class TypeScript inference. (You will still find plenty of tutorials recommending Formik - it is effectively unmaintained, so do not start a new project with it.)
 
 ## React Hook Form
 
@@ -706,7 +721,7 @@ After installing this library, we need to create a form instance using the `useF
 
 **useForm - defaultValues, resolver**
 
-These two options are commonly used. The `defaultValues` option defines the default values for the fields in the form. The `resolver` function is when the form is submitted and validates all fields. RHF is often used with `zod`, where we define a form schema using Zod and then pass this resolver as an option to `useForm` using the `zodResolver` adapter.
+These two options are commonly used. The `defaultValues` option defines the default values for the fields in the form. The `resolver` is the function that runs when the form is submitted and validates all the fields. RHF is often used with `zod`, where we define a form schema using Zod and then pass this resolver as an option to `useForm` using the `zodResolver` adapter.
 
 ```tsx
 const formSchema = z.object({
@@ -847,13 +862,12 @@ function Home() {
 ```
 
 <MdxComment>
-  In this example, they wrapped the entire form in a `FormProvider`, which
-  allowed the use of hooks like `useFormContext`. We also created a custom
-  `CustomInput` component that does not register the field using `register`, but
-  uses a `Controller` component and a `control` component that we got from
-  `useFormContext`. In `CustomInput` we also added `watch` to the value of
-  `name`, whereby we can change the component's behavior based on the value of
-  `name`.
+  Here we wrapped the entire form in a `FormProvider`, which allows any child to
+  reach the form instance through `useFormContext`. The custom `CustomFormInput`
+  component does not register its field with `register`; it uses the
+  `Controller` component together with the `control` object obtained from the
+  context. It also watches the value of `name`, so it can change its own
+  behaviour based on another field.
 </MdxComment>
 
 ## Next lecture

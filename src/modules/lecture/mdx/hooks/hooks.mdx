@@ -248,7 +248,7 @@ function Counter() {
 }
 ```
 
-As we can see, the same function is called twice with the same parameter, i.e., 1. So the result will be the same as if we called it only once. React does not set a state immediately after the first call to the setter function but waits for the function to complete (unless it is an asynchronous function).
+As we can see, the same function is called twice with the same parameter, i.e., 1. So the result will be the same as if we called it only once. Calling the setter does not change `count` in the code that is currently running - for the whole of this render, `count` is a constant. The setter only schedules an update, and React applies all the updates scheduled together, then renders once with the new value.
 
 Typically, erroneous code also looks something like this:
 
@@ -331,9 +331,18 @@ function Counter() {
 }
 ```
 
-The `currentCount` parameter will always be the most recent set value, even within the same function. React will still not rerender after each such setter function call.
+The `currentCount` parameter is always the most recent scheduled value, even when the setter is called several times in a row. React still does not re-render after each call.
 
-This behavior is called **batching**, making React applications very fast. It also takes away the so-called half states, where the user would see an incomplete state because the function in which the setter was called has not yet finished.
+This behavior is called **batching**: React collects all the state updates scheduled during one task and processes them in a single re-render. It makes applications fast and it also prevents so-called half states, where the user would briefly see a UI in which one state has already been updated and a related one has not.
+
+<MdxComment>
+  Since React 18, batching is **automatic everywhere** - in event handlers, in
+  `setTimeout` callbacks, in native event listeners and in code that runs after
+  an `await`. In React 17 only event handlers were batched, which is why older
+  articles talk about updates outside handlers being applied one by one. If you
+  ever need the opposite, `flushSync` from `react-dom` forces an immediate
+  re-render, but you will need it very rarely.
+</MdxComment>
 
 ### State is private
 
