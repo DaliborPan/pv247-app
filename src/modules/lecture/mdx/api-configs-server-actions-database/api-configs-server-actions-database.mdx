@@ -354,12 +354,6 @@ Everything in the second group operates on a whole route at once, which is exact
 
 Next.js 16 also adds the `prefetch` and `instant` options, which fine-tune how a route is prefetched and how instantly it can be navigated to.
 
-### Incremental Static Regeneration
-
-The idea behind `revalidate` has not disappeared, only the API has. A page that lists all users, for example, does not have to hit the database on every request: new users are added rarely, so the list can be generated once and regenerated periodically or on demand. Serving a prebuilt page and refreshing it in the background is called **Incremental Static Regeneration (ISR)**, and it has been in Next.js since version 12.
-
-Under Cache Components we express the same thing with `'use cache'` plus `cacheLife` (time-based) and `cacheTag` + `revalidateTag` (on-demand). We will get to both in the caching section.
-
 ## fetch
 
 Next.js extends the capabilities of the native web `fetch` function so that caching can be controlled directly at the request level, instead of at the level of a whole page.
@@ -752,180 +746,88 @@ For a broader walkthrough of what server actions can do, we recommend [this vide
 
 ## Caching
 
-Caching used to be the hardest part of Next.js to learn. In versions 13 and 14 a lot of it was on by default and the skill was knowing how to opt **out**. Since v15 the defaults are the opposite - nothing is cached unless you ask for it - and Next.js 16 with Cache Components reduces the whole topic to one explicit tool: the `'use cache'` directive, plus two functions that describe how long an entry lives and how it is invalidated.
+The tool this whole topic rests on is already familiar from the previous lecture: the `'use cache'` directive, with `cacheLife` and `cacheTag`. What we add here is where a cached result actually lives, how long "long enough" is, and what you are not allowed to do inside a cached function.
 
 > Most caching is invisible in development. It only shows up when the application runs in production mode (`next build && next start`), which is what makes it hard to debug. Never draw conclusions about caching from `next dev` alone.
 
 ### The layers
 
-It still helps to know what sits where, because the four layers are invalidated differently:
+Four things cache in a Next.js application and each of them is invalidated differently:
 
-- **Request memoization** - within a single render pass, `GET` `fetch` calls with the same URL and options are executed once and the result is shared. This is not a cache that survives the request; it only means that a `Parent` and a nested `Child` asking for the same data do not produce two requests. For anything that is not `fetch`, such as a database query, React's `cache()` function does the same job. Memoization does not apply in route handlers, since they are not part of the React component tree.
-
-- **`'use cache'`** - the actual cache. It stores the output of a function or a component, it is shared across requests and across users, and its lifetime is described by `cacheLife`. This is the layer we control.
-
-- **The prerendered output** - the HTML and the RSC payload produced at build time, in other words the static shell from the previous lecture. Everything static, plus every `'use cache'` result whose lifetime is long enough, ends up here and can be served from a CDN.
-
-- **The client router cache** - the browser keeps the RSC payloads it has already received, from a navigation or from a prefetch, and reuses them while they are fresh. How long that is comes from the `stale` value of the cache profile, with a minimum of 30 seconds enforced by the router.
+- **Request memoization** - within one render pass the same `GET` `fetch` runs once and the result is shared. Not a cache: the next request starts from scratch.
+- **`'use cache'`** - the actual cache, shared across requests and across users, with the lifetime given by `cacheLife`. The only layer we control directly.
+- **The prerendered output** - the static shell from the previous lecture. Everything static, plus every cached result that lives long enough, ends up here and can be served from a CDN.
+- **The client router cache** - the browser reuses the RSC payloads it already received for as long as the `stale` value allows, and for at least 30 seconds.
 
 <MdxComment>
-  All of these are scoped to a single deployment. A new deploy starts with empty
-  caches, because the build id is part of every cache key. Also note that by
-  default the server-side store is in memory, so on a serverless platform (such
-  as Vercel) an entry does not necessarily survive from one request to the next.
+  All of them are scoped to a single deployment - a new deploy starts with empty
+  caches, because the build id is part of every cache key. And the server-side
+  store is in memory by default, so on a serverless platform such as Vercel an
+  entry does not necessarily survive from one request to the next.
 </MdxComment>
 
-### The `'use cache'` directive
+### How long an entry lives
 
-`'use cache'` marks an async function, component, page or layout as cacheable. It can be placed as the first statement of a function body, or at the top of a file, in which case every export of that file is cached and all of them have to be `async`.
-
-```ts
-// src/server/todos.ts
-
-import { cacheLife, cacheTag } from 'next/cache';
-
-import { db } from '@/db';
-
-export const readTodos = async () => {
-  'use cache';
-  cacheTag('todos');
-  cacheLife('hours');
-
-  return db.query.todos.findMany();
-};
-```
-
-The cache key is built from the arguments of the function **and** from every value it closes over, so `readTodos(userId)` produces a separate entry for each user. This is also why the arguments and the return value have to be serializable - a class instance or a function cannot be part of a cache entry.
-
-There are two ways of using the directive and both are common:
-
-- **data-level** caching, as above: a function that reads data is cached, and any component may call it.
-- **UI-level** caching: `'use cache'` at the top of a component, page or layout, so the rendered output is cached, not just the data.
-
-<MdxComment>
-  A cached function must not read request data. Calling `cookies()`, `headers()`
-  or awaiting `searchParams` inside a `'use cache'` scope is an error - and so
-  is calling a helper that does it. Read the value outside the cached scope and
-  pass it in as an argument; it then becomes part of the cache key.
-</MdxComment>
-
-### cacheLife
-
-`cacheLife` sets how long an entry is usable. It takes the name of a profile, or an object for full control. The built-in profiles are:
-
-- `seconds` - refreshed after 1 second, expires after a minute
-- `minutes` - refreshed after a minute, expires after an hour
-- `hours` - refreshed after an hour, expires after a day
-- `days` - refreshed after a day, expires after a week
-- `weeks` - refreshed after a week, expires after 30 days
-- `max` - refreshed after 30 days, expires after a year
-- `default` - what applies when you do not call `cacheLife` at all: refreshed after 15 minutes, never expires
-
-Each profile actually carries three values - `stale` (how long the **browser** reuses it), `revalidate` (after how long the **server** recomputes it) and `expire` (when the entry may no longer be served at all) - and you can set them directly in seconds:
+A `cacheLife` profile is not one number but three. `stale` is how long the **browser** reuses the value, `revalidate` after how long the **server** recomputes it, and `expire` is the point at which it may not be served at all any more. The named profiles are shorthands for these three, and you can also set them directly in seconds:
 
 ```ts
 'use cache';
 cacheLife({ stale: 3600, revalidate: 7200, expire: 86400 });
 ```
 
-<MdxComment>
-  Always write an explicit `cacheLife`; it makes the behaviour visible at the
-  call site. Note that a very short lifetime (the `seconds` profile) is
-  deliberately excluded from prerendering - such an entry would be stale before
-  anyone could read it, so it becomes a dynamic hole in the shell instead.
-</MdxComment>
+Always write an explicit `cacheLife` - it makes the behaviour visible at the call site instead of relying on the implicit `default` profile. One consequence is worth knowing: an entry with a very short lifetime (the `seconds` profile) is deliberately left out of prerendering, because it would be stale before anyone could read it. It becomes a dynamic hole in the shell instead.
 
-### cacheTag and on-demand invalidation
+### What must stay outside a cached function
 
-Time-based expiry is not enough for data that changes when a user does something. `cacheTag` labels the entry, and a server action then invalidates every entry with that label using the functions from the [revalidation](#revalidation) section:
+A cached function must not read request data. Calling `cookies()`, `headers()` or awaiting `searchParams` inside a `'use cache'` scope is an error, and so is calling a helper that does it. Read the value outside and pass it in as an argument, where it becomes part of the cache key:
 
 ```ts
-// src/app/server-action/actions.ts
+// ❌ the cached function reads the request
+const getWidgets = async () => {
+  'use cache';
+  const userId = (await cookies()).get('userId')?.value;
 
-'use server';
+  return db.query.widgets.findMany({ where: eq(widgets.userId, userId) });
+};
 
-import { updateTag } from 'next/cache';
+// ✅ the value is read outside and passed in
+const getWidgets = async (userId: string) => {
+  'use cache';
 
-import { addTodo } from '@/server';
-
-export const addTodoAction = async (title: string) => {
-  await addTodo(title);
-
-  // every 'use cache' entry tagged 'todos' is expired,
-  // and the page re-rendered in this same response reads fresh data
-  updateTag('todos');
+  return db.query.widgets.findMany({ where: eq(widgets.userId, userId) });
 };
 ```
 
-This pairing - a long `cacheLife` plus a `cacheTag` invalidated on demand - is the recommended default for data that only changes when someone edits it. It is exactly what this course application does with the list of lectures: it is cached with the `max` profile and tagged, and publishing a lecture invalidates the tag, without rebuilding the application.
+To invalidate any of this after a mutation, we use `cacheTag` together with the functions from the [revalidation](#revalidation) section above.
 
 ### Request memoization
 
-Finally, a short demonstration of the layer we cannot turn off. The same `fetchData` function is called by two components in the same tree:
+The one layer we do not have to ask for. Two components in the same tree need the same data, so both call the same function - and the request is still sent only once:
 
 ```tsx
-import { Suspense } from 'react';
-import { z } from 'zod';
+const getUsers = async () => {
+  const response = await fetch('https://api.example.com/users');
 
-const url = 'https://api-example.com/users';
+  return response.json();
+};
 
-async function fetchData() {
-  const response = await fetch(url);
-  const data = z
-    .array(z.object({ id: z.string() }))
-    .parse(await response.json());
+async function Parent() {
+  const users = await getUsers();
 
-  return data;
+  return (
+    <div>
+      <span>{users.length} users</span>
+      <Child />
+    </div>
+  );
 }
 
 async function Child() {
-  const data = await fetchData();
-  const first = data[0];
+  const users = await getUsers(); // no second request
 
-  if (!first) {
-    return null;
-  }
-
-  return (
-    <div>
-      <h1>This is first ID: {first.id}</h1>
-    </div>
-  );
-}
-
-async function Parent() {
-  const data = await fetchData();
-
-  return (
-    <div>
-      <div className="flex gap-x-2">
-        {data.slice(0, 2).map(user => (
-          <div key={user.id}>{user.id}</div>
-        ))}
-      </div>
-      <Suspense fallback={<div>Child loading...</div>}>
-        <Child />
-      </Suspense>
-    </div>
-  );
-}
-
-export default function Page() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Parent />
-    </Suspense>
-  );
+  return <span>{users[0]?.name}</span>;
 }
 ```
-
-<MdxComment>
-  The `fetch` is executed only once, in the `Parent` component. The page first
-  shows the `Loading...` fallback defined in `Page`. Once `Parent` has the data
-  it starts rendering, reaches the asynchronous `Child` and renders the `Child
-  loading...` fallback - but that one is barely visible, because `Child` calls
-  the very same `fetch` and gets the memoized result immediately.
-</MdxComment>
 
 Two rules to keep in mind:
 

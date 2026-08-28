@@ -500,16 +500,7 @@ const getMany = async () => {
 
 You can put `'use cache'` on a data function like above (data-level caching), or on a whole component, page or layout (UI-level caching). Note that all the arguments of the function, and any values it closes over, automatically become part of the cache key.
 
-<MdxComment>
-  Older Next.js APIs for this job are gone or replaced. With `cacheComponents`
-  enabled, the route segment configs `export const dynamic`, `export const
-  revalidate`, `export const fetchCache` and `export const dynamicParams` are no
-  longer allowed and fail the build; `unstable_cache` and `unstable_noStore` are
-  replaced by `'use cache'` and by the fact that nothing is cached unless you ask
-  for it; and `fetch(url, { cache, next: { revalidate, tags } })` becomes a
-  `fetch` inside a `'use cache'` function with `cacheLife` and `cacheTag`. We
-  will look at all the caching layers in detail in the next lesson.
-</MdxComment>
+We will look at the caching layers, and at the older APIs this directive replaces, in the next lesson.
 
 ### Streaming request data
 
@@ -721,16 +712,24 @@ Even though data fetching on the server using asynchronous RSCs is now preferred
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import type { PropsWithChildren } from 'react';
-
-const queryClient = new QueryClient();
+import { type PropsWithChildren, useState } from 'react';
 
 export function Providers({ children }: PropsWithChildren) {
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 }
 ```
+
+<MdxComment>
+  As in the lecture on TanStack Query, the client is created inside the
+  component. Here the reason is even more visible: this file is marked `'use
+  client'`, but it is still rendered on the server first. A client created next
+  to the component would live in the server process and be shared by every
+  request, and therefore by every user.
+</MdxComment>
 
 ```tsx
 // src/app/layout.tsx
