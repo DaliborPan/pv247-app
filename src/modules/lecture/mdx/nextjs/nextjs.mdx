@@ -452,7 +452,7 @@ export async function generateStaticParams() {
 }
 ```
 
-You do not have to list every URL. A slug that `generateStaticParams` does not return is not an error: the visitor is served the prerendered part of the route immediately, the rest is rendered in the background once the params are known, and the next visitor to the same URL gets that upgraded result from the cache. This is what Incremental Static Regeneration means today, and we will come back to it in the lecture on caching.
+You do not have to list every URL. A slug that `generateStaticParams` does not return is not an error: the visitor is served the prerendered part of the route immediately, the rest is rendered in the background once the params are known, and the next visitor to the same URL gets that upgraded result from the cache. This is what Incremental Static Regeneration means today, and we will come back to it in the next lecture.
 
 If a slug should not exist at all, handle it where you load the data and call `notFound()`, which renders the closest `not-found.tsx`.
 

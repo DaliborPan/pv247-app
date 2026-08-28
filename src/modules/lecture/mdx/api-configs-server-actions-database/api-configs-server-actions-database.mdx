@@ -121,10 +121,14 @@ Until recently, the only way to create, edit or delete data in a database or oth
 
 export const POST = async (request: Request) => {
   const body = await request.json();
+  const parsed = createEventSchema.safeParse(body);
+
+  if (!parsed.success) {
+    return Response.json({ message: 'Invalid event data' }, { status: 400 });
+  }
 
   try {
-    const data = createEventSchema.parse(body);
-    const event = await database.event.create(data);
+    const event = await database.event.create(parsed.data);
 
     return Response.json(
       {
@@ -145,7 +149,9 @@ export const POST = async (request: Request) => {
   the backend to the client using `zod`, we need to validate the data from the
   client to the server. The `createEventSchema` takes care of this, which
   defines the valid shape of the object we expect from the client. We can then
-  directly access the database and thus create a new event.
+  directly access the database and thus create a new event. Note the status
+  codes: a malformed body is the caller's mistake and gets a `400`, while `500`
+  is reserved for something going wrong on our side.
 </MdxComment>
 
 ### Route resolution
@@ -240,7 +246,7 @@ Route (app)                         Revalidate  Expire
   fresh.
 </MdxComment>
 
-If we do need data from a database or an external API in a prerendered response, we can cache that data with the `'use cache'` directive, which we will cover in detail in the caching section.
+If we do need data from a database or an external API in a prerendered response, we can cache that data with the `'use cache'` directive from the previous lecture.
 
 ```ts
 // app/api/lectures/route.ts
@@ -369,20 +375,24 @@ The `cache` option is not a new property added by the Next.js team - it is avail
 **`fetch` is not cached by default.** This is the most common outdated claim about Next.js: in versions 13 and 14, `fetch` was cached by default and you had to opt out. Since Next.js v15, caching is **opt-in** - the default (`auto no cache`) fetches the resource on every request, and only prerendering can make it run once at build time.
 
 ```ts
-export default async function Page() {
-  const cachedData = await fetch('https://api.example.com', {
+// a cached read - reused by later requests for the same URL
+const getProducts = async () => {
+  const response = await fetch('https://api.example.com/products', {
     cache: 'force-cache'
   });
 
-  const freshData = await fetch('https://api.example.com', {
+  return response.json();
+};
+
+// an uncached read - goes out on every request, so whatever renders it
+// has to sit behind a <Suspense> boundary
+const getCartTotal = async () => {
+  const response = await fetch('https://api.example.com/cart', {
     cache: 'no-store'
   });
 
-  return (
-    ...
-  );
-}
-
+  return response.json();
+};
 ```
 
 ### options.next
@@ -632,7 +642,7 @@ So we now have two ways of creating, updating and deleting data from the client.
 
 - A server action passed to `<form action={...}>` is submitted by the browser itself. The form therefore works before the page is hydrated and keeps working for a user whose JavaScript failed to load - a property called progressive enhancement.
 
-- A traditional POST endpoint is always invoked from JavaScript: something has to collect the values, build the request and send it to the right URL.
+- A POST endpoint can also be reached by a plain `<form method="post" action="/api/events">` without any JavaScript. What we actually compare it with here is the usual client-side flow, where JavaScript collects the values, builds the request and sends it to the right URL - and that one does need JavaScript.
 
 **Getting the new UI**
 
@@ -756,8 +766,8 @@ Four things cache in a Next.js application and each of them is invalidated diffe
 
 - **Request memoization** - within one render pass the same `GET` `fetch` runs once and the result is shared. Not a cache: the next request starts from scratch.
 - **`'use cache'`** - the actual cache, shared across requests and across users, with the lifetime given by `cacheLife`. The only layer we control directly.
-- **The prerendered output** - the static shell from the previous lecture. Everything static, plus every cached result that lives long enough, ends up here and can be served from a CDN.
-- **The client router cache** - the browser reuses the RSC payloads it already received for as long as the `stale` value allows, and for at least 30 seconds.
+- **The prerendered output** - the static shell from the previous lecture. Everything static, plus every cached result that lives long enough **and does not depend on request data**, ends up here and can be served from a CDN. A cached function that takes a value read from the request is only filled in at runtime.
+- **The client router cache** - the browser reuses the cached payloads it already received, for as long as the `stale` value allows and for at least 30 seconds. Uncached parts of a page are not reused this way; they are fetched again on the next visit.
 
 <MdxComment>
   All of them are scoped to a single deployment - a new deploy starts with empty
@@ -959,9 +969,8 @@ export default defineConfig({
 ```
 
 <MdxComment>
-  Older tutorials pass a `driver` option instead of `dialect`, which current
-  versions of `drizzle-kit` no longer accept. The config above is the one this
-  course application uses.
+  Older tutorials configure Turso with `driver: 'turso'`. That combination is
+  gone - for Turso you now pass `dialect: 'turso'`.
 </MdxComment>
 
 There are two ways of getting the schema into the database:
