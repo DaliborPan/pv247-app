@@ -733,8 +733,7 @@ const addTodoSchema = z.object({
   title: z.string().min(1)
 });
 
-export const addTodoAction = async (input: unknown) => {
-  // the client is not a trusted source, so the input is parsed here as well
+export const addTodoAction = async (input: z.infer<typeof addTodoSchema>) => {
   const { title } = addTodoSchema.parse(input);
 
   await addTodo(title);
@@ -744,10 +743,11 @@ export const addTodoAction = async (input: unknown) => {
 ```
 
 <MdxComment>
-  Note that the action takes `unknown` and parses it. The type of the argument
-  is only a compile-time promise; the action is a public endpoint, and anyone
-  can `POST` anything to it. This is the "validate the input" rule from the
-  security section, applied to an action that is called from our own form.
+  The argument is typed and the action still parses it - that is not redundant.
+  The type is checked when our code compiles and then erased; what ships is an
+  HTTP endpoint anyone can `POST` arbitrary JSON to, without going through our
+  form. The type catches our own mistakes at build time, the `parse` catches
+  everyone else's.
 </MdxComment>
 
 The [next-safe-action](https://next-safe-action.dev/docs/getting-started) library mentioned earlier removes most of this boilerplate: it takes the schema, validates the input for us and hands the action a typed value.
@@ -1095,9 +1095,9 @@ import { updateTag } from 'next/cache';
 
 import { createTodo } from '@/server/todos';
 
-import { todoFormSchema } from './schema';
+import { todoFormSchema, type TodoFormSchema } from './schema';
 
-export const addTodoAction = async (input: unknown) => {
+export const addTodoAction = async (input: TodoFormSchema) => {
   const { title } = todoFormSchema.parse(input);
 
   await createTodo(title);
