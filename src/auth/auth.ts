@@ -9,7 +9,18 @@ import {
   verification
 } from '../db/schema/users';
 
+const betterAuthUrl = process.env.BETTER_AUTH_URL;
+const betterAuthSecret = process.env.BETTER_AUTH_SECRET;
+
+if (!betterAuthUrl || !betterAuthSecret) {
+  throw new Error(
+    'BETTER_AUTH_URL and BETTER_AUTH_SECRET must be configured before starting the application.'
+  );
+}
+
 export const auth = betterAuth({
+  baseURL: betterAuthUrl,
+  secret: betterAuthSecret,
   database: drizzleAdapter(db, {
     provider: 'sqlite',
     schema: {
@@ -29,7 +40,8 @@ export const auth = betterAuth({
     additionalFields: {
       role: {
         type: 'string',
-        defaultValue: 'student'
+        defaultValue: 'student',
+        input: false
       },
       firstName: {
         type: 'string'
@@ -41,12 +53,17 @@ export const auth = betterAuth({
         type: 'string'
       },
       lectorId: {
-        type: 'string'
+        type: 'string',
+        input: false
       },
       projectId: {
-        type: 'string'
+        type: 'string',
+        input: false
       }
     }
+  },
+  account: {
+    encryptOAuthTokens: true
   },
   session: {
     expiresIn: 3 * 7 * 24 * 60 * 60, // 3 weeks (seconds — Better Auth uses seconds, not ms)
@@ -55,11 +72,5 @@ export const auth = betterAuth({
         type: 'string'
       }
     }
-  } // TODO: Add plugin or API route middleware to handle user role assignment
-  // after social sign-in. The logic should:
-  // 1. Check if user.email is in LECTOR_EMAILS
-  // 2. Set role to 'lector' or 'student'
-  // 3. If student, assign lectorId via getNewStudentLectorIdQuery()
-  // 4. Update user via updateUser()
-  // 5. Revalidate getStudentsWithHomeworkCached
+  }
 });

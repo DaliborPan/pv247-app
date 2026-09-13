@@ -51,6 +51,7 @@ export const session = sqliteTable('session', {
     .notNull(),
   ipAddress: text('ip_address'),
   userAgent: text('user_agent'),
+  role: text('role', { enum: dbRoleSchema.options }),
   userId: text('user_id')
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' })
