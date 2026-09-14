@@ -565,7 +565,7 @@ So we now have two ways of creating, updating and deleting data from the client.
 
 - With a POST endpoint, the request only creates the entity. To display the new list we need a second request: `router.refresh()` when the list is rendered by a server component, or `queryClient.invalidateQueries` when the list is fetched on the client with TanStack Query.
 
-> Both approaches are valid and you will meet both. A reasonable rule of thumb: if the data on the screen is rendered by a server component, use a server action; if the mutation is part of a client-side data flow that TanStack Query already manages, an endpoint fits in more naturally.
+> Server actions are the default choice today. You should start with them and only step away when you have a reason. That reason is usually a caller other than your own UI: a webhook, a mobile client or a third-party integration all need a stable URL, and a POST endpoint is the right tool there.
 
 ## Server actions called from a client component
 
