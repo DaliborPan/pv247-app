@@ -673,7 +673,7 @@ For a broader walkthrough of what server actions can do, we recommend [this vide
 
 The tool this whole topic rests on is already familiar from the previous lecture: the `'use cache'` directive, with `cacheLife` and `cacheTag`. What we add here is where a cached result actually lives, how long "long enough" is, and what you are not allowed to do inside a cached function.
 
-> Most caching is invisible in development. It only shows up when the application runs in production mode (`next build && next start`), which is what makes it hard to debug. Never draw conclusions about caching from `next dev` alone.
+> Next.js 16.3 makes caching easier to explore during development: Next.js DevTools lets you see which parts of the page are cached and where the `<Suspense>` boundaries are. Use this visual feedback while running `next dev` to understand how your page is rendered. Development and production can still behave differently, so a final check with `next build && next start` is useful to confirm the production behaviour.
 
 ### The layers
 
