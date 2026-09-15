@@ -4,7 +4,7 @@ import { SidebarCard } from '@/components/sidebar-card';
 import { SidebarCardRow } from './sidebar-card-row';
 import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 import { ReactNode, Suspense } from 'react';
-import { lectureLoaders } from '@/modules/lecture/loader';
+import { getLectures, getLecturesWithHomework } from '@/modules/lecture/queries';
 import { Skeleton } from '@/components/skeleton';
 import { getSessionUser } from '@/modules/session-user';
 
@@ -35,8 +35,8 @@ const OverviewSidebarCard = ({
 };
 
 export const OverviewCard = async () => {
-  const lectures = await lectureLoaders.getMany();
-  const homeworkCount = (await lectureLoaders.getAllWithHomework()).length;
+  const lectures = await getLectures();
+  const homeworkCount = (await getLecturesWithHomework()).length;
 
   const overviewPromise = studentLoaders.getMineOverview();
 

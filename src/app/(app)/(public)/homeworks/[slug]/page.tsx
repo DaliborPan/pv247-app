@@ -2,7 +2,10 @@ import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import { getHomeworkMdxComponent } from '@/modules/homework/mdx';
-import { lectureLoaders } from '@/modules/lecture/loader';
+import {
+  getIsHomeworkAvailable,
+  getLecturesWithHomework
+} from '@/modules/lecture/queries';
 import {
   homeworkSlugSchema,
   type HomeworkSlugType
@@ -16,7 +19,7 @@ export const generateMetadata = async ({
   params
 }: PageProps<'/homeworks/[slug]'>): Promise<Metadata> => {
   const slug = (await params).slug as HomeworkSlugType;
-  const lectures = await lectureLoaders.getAllWithHomework();
+  const lectures = await getLecturesWithHomework();
   const lecture = lectures.find(l => l.homeworkSlug === slug);
 
   if (!lecture) {
@@ -38,7 +41,7 @@ export const generateStaticParams = () => {
 const Page = async ({ params }: PageProps<'/homeworks/[slug]'>) => {
   const slug = (await params).slug as HomeworkSlugType;
   const [isAvailable, error] = await tryCatch(
-    lectureLoaders.getIsHomeworkAvailable(slug)
+    getIsHomeworkAvailable(slug)
   );
 
   if (error) {

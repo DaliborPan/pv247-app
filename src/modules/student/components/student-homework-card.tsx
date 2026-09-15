@@ -1,9 +1,9 @@
-import { lectureLoaders } from '@/modules/lecture/loader';
+import { getAvailableLectures, getLectures } from '@/modules/lecture/queries';
 
 import { ListCard } from './list-card';
 import { PointsBadge } from './points-badge';
 import { ReactNode, Suspense } from 'react';
-import { LectureType } from '@/modules/lecture/schema';
+import type { LectureType } from '@/modules/lecture/types';
 import { UserType } from '@/modules/user/schema';
 
 import { homeworkLoader } from '@/modules/homework/loader';
@@ -13,8 +13,8 @@ const HomeworkListCard = async ({
 }: {
   points?: (lecture: LectureType) => ReactNode;
 }) => {
-  const lectures = await lectureLoaders.getMany();
-  const availableLectures = await lectureLoaders.getAvailable();
+  const lectures = await getLectures();
+  const availableLectures = await getAvailableLectures();
 
   return (
     <ListCard

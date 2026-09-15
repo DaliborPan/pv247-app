@@ -14,24 +14,3 @@ export type LectureSlugType = z.infer<typeof lectureSlugSchema>;
 
 export const homeworkSlugSchema = dbHomeworkSlugSchema;
 export type HomeworkSlugType = z.infer<typeof homeworkSlugSchema>;
-
-export const lectureSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  availableFrom: z.string(),
-  slug: lectureSlugSchema,
-  preview: z.string(),
-  attendanceToken: z.string(),
-  isAvailable: z.boolean(),
-
-  // homework
-  homeworkName: z.string(),
-  homeworkSlug: homeworkSlugSchema,
-  homeworkPreview: z.string(),
-  homeworkClassroomLink: z.string(),
-  homeworkTemplateRepositoryUrl: z.string().nullable(),
-  homeworkMaxPoints: z.number(),
-  homeworkDeadline: z.string()
-});
-
-export type LectureType = z.infer<typeof lectureSchema>;

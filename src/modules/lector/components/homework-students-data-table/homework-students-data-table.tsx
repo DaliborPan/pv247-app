@@ -1,6 +1,6 @@
 import { DataTable } from '@/components/data-table';
 import { getSessionUser } from '@/modules/session-user';
-import { type LectureType } from '@/modules/lecture/schema';
+import { type LectureType } from '@/modules/lecture/types';
 
 import { type studentLoaders } from '@/modules/student/loader';
 
@@ -12,7 +12,10 @@ export const HomeworkStudentsDataTable = async ({
   lecture
 }: {
   students: LoaderResult<typeof studentLoaders.getStudentsWithHomework>;
-  lecture?: LectureType;
+  lecture?: Pick<
+    LectureType,
+    'id' | 'homeworkName' | 'homeworkSlug' | 'homeworkTemplateRepositoryUrl'
+  >;
 }) => {
   const sessionUser = await getSessionUser();
 
@@ -20,7 +23,13 @@ export const HomeworkStudentsDataTable = async ({
     <DataTable
       data={students.map(student => {
         const defaultValues = {
-          lecture,
+          lecture: lecture
+            ? {
+                id: lecture.id,
+                homeworkName: lecture.homeworkName,
+                homeworkSlug: lecture.homeworkSlug
+              }
+            : undefined,
           lectorId: sessionUser.id,
           studentId: student.id,
           points: student.homeworksStudent.find(

@@ -3,11 +3,11 @@ import { ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/base/button';
 import { TextPreview } from '@/components/text-preview';
-import { lectureLoaders } from '@/modules/lecture/loader';
+import { getAvailableLectures } from '@/modules/lecture/queries';
 
 export const CurrentLectureCard = async () => {
-  const availableLectures = await lectureLoaders.getAvailable();
-  const currentLecture = availableLectures.pop();
+  const availableLectures = await getAvailableLectures();
+  const currentLecture = availableLectures.at(-1);
 
   if (!currentLecture) {
     return null;

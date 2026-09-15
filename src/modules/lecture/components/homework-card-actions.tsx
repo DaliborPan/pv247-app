@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ExternalLink, Github, Lock, NotepadText } from 'lucide-react';
 
-import { LectureType } from '../schema';
+import { type LectureType } from '@/modules/lecture/types';
 import { getHomeworkGithubUrl } from '@/modules/homework/utils';
 
 import { cn } from '@/lib/cn';
@@ -11,7 +11,11 @@ import { getSession } from '@/modules/session-user';
 import { homeworkRepositoryLoader } from '@/modules/homework-repository/loader';
 import { CreateHomeworkRepositoryAction } from '@/modules/homework-repository/components/create-homework-repository-action/create-homework-repository-action';
 
-export const HomeworkCardActions = ({ lecture }: { lecture: LectureType }) => {
+export const HomeworkCardActions = ({
+  lecture
+}: {
+  lecture: LectureType;
+}) => {
   return (
     <div className="flex grow gap-x-2">
       <Link

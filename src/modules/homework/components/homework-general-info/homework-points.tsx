@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { Button } from '@/components/base/button';
-import { type LectureType } from '@/modules/lecture/schema';
+import { type LectureType } from '@/modules/lecture/types';
 
 import { LabeledItem } from './labeled-item';
 
@@ -9,7 +9,11 @@ import { getSession } from '@/modules/session-user';
 import { homeworkLoader } from '../../loader';
 import { getHomeworkPointsMessage } from '../../utils';
 
-export const HomeworkPoints = async ({ lecture }: { lecture: LectureType }) => {
+export const HomeworkPoints = async ({
+  lecture
+}: {
+  lecture: Pick<LectureType, 'id' | 'homeworkSlug'>;
+}) => {
   const sessionUser = await getSession();
 
   if (!sessionUser) return null;

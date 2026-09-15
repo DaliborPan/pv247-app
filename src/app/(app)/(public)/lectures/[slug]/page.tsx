@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
-import { lectureLoaders } from '@/modules/lecture/loader';
+import { getIsLectureAvailable, getLectures } from '@/modules/lecture/queries';
 import { getLectureMdxComponent } from '@/modules/lecture/mdx';
 import {
   lectureSlugSchema,
@@ -16,7 +16,7 @@ export const generateMetadata = async ({
   params
 }: PageProps<'/lectures/[slug]'>): Promise<Metadata> => {
   const slug = (await params).slug as LectureSlugType;
-  const lectures = await lectureLoaders.getMany();
+  const lectures = await getLectures();
   const lecture = lectures.find(l => l.slug === slug);
 
   if (!lecture) {
@@ -38,7 +38,7 @@ export const generateStaticParams = () => {
 const Page = async ({ params }: PageProps<'/lectures/[slug]'>) => {
   const slug = (await params).slug as LectureSlugType;
   const [isAvailable, error] = await tryCatch(
-    lectureLoaders.getIsAvailable(slug)
+    getIsLectureAvailable(slug)
   );
 
   if (error) {

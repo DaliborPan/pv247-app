@@ -1,5 +1,5 @@
 import { DetailCard } from '@/components/detail-card';
-import { lectureLoaders } from '@/modules/lecture/loader';
+import { getLectures } from '@/modules/lecture/queries';
 import { SetStudentAttendanceAction } from '@/modules/student-lecture/components/set-student-attendance-action';
 import { studentLectureLoaders } from '@/modules/student-lecture/loader';
 import { Suspense } from 'react';
@@ -27,7 +27,7 @@ const AttendanceCell = ({
 export const StudentAttendanceCard = async (props: {
   userId: Promise<string>;
 }) => {
-  const lectures = await lectureLoaders.getMany();
+  const lectures = await getLectures();
 
   return (
     <DetailCard title="Attendance">

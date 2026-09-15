@@ -1,4 +1,4 @@
-import { lectureQueries } from '@/modules/lecture/server';
+import { db } from '@/db';
 import { getSession } from '@/modules/session-user';
 import { acceptAttendanceCodeSchema } from '@/modules/student-lecture/schema';
 import { studentLectureMutations } from '@/modules/student-lecture/server/mutation';
@@ -21,8 +21,11 @@ export const GET = async (
 
   const url = new URL('/accept-attendance', request.url);
 
-  const lectures = await lectureQueries.getMany();
-  const lecture = lectures.find(lecture => lecture.attendanceToken === token);
+  const lecture = await db.query.lectures.findFirst({
+    columns: { id: true },
+    where: (lectures, { eq }) => eq(lectures.attendanceToken, token),
+    orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)]
+  });
 
   if (!lecture) {
     url.searchParams.set(

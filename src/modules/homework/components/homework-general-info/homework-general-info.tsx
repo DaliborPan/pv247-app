@@ -1,4 +1,4 @@
-import { lectureLoaders } from '@/modules/lecture/loader';
+import { getLecturesWithHomework } from '@/modules/lecture/queries';
 import { type HomeworkSlugType } from '@/modules/lecture/schema';
 
 import { PersonHomeworkDeadline } from './person-homework-deadline';
@@ -11,7 +11,7 @@ export const HomeworkGeneralInfo = async ({
 }: {
   slug: HomeworkSlugType;
 }) => {
-  const lectures = await lectureLoaders.getAllWithHomework();
+  const lectures = await getLecturesWithHomework();
   const lecture = lectures.find(lecture => lecture.homeworkSlug === slug);
 
   if (!lecture) return null;

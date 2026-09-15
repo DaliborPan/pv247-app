@@ -1,5 +1,3 @@
-import { type LectureType } from '@/modules/lecture/schema';
-
 import { lectures } from './schema/lectures';
 
 import { db } from '.';
@@ -137,7 +135,9 @@ import { db } from '.';
 // 	}
 // ];
 
-export const lecturesSeedData: LectureType[] = [
+type LectureSeed = Required<typeof lectures.$inferInsert>;
+
+export const lecturesSeedData: LectureSeed[] = [
   {
     id: 'intro',
     homeworkTemplateRepositoryUrl: null,

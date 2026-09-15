@@ -1,7 +1,7 @@
 import { formatDate } from '@/lib/date';
 import { TextPreview } from '@/components/text-preview';
 
-import { type LectureType } from '../schema';
+import { type LectureType } from '@/modules/lecture/types';
 
 import { HomeworkPointsBadge } from './homework-points-badge';
 import { HomeworkCardActions } from './homework-card-actions';

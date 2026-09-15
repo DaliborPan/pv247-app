@@ -11,7 +11,7 @@ import {
   GithubSetupError
 } from '@/integrations/github/client';
 import { type SessionUserType } from '@/modules/session-user/types';
-import { type LectureType } from '@/modules/lecture/schema';
+import { type LectureType } from '@/modules/lecture/types';
 import { getHomeworkGithubUrl } from '@/modules/homework/utils';
 import { homeworkRepositoryRepository } from './repository';
 import {
@@ -23,7 +23,10 @@ import {
 type HomeworkRepositoryContext = HomeworkRepositoryInput & {
   record: HomeworkRepositoryType | undefined;
   setRecord: (record: HomeworkRepositoryType) => void;
-  lecture: LectureType;
+  lecture: Pick<
+    LectureType,
+    'homeworkTemplateRepositoryUrl' | 'homeworkSlug'
+  >;
   github: ReturnType<typeof createGithubClient>;
   githubUserId: string;
   githubLogin: string;

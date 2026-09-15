@@ -1,6 +1,6 @@
 import { DetailCard } from '@/components/detail-card';
 import { getSessionUser } from '@/modules/session-user';
-import { lectureLoaders } from '@/modules/lecture/loader';
+import { getLectures } from '@/modules/lecture/queries';
 import { SignOutLectureAction } from '@/modules/lecture-lector/components/sign-out-lecture-action';
 import { SignUpLectureAction } from '@/modules/lecture-lector/components/sign-up-lecture-action';
 import { SetLectureTeacherApprovalAction } from '@/modules/lecture-lector/components/set-lecture-teacher-approval-action';
@@ -13,7 +13,7 @@ import { getLectorDisplayName } from '@/modules/lector/utils/lector-display-name
 import { formatDate } from '@/lib/date';
 
 export const LectorSignUpLecturesSection = async () => {
-  const lectures = await lectureLoaders.getMany();
+  const lectures = await getLectures();
   const [sessionUser, lectorsByLectureId] = await Promise.all([
     getSessionUser(),
     lectureLectorLoaders.getLectorsForLectures()
