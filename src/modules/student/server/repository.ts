@@ -50,6 +50,9 @@ const getManyStudentsWithHomework = ({ lectureId }: { lectureId: string }) =>
   db.query.users.findMany({
     where: (table, { eq }) => eq(table.role, 'student'),
     with: {
+      homeworkRepositories: {
+        where: (table, { eq }) => eq(table.lectureId, lectureId)
+      },
       homeworksStudent: {
         where: (table, { eq }) => eq(table.lectureId, lectureId)
       }

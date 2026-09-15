@@ -140,6 +140,7 @@ import { db } from '.';
 export const lecturesSeedData: LectureType[] = [
   {
     id: 'intro',
+    homeworkTemplateRepositoryUrl: null,
     attendanceToken: 'NWR12X',
     name: 'Introduction',
     slug: 'introduction',
@@ -157,6 +158,7 @@ export const lecturesSeedData: LectureType[] = [
   },
   {
     id: 'react',
+    homeworkTemplateRepositoryUrl: null,
     attendanceToken: 'OQW92U',
     name: 'React',
     slug: 'react',
@@ -174,6 +176,7 @@ export const lecturesSeedData: LectureType[] = [
   },
   {
     id: 'styling',
+    homeworkTemplateRepositoryUrl: null,
     attendanceToken: 'PQX81V',
     name: 'Styling',
     slug: 'styling',
@@ -191,6 +194,7 @@ export const lecturesSeedData: LectureType[] = [
   },
   {
     id: 'hooks',
+    homeworkTemplateRepositoryUrl: null,
     attendanceToken: 'RSY70W',
     name: 'React hooks, state',
     slug: 'hooks',
@@ -208,6 +212,7 @@ export const lecturesSeedData: LectureType[] = [
   },
   {
     id: 'other-hooks-refs-tables',
+    homeworkTemplateRepositoryUrl: null,
     attendanceToken: 'TUV69V',
     name: 'Hooks, refs, tables',
     slug: 'other-hooks-refs-tables',
@@ -225,6 +230,7 @@ export const lecturesSeedData: LectureType[] = [
   },
   {
     id: 'async-forms',
+    homeworkTemplateRepositoryUrl: null,
     attendanceToken: 'UWX58U',
     name: 'Async, forms',
     slug: 'async-forms',
@@ -242,6 +248,7 @@ export const lecturesSeedData: LectureType[] = [
   },
   {
     id: 'nextjs',
+    homeworkTemplateRepositoryUrl: null,
     attendanceToken: 'VYZ47T',
     name: 'Next.js - the React framework',
     slug: 'nextjs',
@@ -259,6 +266,7 @@ export const lecturesSeedData: LectureType[] = [
   },
   {
     id: 'suspense-streaming-rsc',
+    homeworkTemplateRepositoryUrl: null,
     attendanceToken: 'WAB36S',
     name: 'Suspense, streaming, RSC',
     slug: 'suspense-streaming-rsc',
@@ -276,6 +284,7 @@ export const lecturesSeedData: LectureType[] = [
   },
   {
     id: 'api-configs-server-actions-database',
+    homeworkTemplateRepositoryUrl: null,
     attendanceToken: 'XCD25R',
     name: 'API routes, caching, revalidation, server actions, database',
     slug: 'api-configs-server-actions-database',
@@ -293,6 +302,7 @@ export const lecturesSeedData: LectureType[] = [
   },
   {
     id: 'authentication-metadata-deployment',
+    homeworkTemplateRepositoryUrl: null,
     attendanceToken: 'YBE14Q',
     name: 'Authentication, metadata, deployment',
     slug: 'authentication-metadata-deployment',

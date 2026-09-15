@@ -1,7 +1,7 @@
 'use client';
 
 import { createColumnHelper } from '@tanstack/react-table';
-import { ExternalLink, X } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 
 import { DataTableColumnHeader } from '@/components/data-table';
 import { Icon } from '@/components/base/icon';
@@ -12,10 +12,12 @@ import {
 import { type studentLoaders } from '@/modules/student/loader';
 import { LoaderResult } from '@/types';
 import { getHomeworkGithubUrl } from '@/modules/homework/utils';
+import { CreateHomeworkRepositoryAction } from '@/modules/homework-repository/components/create-homework-repository-action/create-homework-repository-action';
 
 const columnHelper = createColumnHelper<
   LoaderResult<typeof studentLoaders.getStudentsWithHomework>[number] & {
     defaultValues: Partial<SetHomeworkPointsFormSchema>;
+    templateRepositoryUrl?: string | null;
   }
 >();
 
@@ -25,6 +27,43 @@ export const columns = [
     header: props => <DataTableColumnHeader {...props} title="GitHub" />,
     minSize: 200,
     cell: ({ row }) => {
+      const lecture = row.original.defaultValues.lecture;
+      const repository = row.original.homeworkRepositories[0];
+      if (row.original.templateRepositoryUrl || repository) {
+        return (
+          <div className="flex flex-col items-start gap-2">
+            {repository?.repositoryUrl && (
+              <a
+                href={repository.repositoryUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-primary hover:underline"
+              >
+                Open repository
+              </a>
+            )}
+            {repository?.status === 'ready' ? (
+              repository.invitationId && (
+                <span className="text-xs text-text-terciary">
+                  Invitation sent
+                </span>
+              )
+            ) : lecture?.id ? (
+              <CreateHomeworkRepositoryAction
+                lectureId={lecture.id}
+                studentId={row.original.id}
+                exists={!!repository?.githubRepositoryId}
+                retry={!!repository}
+              />
+            ) : null}
+            {repository?.lastError && (
+              <p className="max-w-xs text-sm text-red-700" role="status">
+                {repository.lastError}
+              </p>
+            )}
+          </div>
+        );
+      }
       const homeworkSlug = row.original.defaultValues?.lecture?.homeworkSlug;
       const githubName = row.original.github;
       const url = getHomeworkGithubUrl({

@@ -1,6 +1,7 @@
 import { drizzle } from 'drizzle-orm/libsql';
 
 import { homeworks } from './schema/homeworks';
+import { homeworkRepositories } from './schema/homework-repository';
 import { lectures } from './schema/lectures';
 import { projects } from './schema/projects';
 import { users } from './schema/users';
@@ -15,6 +16,7 @@ export const db = drizzle({
   },
   schema: {
     homeworks,
+    homeworkRepositories,
     lectures,
     projects,
     users,
