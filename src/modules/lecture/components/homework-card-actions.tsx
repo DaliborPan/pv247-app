@@ -8,7 +8,7 @@ import { cn } from '@/lib/cn';
 import { Button } from '@/components/base/button';
 import { Suspense } from 'react';
 import { getSession } from '@/modules/session-user';
-import { getStudentHomeworkRepositories } from '@/modules/homework-repository/loader';
+import { homeworkRepositoryLoader } from '@/modules/homework-repository/loader';
 import { CreateHomeworkRepositoryAction } from '@/modules/homework-repository/components/create-homework-repository-action/create-homework-repository-action';
 
 export const HomeworkCardActions = ({ lecture }: { lecture: LectureType }) => {
@@ -54,9 +54,11 @@ export const HomeworkCardActions = ({ lecture }: { lecture: LectureType }) => {
           <Suspense>
             {getSession().then(async sessionUser => {
               const repository = sessionUser
-                ? (await getStudentHomeworkRepositories(sessionUser.id)).find(
-                    item => item.lectureId === lecture.id
-                  )
+                ? (
+                    await homeworkRepositoryLoader.getManyForStudent(
+                      sessionUser.id
+                    )
+                  ).find(item => item.lectureId === lecture.id)
                 : undefined;
               const homeworkGithubUrl =
                 repository?.status === 'ready'
