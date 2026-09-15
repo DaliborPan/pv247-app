@@ -277,10 +277,10 @@ export const lecturesSeedData: LectureType[] = [
   {
     id: 'api-configs-server-actions-database',
     attendanceToken: 'XCD25R',
-    name: 'API routes, configs, caching, server actions, database',
+    name: 'API routes, caching, revalidation, server actions, database',
     slug: 'api-configs-server-actions-database',
     preview:
-      "This lecture, we'll be focusing on custom API endpoints, route segment configs, caching, and revalidation options for cache layers. We'll explore server actions that allow for server-side processing without the need for API routes and discuss how to interact with databases using TypeScript.",
+      "This lecture, we'll be focusing on custom API endpoints, caching, and revalidation options for cache layers. We'll explore server actions that allow for server-side processing without the need for API routes and discuss how to interact with databases using TypeScript.",
     availableFrom: '2026-11-09T06:00:00',
     homeworkClassroomLink: '',
     homeworkMaxPoints: 40,
