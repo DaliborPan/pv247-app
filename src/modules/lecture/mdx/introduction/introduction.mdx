@@ -33,7 +33,7 @@ Dalibor is a frontend developer with overlap into the backend as well, with almo
 
 #### Maroš Beťko
 
-[TBA]
+Maroš is a full-stack engineer focused on TypeScript, React, and Next.js. He graduated from FI MUNI and continued building practical products and developer tooling, with experience across frontend and full-stack development. He is especially interested in type-safe systems, performance, and creating maintainable software.
 
 #### Ladislav Burgr
 
@@ -150,7 +150,7 @@ To run JavaScript outside a browser, we need a runtime. Node.js is an open-sourc
 
 We will encounter Node.js when we discuss Next.js later in the semester; Next.js uses the Node.js runtime by default. Node.js was introduced in 2009. Alternatives, including **Bun**, have since emerged with different trade-offs and goals.
 
-Install the current **LTS** release - Next.js 16 requires at least Node.js 20.9, and the tooling around it (ESLint 10 among others) has already moved past Node 18. Check what you have with `node --version`. If you need to switch between versions on the same machine, use a version manager such as [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), and pin the version for a project in an `.nvmrc` file.
+Install the current **LTS** release - Next.js 16 requires at least Node.js 20.9, and the tooling around it (including modern linting and formatting tools such as oxlint and oxfmt) has already moved past Node 18. Check what you have with `node --version`. If you need to switch between versions on the same machine, use a version manager such as [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), and pin the version for a project in an `.nvmrc` file.
 
 ### Bun
 
@@ -216,16 +216,21 @@ There is also `pnpm`, which boasts its ability to save disk space by using a sin
 
 While at first glance similar, formatters and linters aim to fix different problems. Formatters mainly take care of indentation, new lines, and automatic wrapping. Linters handle various coding conventions and rules you want to follow, like controlling unused variables, usage of let/var, etc. Generally, linters provide warning messages about broken rules, but many also have autofix actions that blur the line between linters and formatters even more.
 
-### Prettier
+### Oxfmt
 
-Prettier is a popular formatter for JavaScript, TypeScript, and many other file formats commonly used in web development like JSON, HTML, and CSS (you can find the complete list [here](https://prettier.io/docs/) with an option to add a [plugin](https://prettier.io/docs/plugins) to support more file types). You can read more about their philosophy and what exactly they aim to achieve on their website. The most important part for us is that Prettier builds on having as few options as possible to make it easy to start using and to provide robust and consistent formatting.
+`oxfmt` is the formatter in the Oxc ecosystem for JavaScript, TypeScript, and related web files. It is designed to be fast and lightweight, which makes it a strong modern alternative to Prettier in large codebases. Many projects still use Prettier because it has a long track record and a broad ecosystem, but Oxc is a newer option that often runs noticeably faster and fits well with modern frontend toolchains.
 
-You can install it via npm and then create a `.prettierrc` file (or any other of [these options](https://prettier.io/docs/configuration)) and change the [options](https://prettier.io/docs/options) you want.
+You can install it with npm and then run it directly on your project files:
+
+```bash
+npm i -D oxfmt
+npx oxfmt .
+```
 
 {/* prettier-ignore-start */}
 
 ```tsx
-/** Without prettier */
+/** Without oxfmt */
 
 export function KeyDemo() {
 	const [items, setItems] = useState(['Item 1', 'Item 2', 'Item 3']);
@@ -243,7 +248,7 @@ export function KeyDemo() {
 {/* prettier-ignore-end */}
 
 ```tsx
-/** With prettier */
+/** With oxfmt */
 
 export function KeyDemo() {
   const [items, setItems] = useState(['Item 1', 'Item 2', 'Item 3']);
@@ -264,52 +269,33 @@ export function KeyDemo() {
 }
 ```
 
-### ESLint
+### Oxlint
 
-ESLint is the most popular linting tool for JavaScript and TypeScript code. It is highly configurable; many custom plugins extend the functionality by providing custom rules, and there are also many configs that you can use as-is or extend with your own preferred rules. You can find some interesting configs [here](https://github.com/dustinspecker/awesome-eslint#configs).
+`oxlint` is the linter in the Oxc ecosystem for JavaScript and TypeScript code. It is designed for speed and good defaults, and it is often a more performant alternative to ESLint in large applications. Many existing projects and tutorials still use ESLint, but Oxc is a newer, high-performance option that keeps a familiar rule-driven workflow while being much faster to execute.
 
-Like Prettier, you install it via npm. The configuration lives in an `eslint.config.mjs` file, which exports an array of config objects - the so-called **flat config**. It was introduced in ESLint 9, became the default there, and since ESLint 10 it is the only supported format. If you open an older project (or an older tutorial) and find an `.eslintrc.json` or `.eslintrc.js` file with an `extends` array, you are looking at the previous format.
+A lot of `oxlint` rules are intentionally aligned with the rule names and conventions developers already know from ESLint, and many of them are backwards compatible in practice. That makes migration easier when a project already has lint rules defined in the older ESLint ecosystem.
 
-For a Next.js application we install `eslint` together with `eslint-config-next`, which already bundles the recommended rules for React, React Hooks and Next.js itself:
+For a typical project, you install `oxlint` and run it directly from the command line:
 
 ```bash
-npm i -D eslint eslint-config-next eslint-config-prettier
+npm i -D oxlint
+npx oxlint .
 ```
 
-```js
-/** eslint.config.mjs */
+A configuration file can be kept small and explicit:
 
-import { defineConfig, globalIgnores } from 'eslint/config';
-import nextVitals from 'eslint-config-next/core-web-vitals';
-import nextTs from 'eslint-config-next/typescript';
-import prettier from 'eslint-config-prettier/flat';
-
-export default defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // turns off the ESLint rules that would fight with Prettier
-  prettier,
-  {
-    rules: {
-      'no-console': 'off'
-    }
+```json
+{
+  "rules": {
+    "no-console": "off"
   },
-  globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts'])
-]);
+  "ignorePatterns": [".next/**", "out/**", "build/**", "next-env.d.ts"]
+}
 ```
-
-<MdxComment>
-  The `core-web-vitals` config raises the rules that affect Core Web Vitals from
-  warnings to errors, and `eslint-config-next/typescript` adds the rules from
-  [typescript-eslint](https://typescript-eslint.io/). Both are what
-  `create-next-app` sets up for a new TypeScript project.
-</MdxComment>
-
-The linter is run through the ESLint CLI - `npx eslint .`, or `pnpm exec eslint .`. Next.js used to wrap it in a `next lint` command, but that command was **removed in Next.js 16**, and so was the `eslint` option in `next.config.ts`. If you meet `next lint` in a tutorial, replace it with `eslint .`.
 
 <MdxImage
   src={ESLINT_ERRORS_DEMO}
-  alt="Editor showing ESLint error messages in JavaScript code"
+  alt="Editor showing lint error messages in JavaScript code"
 />
 
 ## TypeScript
