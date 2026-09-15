@@ -35,8 +35,10 @@ const withHomeworkRepositoryContext = async (
   operation: (
     context: HomeworkRepositoryContext
   ) => Promise<HomeworkRepositoryResult>
-): Promise<HomeworkRepositoryResult> => {
-  if (user.role !== 'lector') throw new Error('Unauthorized');
+) => {
+  if (user.role !== 'student' || user.id !== studentId) {
+    throw new Error('Unauthorized');
+  }
 
   let record: HomeworkRepositoryType | undefined;
 
@@ -142,10 +144,18 @@ const withHomeworkRepositoryContext = async (
   }
 };
 
-export const createHomeworkRepository = (
-  user: SessionUserType,
-  input: HomeworkRepositoryInput
-): Promise<HomeworkRepositoryResult> =>
+/**
+ * Creates a private assignment repository from the homework template.
+ *
+ * Persists the target name before contacting GitHub and stores the repository
+ * ID immediately after creation. It does not configure access; callers must
+ * invoke `complete` after GitHub finishes copying the template.
+ *
+ * @throws {Error} When the caller is not the assigned student.
+ * @throws {GithubSetupError} When the homework, student, linked GitHub account,
+ * template, target name, or GitHub operation cannot be verified or completed.
+ */
+const create = (user: SessionUserType, input: HomeworkRepositoryInput) =>
   withHomeworkRepositoryContext(user, input, async context => {
     const {
       lectureId,
@@ -156,6 +166,7 @@ export const createHomeworkRepository = (
       githubLogin,
       setRecord
     } = context;
+
     let { record } = context;
     if (record?.githubRepositoryId) {
       return { status: 'preparing' };
@@ -277,10 +288,18 @@ export const createHomeworkRepository = (
     return { status: 'preparing' };
   });
 
-export const completeHomeworkRepository = (
-  user: SessionUserType,
-  input: HomeworkRepositoryInput
-): Promise<HomeworkRepositoryResult> =>
+/**
+ * Finishes an existing assignment repository setup and grants the student write access.
+ *
+ * Verifies the stored private repository, records its initial commit, optionally
+ * grants the teacher team access, and sends or reuses the student's invitation.
+ * Returns `preparing` when GitHub has not finished copying the template yet.
+ *
+ * @throws {Error} When the caller is not the assigned student.
+ * @throws {GithubSetupError} When no created repository exists, its ownership or
+ * visibility is invalid, or a GitHub, account, or database operation fails.
+ */
+const complete = (user: SessionUserType, input: HomeworkRepositoryInput) =>
   withHomeworkRepositoryContext(user, input, async context => {
     const { record, github, githubUserId, githubLogin } = context;
     // Completion is never allowed to generate another repository.
@@ -377,3 +396,5 @@ export const completeHomeworkRepository = (
     });
     return { status: 'ready', repositoryUrl: repository.html_url };
   });
+
+export const homeworkRepositoryMutation = { create, complete };

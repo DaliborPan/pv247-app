@@ -9,6 +9,7 @@ import { Button } from '@/components/base/button';
 import { Suspense } from 'react';
 import { getSession } from '@/modules/session-user';
 import { getStudentHomeworkRepositories } from '@/modules/homework-repository/loader';
+import { CreateHomeworkRepositoryAction } from '@/modules/homework-repository/components/create-homework-repository-action/create-homework-repository-action';
 
 export const HomeworkCardActions = ({ lecture }: { lecture: LectureType }) => {
   return (
@@ -68,18 +69,32 @@ export const HomeworkCardActions = ({ lecture }: { lecture: LectureType }) => {
                       });
 
               return (
-                homeworkGithubUrl && (
-                  <a href={homeworkGithubUrl} target="_blank" rel="noreferrer">
-                    <Button
-                      size="sm"
-                      variant="outline/primary"
-                      iconLeft={{ icon: <Github /> }}
-                      title="Open your repository on GitHub"
+                <>
+                  {homeworkGithubUrl && (
+                    <a
+                      href={homeworkGithubUrl}
+                      target="_blank"
+                      rel="noreferrer"
                     >
-                      GH repo
-                    </Button>
-                  </a>
-                )
+                      <Button
+                        size="sm"
+                        variant="outline/primary"
+                        iconLeft={{ icon: <Github /> }}
+                        title="Open your repository on GitHub"
+                      >
+                        GH repo
+                      </Button>
+                    </a>
+                  )}
+                  {sessionUser?.role === 'student' &&
+                    lecture.homeworkTemplateRepositoryUrl &&
+                    repository?.status !== 'ready' && (
+                      <CreateHomeworkRepositoryAction
+                        lectureId={lecture.id}
+                        status={repository?.status}
+                      />
+                    )}
+                </>
               );
             })}
           </Suspense>

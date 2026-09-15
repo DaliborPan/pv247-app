@@ -1,23 +1,26 @@
 'use server';
 
 import { refresh } from 'next/cache';
+import { z } from 'zod';
 
-import { authLectorServerAction } from '@/server/server-actions';
-import {
-  createHomeworkRepository,
-  completeHomeworkRepository
-} from '../../server/mutation';
+import { authStudentServerAction } from '@/server/server-actions';
+import { homeworkRepositoryMutation } from '../../server/mutation';
 import { GithubSetupError } from '@/integrations/github/client';
 
-import { homeworkRepositoryInputSchema } from '../../schema';
+const ownHomeworkRepositoryInputSchema = z.object({
+  lectureId: z.string().min(1)
+});
 
-export const createHomeworkRepositoryAction = authLectorServerAction
-  .input(homeworkRepositoryInputSchema)
+export const createOwnHomeworkRepositoryAction = authStudentServerAction
+  .input(ownHomeworkRepositoryInputSchema)
   .handler(async ({ input, ctx }) => {
     try {
-      const result = await createHomeworkRepository(
-        ctx.sessionUserLector,
-        input
+      const result = await homeworkRepositoryMutation.create(
+        ctx.sessionUserStudent,
+        {
+          lectureId: input.lectureId,
+          studentId: ctx.sessionUserStudent.id
+        }
       );
       return { result, error: null };
     } catch (error) {
@@ -32,13 +35,16 @@ export const createHomeworkRepositoryAction = authLectorServerAction
     }
   });
 
-export const completeHomeworkRepositoryAction = authLectorServerAction
-  .input(homeworkRepositoryInputSchema)
+export const completeOwnHomeworkRepositoryAction = authStudentServerAction
+  .input(ownHomeworkRepositoryInputSchema)
   .handler(async ({ input, ctx }) => {
     try {
-      const result = await completeHomeworkRepository(
-        ctx.sessionUserLector,
-        input
+      const result = await homeworkRepositoryMutation.complete(
+        ctx.sessionUserStudent,
+        {
+          lectureId: input.lectureId,
+          studentId: ctx.sessionUserStudent.id
+        }
       );
       return { result, error: null };
     } catch (error) {

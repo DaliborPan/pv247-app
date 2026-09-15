@@ -32,3 +32,20 @@ export const authLectorServerAction = createServerActionProcedure(
     };
   })
   .createServerAction();
+
+export const authStudentServerAction = createServerActionProcedure(
+  authServerProcedure
+)
+  .handler(({ ctx }) => {
+    if (ctx.sessionUser.role !== 'student') {
+      throw new Error('User not authorized');
+    }
+
+    return {
+      sessionUserStudent: {
+        ...ctx.sessionUser,
+        role: 'student' as const
+      }
+    };
+  })
+  .createServerAction();
