@@ -10,12 +10,15 @@ import { UserType } from '@/modules/user/schema';
 import { homeworkLoader } from '@/modules/homework/loader';
 import { getHomeworkGithubUrl } from '@/modules/homework/utils';
 import { Icon } from '@/components/base/icon';
+import { getStudentHomeworkRepositories } from '@/modules/homework-repository/loader';
 
 const HomeworkListCard = async ({
   githubName,
+  repositories = [],
   points
 }: {
   githubName?: string | null;
+  repositories?: Awaited<ReturnType<typeof getStudentHomeworkRepositories>>;
   points?: (lecture: LectureType) => ReactNode;
 }) => {
   const lectures = await lectureLoaders.getMany();
@@ -28,10 +31,18 @@ const HomeworkListCard = async ({
         .slice(0, availableLectures.length + 1)
         .filter(lecture => !!lecture.homeworkSlug)}
       renderItem={(lecture, index) => {
-        const homeworkGithubUrl = getHomeworkGithubUrl({
-          githubName: githubName ?? null,
-          homeworkSlug: lecture.homeworkSlug
-        });
+        const repository = repositories.find(
+          item => item.lectureId === lecture.id
+        );
+        const homeworkGithubUrl =
+          repository?.status === 'ready'
+            ? repository.repositoryUrl
+            : lecture.homeworkTemplateRepositoryUrl || repository
+              ? undefined
+              : getHomeworkGithubUrl({
+                  githubName: githubName ?? null,
+                  homeworkSlug: lecture.homeworkSlug
+                });
 
         return (
           <>
@@ -83,10 +94,12 @@ export const StudentHomeworkCard = (props: { user: Promise<UserType> }) => {
         const homework = await homeworkLoader.getMany({
           userId: user.id
         });
+        const repositories = await getStudentHomeworkRepositories(user.id);
 
         return (
           <HomeworkListCard
             githubName={user.github}
+            repositories={repositories}
             points={lecture => {
               const lectureHomework = homework.find(
                 hw => hw.lectureId === lecture.id

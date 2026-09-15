@@ -1,5 +1,7 @@
 # PV247 app
 
+GitHub homework repository setup: [deployment and recovery guide](docs/github-homework-repositories.md).
+
 The application used for the course PV247 Modern Development of User Interfaces and implemented as part of the diploma thesis.
 
 ## General stack

@@ -1,7 +1,7 @@
 'use client';
 
 import { createColumnHelper } from '@tanstack/react-table';
-import { ExternalLink, X } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 
 import { DataTableColumnHeader } from '@/components/data-table';
 import { Icon } from '@/components/base/icon';
@@ -16,6 +16,7 @@ import { getHomeworkGithubUrl } from '@/modules/homework/utils';
 const columnHelper = createColumnHelper<
   LoaderResult<typeof studentLoaders.getStudentsWithHomework>[number] & {
     defaultValues: Partial<SetHomeworkPointsFormSchema>;
+    templateRepositoryUrl?: string | null;
   }
 >();
 
@@ -25,6 +26,13 @@ export const columns = [
     header: props => <DataTableColumnHeader {...props} title="GitHub" />,
     minSize: 200,
     cell: ({ row }) => {
+      if (row.original.templateRepositoryUrl) {
+        return (
+          <div className="italic text-text-terciary">
+            {row.original.name ?? row.original.lastName}
+          </div>
+        );
+      }
       const homeworkSlug = row.original.defaultValues?.lecture?.homeworkSlug;
       const githubName = row.original.github;
       const url = getHomeworkGithubUrl({

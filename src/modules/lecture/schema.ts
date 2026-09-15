@@ -29,6 +29,7 @@ export const lectureSchema = z.object({
   homeworkSlug: homeworkSlugSchema,
   homeworkPreview: z.string(),
   homeworkClassroomLink: z.string(),
+  homeworkTemplateRepositoryUrl: z.string().nullable(),
   homeworkMaxPoints: z.number(),
   homeworkDeadline: z.string()
 });

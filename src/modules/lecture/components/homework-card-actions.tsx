@@ -8,6 +8,8 @@ import { cn } from '@/lib/cn';
 import { Button } from '@/components/base/button';
 import { Suspense } from 'react';
 import { getSession } from '@/modules/session-user';
+import { getStudentHomeworkRepositories } from '@/modules/homework-repository/loader';
+import { CreateHomeworkRepositoryAction } from '@/modules/homework-repository/components/create-homework-repository-action/create-homework-repository-action';
 
 export const HomeworkCardActions = ({ lecture }: { lecture: LectureType }) => {
   return (
@@ -31,42 +33,68 @@ export const HomeworkCardActions = ({ lecture }: { lecture: LectureType }) => {
 
       {lecture.isAvailable && (
         <>
-          <a
-            href={lecture.homeworkClassroomLink}
-            target="_blank"
-            rel="noreferrer"
-            className="grow lg:grow-0"
-          >
-            <Button
-              size="sm"
-              className="w-full lg:w-auto"
-              iconLeft={{ icon: <ExternalLink /> }}
-              variant="outline/primary"
+          {!lecture.homeworkTemplateRepositoryUrl && (
+            <a
+              href={lecture.homeworkClassroomLink}
+              target="_blank"
+              rel="noreferrer"
+              className="grow lg:grow-0"
             >
-              GH classroom
-            </Button>
-          </a>
+              <Button
+                size="sm"
+                className="w-full lg:w-auto"
+                iconLeft={{ icon: <ExternalLink /> }}
+                variant="outline/primary"
+              >
+                GH classroom
+              </Button>
+            </a>
+          )}
 
           <Suspense>
-            {getSession().then(sessionUser => {
-              const homeworkGithubUrl = getHomeworkGithubUrl({
-                githubName: sessionUser?.github ?? null,
-                homeworkSlug: lecture.homeworkSlug
-              });
+            {getSession().then(async sessionUser => {
+              const repository = sessionUser
+                ? (await getStudentHomeworkRepositories(sessionUser.id)).find(
+                    item => item.lectureId === lecture.id
+                  )
+                : undefined;
+              const homeworkGithubUrl =
+                repository?.status === 'ready'
+                  ? repository.repositoryUrl
+                  : lecture.homeworkTemplateRepositoryUrl || repository
+                    ? undefined
+                    : getHomeworkGithubUrl({
+                        githubName: sessionUser?.github ?? null,
+                        homeworkSlug: lecture.homeworkSlug
+                      });
 
               return (
-                homeworkGithubUrl && (
-                  <a href={homeworkGithubUrl} target="_blank" rel="noreferrer">
-                    <Button
-                      size="sm"
-                      variant="outline/primary"
-                      iconLeft={{ icon: <Github /> }}
-                      title="Open your repository on GitHub"
+                <>
+                  {homeworkGithubUrl && (
+                    <a
+                      href={homeworkGithubUrl}
+                      target="_blank"
+                      rel="noreferrer"
                     >
-                      GH repo
-                    </Button>
-                  </a>
-                )
+                      <Button
+                        size="sm"
+                        variant="outline/primary"
+                        iconLeft={{ icon: <Github /> }}
+                        title="Open your repository on GitHub"
+                      >
+                        GH repo
+                      </Button>
+                    </a>
+                  )}
+                  {sessionUser?.role === 'student' &&
+                    lecture.homeworkTemplateRepositoryUrl &&
+                    repository?.status !== 'ready' && (
+                      <CreateHomeworkRepositoryAction
+                        lectureId={lecture.id}
+                        status={repository?.status}
+                      />
+                    )}
+                </>
               );
             })}
           </Suspense>

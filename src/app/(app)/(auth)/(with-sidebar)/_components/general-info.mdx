@@ -35,27 +35,25 @@ The team project is graded on a pass/fail basis ...don’t worry! :) After prese
 
 For (almost) every lecture there will be a weekly assignment for you to do. You always have 1 week to solve it (deadline is at midnight the night before next lecture).
 
-#### Accepting an assignment
+#### Getting your repository
 
-To work on assignments you need to have a GitHub account. We will be using Github Classroom for distributing and submitting the assignments.
+To work on assignments you need a GitHub account. Open the relevant homework in the application and choose **Create repository**. GitHub will create a private repository from the assignment template.
 
-> **IMPORTANT!** When accepting first assignment you will be asked to authorize GitHub Classroom to access your account. You will also be asked to select your UCO and name from the list of students, so your GitHub account can be linked. If you don't see your UCO on the list or you somehow skip the step, please contact us so we can link it manually.
+> **IMPORTANT!** Wait at least one minute after creating the repository, then choose **Finish setup**. Once setup is complete, you will receive a GitHub invitation and can open your repository from the homework card.
 
-Each assignment will have an invitation link that should look like example below that will be sent via email - `https://classroom.github.com/a/foogoo`
-
-Accept the assignment and use the provided link to get to your repository. Instructions will be provided in `README.MD`. You should then clone the repository or you can also use Github's built in VS Code editor by pressing `.` or changing `.com` to `.dev` on repository dashboard (you can read more about this feature [here](https://docs.github.com/en/codespaces/developing-in-codespaces/web-based-editor))
+Instructions are provided in `README.md`. Clone the repository or use GitHub's built-in VS Code editor by pressing `.` or changing `.com` to `.dev` on the repository dashboard (read more about this feature [here](https://docs.github.com/en/codespaces/developing-in-codespaces/web-based-editor)).
 
 #### Submitting the finished assignment
 
-After accepting the assignment, apart from starter code and instructions, your repository should contain a **Feedback** pull request merging from `master` to a `feedback` branch. Push your change to `master` branch and when you are done [label](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels#applying-a-label) the **Feedback** PR with a `Submitted` label. There is an automatic pipeline to build & lint your project.
+Create a branch named `solution` from `main` and implement your work there. When you are ready to submit, create a pull request from `solution` to `main`. Leave the pull request open and do not merge it.
 
-There should be a successful submission **before** the deadline otherwise you will be penalized. Important timestamp is of you labeling the PR as `Submitted`.
+The pull request must be open **before** the deadline. We will grade the latest commit pushed before the deadline.
 
-You can also resubmit your work before deadline multiple times by removing the label, pushing changes and labeling it again.
+You can push further changes to the same `solution` branch before the deadline; they will appear in the pull request automatically.
 
 #### Feedback
 
-After submissions close we will review them using Github's PR review. Feel free to reply to the comments and ask questions about the feedback.
+After submissions close we will review your pull request using GitHub's review tools. Feel free to reply to comments and ask questions about the feedback.
 
 ### Team project
 
@@ -63,11 +61,12 @@ By the end of the semester, you will work on a team project—a web application 
 
 #### Important dates
 
-- **23. 3.** - Following the 6th lecture, start considering potential project topics and assembling your team.
-- **6. 4.** - Submit your chosen project topic through this web application.
-- **21/22. 4.** - After the final lecture, a brief project review will take place:
+- **19. 10.** - Following the 6th lecture, start considering potential project topics and assembling your team.
+- **2. 11.** - Submit your chosen project topic through this web application.
+- **17/18. 11.** - After the final lecture, a brief project review will take place:
   - Each team must present their progress. By this point, around 10% of the project should be completed.
   - You should have a GitHub repository set up, a Next.js application initialized, and a clear concept of the features you plan to develop.
+- **8/9. 12.** - Final project presentations will take place.
 
 #### Base requirements
 
