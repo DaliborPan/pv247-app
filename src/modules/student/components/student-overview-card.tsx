@@ -2,15 +2,14 @@ import { DetailCard } from '@/components/detail-card';
 import { LabeledValue } from '@/components/labeled-value';
 import { cn } from '@/lib/cn';
 import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
-import { studentLoaders } from '@/modules/student/loader';
+import { getStudentOverview } from '@/modules/student/queries';
+import { type StudentOverviewType } from '@/modules/student/types';
 import { type UserType } from '@/modules/user/schema';
 import { Suspense } from 'react';
 
 type StudentOverviewCardProps = {
   user: Promise<Pick<UserType, 'id' | 'role'>>;
-  otherFields?: (
-    overview: Awaited<ReturnType<typeof studentLoaders.getOverview>>
-  ) => React.ReactNode;
+  otherFields?: (overview: StudentOverviewType) => React.ReactNode;
 };
 
 export const StudentOverviewCard = async ({
@@ -24,7 +23,7 @@ export const StudentOverviewCard = async ({
           return null;
         }
 
-        const overviewPromise = studentLoaders.getOverview(user);
+        const overviewPromise = getStudentOverview(user.id);
 
         return (
           <DetailCard title="Overview">

@@ -1,8 +1,8 @@
 import { Hero } from '@/components/base/hero';
-import { type UserType } from '@/modules/user/schema';
+import { type StudentType } from '@/modules/student/types';
 import { Suspense } from 'react';
 
-export const StudentHero = ({ student }: { student: Promise<UserType> }) => {
+export const StudentHero = ({ student }: { student: Promise<StudentType> }) => {
   return (
     <Hero>
       <div className="size-20 rounded-full bg-gradient-to-tr from-primary-100 to-primary-300 shadow" />

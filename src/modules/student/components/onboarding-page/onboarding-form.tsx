@@ -9,30 +9,29 @@ import { Form } from '@/components/form';
 import { FormInput } from '@/components/form/form-fields/form-input';
 import { Button } from '@/components/base/button';
 
-import { onboardingFormSchema, type OnboardingFormSchema } from './schema';
-import { onboardingFormAction } from './action';
-import { SessionUserType } from '@/modules/session-user/types';
+import { profileFormSchema, type ProfileFormType } from '../../schema';
+import { onboardingFormAction } from '../../actions';
 
 const useOnboardingFormMutation = () =>
   useMutation({
-    mutationFn: async (data: OnboardingFormSchema) => onboardingFormAction(data)
+    mutationFn: async (data: ProfileFormType) => onboardingFormAction(data)
   });
 
 export const OnboardingForm = ({
-  sessionUser
+  defaultGithub
 }: {
-  sessionUser: SessionUserType;
+  defaultGithub: string;
 }) => {
-  const form = useForm<OnboardingFormSchema>({
-    resolver: zodResolver(onboardingFormSchema),
+  const form = useForm<ProfileFormType>({
+    resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      github: sessionUser.name
+      github: defaultGithub
     }
   });
 
   const mutation = useOnboardingFormMutation();
 
-  const onSubmit = async (data: OnboardingFormSchema) => {
+  const onSubmit = async (data: ProfileFormType) => {
     const [_, error] = await mutation.mutateAsync(data);
 
     if (error) {

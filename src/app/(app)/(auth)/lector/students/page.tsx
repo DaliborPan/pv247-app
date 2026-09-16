@@ -3,10 +3,10 @@ import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
 import { StudentsDataTable } from '@/modules/lector/components/students-data-table';
 
 import { getSessionUser } from '@/modules/session-user';
-import { studentLoaders } from '@/modules/student/loader';
+import { getStudents } from '@/modules/student/queries';
 
 const Page = async () => {
-  const students = await studentLoaders.listStudents();
+  const students = await getStudents();
 
   const sessionUser = await getSessionUser();
   const hasOwnStudents = students.some(

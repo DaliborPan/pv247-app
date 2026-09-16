@@ -1,4 +1,4 @@
-import { studentLoaders } from '@/modules/student/loader';
+import { getMyStudentOverview } from '@/modules/student/queries';
 import { SidebarCard } from '@/components/sidebar-card';
 
 import { SidebarCardRow } from './sidebar-card-row';
@@ -38,7 +38,7 @@ export const OverviewCard = async () => {
   const lectures = await getLectures();
   const homeworkCount = (await getLecturesWithHomework()).length;
 
-  const overviewPromise = studentLoaders.getMineOverview();
+  const overviewPromise = getMyStudentOverview();
 
   return (
     <Suspense fallback={<OverviewSidebarCard />}>
@@ -50,7 +50,7 @@ export const OverviewCard = async () => {
                 <Suspense>
                   {overviewPromise.then(
                     overview =>
-                      `${overview.attendances.length}/${lectures.length}`
+                      `${overview.attendanceCount}/${lectures.length}`
                   )}
                 </Suspense>
               }

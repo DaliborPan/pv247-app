@@ -1,6 +1,6 @@
 # Migrace na tenkou DAL (varianta A)
 
-Stav: `lecture`, `homework`, `student-lecture`, `lecture-lector` a `project` implementovany. Ostatni moduly zatim nemigrovany; dalsi na rade je `student`.
+Stav: `lecture`, `homework`, `student-lecture`, `lecture-lector`, `project` a `student` implementovany. Dalsi na rade je `homework-repository`, pote zbyva zaverecny cleanup.
 
 ## Stav Pilotu
 
@@ -58,13 +58,26 @@ Stav: `lecture`, `homework`, `student-lecture`, `lecture-lector` a `project` imp
 - Lektorske seznamy a detail zustavaji lector-only, studentsky prehled self-or-lector. Seznam nacte data jednou a v UI je rozdeli do puvodnich skupin; FAILED zustava mimo obe skupiny.
 - Combobox kandidatu presunut ze student vrstev do project query a vraci primo value/label. Kontroluje opravneni k operaci podle aktualniho users.projectId z DB: edit vyzaduje clenstvi bez lektorske vyjimky, create nepovoli existujici prirazeni. Filtr kandidatu vcetne GitHub podminky a stavajicich clenu zustal zachovan.
 - Create/edit, status a hodnoceni zapisuji primo v existujicich actions. Zachovany vstupni schemata, ZSA procedury, chybove zpravy, poradi zapisu, refresh/revalidatePath a role-student filtr pri prirazovani clenu. Create zachovava i dosavadni volitelne ID ze vstupu.
-- Approval klient dostava explicitne jen id/status. Odstraneny project LoaderResult/ReturnType vazby; obecny LoaderResult zustava pro student tabulky, ktere jeste nejsou migrovane.
+- Approval klient dostava explicitne jen id/status. Odstraneny project LoaderResult/ReturnType vazby; posledni student konzumenti a obecny LoaderResult byly nasledne odstraneny pri migraci student.
 - Odstraneny project loader, server/query, repository, mutation a index. Odstraneny take nepotrebne student assignment/candidate helpery; studentsky overview vzdy vola `getStudentProject(user.id)`, bez podminky nad projectId uzivatelskeho objektu.
 - Status enum je definovany v aplikacnim schema.ts a pouzity Drizzle schematem se stejnymi hodnotami/defaultem. Stare read Zod schema a DB enum soubor odstraneny; zadna DB migrace nebyla provedena.
 - Samostatne follow-upy bez oprav v refactoru: zapisy clenstvi nejsou atomicke a nekontroluji obsazenost vsech clenu; approval nadale duveruje klientskemu currentStatus a povoluje clena projektu nebo lektora; edit nezavadi nove omezeni na CREATED. Kandidat bez GitHub muze chybet mezi options i kdyz je v editacnich defaults. Tyto existujici vlastnosti se pri migraci nezmenily.
 - Na naslednou zadost uzivatele odstranen projectId z Better Auth user.additionalFields, a tim z odvozenych session-user typu a nove nacitaneho auth vystupu. Sloupec users.projectId a DB uzivatelske typy zustaly zachovany. Neni potreba DB migrace ani nove prihlaseni pri aktualni konfiguraci bez cookie cache/secondary storage.
 - Create i approval action overuji clenstvi primo necachovanym DB dotazem, nikoliv pres React.cache query. Student overview nacita projekt soubezne s body/dochazkou; nav/card props byly zuzeny na skutecne potrebna pole, aby session nemusela splnovat cely UserType.
 - Provedena pouze staticka kontrola diffu, SQL struktury, importu a UI kontraktu. Testy, browser, build, lint ani typecheck nebyly spusteny. Pred dalsim modulem pockat na schvaleni uzivatele.
+
+## Stav Student
+
+- Pridany `src/modules/student/queries.ts`, `types.ts`, `actions.ts` a `schema.ts`. Read API: `getStudent`, `getStudents`, `getStudentsWithHomework`, `getStudentOverview`, `getMyStudentOverview`. Pouziva `server-only`, primitivni argumenty a `React.cache`, bez persistentni cache/tagu.
+- Seznam, detail a hodnoceni sdileji zaklad `StudentType`; `StudentProgressType` a `StudentHomeworkType` pridavaji skutecne odlisne agregace/hodnoceni. `StudentOverviewType` popisuje souhrn. Email, auth metadata a nepotrebne relace se nevybiraji ani neposilaji do klientskych tabulek.
+- Detail pouziva cilene ID plus role=student misto nacitani vsech studentu. Zachovana lector-only autorizace i chyba pri neexistujicim studentovi; nepotrebne pripojene homework cteni z detailu odstraneno. Nepouzivany puvodni getMany se neprenasel.
+- Seznam a grading zustavaji lector-only. Own-students tab je stale pouze filtr v UI. Grading zahrnuje i studenty bez hodnoceni a zachovava prvni odpovidajici zaznam vcetne nuly.
+- Prehled overuje self-or-lector a sklada existujici homework, attendance a project query. Vlastni prehled deleguje na stejny vstup; role student se zde nevynucuje. Projekt se vzdy cte podle DB clenstvi, nikdy ze session.projectId.
+- Zachovany soucty vsech bodu, pocet zaznamu hodnoceni/dochazky vcetne duplicit a prahy 130/8. TotalPoints stale znamena homework points. `attendanceCount` nahradil nepotrebne pole attendances; list nema plne homework/attendance relace a projektovy odkaz bere ID z vybraneho projektu.
+- Onboarding a edit-profile jsou dve samostatne autentizovane actions v jednom souboru s primym update vlastniho uzivatele. Sdileji profileFormSchema/ProfileFormType se stejnymi tremi z.string() poli bez nove validace. Zachovany revalidace '/' layout a '/profile', i moznost editace vlastniho profilu lektorem.
+- Onboarding client dostava pouze defaultGithub=sessionUser.name, nikoliv cely session objekt. UI, formulare a ZSA error/toast flow zustaly zachovany.
+- Prepojeny runtime i type-only konzumenty vcetne sidebaru, detailu a obou tabulek. Odstraneny stary loader, server/query, repository, mutation, index, duplikovane colocated profile action/schema soubory a posledni LoaderResult helper `src/types.ts`.
+- Provedena pouze staticka kontrola diffu, importu, projekci a kontraktu. Testy, browser, build, lint ani typecheck nebyly spusteny. Pred dalsim modulem pockat na schvaleni uzivatele.
 
 ## Cil A Rozsah
 

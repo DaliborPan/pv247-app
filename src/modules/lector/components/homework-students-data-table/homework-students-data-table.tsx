@@ -2,16 +2,15 @@ import { DataTable } from '@/components/data-table';
 import { getSessionUser } from '@/modules/session-user';
 import { type LectureType } from '@/modules/lecture/types';
 
-import { type studentLoaders } from '@/modules/student/loader';
+import { type StudentHomeworkType } from '@/modules/student/types';
 
 import { columns } from './columns';
-import { LoaderResult } from '@/types';
 
 export const HomeworkStudentsDataTable = async ({
   students,
   lecture
 }: {
-  students: LoaderResult<typeof studentLoaders.getStudentsWithHomework>;
+  students: StudentHomeworkType[];
   lecture?: Pick<
     LectureType,
     'id' | 'homeworkName' | 'homeworkSlug' | 'homeworkTemplateRepositoryUrl'

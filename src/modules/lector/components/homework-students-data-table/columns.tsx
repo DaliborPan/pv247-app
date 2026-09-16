@@ -9,12 +9,11 @@ import {
   SetHomeworkPointsForm,
   type SetHomeworkPointsFormSchema
 } from '@/modules/homework/components/set-homework-points-form';
-import { type studentLoaders } from '@/modules/student/loader';
-import { LoaderResult } from '@/types';
+import { type StudentHomeworkType } from '@/modules/student/types';
 import { getHomeworkGithubUrl } from '@/modules/homework/utils';
 
 const columnHelper = createColumnHelper<
-  LoaderResult<typeof studentLoaders.getStudentsWithHomework>[number] & {
+  StudentHomeworkType & {
     defaultValues: Partial<SetHomeworkPointsFormSchema>;
     templateRepositoryUrl?: string | null;
   }

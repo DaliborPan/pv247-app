@@ -15,7 +15,7 @@ export const OnboardingPage = async () => {
         materials.{' '}
       </p>
 
-      <OnboardingForm sessionUser={sessionUser} />
+      <OnboardingForm defaultGithub={sessionUser.name} />
     </div>
   );
 };

@@ -5,14 +5,14 @@ import { SidebarCard } from '@/components/sidebar-card';
 import { getAvailableLectures, getLectures } from '@/modules/lecture/queries';
 
 import { SidebarLinkRow } from './sidebar-link-row';
-import { studentLoaders } from '@/modules/student/loader';
+import { getMyStudentOverview } from '@/modules/student/queries';
 import { Suspense } from 'react';
 
 export const HomeworksCard = async () => {
   const lectures = await getLectures();
   const availableLectures = await getAvailableLectures();
 
-  const overviewPromise = studentLoaders.getMineOverview();
+  const overviewPromise = getMyStudentOverview();
 
   return (
     <SidebarCard title="Homework" className="hidden lg:block">

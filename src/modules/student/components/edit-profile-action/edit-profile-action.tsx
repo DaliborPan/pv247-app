@@ -9,20 +9,20 @@ import { Prompt } from '@/components/base/prompt';
 import { FormInput } from '@/components/form/form-fields/form-input';
 import { Button } from '@/components/base/button';
 
-import { editProfileFormSchema, type EditProfileFormType } from './schema';
-import { editProfileAction } from './action';
+import { profileFormSchema, type ProfileFormType } from '../../schema';
+import { editProfileAction } from '../../actions';
 
 export const EditProfileAction = ({
   defaultValuesPromise
 }: {
-  defaultValuesPromise: Promise<DefaultValues<EditProfileFormType>>;
+  defaultValuesPromise: Promise<DefaultValues<ProfileFormType>>;
 }) => {
   const defaultValues = use(defaultValuesPromise);
 
   return (
-    <Prompt<EditProfileFormType>
+    <Prompt<ProfileFormType>
       title="Edit profile"
-      formSchema={editProfileFormSchema}
+      formSchema={profileFormSchema}
       defaultValues={defaultValues}
       content={
         <div className="flex flex-col gap-y-3 pt-2">
