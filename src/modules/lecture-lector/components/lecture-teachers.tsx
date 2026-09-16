@@ -1,7 +1,7 @@
 import { getLectures } from '@/modules/lecture/queries';
 import type { LectureSlugType } from '@/modules/lecture/schema';
 
-import { lectureLectorLoaders } from '../loader';
+import { getLectureApprovedLectors } from '../queries';
 
 import { LectorChip } from '@/modules/lector/components/lector-chip';
 
@@ -16,9 +16,7 @@ export const LectureTeachers = async ({
 
   if (!lecture) return null;
 
-  const lectureLectors = await lectureLectorLoaders.getLectureApprovedLectors(
-    lecture.id
-  );
+  const lectureLectors = await getLectureApprovedLectors(lecture.id);
 
   if (lectureLectors.length === 0) return null;
 

@@ -1,6 +1,6 @@
 # Migrace na tenkou DAL (varianta A)
 
-Stav: `lecture`, `homework` a `student-lecture` implementovany. Ostatni moduly zatim nemigrovany; dalsi na rade je `lecture-lector`.
+Stav: `lecture`, `homework`, `student-lecture` a `lecture-lector` implementovany. Ostatni moduly zatim nemigrovany; dalsi na rade je `project`.
 
 ## Stav Pilotu
 
@@ -37,6 +37,18 @@ Stav: `lecture`, `homework` a `student-lecture` implementovany. Ostatni moduly z
 - Odstraneny loader a stare server/query, repository, mutation a index soubory. Nepouzivane read Zod schema nahrazeno explicitnim typem; `acceptAttendanceCodeSchema` zustava pro route a vysledkovou stranku.
 - Samostatny follow-up: check-then-insert neni ochrana proti soubehu a DB nema unikatni par student/prednaska. Migrace tuto vlastnost nezmenila a nepridala schema zmeny.
 - Provedena pouze staticka kontrola diffu, importu a klientova navratoveho kontraktu. Testy, browser, build, lint ani typecheck nebyly spusteny. Pred dalsim modulem pockat na schvaleni uzivatele.
+
+## Stav Lecture-Lector
+
+- Pridany `src/modules/lecture-lector/queries.ts` a `types.ts`. Read vstupy pouzivaji `server-only` a `React.cache`, bez persistentni cache a bez tagu.
+- `getLectureApprovedLectors(lectureId)` zustava verejna; filtruje schvalene zaznamy primo v SQL a vraci `LectureApprovedLectorType` s ID prirazeni a jmenem/avatarem vyucujiciho. Nenacita kompletni uzivatelske zaznamy.
+- `getLectorsForLectures()` vraci seskupene `LectureLectorType` pro spravu prihlaseni a nove overuje roli lektora primo v DAL, nikoliv jen pres podminene zobrazeni profile sekce. Skupinovy klic nese lectureId, polozky obsahuji jen potrebne udaje.
+- Sign-up, sign-out a approval zapisuji primo v existujicich actions. Zachovany ZSA procedury, validace, chybove zpravy a `refresh()` po uspesnem zapisu. Vlastni lectorId pro prihlaseni/odhlaseni pochazi ze session.
+- Zachovana soucasna pravidla schvalovani: libovolny lektor smi schvalit existujici prihlasku vcetne vlastni, bez omezeni availability statusem; nove schvaleni odmita stav se dvema schvalenymi, jiz schvaleny cil lze potvrdit znovu a odschvaleni zustava povolene.
+- Status enum presunut do client-safe moduloveho `schema.ts`; Drizzle definice ho importuje odtud. Hodnoty, poradi, default i DB constraints zustaly identicke; zadna DB migrace ani zapis nebyly provedeny.
+- Prepojeny verejne lecture teachers a profile sprava prihlaseni. `LectorChip` prijima pouze zobrazovana pole. Odstraneny loader, server/query, repository, mutation, index a puvodni DB enum soubor; nepouzivane neomezene cteni pro jednu prednasku se neprenaselo.
+- Existujici unikatni par lectureId/lectorId zustava. Samostatny follow-up: soucasna kontrola limitu dvou schvalenych neni atomicka a muze zavodit pri soubehu; migrace nepridavala transakce ani nova pravidla.
+- Provedena pouze staticka kontrola diffu, typu, importu a autorizacnich vetvi. Testy, browser, build, lint ani typecheck nebyly spusteny. Pred dalsim modulem pockat na schvaleni uzivatele.
 
 ## Cil A Rozsah
 
