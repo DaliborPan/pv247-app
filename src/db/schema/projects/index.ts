@@ -1,1 +1,1 @@
-export { projects, type ProjectInsertType } from './projects';
+export { projects } from './projects';

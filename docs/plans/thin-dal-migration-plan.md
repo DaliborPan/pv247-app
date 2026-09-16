@@ -1,6 +1,6 @@
 # Migrace na tenkou DAL (varianta A)
 
-Stav: `lecture`, `homework`, `student-lecture`, `lecture-lector`, `project`, `student` a `homework-repository` implementovany. Zbyva zaverecny cleanup vcetne posouzeni zbyvajiciho `lector` kodu a serverovych hranic.
+Stav: migrace varianty A a zaverecny cleanup implementovany. Dokoncena staticka kontrola; funkcnost nebyla runtime overena. Na zadost uzivatele nebyly spusteny testy, build, lint, typecheck ani seed, DB nebo GitHub operace.
 
 ## Stav Pilotu
 
@@ -91,6 +91,27 @@ Stav: `lecture`, `homework`, `student-lecture`, `lecture-lector`, `project`, `st
 - Prepojeny homework card actions. Odstraneny loader, server/query, server/repository, server/mutation a puvodni DB status soubor. Zadna zmena ulozenych dat ani databazovych constraints.
 - Provedena pouze staticka kontrola importu a porovnani puvodniho/noveho workflow. Testy, browser, build, lint, typecheck, GitHub operace ani DB zapisy nebyly spusteny. Pred cleanupem pockat na schvaleni uzivatele.
 
+## Stav Cleanupu
+
+- Odstranen zbyvajici `lector/server` (query, repository, index). Reviewer-selection a getLectorStudents nemely runtime ani typove konzumenty vcetne auth/integraci; neni potreba nahradni DAL modul.
+- V `src/modules` nezbyvaji soubory starych `server/` vrstev ani loadery. Vsech 24 verejnych read vstupu v sedmi queries.ts modulech ma suffix Query a server-only hranici. Klientske mutation hooky, komponentove exporty a GitHub integrace zustaly zachovany.
+- Doplnene `server-only` do aplikacni DB inicializace, auth implementace, session readeru a sdilenych ZSA procedur. Auth barrel ma pouze explicitni export auth. Client auth inference zustava type-only a konkretni actions maji nadale vlastni use-server hranici.
+- Seed nepouziva server-only DB vstup: vytvari vlastni Drizzle spojeni az pri explicitnim volani seed(), se stejnymi promennymi prostredi a puvodni transakci. Nevznikl novy CLI prikaz ani automaticke spousteni seedu.
+- User role a lecture/homework slug enumy presunuty do client-safe modulovych schema.ts. DB je importuje z aplikacni vrstvy; hodnoty, poradi, defaulty a prazdny homework slug posledni lekce zustaly zachovany. Sdilena modulova schema.ts/types.ts nemaji runtime DB zavislosti.
+- Na naslednou zadost uzivatele odstranen cely modul user i obecny UserType. Role jsou v client-safe `session-user/schema.ts`, ktery importuje i DB definice. Navigace pouziva Pick<SessionUserType>, studentske karty Pick<StudentType> a LectorChip ma lokalni props pro zobrazovane udaje. Sdilene schema neimportuje serverovy session reader ani auth implementaci; projectId se do session nevraci.
+- Odstraneny nepouzivane DB typove aliasy UserInsertType/UserSelectType, ProjectInsertType, HomeworkInsertType, LectureLectorInsertType, StudentLectureInsertType a jejich reexporty. Privatne pouzivane homework-repository insert/select typy zustaly. Odstranen nepouzivany AcceptAttendanceCodeType; runtime schema kodu zustava.
+- Staticky zkontrolovany reference odstranenych souboru/symbolu, klient/server hranice, seed importni cesta, enumy a typove kontrakty. Nebyl nalezen zbyvajici primy DB pristup v prezentacnich komponentach; DB importuji query, actions, route a auth infrastruktura.
+- Vyukove MDX ukazky puvodni architektury, nesouvisejici UI barrely a tooling zustaly mimo cleanup. Pripadna aktualizace vyukovych textu je samostatna zmena.
+
+## Oddelene Follow-Upy
+
+- Project clenstvi: vice zapisu bez transakce a bez serverove kontroly obsazenosti vsech vybranych clenu; schvalovani nadale vychazi z klientsky zaslaneho currentStatus.
+- Dochazka: check-then-insert neni ochrana proti soubehu; chybi DB unikatnost paru student/prednaska.
+- Lecture-lector: limit dvou schvalenych vyucujicich je kontrolovan neatomicky.
+- Hodnoceni: create prebira lectorId/nazev zadani ze vstupu, validace neurcuje rozsah bodu a schema nezakazuje duplicity.
+- Session: nullable getSession zachytava i provozni chyby jako neprihlaseni; toto chovani nebylo meneno.
+- Tooling a overeni: existujici next lint script neni platny pro Next 16; jeho oprava i runtime/test overeni byly podle dohody mimo rozsah.
+
 ## Cil A Rozsah
 
 Zjednodusit serverovou datovou vrstvu bez povinneho retezce loader -> query -> repository. Pouzit vyhradne variantu A, bez samostatne use-case/service vrstvy.
@@ -126,7 +147,7 @@ Existujici HTTP vstup: Route Handler -> Drizzle
 
 ## Vychodiska
 
-Moduly `lecture`, `lecture-lector`, `homework`, `student-lecture`, `project`, `student`, `homework-repository` maji loader i serverove query/repository/mutation soubory. `lector` ma query/repository bez loaderu. `session-user` je infrastruktura identity; `user` obsahuje sdilena schemata a nepotrebuje novou DAL.
+Puvodni stav pred migraci: moduly `lecture`, `lecture-lector`, `homework`, `student-lecture`, `project`, `student`, `homework-repository` mely loader i serverove query/repository/mutation soubory. `lector` mel query/repository bez loaderu. `session-user` je infrastruktura identity; `user` obsahuje sdilene kontrakty a nepotrebuje novou DAL.
 
 `homework-repository` je domena GitHub repozitaru, nikoliv vrstva urcena ke smazani. Klientske `components/**/mutation.ts` jsou React Query hooky, nikoliv backendova vrstva.
 
@@ -211,7 +232,7 @@ Vystup: queries a action soubor s privatnimi pomocnymi funkcemi, bez samostatneh
 ### 8. Dokoncit Cleanup
 
 - Projit reference `src/modules/lector/server` vcetne auth/integraci. Nepouzivane reviewer-selection funkce odstranit; pripadne skutecne konzumenty prevest primo do prislusne query/action. Nevyrabet vrstvu jen kvuli symetrii.
-- `user/schema.ts` ponechat jako client-safe kontrakty. Sdilene enum zavislosti presmerovat z DB do domeny bez zmeny ulozenych hodnot.
+- Podle nasledneho rozhodnuti uzivatele modul user odstranit; role umistit do client-safe `session-user/schema.ts`. Konzumenty puvodniho UserType prevest na potrebna pole session/student typu nebo lokalni props. Sdilene enum zavislosti presmerovat z DB do domeny bez zmeny ulozenych hodnot.
 - Odstranit nahrazene loadery, `server/query.ts`, domenove `server/mutation.ts`, repository wrappery a siroke `server/index.ts` barrely. Neodstranovat klientsky React Query kod ani nizkourovnove integrace podle pouheho nazvu.
 - Odstranit `LoaderResult` z `src/types.ts`, pokud uz nema konzumenty. Verejne UI kontrakty nahradit explicitnimi DTO; lokalni inference muze zustat.
 - Staticky projit vsechny runtime i type-only reference, `ReturnType`, relativni importy, aliases, metadata a route konzumenty. UI nesmi importovat DB; colocated serverove actions ji importovat mohou.

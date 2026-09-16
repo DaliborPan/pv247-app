@@ -20,5 +20,3 @@ export const projects = sqliteTable('project', {
     .notNull()
     .default(sql`(CURRENT_TIMESTAMP)`)
 });
-
-export type ProjectInsertType = typeof projects.$inferInsert;

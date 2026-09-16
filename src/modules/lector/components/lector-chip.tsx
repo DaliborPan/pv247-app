@@ -1,10 +1,14 @@
-import { type UserType } from '@/modules/user/schema';
 import { getLectorDisplayName } from '../utils/lector-display-name';
 
 export const LectorChip = ({
   lector
 }: {
-  lector: Pick<UserType, 'name' | 'firstName' | 'lastName' | 'image'>;
+  lector: {
+    name: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    image?: string | null;
+  };
 }) => {
   return (
     <div className="border-border-primary bg-bg-secondary flex items-center gap-2 rounded-lg border px-3 py-2">

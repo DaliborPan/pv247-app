@@ -26,5 +26,3 @@ export const lectureLectors = sqliteTable(
   },
   table => [unique().on(table.lectureId, table.lectorId)]
 );
-
-export type LectureLectorInsertType = typeof lectureLectors.$inferInsert;

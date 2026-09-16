@@ -1,16 +1,31 @@
 import { z } from 'zod';
 
-/**
- * Special case of importing schemas from database, because we want
- * to have enums in database directly.
- *
- * Reexporting them from this file to allow other components/... to import from here
- */
-import { dbHomeworkSlugSchema } from '@/db/schema/lectures/homework-slug';
-import { dbLectureSlugSchema } from '@/db/schema/lectures/lecture-slug';
-
-export const lectureSlugSchema = dbLectureSlugSchema;
+export const lectureSlugSchema = z.enum([
+  'introduction',
+  'react',
+  'styling',
+  'hooks',
+  'other-hooks-refs-tables',
+  'async-forms',
+  'nextjs',
+  'suspense-streaming-rsc',
+  'api-configs-server-actions-database',
+  'authentication-metadata-deployment'
+]);
 export type LectureSlugType = z.infer<typeof lectureSlugSchema>;
 
-export const homeworkSlugSchema = dbHomeworkSlugSchema;
+export const homeworkSlugSchema = z.enum([
+  'typescript',
+  'react-basics',
+  'styling',
+  'state',
+  'table-memo',
+  'forms-async',
+  'nextjs-basic',
+  'rsc-forms',
+  'api-actions-database',
+
+  // Last lesson does not have a homework
+  ''
+]);
 export type HomeworkSlugType = z.infer<typeof homeworkSlugSchema>;

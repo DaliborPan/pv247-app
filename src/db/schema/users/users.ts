@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
-import { dbRoleSchema } from './role';
+import { userRoleSchema } from '@/modules/session-user/schema';
 
 export const user = sqliteTable('user', {
   id: text('id').primaryKey(),
@@ -20,7 +20,7 @@ export const user = sqliteTable('user', {
     .notNull(),
 
   // role
-  role: text('role', { enum: dbRoleSchema.options })
+  role: text('role', { enum: userRoleSchema.options })
     .default('student')
     .notNull(),
 
@@ -36,9 +36,6 @@ export const user = sqliteTable('user', {
   projectId: text('projectId')
 });
 
-export type UserInsertType = typeof user.$inferInsert;
-export type UserSelectType = typeof user.$inferSelect;
-
 export const session = sqliteTable('session', {
   id: text('id').primaryKey(),
   expiresAt: integer('expires_at', { mode: 'timestamp_ms' }).notNull(),
@@ -51,7 +48,7 @@ export const session = sqliteTable('session', {
     .notNull(),
   ipAddress: text('ip_address'),
   userAgent: text('user_agent'),
-  role: text('role', { enum: dbRoleSchema.options }),
+  role: text('role', { enum: userRoleSchema.options }),
   userId: text('user_id')
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' })

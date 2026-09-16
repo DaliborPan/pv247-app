@@ -3,12 +3,14 @@ import { LabeledValue } from '@/components/labeled-value';
 import { cn } from '@/lib/cn';
 import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 import { getStudentOverviewQuery } from '@/modules/student/queries';
-import { type StudentOverviewType } from '@/modules/student/types';
-import { type UserType } from '@/modules/user/schema';
+import {
+  type StudentOverviewType,
+  type StudentType
+} from '@/modules/student/types';
 import { Suspense } from 'react';
 
 type StudentOverviewCardProps = {
-  user: Promise<Pick<UserType, 'id' | 'role'>>;
+  user: Promise<Pick<StudentType, 'id' | 'role'>>;
   otherFields?: (overview: StudentOverviewType) => React.ReactNode;
 };
 

@@ -1,6 +1,6 @@
-import { lectures } from './schema/lectures';
+import { drizzle } from 'drizzle-orm/libsql';
 
-import { db } from '.';
+import { lectures } from './schema/lectures';
 
 // const usersData: User[] = [
 // 	{
@@ -322,6 +322,13 @@ export const lecturesSeedData: LectureSeed[] = [
 ];
 
 export const seed = async () => {
+  const db = drizzle({
+    connection: {
+      url: process.env.DATABASE_URL!,
+      authToken: process.env.AUTH_TOKEN
+    }
+  });
+
   await db.transaction(async tx => {
     for (const lecture of lecturesSeedData) {
       await tx

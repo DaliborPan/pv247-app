@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { createServerActionProcedure } from 'zsa';
 
 import { getSessionUser } from '@/modules/session-user';

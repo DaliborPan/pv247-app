@@ -4,7 +4,7 @@ import { ListCard } from './list-card';
 import { PointsBadge } from './points-badge';
 import { ReactNode, Suspense } from 'react';
 import type { LectureType } from '@/modules/lecture/types';
-import { UserType } from '@/modules/user/schema';
+import { type StudentType } from '@/modules/student/types';
 
 import {
   getStudentHomeworksQuery,
@@ -49,7 +49,7 @@ const HomeworkListCard = async ({
 };
 
 export const StudentHomeworkCard = (props: {
-  user: Promise<Pick<UserType, 'id' | 'role'>>;
+  user: Promise<Pick<StudentType, 'id' | 'role'>>;
 }) => {
   return (
     <Suspense fallback={<HomeworkListCard />}>

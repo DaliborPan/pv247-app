@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { drizzle } from 'drizzle-orm/libsql';
 
 import { homeworks } from './schema/homeworks';

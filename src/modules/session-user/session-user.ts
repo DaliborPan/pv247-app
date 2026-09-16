@@ -1,9 +1,11 @@
+import 'server-only';
+
 import { cache } from 'react';
 import { headers } from 'next/headers';
 
 import { auth } from '@/auth';
 
-import { type UserRoleType } from '../user/schema';
+import { type UserRoleType } from './schema';
 import { tryCatch } from '@/lib/try-catch';
 
 /**
