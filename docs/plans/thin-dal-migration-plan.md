@@ -1,6 +1,6 @@
 # Migrace na tenkou DAL (varianta A)
 
-Stav: `lecture` a `homework` implementovany. Ostatni moduly zatim nemigrovany; dochazka zustava samostatnym dalsim krokem.
+Stav: `lecture`, `homework` a `student-lecture` implementovany. Ostatni moduly zatim nemigrovany; dalsi na rade je `lecture-lector`.
 
 ## Stav Pilotu
 
@@ -25,6 +25,18 @@ Stav: `lecture` a `homework` implementovany. Ostatni moduly zatim nemigrovany; d
 - Zachovany nuly, nullable lectureId, pocty/soucty vsech zaznamu a update vsech odpovidajicich radku. Kontrola zahajeneho hodnoceni nacita pouze prvni ID misto celeho seznamu.
 - Samostatne follow-upy, bez oprav v migraci: create duveruje klientskemu `lectorId` a nazvu zadani; bodove schema neurcuje minimum/maximum; databaze nezakazuje duplicitni hodnoceni. Soucasne chovani nebylo pri presunu predefinovano.
 - Provedena pouze staticka kontrola diffu, importu a konzumentu. Testy, browser, build, lint ani typecheck nebyly spusteny. Pred dalsim modulem pockat na schvaleni uzivatele.
+
+## Stav Student-Lecture
+
+- Pridany `src/modules/student-lecture/queries.ts` a `types.ts`. Read vstup je `getStudentLectures(studentId)` s `server-only`, `React.cache` a vlastni self-or-lector autorizaci. Nepouzivany cache tag byl nasledne na zadost uzivatele odstranen.
+- `StudentLectureType` obsahuje pouze `lectureId: string | null`. DB select skutecne vraci jen toto pole; pocty zaznamu vcetne duplicit a null hodnot zustavaji stejne.
+- Lektorsky toggle je primo v existujici action se zachovanou validaci a ZSA procedurou. Existence se zjistuje cilenym dotazem; pri odebrani se nadale mazou vsechny odpovidajici zaznamy. Navratovy status `created`/`deleted` zustava kompatibilni s klientem.
+- QR Route Handler provadi vlastni check a insert primo pres Drizzle. Zachovano prihlaseni, kontrola tokenu a SUCCESS pro novy i jiz existujici zaznam; pri opakovanem postupnem potvrzeni se znovu nevklada.
+- Na zadost uzivatele odstraneny invalidace attendance tagu, ktery nemel odpovidajici cache. Action po zapisu vola `refresh()` pro obnovu UI; QR route nadale konci redirectem. Zadna persistentni cache nebyla pridana.
+- Prepojeny attendance badge, studentska dochazkova karta a studentsky overview loader. Studentske repository relace zustavaji mimo rozsah teto migrace.
+- Odstraneny loader a stare server/query, repository, mutation a index soubory. Nepouzivane read Zod schema nahrazeno explicitnim typem; `acceptAttendanceCodeSchema` zustava pro route a vysledkovou stranku.
+- Samostatny follow-up: check-then-insert neni ochrana proti soubehu a DB nema unikatni par student/prednaska. Migrace tuto vlastnost nezmenila a nepridala schema zmeny.
+- Provedena pouze staticka kontrola diffu, importu a klientova navratoveho kontraktu. Testy, browser, build, lint ani typecheck nebyly spusteny. Pred dalsim modulem pockat na schvaleni uzivatele.
 
 ## Cil A Rozsah
 
@@ -97,7 +109,7 @@ Vystup: jedno verejne read API, minimalni katalogove DTO, oddelena ochrana token
 - Create/update hodnoceni a toggle dochazky presunout primo do stavajicich actions pri zachovani ZSA kontraktu a runtime opravneni.
 - Odstranit primy import homework repository ze student query: konzument pouzije nove autorizovane cteni nebo vlastni autorizovany cileny DB dotaz.
 - V `src/app/api/accept-attendance/[token]/route.ts` umistit zapis primo do handleru. Zachovat prihlaseni, validaci tokenu a idempotentni opakovane potvrzeni; nepridavat mezivrstvu ani volani action z route.
-- Zachovat stavajici refresh/revalidation. Tag `student-lectures:<id>` dnes nema odpovidajici tagovane read cteni; evidovat to jako samostatny follow-up, nepridavat kvuli nemu cache.
+- Attendance tag bez odpovidajici cache odstranit podle nasledneho rozhodnuti uzivatele; action pouzije `refresh()`, route ponecha redirect. Nepridavat kvuli tagu persistentni cache.
 - Prevest konzumenty vcetne zatim nemigrovaneho studentskeho loaderu a odstranit nahrazene backendove vrstvy. Klientske mutation hooky zustavaji.
 
 Vystup: cteni pres queries, zapisy primo v actions/route, zadne verejne raw repository API.

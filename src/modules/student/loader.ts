@@ -8,7 +8,7 @@ import { projectQueries } from '@/modules/project/server';
 
 import { studentQueries } from './server';
 
-import { studentLectureQueries } from '../student-lecture/server';
+import { getStudentLectures } from '@/modules/student-lecture/queries';
 
 /**
  * Loads students, that are not assigned to a project and are not the current user.
@@ -31,7 +31,7 @@ const getOverview = async (user: UserType) => {
 
   const [homework, attendances] = await Promise.all([
     getStudentHomeworks(user.id),
-    studentLectureQueries.getMany(sessionUser, { userId: user.id })
+    getStudentLectures(user.id)
   ]);
 
   const project = user.projectId

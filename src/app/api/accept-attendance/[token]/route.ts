@@ -1,9 +1,7 @@
 import { db } from '@/db';
+import { studentLectures } from '@/db/schema/studentLecture';
 import { getSession } from '@/modules/session-user';
 import { acceptAttendanceCodeSchema } from '@/modules/student-lecture/schema';
-import { studentLectureMutations } from '@/modules/student-lecture/server/mutation';
-import { getStudentLecturesTag } from '@/modules/student-lecture/server/tag';
-import { revalidateTag } from 'next/cache';
 
 export const GET = async (
   request: Request,
@@ -36,15 +34,23 @@ export const GET = async (
     return Response.redirect(url);
   }
 
-  const updated = await studentLectureMutations.createMine(
-    sessionUser,
-    lecture.id
-  );
-  url.searchParams.set('code', acceptAttendanceCodeSchema.Values.SUCCESS);
+  const existing = await db.query.studentLectures.findFirst({
+    columns: { id: true },
+    where: (studentLectures, { and, eq }) =>
+      and(
+        eq(studentLectures.studentId, sessionUser.id),
+        eq(studentLectures.lectureId, lecture.id)
+      )
+  });
 
-  if (updated) {
-    revalidateTag(getStudentLecturesTag(sessionUser.id), 'max');
+  if (!existing) {
+    await db.insert(studentLectures).values({
+      studentId: sessionUser.id,
+      lectureId: lecture.id
+    });
   }
+
+  url.searchParams.set('code', acceptAttendanceCodeSchema.Values.SUCCESS);
 
   return Response.redirect(url);
 };
