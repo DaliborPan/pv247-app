@@ -6,11 +6,13 @@ import { useMutation } from '@tanstack/react-query';
 
 import { Button } from '@/components/base/button';
 
-import { type ProjectType } from '../../schema';
+import { type ProjectType } from '@/modules/project/types';
 
 import { approveProjectAction } from './action';
 
-const useApproveProjectMutation = (project: ProjectType) =>
+const useApproveProjectMutation = (
+  project: Pick<ProjectType, 'id' | 'status'>
+) =>
   useMutation({
     mutationFn: async () =>
       approveProjectAction({
@@ -19,7 +21,11 @@ const useApproveProjectMutation = (project: ProjectType) =>
       })
   });
 
-export const ApproveProjectButton = ({ project }: { project: ProjectType }) => {
+export const ApproveProjectButton = ({
+  project
+}: {
+  project: Pick<ProjectType, 'id' | 'status'>;
+}) => {
   const mutation = useApproveProjectMutation(project);
 
   const StatusIcon = project.status === 'CREATED' ? Check : X;

@@ -55,10 +55,6 @@ export const auth = betterAuth({
       lectorId: {
         type: 'string',
         input: false
-      },
-      projectId: {
-        type: 'string',
-        input: false
       }
     }
   },

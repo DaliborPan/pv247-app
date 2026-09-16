@@ -14,11 +14,13 @@ import { MobileNavigation } from './mobile-navigation';
 import { Logout } from './logout';
 import { Suspense } from 'react';
 
+type NavigationUserType = Pick<UserType, 'name' | 'role'>;
+
 const NavigationDelimiter = ({ className }: { className?: string }) => (
   <div className={cn('mx-6 h-5 w-[2px] bg-[#B9BBC6]', className)} />
 );
 
-const UserMenuItem = ({ user }: { user: UserType }) => (
+const UserMenuItem = ({ user }: { user: Pick<UserType, 'name'> }) => (
   <Link href="/profile" className="flex items-center gap-x-3">
     <div className="size-8 rounded-full bg-neutral" />
 
@@ -30,7 +32,7 @@ export const Navigation = ({
   user,
   isUserLoading
 }: {
-  user?: UserType | Promise<UserType | undefined | null>;
+  user?: NavigationUserType | Promise<NavigationUserType | undefined | null>;
   isUserLoading?: boolean;
 }) => {
   if (user instanceof Promise) {
@@ -55,7 +57,10 @@ export const Navigation = ({
           />
         </Link>
 
-        <MobileNavigation user={user} isUserLoading={isUserLoading} />
+        <MobileNavigation
+          user={user ? { role: user.role } : undefined}
+          isUserLoading={isUserLoading}
+        />
 
         <div className="hidden grow items-center lg:flex">
           <nav className="grow">

@@ -1,10 +1,15 @@
 import { Suspense } from 'react';
 import { ProjectCard } from './_components/project-card';
-import { projectLoaders } from '@/modules/project/loader';
+import { getProjects } from '@/modules/project/queries';
 
 const Page = async () => {
-  const projectsCompleted = await projectLoaders.getCompleted();
-  const projectsCreatedOrApproved = await projectLoaders.getCreatedOrApproved();
+  const projects = await getProjects();
+  const projectsCompleted = projects.filter(
+    project => project.status === 'COMPLETED'
+  );
+  const projectsCreatedOrApproved = projects.filter(
+    project => project.status === 'CREATED' || project.status === 'APPROVED'
+  );
 
   return (
     <>

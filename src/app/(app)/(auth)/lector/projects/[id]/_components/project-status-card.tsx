@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon';
 import { SetProjectPointsAction } from '@/modules/project/components/set-project-points-action';
 import { ApproveProjectButton } from '@/modules/project/components/approve-project-action';
-import { ProjectType } from '@/modules/project/schema';
+import { type ProjectType } from '@/modules/project/types';
 
 const getStatusText = (status: ProjectType['status']) => {
   if (status === 'APPROVED') return 'Approved!';
@@ -17,7 +17,11 @@ const getStatusText = (status: ProjectType['status']) => {
   return 'Unknown status';
 };
 
-export const ProjectStatusCard = ({ project }: { project: ProjectType }) => {
+export const ProjectStatusCard = ({
+  project
+}: {
+  project: Pick<ProjectType, 'id' | 'status' | 'github' | 'comment'>;
+}) => {
   const status = project.status;
 
   const isScored = status === 'COMPLETED' || status === 'FAILED';
@@ -81,7 +85,9 @@ export const ProjectStatusCard = ({ project }: { project: ProjectType }) => {
       )}
 
       {(status === 'CREATED' || status === 'APPROVED') && (
-        <ApproveProjectButton project={project} />
+        <ApproveProjectButton
+          project={{ id: project.id, status: project.status }}
+        />
       )}
     </SidebarCard>
   );

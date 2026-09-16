@@ -1,18 +1,24 @@
 'use server';
 
-import { updateProjectPointsMutation } from '@/modules/project/server';
+import { eq } from 'drizzle-orm';
+import { refresh } from 'next/cache';
+
+import { db } from '@/db';
+import { projects } from '@/db/schema/projects';
 import { authLectorServerAction } from '@/server/server-actions';
 
 import { setProjectPointsFormSchema } from './schema';
-import { refresh } from 'next/cache';
 
 export const setProjectPointsAction = authLectorServerAction
   .input(setProjectPointsFormSchema)
-  .handler(async ({ ctx, input }) => {
-    await updateProjectPointsMutation(ctx.sessionUserLector, input.projectId, {
-      status: input.status,
-      comment: input.comment
-    });
+  .handler(async ({ input }) => {
+    await db
+      .update(projects)
+      .set({
+        status: input.status,
+        comment: input.comment
+      })
+      .where(eq(projects.id, input.projectId));
 
     refresh();
   });

@@ -1,6 +1,6 @@
 # Migrace na tenkou DAL (varianta A)
 
-Stav: `lecture`, `homework`, `student-lecture` a `lecture-lector` implementovany. Ostatni moduly zatim nemigrovany; dalsi na rade je `project`.
+Stav: `lecture`, `homework`, `student-lecture`, `lecture-lector` a `project` implementovany. Ostatni moduly zatim nemigrovany; dalsi na rade je `student`.
 
 ## Stav Pilotu
 
@@ -50,6 +50,22 @@ Stav: `lecture`, `homework`, `student-lecture` a `lecture-lector` implementovany
 - Existujici unikatni par lectureId/lectorId zustava. Samostatny follow-up: soucasna kontrola limitu dvou schvalenych neni atomicka a muze zavodit pri soubehu; migrace nepridavala transakce ani nova pravidla.
 - Provedena pouze staticka kontrola diffu, typu, importu a autorizacnich vetvi. Testy, browser, build, lint ani typecheck nebyly spusteny. Pred dalsim modulem pockat na schvaleni uzivatele.
 
+## Stav Project
+
+- Pridany `src/modules/project/queries.ts` a `types.ts`. Read vstupy: `getMyProject`, `getProject`, `getProjects`, `getStudentProject`, `getProjectFormStudentComboboxOptions`. Vse s `server-only` a `React.cache`, bez persistentni cache/tagu.
+- Na zadost uzivatele sjednoceny seznam, detail i studentsky prehled na `ProjectType` a spolecny DB vyber. `getMyProject()` deleguje na `getStudentProject(sessionUser.id)`, kde zustava self-or-lector autorizace i memoizace. `ProjectStudentOptionType` zustava pro combobox. Clenove projektu neobsahuji e-mail, account metadata ani cely DB radek. Seznam a prehled nyni nacitaji stejna projektova pole jako detail vcetne clenu.
+- Detail i vlastni projekt pouzivaji cilene DB dotazy; vlastni a studentsky projekt se urcuji podle aktualniho DB clenstvi. Zachovano null pro chybejici vlastni/studentsky projekt a undefined pro lektorsky detail.
+- Lektorske seznamy a detail zustavaji lector-only, studentsky prehled self-or-lector. Seznam nacte data jednou a v UI je rozdeli do puvodnich skupin; FAILED zustava mimo obe skupiny.
+- Combobox kandidatu presunut ze student vrstev do project query a vraci primo value/label. Kontroluje opravneni k operaci podle aktualniho users.projectId z DB: edit vyzaduje clenstvi bez lektorske vyjimky, create nepovoli existujici prirazeni. Filtr kandidatu vcetne GitHub podminky a stavajicich clenu zustal zachovan.
+- Create/edit, status a hodnoceni zapisuji primo v existujicich actions. Zachovany vstupni schemata, ZSA procedury, chybove zpravy, poradi zapisu, refresh/revalidatePath a role-student filtr pri prirazovani clenu. Create zachovava i dosavadni volitelne ID ze vstupu.
+- Approval klient dostava explicitne jen id/status. Odstraneny project LoaderResult/ReturnType vazby; obecny LoaderResult zustava pro student tabulky, ktere jeste nejsou migrovane.
+- Odstraneny project loader, server/query, repository, mutation a index. Odstraneny take nepotrebne student assignment/candidate helpery; studentsky overview vzdy vola `getStudentProject(user.id)`, bez podminky nad projectId uzivatelskeho objektu.
+- Status enum je definovany v aplikacnim schema.ts a pouzity Drizzle schematem se stejnymi hodnotami/defaultem. Stare read Zod schema a DB enum soubor odstraneny; zadna DB migrace nebyla provedena.
+- Samostatne follow-upy bez oprav v refactoru: zapisy clenstvi nejsou atomicke a nekontroluji obsazenost vsech clenu; approval nadale duveruje klientskemu currentStatus a povoluje clena projektu nebo lektora; edit nezavadi nove omezeni na CREATED. Kandidat bez GitHub muze chybet mezi options i kdyz je v editacnich defaults. Tyto existujici vlastnosti se pri migraci nezmenily.
+- Na naslednou zadost uzivatele odstranen projectId z Better Auth user.additionalFields, a tim z odvozenych session-user typu a nove nacitaneho auth vystupu. Sloupec users.projectId a DB uzivatelske typy zustaly zachovany. Neni potreba DB migrace ani nove prihlaseni pri aktualni konfiguraci bez cookie cache/secondary storage.
+- Create i approval action overuji clenstvi primo necachovanym DB dotazem, nikoliv pres React.cache query. Student overview nacita projekt soubezne s body/dochazkou; nav/card props byly zuzeny na skutecne potrebna pole, aby session nemusela splnovat cely UserType.
+- Provedena pouze staticka kontrola diffu, SQL struktury, importu a UI kontraktu. Testy, browser, build, lint ani typecheck nebyly spusteny. Pred dalsim modulem pockat na schvaleni uzivatele.
+
 ## Cil A Rozsah
 
 Zjednodusit serverovou datovou vrstvu bez povinneho retezce loader -> query -> repository. Pouzit vyhradne variantu A, bez samostatne use-case/service vrstvy.
@@ -68,7 +84,7 @@ Existujici HTTP vstup: Route Handler -> Drizzle
 
 ## Cilove Konvence
 
-- Aplikacni typy pojmenovavat podle vyznamu s priponou `Type`, nikdy `Dto` ani `DTO`: napr. `LectureType`, `LectureAttendanceType`, `ProjectListItemType`. Tato konvence plati i pro vsechny dalsi migrovane moduly. DTO v textu planu oznacuje pouze koncept oddeleni aplikacnich dat od DB, nikoliv cast nazvu typu.
+- Aplikacni typy pojmenovavat podle vyznamu s priponou `Type`, nikdy `Dto` ani `DTO`: napr. `LectureType`, `LectureAttendanceType`, `ProjectType`. Preferovat jeden sdileny typ entity pro seznam/detail/prehled, pokud neni konkretni duvod je oddelit. Tato konvence plati i pro vsechny dalsi migrovane moduly. DTO v textu planu oznacuje pouze koncept oddeleni aplikacnich dat od DB, nikoliv cast nazvu typu.
 - `queries.ts`: pojmenovane exporty read operaci, `import 'server-only'`, ziskani session, autorizace, business vypocty, cilene Drizzle dotazy a minimalni DTO. Verejny katalog muze zustat anonymni.
 - `React.cache`: vychozi pro read vstupy pouzivane pri RSC renderu. Definice na urovni modulu, prednostne primitivni argumenty, zadne vedlejsi efekty. Nespolihat na memoizaci v Route Handlerech ani pri mutacich.
 - `types.ts`: explicitni read DTO podle skutecnych konzumentu, bez runtime importu DB nebo serverove implementace. Neprepisovat vsechny typy preventivne.

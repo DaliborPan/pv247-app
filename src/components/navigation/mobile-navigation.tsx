@@ -31,7 +31,7 @@ export const MobileNavigation = ({
   user,
   isUserLoading = false
 }: {
-  user?: UserType;
+  user?: Pick<UserType, 'role'>;
   isUserLoading?: boolean;
 }) => (
   <div className="flex grow items-center gap-x-3 lg:hidden">

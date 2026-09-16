@@ -7,7 +7,7 @@ import { type UserType } from '@/modules/user/schema';
 import { Suspense } from 'react';
 
 type StudentOverviewCardProps = {
-  user: Promise<UserType>;
+  user: Promise<Pick<UserType, 'id' | 'role'>>;
   otherFields?: (
     overview: Awaited<ReturnType<typeof studentLoaders.getOverview>>
   ) => React.ReactNode;

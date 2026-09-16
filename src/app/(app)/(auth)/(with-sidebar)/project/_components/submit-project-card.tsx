@@ -4,14 +4,13 @@ import { Pencil } from 'lucide-react';
 import { Button } from '@/components/base/button';
 import { DetailCard } from '@/components/detail-card';
 
-import { projectLoaders } from '@/modules/project/loader';
-import { LoaderResult } from '@/types';
+import { type ProjectType } from '@/modules/project/types';
 import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 
 export const SubmitProjectCard = ({
   project
 }: {
-  project: NonNullable<LoaderResult<typeof projectLoaders.getMine>>;
+  project: ProjectType;
 }) => {
   return (
     <DetailCard

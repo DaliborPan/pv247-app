@@ -48,7 +48,9 @@ const HomeworkListCard = async ({
   );
 };
 
-export const StudentHomeworkCard = (props: { user: Promise<UserType> }) => {
+export const StudentHomeworkCard = (props: {
+  user: Promise<Pick<UserType, 'id' | 'role'>>;
+}) => {
   return (
     <Suspense fallback={<HomeworkListCard />}>
       {props.user.then(async user => {

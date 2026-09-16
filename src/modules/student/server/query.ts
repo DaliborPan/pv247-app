@@ -1,12 +1,7 @@
 import { type SessionUserType } from '@/modules/session-user/types';
 
-import { getProjectFormStudents, studentRepository } from './repository';
+import { studentRepository } from './repository';
 import { getStudentHomeworks } from '@/modules/homework/queries';
-
-export const getProjectFormStudentComboboxOptions = async (
-  sessionUser: SessionUserType,
-  projectId: string | undefined
-) => getProjectFormStudents(sessionUser, projectId);
 
 const getMany = (sessionUser: SessionUserType) => {
   if (sessionUser.role !== 'lector') {
@@ -78,7 +73,6 @@ const get = async (sessionUser: SessionUserType, studentId: string) => {
 };
 
 export const studentQueries = {
-  getProjectFormStudentComboboxOptions,
   getMany,
   getManyWithHomework,
   get,

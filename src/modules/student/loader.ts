@@ -4,39 +4,18 @@ import { getSessionUser } from '@/modules/session-user';
 import { type UserType } from '@/modules/user/schema';
 import { getStudentHomeworks } from '@/modules/homework/queries';
 
-import { projectQueries } from '@/modules/project/server';
+import { getStudentProject } from '@/modules/project/queries';
 
 import { studentQueries } from './server';
 
 import { getStudentLectures } from '@/modules/student-lecture/queries';
 
-/**
- * Loads students, that are not assigned to a project and are not the current user.
- *
- * Students, that are already assigned to the project are also included.
- */
-export const getProjectFormStudentComboboxOptions = async (
-  projectId: string | undefined
-) => {
-  const sessionUser = await getSessionUser();
-
-  return studentQueries.getProjectFormStudentComboboxOptions(
-    sessionUser,
-    projectId
-  );
-};
-
-const getOverview = async (user: UserType) => {
-  const sessionUser = await getSessionUser();
-
-  const [homework, attendances] = await Promise.all([
+const getOverview = async (user: Pick<UserType, 'id'>) => {
+  const [homework, attendances, project] = await Promise.all([
     getStudentHomeworks(user.id),
-    getStudentLectures(user.id)
+    getStudentLectures(user.id),
+    getStudentProject(user.id)
   ]);
-
-  const project = user.projectId
-    ? await projectQueries.get(sessionUser, { userId: user.id })
-    : undefined;
 
   const awardedHomeworkCount = homework.length;
   const homeworkTotalPoints = homework.reduce(
@@ -96,6 +75,5 @@ export const studentLoaders = {
   getMineOverview,
   getOverview,
   listStudents,
-  getStudentsWithHomework,
-  getProjectFormStudentComboboxOptions
+  getStudentsWithHomework
 };
