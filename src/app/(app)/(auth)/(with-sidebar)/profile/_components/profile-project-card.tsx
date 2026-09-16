@@ -4,13 +4,13 @@ import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/base/button';
 import { LabeledValue } from '@/components/labeled-value';
 import { DetailCard } from '@/components/detail-card';
-import { getMyProject } from '@/modules/project/queries';
+import { getMyProjectQuery } from '@/modules/project/queries';
 import { Suspense } from 'react';
 
 export const ProfileProjectCard = () => {
   return (
     <Suspense>
-      {getMyProject().then(project => {
+      {getMyProjectQuery().then(project => {
         if (!project) return null;
 
         return (

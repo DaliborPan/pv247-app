@@ -8,7 +8,7 @@ import { cn } from '@/lib/cn';
 import { Button } from '@/components/base/button';
 import { Suspense } from 'react';
 import { getSession } from '@/modules/session-user';
-import { getStudentHomeworkRepositories } from '@/modules/homework-repository/queries';
+import { getStudentHomeworkRepositoriesQuery } from '@/modules/homework-repository/queries';
 import { CreateHomeworkRepositoryAction } from '@/modules/homework-repository/components/create-homework-repository-action/create-homework-repository-action';
 
 export const HomeworkCardActions = ({
@@ -59,7 +59,7 @@ export const HomeworkCardActions = ({
             {getSession().then(async sessionUser => {
               const repository = sessionUser
                 ? (
-                    await getStudentHomeworkRepositories(
+                    await getStudentHomeworkRepositoriesQuery(
                       sessionUser.id
                     )
                   ).find(item => item.lectureId === lecture.id)

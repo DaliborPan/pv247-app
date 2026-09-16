@@ -16,7 +16,7 @@ Stav: `lecture`, `homework`, `student-lecture`, `lecture-lector`, `project`, `st
 ## Stav Homework
 
 - Po schvaleni lecture pilotu byl samostatne migrovan `homework`, nikoliv soucasne `student-lecture` z puvodne spojeneho kroku 3.
-- Pridany `src/modules/homework/queries.ts` a `types.ts`. Read API: `getMyHomeworks(lectureId?)`, `getStudentHomeworks(studentId)`, `getHomeworkGradingStatus(lectureId)`.
+- Pridany `src/modules/homework/queries.ts` a `types.ts`. Read API: `getMyHomeworksQuery(lectureId?)`, `getStudentHomeworksQuery(studentId)`, `getHomeworkGradingStatusQuery(lectureId)`.
 - `HomeworkType` obsahuje pouze `lectureId` a `points`; `HomeworkGradingStatusType` obsahuje `hasGradingStarted`. Select skutecne vynechava nepotrebna pole `id`, `name`, `studentId` a `lectorId` z osobnich vysledku.
 - Zachovano anonymni vlastni cteni jako prazdny seznam a self-or-lector autorizace studentskych dat. Vsechny nove read vstupy pouzivaji `React.cache`, bez persistentni cache. Stav hodnoceni zustava verejnou informaci o existenci libovolneho zaznamu pro prednasku.
 - Create/update jsou primo v existujici ZSA action, se stejnou validaci, lektorskou procedurou a `refresh()`. Klientske mutation hooky a vstupni schema zustavaji.
@@ -28,7 +28,7 @@ Stav: `lecture`, `homework`, `student-lecture`, `lecture-lector`, `project`, `st
 
 ## Stav Student-Lecture
 
-- Pridany `src/modules/student-lecture/queries.ts` a `types.ts`. Read vstup je `getStudentLectures(studentId)` s `server-only`, `React.cache` a vlastni self-or-lector autorizaci. Nepouzivany cache tag byl nasledne na zadost uzivatele odstranen.
+- Pridany `src/modules/student-lecture/queries.ts` a `types.ts`. Read vstup je `getStudentLecturesQuery(studentId)` s `server-only`, `React.cache` a vlastni self-or-lector autorizaci. Nepouzivany cache tag byl nasledne na zadost uzivatele odstranen.
 - `StudentLectureType` obsahuje pouze `lectureId: string | null`. DB select skutecne vraci jen toto pole; pocty zaznamu vcetne duplicit a null hodnot zustavaji stejne.
 - Lektorsky toggle je primo v existujici action se zachovanou validaci a ZSA procedurou. Existence se zjistuje cilenym dotazem; pri odebrani se nadale mazou vsechny odpovidajici zaznamy. Navratovy status `created`/`deleted` zustava kompatibilni s klientem.
 - QR Route Handler provadi vlastni check a insert primo pres Drizzle. Zachovano prihlaseni, kontrola tokenu a SUCCESS pro novy i jiz existujici zaznam; pri opakovanem postupnem potvrzeni se znovu nevklada.
@@ -41,8 +41,8 @@ Stav: `lecture`, `homework`, `student-lecture`, `lecture-lector`, `project`, `st
 ## Stav Lecture-Lector
 
 - Pridany `src/modules/lecture-lector/queries.ts` a `types.ts`. Read vstupy pouzivaji `server-only` a `React.cache`, bez persistentni cache a bez tagu.
-- `getLectureApprovedLectors(lectureId)` zustava verejna; filtruje schvalene zaznamy primo v SQL a vraci `LectureApprovedLectorType` s ID prirazeni a jmenem/avatarem vyucujiciho. Nenacita kompletni uzivatelske zaznamy.
-- `getLectorsForLectures()` vraci seskupene `LectureLectorType` pro spravu prihlaseni a nove overuje roli lektora primo v DAL, nikoliv jen pres podminene zobrazeni profile sekce. Skupinovy klic nese lectureId, polozky obsahuji jen potrebne udaje.
+- `getLectureApprovedLectorsQuery(lectureId)` zustava verejna; filtruje schvalene zaznamy primo v SQL a vraci `LectureApprovedLectorType` s ID prirazeni a jmenem/avatarem vyucujiciho. Nenacita kompletni uzivatelske zaznamy.
+- `getLectorsForLecturesQuery()` vraci seskupene `LectureLectorType` pro spravu prihlaseni a nove overuje roli lektora primo v DAL, nikoliv jen pres podminene zobrazeni profile sekce. Skupinovy klic nese lectureId, polozky obsahuji jen potrebne udaje.
 - Sign-up, sign-out a approval zapisuji primo v existujicich actions. Zachovany ZSA procedury, validace, chybove zpravy a `refresh()` po uspesnem zapisu. Vlastni lectorId pro prihlaseni/odhlaseni pochazi ze session.
 - Zachovana soucasna pravidla schvalovani: libovolny lektor smi schvalit existujici prihlasku vcetne vlastni, bez omezeni availability statusem; nove schvaleni odmita stav se dvema schvalenymi, jiz schvaleny cil lze potvrdit znovu a odschvaleni zustava povolene.
 - Status enum presunut do client-safe moduloveho `schema.ts`; Drizzle definice ho importuje odtud. Hodnoty, poradi, default i DB constraints zustaly identicke; zadna DB migrace ani zapis nebyly provedeny.
@@ -52,14 +52,14 @@ Stav: `lecture`, `homework`, `student-lecture`, `lecture-lector`, `project`, `st
 
 ## Stav Project
 
-- Pridany `src/modules/project/queries.ts` a `types.ts`. Read vstupy: `getMyProject`, `getProject`, `getProjects`, `getStudentProject`, `getProjectFormStudentComboboxOptions`. Vse s `server-only` a `React.cache`, bez persistentni cache/tagu.
-- Na zadost uzivatele sjednoceny seznam, detail i studentsky prehled na `ProjectType` a spolecny DB vyber. `getMyProject()` deleguje na `getStudentProject(sessionUser.id)`, kde zustava self-or-lector autorizace i memoizace. `ProjectStudentOptionType` zustava pro combobox. Clenove projektu neobsahuji e-mail, account metadata ani cely DB radek. Seznam a prehled nyni nacitaji stejna projektova pole jako detail vcetne clenu.
+- Pridany `src/modules/project/queries.ts` a `types.ts`. Read vstupy: `getMyProjectQuery`, `getProjectQuery`, `getProjectsQuery`, `getStudentProjectQuery`, `getProjectFormStudentComboboxOptionsQuery`. Vse s `server-only` a `React.cache`, bez persistentni cache/tagu.
+- Na zadost uzivatele sjednoceny seznam, detail i studentsky prehled na `ProjectType` a spolecny DB vyber. `getMyProjectQuery()` deleguje na `getStudentProjectQuery(sessionUser.id)`, kde zustava self-or-lector autorizace i memoizace. `ProjectStudentOptionType` zustava pro combobox. Clenove projektu neobsahuji e-mail, account metadata ani cely DB radek. Seznam a prehled nyni nacitaji stejna projektova pole jako detail vcetne clenu.
 - Detail i vlastni projekt pouzivaji cilene DB dotazy; vlastni a studentsky projekt se urcuji podle aktualniho DB clenstvi. Zachovano null pro chybejici vlastni/studentsky projekt a undefined pro lektorsky detail.
 - Lektorske seznamy a detail zustavaji lector-only, studentsky prehled self-or-lector. Seznam nacte data jednou a v UI je rozdeli do puvodnich skupin; FAILED zustava mimo obe skupiny.
 - Combobox kandidatu presunut ze student vrstev do project query a vraci primo value/label. Kontroluje opravneni k operaci podle aktualniho users.projectId z DB: edit vyzaduje clenstvi bez lektorske vyjimky, create nepovoli existujici prirazeni. Filtr kandidatu vcetne GitHub podminky a stavajicich clenu zustal zachovan.
 - Create/edit, status a hodnoceni zapisuji primo v existujicich actions. Zachovany vstupni schemata, ZSA procedury, chybove zpravy, poradi zapisu, refresh/revalidatePath a role-student filtr pri prirazovani clenu. Create zachovava i dosavadni volitelne ID ze vstupu.
 - Approval klient dostava explicitne jen id/status. Odstraneny project LoaderResult/ReturnType vazby; posledni student konzumenti a obecny LoaderResult byly nasledne odstraneny pri migraci student.
-- Odstraneny project loader, server/query, repository, mutation a index. Odstraneny take nepotrebne student assignment/candidate helpery; studentsky overview vzdy vola `getStudentProject(user.id)`, bez podminky nad projectId uzivatelskeho objektu.
+- Odstraneny project loader, server/query, repository, mutation a index. Odstraneny take nepotrebne student assignment/candidate helpery; studentsky overview vzdy vola `getStudentProjectQuery(user.id)`, bez podminky nad projectId uzivatelskeho objektu.
 - Status enum je definovany v aplikacnim schema.ts a pouzity Drizzle schematem se stejnymi hodnotami/defaultem. Stare read Zod schema a DB enum soubor odstraneny; zadna DB migrace nebyla provedena.
 - Samostatne follow-upy bez oprav v refactoru: zapisy clenstvi nejsou atomicke a nekontroluji obsazenost vsech clenu; approval nadale duveruje klientskemu currentStatus a povoluje clena projektu nebo lektora; edit nezavadi nove omezeni na CREATED. Kandidat bez GitHub muze chybet mezi options i kdyz je v editacnich defaults. Tyto existujici vlastnosti se pri migraci nezmenily.
 - Na naslednou zadost uzivatele odstranen projectId z Better Auth user.additionalFields, a tim z odvozenych session-user typu a nove nacitaneho auth vystupu. Sloupec users.projectId a DB uzivatelske typy zustaly zachovany. Neni potreba DB migrace ani nove prihlaseni pri aktualni konfiguraci bez cookie cache/secondary storage.
@@ -68,7 +68,7 @@ Stav: `lecture`, `homework`, `student-lecture`, `lecture-lector`, `project`, `st
 
 ## Stav Student
 
-- Pridany `src/modules/student/queries.ts`, `types.ts`, `actions.ts` a `schema.ts`. Read API: `getStudent`, `getStudents`, `getStudentsWithHomework`, `getStudentOverview`, `getMyStudentOverview`. Pouziva `server-only`, primitivni argumenty a `React.cache`, bez persistentni cache/tagu.
+- Pridany `src/modules/student/queries.ts`, `types.ts`, `actions.ts` a `schema.ts`. Read API: `getStudentQuery`, `getStudentsQuery`, `getStudentsWithHomeworkQuery`, `getStudentOverviewQuery`, `getMyStudentOverviewQuery`. Pouziva `server-only`, primitivni argumenty a `React.cache`, bez persistentni cache/tagu.
 - Seznam, detail a hodnoceni sdileji zaklad `StudentType`; `StudentProgressType` a `StudentHomeworkType` pridavaji skutecne odlisne agregace/hodnoceni. `StudentOverviewType` popisuje souhrn. Email, auth metadata a nepotrebne relace se nevybiraji ani neposilaji do klientskych tabulek.
 - Detail pouziva cilene ID plus role=student misto nacitani vsech studentu. Zachovana lector-only autorizace i chyba pri neexistujicim studentovi; nepotrebne pripojene homework cteni z detailu odstraneno. Nepouzivany puvodni getMany se neprenasel.
 - Seznam a grading zustavaji lector-only. Own-students tab je stale pouze filtr v UI. Grading zahrnuje i studenty bez hodnoceni a zachovava prvni odpovidajici zaznam vcetne nuly.
@@ -81,7 +81,7 @@ Stav: `lecture`, `homework`, `student-lecture`, `lecture-lector`, `project`, `st
 
 ## Stav Homework-Repository
 
-- Pridany `src/modules/homework-repository/queries.ts` a `types.ts`. `getStudentHomeworkRepositories(studentId)` pouziva `server-only`, `React.cache` a self-or-lector autorizaci. Vraci pouze lectureId/repositoryUrl/status jako `HomeworkRepositoryType`.
+- Pridany `src/modules/homework-repository/queries.ts` a `types.ts`. `getStudentHomeworkRepositoriesQuery(studentId)` pouziva `server-only`, `React.cache` a self-or-lector autorizaci. Vraci pouze lectureId/repositoryUrl/status jako `HomeworkRepositoryType`.
 - Cely create/complete workflow je v existujicim `components/create-homework-repository-action/action.ts`. Exportovany jsou pouze dve puvodni actions; kontext, faze a opakovane persistence update jsou privatni funkce ve stejnem souboru. Nevznikla zadna samostatna service/use-case/repository vrstva.
 - Privatni ulozeny stav pouziva DB select/insert typy, nikoliv verejny read typ. `HomeworkRepositoryResultType` oddeluje transientni `preparing` od `ready` s URL; persisted stavy zustaly pending/repository_created/ready.
 - Zachovany ZSA student-only vstupy, studentId odvozene ze session, ready fast path, overeni OAuth account ID, 45s budget, validace template URL a repository, rezervace jmena pred POST, konfliktni guard a zakaz adopce existujiciho nespojeneho repozitare.
@@ -110,7 +110,7 @@ Existujici HTTP vstup: Route Handler -> Drizzle
 ## Cilove Konvence
 
 - Aplikacni typy pojmenovavat podle vyznamu s priponou `Type`, nikdy `Dto` ani `DTO`: napr. `LectureType`, `LectureAttendanceType`, `ProjectType`. Preferovat jeden sdileny typ entity pro seznam/detail/prehled, pokud neni konkretni duvod je oddelit. Tato konvence plati i pro vsechny dalsi migrovane moduly. DTO v textu planu oznacuje pouze koncept oddeleni aplikacnich dat od DB, nikoliv cast nazvu typu.
-- `queries.ts`: pojmenovane exporty read operaci, `import 'server-only'`, ziskani session, autorizace, business vypocty, cilene Drizzle dotazy a minimalni DTO. Verejny katalog muze zustat anonymni.
+- `queries.ts`: pojmenovane exporty read operaci s povinnym suffixem `Query` (napr. `getProjectQuery`, `getMyStudentOverviewQuery`), `import 'server-only'`, ziskani session, autorizace, business vypocty, cilene Drizzle dotazy a minimalni DTO. Plati i pro agregace a delegujici/memoizovane read vstupy, ne pouze pro prime SQL dotazy. Verejny katalog muze zustat anonymni. Privatni helpery povinny suffix nemaji; Server Actions pouzivaji suffix `Action`.
 - `React.cache`: vychozi pro read vstupy pouzivane pri RSC renderu. Definice na urovni modulu, prednostne primitivni argumenty, zadne vedlejsi efekty. Nespolihat na memoizaci v Route Handlerech ani pri mutacich.
 - `types.ts`: explicitni read DTO podle skutecnych konzumentu, bez runtime importu DB nebo serverove implementace. Neprepisovat vsechny typy preventivne.
 - `schema.ts`: Zod validace vstupu a client-safe domenove hodnoty. DB schema muze sdilene hodnoty importovat; UI nema runtime zaviset na DB modulech.

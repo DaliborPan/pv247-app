@@ -4,7 +4,7 @@ import { ArrowRight, Users } from 'lucide-react';
 import { Button } from '@/components/base/button';
 import { SidebarCard } from '@/components/sidebar-card';
 import { Icon } from '@/components/base/icon';
-import { getMyProject } from '@/modules/project/queries';
+import { getMyProjectQuery } from '@/modules/project/queries';
 import { Suspense } from 'react';
 
 export const ProjectCard = () => {
@@ -26,7 +26,7 @@ export const ProjectCard = () => {
       }
     >
       <Suspense>
-        {getMyProject().then(project => (
+        {getMyProjectQuery().then(project => (
           <>
             {project ? (
               <div className="flex flex-col gap-y-2">

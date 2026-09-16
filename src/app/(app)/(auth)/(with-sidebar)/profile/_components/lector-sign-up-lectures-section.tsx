@@ -1,10 +1,10 @@
 import { DetailCard } from '@/components/detail-card';
 import { getSessionUser } from '@/modules/session-user';
-import { getLectures } from '@/modules/lecture/queries';
+import { getLecturesQuery } from '@/modules/lecture/queries';
 import { SignOutLectureAction } from '@/modules/lecture-lector/components/sign-out-lecture-action';
 import { SignUpLectureAction } from '@/modules/lecture-lector/components/sign-up-lecture-action';
 import { SetLectureTeacherApprovalAction } from '@/modules/lecture-lector/components/set-lecture-teacher-approval-action';
-import { getLectorsForLectures } from '@/modules/lecture-lector/queries';
+import { getLectorsForLecturesQuery } from '@/modules/lecture-lector/queries';
 import { lectureLectorStatusOptions } from '@/modules/lecture-lector/schema';
 import { getLectureLectorStatusLabel } from '@/modules/lecture-lector/utils';
 import { cn } from '@/lib/cn';
@@ -13,10 +13,10 @@ import { getLectorDisplayName } from '@/modules/lector/utils/lector-display-name
 import { formatDate } from '@/lib/date';
 
 export const LectorSignUpLecturesSection = async () => {
-  const lectures = await getLectures();
+  const lectures = await getLecturesQuery();
   const [sessionUser, lectorsByLectureId] = await Promise.all([
     getSessionUser(),
-    getLectorsForLectures()
+    getLectorsForLecturesQuery()
   ]);
 
   return (

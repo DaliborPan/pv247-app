@@ -1,14 +1,14 @@
 import { type HomeworkSlugType } from '@/modules/lecture/schema';
 
 import { HomeworkNavigationLink } from './homework-navigation-link';
-import { getLectures } from '@/modules/lecture/queries';
+import { getLecturesQuery } from '@/modules/lecture/queries';
 
 export const HomeworksNavigation = async ({
   homeworkSlug
 }: {
   homeworkSlug: HomeworkSlugType;
 }) => {
-  const lectures = await getLectures();
+  const lectures = await getLecturesQuery();
 
   const slugLectureIndex = lectures.findIndex(
     lecture => lecture.homeworkSlug === homeworkSlug

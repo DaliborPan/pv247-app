@@ -7,7 +7,7 @@ import { getSessionUser } from '@/modules/session-user';
 
 import { type StudentLectureType } from './types';
 
-export const getStudentLectures = cache(
+export const getStudentLecturesQuery = cache(
   async (studentId: string): Promise<StudentLectureType[]> => {
     const sessionUser = await getSessionUser();
 

@@ -7,7 +7,7 @@ import { getSessionUser } from '@/modules/session-user';
 
 import { type HomeworkRepositoryType } from './types';
 
-export const getStudentHomeworkRepositories = cache(
+export const getStudentHomeworkRepositoriesQuery = cache(
   async (studentId: string): Promise<HomeworkRepositoryType[]> => {
     const sessionUser = await getSessionUser();
 

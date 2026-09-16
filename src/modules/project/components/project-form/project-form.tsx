@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 
 import { FormEditor } from '@/components/form/form-fields/form-editor';
 import { FormInput } from '@/components/form/form-fields/form-input';
-import { getProjectFormStudentComboboxOptions } from '@/modules/project/queries';
+import { getProjectFormStudentComboboxOptionsQuery } from '@/modules/project/queries';
 
 import { ProjectFormProvider } from './project-form-provider';
 import { StudentCombobox } from './student-combobox';
@@ -13,7 +13,7 @@ const ProjectFormStudentCombobox = async ({
 }: {
   defaultValues?: Partial<ProjectFormSchema>;
 }) => {
-  const options = await getProjectFormStudentComboboxOptions(
+  const options = await getProjectFormStudentComboboxOptionsQuery(
     defaultValues?.id
   );
 

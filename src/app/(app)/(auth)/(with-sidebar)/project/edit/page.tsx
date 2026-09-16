@@ -2,12 +2,12 @@ import { redirect } from 'next/navigation';
 
 import { getSessionUser } from '@/modules/session-user';
 import { ProjectForm } from '@/modules/project/components/project-form';
-import { getMyProject } from '@/modules/project/queries';
+import { getMyProjectQuery } from '@/modules/project/queries';
 import { Suspense } from 'react';
 
 const PageAsync = async () => {
   const sessionUser = await getSessionUser();
-  const project = await getMyProject();
+  const project = await getMyProjectQuery();
 
   if (!project) {
     redirect('/project');

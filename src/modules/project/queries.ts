@@ -29,13 +29,13 @@ const projectSelection = {
   }
 } satisfies Parameters<typeof db.query.projects.findFirst>[0];
 
-export const getMyProject = cache(async (): Promise<ProjectType | null> => {
+export const getMyProjectQuery = cache(async (): Promise<ProjectType | null> => {
   const sessionUser = await getSessionUser();
 
-  return getStudentProject(sessionUser.id);
+  return getStudentProjectQuery(sessionUser.id);
 });
 
-export const getProject = cache(
+export const getProjectQuery = cache(
   async (projectId: string): Promise<ProjectType | undefined> => {
     const sessionUser = await getSessionUser();
 
@@ -50,7 +50,7 @@ export const getProject = cache(
   }
 );
 
-export const getProjects = cache(async (): Promise<ProjectType[]> => {
+export const getProjectsQuery = cache(async (): Promise<ProjectType[]> => {
   const sessionUser = await getSessionUser();
 
   if (sessionUser.role !== 'lector') {
@@ -60,7 +60,7 @@ export const getProjects = cache(async (): Promise<ProjectType[]> => {
   return db.query.projects.findMany(projectSelection);
 });
 
-export const getStudentProject = cache(
+export const getStudentProjectQuery = cache(
   async (studentId: string): Promise<ProjectType | null> => {
     const sessionUser = await getSessionUser();
 
@@ -86,7 +86,7 @@ export const getStudentProject = cache(
   }
 );
 
-export const getProjectFormStudentComboboxOptions = cache(
+export const getProjectFormStudentComboboxOptionsQuery = cache(
   async (projectId?: string): Promise<ProjectStudentOptionType[]> => {
     const sessionUser = await getSessionUser();
     const currentUser = await db.query.users.findFirst({

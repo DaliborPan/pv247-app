@@ -4,14 +4,14 @@ import { Badge } from '@/components/base/badge';
 import { Icon } from '@/components/base/icon';
 
 import { getSession } from '@/modules/session-user';
-import { getStudentLectures } from '@/modules/student-lecture/queries';
+import { getStudentLecturesQuery } from '@/modules/student-lecture/queries';
 
 export const AttendanceBadge = async ({ lectureId }: { lectureId: string }) => {
   const sessionUser = await getSession();
 
   if (!sessionUser) return null;
 
-  const attendances = await getStudentLectures(sessionUser.id);
+  const attendances = await getStudentLecturesQuery(sessionUser.id);
 
   const hasAttendance = attendances.some(
     attendance => attendance.lectureId === lectureId

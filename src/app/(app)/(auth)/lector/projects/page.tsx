@@ -1,9 +1,9 @@
 import { Suspense } from 'react';
 import { ProjectCard } from './_components/project-card';
-import { getProjects } from '@/modules/project/queries';
+import { getProjectsQuery } from '@/modules/project/queries';
 
 const Page = async () => {
-  const projects = await getProjects();
+  const projects = await getProjectsQuery();
   const projectsCompleted = projects.filter(
     project => project.status === 'COMPLETED'
   );

@@ -10,7 +10,7 @@ import {
   type LectureLectorType
 } from './types';
 
-export const getLectorsForLectures = cache(
+export const getLectorsForLecturesQuery = cache(
   async (): Promise<Record<string, LectureLectorType[]>> => {
     const sessionUser = await getSessionUser();
 
@@ -43,7 +43,7 @@ export const getLectorsForLectures = cache(
   }
 );
 
-export const getLectureApprovedLectors = cache(
+export const getLectureApprovedLectorsQuery = cache(
   async (lectureId: string): Promise<LectureApprovedLectorType[]> =>
     db.query.lectureLectors.findMany({
       columns: { id: true },

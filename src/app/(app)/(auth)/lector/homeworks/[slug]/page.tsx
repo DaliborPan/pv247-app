@@ -9,9 +9,9 @@ import { getSessionUser } from '@/modules/session-user';
 import { homeworkSlugSchema } from '@/modules/lecture/schema';
 
 import { HomeworksNavigation } from './_components/homeworks-navigation';
-import { getLectureByHomeworkSlug } from '@/modules/lecture/queries';
+import { getLectureByHomeworkSlugQuery } from '@/modules/lecture/queries';
 import { Suspense } from 'react';
-import { getStudentsWithHomework } from '@/modules/student/queries';
+import { getStudentsWithHomeworkQuery } from '@/modules/student/queries';
 
 const Page = ({ params }: PageProps<'/lector/homeworks/[slug]'>) => {
   return (
@@ -26,13 +26,13 @@ const Page = ({ params }: PageProps<'/lector/homeworks/[slug]'>) => {
         }
 
         const paramSlug = parsedSlug.data;
-        const lecture = await getLectureByHomeworkSlug(paramSlug);
+        const lecture = await getLectureByHomeworkSlugQuery(paramSlug);
 
         if (!lecture) {
           redirect('/');
         }
 
-        const students = await getStudentsWithHomework(lecture.id);
+        const students = await getStudentsWithHomeworkQuery(lecture.id);
 
         const sessionUser = await getSessionUser();
         const hasOwnStudents = students.some(

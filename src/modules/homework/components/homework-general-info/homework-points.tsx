@@ -7,8 +7,8 @@ import { LabeledItem } from './labeled-item';
 
 import { getSession } from '@/modules/session-user';
 import {
-  getMyHomeworks,
-  getHomeworkGradingStatus
+  getMyHomeworksQuery,
+  getHomeworkGradingStatusQuery
 } from '@/modules/homework/queries';
 import { getHomeworkPointsMessage } from '../../utils';
 
@@ -32,8 +32,8 @@ export const HomeworkPoints = async ({
   }
 
   const [homework, gradingStatus] = await Promise.all([
-    getMyHomeworks(lecture.id),
-    getHomeworkGradingStatus(lecture.id)
+    getMyHomeworksQuery(lecture.id),
+    getHomeworkGradingStatusQuery(lecture.id)
   ]);
 
   const homeworkRecord = homework.at(0);

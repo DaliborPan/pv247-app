@@ -1,7 +1,7 @@
 import { LectureCard } from '@/modules/lecture/components/lecture-card';
 
 import { CardsLayout } from '../_components/cards-layout';
-import { getLectures } from '@/modules/lecture/queries';
+import { getLecturesQuery } from '@/modules/lecture/queries';
 
 export const metadata = {
   title: 'Lectures',
@@ -10,7 +10,7 @@ export const metadata = {
 };
 
 const Page = async () => {
-  const lectures = await getLectures();
+  const lectures = await getLecturesQuery();
 
   return (
     <CardsLayout title="Lectures">

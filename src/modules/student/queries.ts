@@ -3,10 +3,10 @@ import 'server-only';
 import { cache } from 'react';
 
 import { db } from '@/db';
-import { getStudentHomeworks } from '@/modules/homework/queries';
-import { getStudentProject } from '@/modules/project/queries';
+import { getStudentHomeworksQuery } from '@/modules/homework/queries';
+import { getStudentProjectQuery } from '@/modules/project/queries';
 import { getSessionUser } from '@/modules/session-user';
-import { getStudentLectures } from '@/modules/student-lecture/queries';
+import { getStudentLecturesQuery } from '@/modules/student-lecture/queries';
 
 import {
   type StudentHomeworkType,
@@ -27,7 +27,7 @@ const studentSelection = {
   }
 } satisfies Parameters<typeof db.query.users.findFirst>[0];
 
-export const getStudent = cache(
+export const getStudentQuery = cache(
   async (studentId: string): Promise<StudentType> => {
     const sessionUser = await getSessionUser();
 
@@ -49,7 +49,7 @@ export const getStudent = cache(
   }
 );
 
-export const getStudents = cache(async (): Promise<StudentProgressType[]> => {
+export const getStudentsQuery = cache(async (): Promise<StudentProgressType[]> => {
   const sessionUser = await getSessionUser();
 
   if (sessionUser.role !== 'lector') {
@@ -83,7 +83,7 @@ export const getStudents = cache(async (): Promise<StudentProgressType[]> => {
   });
 });
 
-export const getStudentsWithHomework = cache(
+export const getStudentsWithHomeworkQuery = cache(
   async (lectureId: string): Promise<StudentHomeworkType[]> => {
     const sessionUser = await getSessionUser();
 
@@ -104,7 +104,7 @@ export const getStudentsWithHomework = cache(
   }
 );
 
-export const getStudentOverview = cache(
+export const getStudentOverviewQuery = cache(
   async (studentId: string): Promise<StudentOverviewType> => {
     const sessionUser = await getSessionUser();
 
@@ -113,9 +113,9 @@ export const getStudentOverview = cache(
     }
 
     const [homework, attendances, project] = await Promise.all([
-      getStudentHomeworks(studentId),
-      getStudentLectures(studentId),
-      getStudentProject(studentId)
+      getStudentHomeworksQuery(studentId),
+      getStudentLecturesQuery(studentId),
+      getStudentProjectQuery(studentId)
     ]);
     const homeworkTotalPoints = homework.reduce(
       (total, homework) => total + homework.points,
@@ -133,10 +133,10 @@ export const getStudentOverview = cache(
   }
 );
 
-export const getMyStudentOverview = cache(
+export const getMyStudentOverviewQuery = cache(
   async (): Promise<StudentOverviewType> => {
     const sessionUser = await getSessionUser();
 
-    return getStudentOverview(sessionUser.id);
+    return getStudentOverviewQuery(sessionUser.id);
   }
 );

@@ -1,11 +1,11 @@
 import { ProjectForm } from '@/modules/project/components/project-form';
-import { getMyProject } from '@/modules/project/queries';
+import { getMyProjectQuery } from '@/modules/project/queries';
 
 import { SubmitProjectCard } from './_components/submit-project-card';
 import { ProjectDescriptionCard, ProjectHero } from './_components';
 
 const Page = async () => {
-  const project = await getMyProject();
+  const project = await getMyProjectQuery();
 
   return project ? (
     <div className="flex flex-col gap-y-4">

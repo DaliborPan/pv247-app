@@ -1,4 +1,4 @@
-import { getLecturesWithHomework } from '@/modules/lecture/queries';
+import { getLecturesWithHomeworkQuery } from '@/modules/lecture/queries';
 import { HomeworkCard } from '@/modules/lecture/components/homework-card';
 import { CardsLayout } from '../_components/cards-layout';
 
@@ -9,7 +9,7 @@ export const metadata = {
 };
 
 const Page = async () => {
-  const lectures = await getLecturesWithHomework();
+  const lectures = await getLecturesWithHomeworkQuery();
 
   return (
     <CardsLayout title="Weekly homework">

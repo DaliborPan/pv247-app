@@ -1,6 +1,6 @@
 import { NavigationButtonLink } from '@/components/navigation-button-link';
 
-import { getLectures } from '../queries';
+import { getLecturesQuery } from '../queries';
 import { type LectureSlugType } from '../schema';
 
 export const LectureNavigation = async ({
@@ -11,7 +11,7 @@ export const LectureNavigation = async ({
   baseHref?: string;
 }) => {
   const lectureSlug = await props.lectureSlug;
-  const lectures = await getLectures();
+  const lectures = await getLecturesQuery();
 
   const slugLectureIndex = lectures.findIndex(
     lecture => lecture.slug === lectureSlug

@@ -35,16 +35,16 @@ const readLectureCatalog = async (): Promise<LectureType[]> => {
   });
 };
 
-export const getLectures = cache(readLectureCatalog);
+export const getLecturesQuery = cache(readLectureCatalog);
 
-export const getLectureByHomeworkSlug = cache(async (homeworkSlug: string) => {
-  const lectures = await getLectures();
+export const getLectureByHomeworkSlugQuery = cache(async (homeworkSlug: string) => {
+  const lectures = await getLecturesQuery();
 
   return lectures.find(lecture => lecture.homeworkSlug === homeworkSlug);
 });
 
-export const getIsLectureAvailable = cache(async (slug: string) => {
-  const lectures = await getLectures();
+export const getIsLectureAvailableQuery = cache(async (slug: string) => {
+  const lectures = await getLecturesQuery();
   const lecture = lectures.find(lecture => lecture.slug === slug);
 
   if (!lecture) {
@@ -54,8 +54,8 @@ export const getIsLectureAvailable = cache(async (slug: string) => {
   return lecture.isAvailable;
 });
 
-export const getIsHomeworkAvailable = cache(async (homeworkSlug: string) => {
-  const lecture = await getLectureByHomeworkSlug(homeworkSlug);
+export const getIsHomeworkAvailableQuery = cache(async (homeworkSlug: string) => {
+  const lecture = await getLectureByHomeworkSlugQuery(homeworkSlug);
 
   if (!lecture) {
     throw new Error(`Lecture with homework slug ${homeworkSlug} not found.`);
@@ -64,19 +64,19 @@ export const getIsHomeworkAvailable = cache(async (homeworkSlug: string) => {
   return lecture.isAvailable;
 });
 
-export const getAvailableLectures = cache(async () => {
-  const lectures = await getLectures();
+export const getAvailableLecturesQuery = cache(async () => {
+  const lectures = await getLecturesQuery();
 
   return lectures.filter(lecture => lecture.isAvailable);
 });
 
-export const getLecturesWithHomework = cache(async () => {
-  const lectures = await getLectures();
+export const getLecturesWithHomeworkQuery = cache(async () => {
+  const lectures = await getLecturesQuery();
 
   return lectures.filter(lecture => !!lecture.homeworkSlug);
 });
 
-export const getLecturesForAttendance = cache(
+export const getLecturesForAttendanceQuery = cache(
   async (): Promise<LectureAttendanceType[]> => {
     const sessionUser = await getSessionUser();
 

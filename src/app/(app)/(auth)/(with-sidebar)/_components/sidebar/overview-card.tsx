@@ -1,10 +1,10 @@
-import { getMyStudentOverview } from '@/modules/student/queries';
+import { getMyStudentOverviewQuery } from '@/modules/student/queries';
 import { SidebarCard } from '@/components/sidebar-card';
 
 import { SidebarCardRow } from './sidebar-card-row';
 import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 import { ReactNode, Suspense } from 'react';
-import { getLectures, getLecturesWithHomework } from '@/modules/lecture/queries';
+import { getLecturesQuery, getLecturesWithHomeworkQuery } from '@/modules/lecture/queries';
 import { Skeleton } from '@/components/skeleton';
 import { getSessionUser } from '@/modules/session-user';
 
@@ -35,10 +35,10 @@ const OverviewSidebarCard = ({
 };
 
 export const OverviewCard = async () => {
-  const lectures = await getLectures();
-  const homeworkCount = (await getLecturesWithHomework()).length;
+  const lectures = await getLecturesQuery();
+  const homeworkCount = (await getLecturesWithHomeworkQuery()).length;
 
-  const overviewPromise = getMyStudentOverview();
+  const overviewPromise = getMyStudentOverviewQuery();
 
   return (
     <Suspense fallback={<OverviewSidebarCard />}>

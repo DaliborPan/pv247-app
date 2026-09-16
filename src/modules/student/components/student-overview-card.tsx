@@ -2,7 +2,7 @@ import { DetailCard } from '@/components/detail-card';
 import { LabeledValue } from '@/components/labeled-value';
 import { cn } from '@/lib/cn';
 import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
-import { getStudentOverview } from '@/modules/student/queries';
+import { getStudentOverviewQuery } from '@/modules/student/queries';
 import { type StudentOverviewType } from '@/modules/student/types';
 import { type UserType } from '@/modules/user/schema';
 import { Suspense } from 'react';
@@ -23,7 +23,7 @@ export const StudentOverviewCard = async ({
           return null;
         }
 
-        const overviewPromise = getStudentOverview(user.id);
+        const overviewPromise = getStudentOverviewQuery(user.id);
 
         return (
           <DetailCard title="Overview">

@@ -1,12 +1,12 @@
 import { NavigationButtonLink } from '@/components/navigation-button-link';
-import { getLecturesWithHomework } from '@/modules/lecture/queries';
+import { getLecturesWithHomeworkQuery } from '@/modules/lecture/queries';
 import { HomeworkSlugType } from '@/modules/lecture/schema';
 import { Suspense } from 'react';
 
 const Navigation = async (props: { slug: Promise<HomeworkSlugType> }) => {
   const slug = await props.slug;
 
-  const lectures = await getLecturesWithHomework();
+  const lectures = await getLecturesWithHomeworkQuery();
   const slugLectureIndex = lectures.findIndex(
     lecture => lecture.homeworkSlug === slug
   );

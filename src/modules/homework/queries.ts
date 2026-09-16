@@ -7,7 +7,7 @@ import { getSession, getSessionUser } from '@/modules/session-user';
 
 import { type HomeworkGradingStatusType, type HomeworkType } from './types';
 
-export const getStudentHomeworks = cache(
+export const getStudentHomeworksQuery = cache(
   async (studentId: string): Promise<HomeworkType[]> => {
     const sessionUser = await getSessionUser();
 
@@ -22,7 +22,7 @@ export const getStudentHomeworks = cache(
   }
 );
 
-export const getMyHomeworks = cache(
+export const getMyHomeworksQuery = cache(
   async (lectureId?: string): Promise<HomeworkType[]> => {
     const sessionUser = await getSession();
 
@@ -30,7 +30,7 @@ export const getMyHomeworks = cache(
       return [];
     }
 
-    const homework = await getStudentHomeworks(sessionUser.id);
+    const homework = await getStudentHomeworksQuery(sessionUser.id);
 
     return lectureId
       ? homework.filter(record => record.lectureId === lectureId)
@@ -38,7 +38,7 @@ export const getMyHomeworks = cache(
   }
 );
 
-export const getHomeworkGradingStatus = cache(
+export const getHomeworkGradingStatusQuery = cache(
   async (lectureId: string): Promise<HomeworkGradingStatusType> => {
     const homework = await db.query.homeworks.findFirst({
       columns: { id: true },
