@@ -1,6 +1,6 @@
 # Migrace na tenkou DAL (varianta A)
 
-Stav: `lecture`, `homework`, `student-lecture`, `lecture-lector`, `project` a `student` implementovany. Dalsi na rade je `homework-repository`, pote zbyva zaverecny cleanup.
+Stav: `lecture`, `homework`, `student-lecture`, `lecture-lector`, `project`, `student` a `homework-repository` implementovany. Zbyva zaverecny cleanup vcetne posouzeni zbyvajiciho `lector` kodu a serverovych hranic.
 
 ## Stav Pilotu
 
@@ -78,6 +78,18 @@ Stav: `lecture`, `homework`, `student-lecture`, `lecture-lector`, `project` a `s
 - Onboarding client dostava pouze defaultGithub=sessionUser.name, nikoliv cely session objekt. UI, formulare a ZSA error/toast flow zustaly zachovany.
 - Prepojeny runtime i type-only konzumenty vcetne sidebaru, detailu a obou tabulek. Odstraneny stary loader, server/query, repository, mutation, index, duplikovane colocated profile action/schema soubory a posledni LoaderResult helper `src/types.ts`.
 - Provedena pouze staticka kontrola diffu, importu, projekci a kontraktu. Testy, browser, build, lint ani typecheck nebyly spusteny. Pred dalsim modulem pockat na schvaleni uzivatele.
+
+## Stav Homework-Repository
+
+- Pridany `src/modules/homework-repository/queries.ts` a `types.ts`. `getStudentHomeworkRepositories(studentId)` pouziva `server-only`, `React.cache` a self-or-lector autorizaci. Vraci pouze lectureId/repositoryUrl/status jako `HomeworkRepositoryType`.
+- Cely create/complete workflow je v existujicim `components/create-homework-repository-action/action.ts`. Exportovany jsou pouze dve puvodni actions; kontext, faze a opakovane persistence update jsou privatni funkce ve stejnem souboru. Nevznikla zadna samostatna service/use-case/repository vrstva.
+- Privatni ulozeny stav pouziva DB select/insert typy, nikoliv verejny read typ. `HomeworkRepositoryResultType` oddeluje transientni `preparing` od `ready` s URL; persisted stavy zustaly pending/repository_created/ready.
+- Zachovany ZSA student-only vstupy, studentId odvozene ze session, ready fast path, overeni OAuth account ID, 45s budget, validace template URL a repository, rezervace jmena pred POST, konfliktni guard a zakaz adopce existujiciho nespojeneho repozitare.
+- Zachovano ulozeni GitHub ID hned po vytvoreni, dokonceni podle immutable ID, kontrola organizace/private/active stavu, initial commit s 409 pripravou, teacher-team opravneni, paginace/reuse pozvanek a finalni ready zapis. Zadne automaticke retry ani polling nebyly pridany.
+- Zachovano setRecord pro persistence chyby po rezervaci, mapovani chyb bez raw detailu, puvodni result/error kontrakt i refresh ve finally. Klientsky retry:false a router.refresh zustaly beze zmeny. Nizkourovnova GitHub integrace zustala zachovana.
+- Status enum presunut do client-safe moduloveho schema.ts; Drizzle pouziva stejne hodnoty a default. Vstupni schema actions je sdilene v modulu se stejnym lectureId.min(1). Nepouzivane full-row/input Zod schema odstraneno.
+- Prepojeny homework card actions. Odstraneny loader, server/query, server/repository, server/mutation a puvodni DB status soubor. Zadna zmena ulozenych dat ani databazovych constraints.
+- Provedena pouze staticka kontrola importu a porovnani puvodniho/noveho workflow. Testy, browser, build, lint, typecheck, GitHub operace ani DB zapisy nebyly spusteny. Pred cleanupem pockat na schvaleni uzivatele.
 
 ## Cil A Rozsah
 

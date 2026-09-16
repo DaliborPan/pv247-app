@@ -6,9 +6,10 @@ import {
   uniqueIndex
 } from 'drizzle-orm/sqlite-core';
 
+import { homeworkRepositoryStatusSchema } from '@/modules/homework-repository/schema';
+
 import { lectures } from './lectures';
 import { users } from './users';
-import { dbHomeworkRepositoryStatusSchema } from './homework-repository-status';
 
 export const homeworkRepositories = sqliteTable(
   'homework_repository',
@@ -26,7 +27,7 @@ export const homeworkRepositories = sqliteTable(
     repositoryUrl: text('repositoryUrl'),
     initialCommitSha: text('initialCommitSha'),
     status: text('status', {
-      enum: dbHomeworkRepositoryStatusSchema.options
+      enum: homeworkRepositoryStatusSchema.options
     })
       .notNull()
       .default('pending'),
