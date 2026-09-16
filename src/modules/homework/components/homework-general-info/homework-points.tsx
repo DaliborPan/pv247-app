@@ -6,7 +6,10 @@ import { type LectureType } from '@/modules/lecture/types';
 import { LabeledItem } from './labeled-item';
 
 import { getSession } from '@/modules/session-user';
-import { homeworkLoader } from '../../loader';
+import {
+  getMyHomeworks,
+  getHomeworkGradingStatus
+} from '@/modules/homework/queries';
 import { getHomeworkPointsMessage } from '../../utils';
 
 export const HomeworkPoints = async ({
@@ -29,8 +32,8 @@ export const HomeworkPoints = async ({
   }
 
   const [homework, gradingStatus] = await Promise.all([
-    homeworkLoader.getMine({ lectureId: lecture.id }),
-    homeworkLoader.getGradingStatus(lecture.id)
+    getMyHomeworks(lecture.id),
+    getHomeworkGradingStatus(lecture.id)
   ]);
 
   const homeworkRecord = homework.at(0);

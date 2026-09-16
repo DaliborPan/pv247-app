@@ -1,7 +1,7 @@
 import { type SessionUserType } from '@/modules/session-user/types';
 
 import { getProjectFormStudents, studentRepository } from './repository';
-import { homeworkRepository } from '@/modules/homework/server/repository';
+import { getStudentHomeworks } from '@/modules/homework/queries';
 
 export const getProjectFormStudentComboboxOptions = async (
   sessionUser: SessionUserType,
@@ -62,7 +62,7 @@ const get = async (sessionUser: SessionUserType, studentId: string) => {
 
   const [students, homeworks] = await Promise.all([
     studentRepository.getManyStudents(),
-    homeworkRepository.getMany({ userId: studentId })
+    getStudentHomeworks(studentId)
   ]);
 
   const student = students.find(student => student.id === studentId);

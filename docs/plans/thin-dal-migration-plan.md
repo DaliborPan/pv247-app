@@ -1,6 +1,6 @@
 # Migrace na tenkou DAL (varianta A)
 
-Stav: pilot modulu `lecture` implementovan, ceka na schvaleni struktury. Ostatni moduly zatim nemigrovany.
+Stav: `lecture` a `homework` implementovany. Ostatni moduly zatim nemigrovany; dochazka zustava samostatnym dalsim krokem.
 
 ## Stav Pilotu
 
@@ -12,6 +12,19 @@ Stav: pilot modulu `lecture` implementovan, ceka na schvaleni struktury. Ostatni
 - Klient dostava jen potrebne lecture props; seed pouziva DB insert typ, nikoliv aplikacni DTO. `.pop()` nahrazeno `.at(-1)`, aby konzument nemenil memoizovane pole.
 - Provedena pouze staticka kontrola kodu, diffu a importu. Testy, browser, build, lint ani typecheck nebyly spusteny. Vyukove MDX ukazky stare architektury nebyly prepisovany.
 - Pred migraci dalsiho modulu pockat na schvaleni uzivatele.
+
+## Stav Homework
+
+- Po schvaleni lecture pilotu byl samostatne migrovan `homework`, nikoliv soucasne `student-lecture` z puvodne spojeneho kroku 3.
+- Pridany `src/modules/homework/queries.ts` a `types.ts`. Read API: `getMyHomeworks(lectureId?)`, `getStudentHomeworks(studentId)`, `getHomeworkGradingStatus(lectureId)`.
+- `HomeworkType` obsahuje pouze `lectureId` a `points`; `HomeworkGradingStatusType` obsahuje `hasGradingStarted`. Select skutecne vynechava nepotrebna pole `id`, `name`, `studentId` a `lectorId` z osobnich vysledku.
+- Zachovano anonymni vlastni cteni jako prazdny seznam a self-or-lector autorizace studentskych dat. Vsechny nove read vstupy pouzivaji `React.cache`, bez persistentni cache. Stav hodnoceni zustava verejnou informaci o existenci libovolneho zaznamu pro prednasku.
+- Create/update jsou primo v existujici ZSA action, se stejnou validaci, lektorskou procedurou a `refresh()`. Klientske mutation hooky a vstupni schema zustavaji.
+- Odstraneny homework loader, server/query, repository, mutation, index a nepouzivane vystupni Zod schema. Nevyuzita vetev cteni vsech hodnoceni bez studentId nebyla prenesena do noveho API.
+- Prepojeny komponenty lecture/homework/student i homework cteni ve student loaderu a query. Studentsky detail uz neimportuje raw homework repository; jeho `homeworksStudent` nese minimalni vysledek nove query.
+- Zachovany nuly, nullable lectureId, pocty/soucty vsech zaznamu a update vsech odpovidajicich radku. Kontrola zahajeneho hodnoceni nacita pouze prvni ID misto celeho seznamu.
+- Samostatne follow-upy, bez oprav v migraci: create duveruje klientskemu `lectorId` a nazvu zadani; bodove schema neurcuje minimum/maximum; databaze nezakazuje duplicitni hodnoceni. Soucasne chovani nebylo pri presunu predefinovano.
+- Provedena pouze staticka kontrola diffu, importu a konzumentu. Testy, browser, build, lint ani typecheck nebyly spusteny. Pred dalsim modulem pockat na schvaleni uzivatele.
 
 ## Cil A Rozsah
 

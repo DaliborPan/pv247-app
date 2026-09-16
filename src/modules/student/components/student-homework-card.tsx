@@ -6,7 +6,10 @@ import { ReactNode, Suspense } from 'react';
 import type { LectureType } from '@/modules/lecture/types';
 import { UserType } from '@/modules/user/schema';
 
-import { homeworkLoader } from '@/modules/homework/loader';
+import {
+  getStudentHomeworks,
+  getHomeworkGradingStatus
+} from '@/modules/homework/queries';
 
 const HomeworkListCard = async ({
   points
@@ -53,9 +56,7 @@ export const StudentHomeworkCard = (props: { user: Promise<UserType> }) => {
           return null;
         }
 
-        const homework = await homeworkLoader.getMany({
-          userId: user.id
-        });
+        const homework = await getStudentHomeworks(user.id);
 
         return (
           <HomeworkListCard
@@ -66,14 +67,12 @@ export const StudentHomeworkCard = (props: { user: Promise<UserType> }) => {
 
               return (
                 <Suspense>
-                  {homeworkLoader
-                    .getGradingStatus(lecture.id)
-                    .then(gradingStatus => (
-                      <PointsBadge
-                        points={lectureHomework?.points}
-                        hasGradingStarted={gradingStatus.hasGradingStarted}
-                      />
-                    ))}
+                  {getHomeworkGradingStatus(lecture.id).then(gradingStatus => (
+                    <PointsBadge
+                      points={lectureHomework?.points}
+                      hasGradingStarted={gradingStatus.hasGradingStarted}
+                    />
+                  ))}
                 </Suspense>
               );
             }}

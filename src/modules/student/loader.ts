@@ -2,7 +2,7 @@ import { cache } from 'react';
 
 import { getSessionUser } from '@/modules/session-user';
 import { type UserType } from '@/modules/user/schema';
-import { homeworkQueries } from '@/modules/homework/server';
+import { getStudentHomeworks } from '@/modules/homework/queries';
 
 import { projectQueries } from '@/modules/project/server';
 
@@ -30,7 +30,7 @@ const getOverview = async (user: UserType) => {
   const sessionUser = await getSessionUser();
 
   const [homework, attendances] = await Promise.all([
-    homeworkQueries.getMany(sessionUser, { userId: user.id }),
+    getStudentHomeworks(user.id),
     studentLectureQueries.getMany(sessionUser, { userId: user.id })
   ]);
 
