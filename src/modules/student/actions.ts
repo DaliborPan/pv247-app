@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 import { db } from '@/db';
-import { users } from '@/db/schema/users';
+import { user as users } from '@/db/schema/users/users';
 import { authServerAction } from '@/server/server-actions';
 
 import { profileFormSchema } from './schema';

@@ -3,8 +3,8 @@ import 'server-only';
 import { cache } from 'react';
 
 import { db } from '@/db';
-import { users } from '@/db/schema/users';
-import { getSessionUser } from '@/modules/session-user';
+import { user as users } from '@/db/schema/users/users';
+import { getSessionUser } from '@/modules/session-user/session-user';
 
 import {
   type ProjectStudentOptionType,

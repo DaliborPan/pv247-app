@@ -1,4 +1,4 @@
-import { DataTable } from '@/components/data-table';
+import { DataTable } from '@/components/data-table/data-table';
 
 import { columns } from './columns';
 import { type StudentProgressType } from '@/modules/student/types';

@@ -3,16 +3,16 @@ import { type MDXComponents } from 'mdx/types';
 
 import { type LectureSlugType } from '../schema';
 
-import { IntroductionMdx } from './introduction';
-import { ReactMdx } from './react';
-import { ApiConfigsServerActionsDatabaseMdx } from './api-configs-server-actions-database';
-import { AuthenticationMetadataDeploymentMdx } from './authentication-metadata-deployment';
-import { StylingMdx } from './styling';
-import { HooksMdx } from './hooks';
-import { OtherHooksRefsTablesMdx } from './other-hooks-refs-tables';
-import { AsyncFormsMdx } from './async-forms';
-import { NextjsMdx } from './nextjs';
-import { SuspenseStreamingRscMdx } from './suspense-streaming-rsc';
+import IntroductionMdx from './introduction/introduction.mdx';
+import ReactMdx from './react/react.mdx';
+import ApiConfigsServerActionsDatabaseMdx from './api-configs-server-actions-database/api-configs-server-actions-database.mdx';
+import AuthenticationMetadataDeploymentMdx from './authentication-metadata-deployment/authentication-metadata-deployment.mdx';
+import StylingMdx from './styling/styling.mdx';
+import HooksMdx from './hooks/hooks.mdx';
+import OtherHooksRefsTablesMdx from './other-hooks-refs-tables/other-hooks-refs-tables.mdx';
+import AsyncFormsMdx from './async-forms/async-forms.mdx';
+import NextjsMdx from './nextjs/nextjs.mdx';
+import SuspenseStreamingRscMdx from './suspense-streaming-rsc/suspense-streaming-rsc.mdx';
 
 type MdxComponent = ComponentType<{
   readonly components?: MDXComponents | undefined;

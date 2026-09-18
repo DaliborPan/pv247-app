@@ -1,6 +1,6 @@
 import { User } from 'lucide-react';
 
-import { Icon } from '@/components/base/icon';
+import { Icon } from '@/components/base/icon/icon';
 import { SidebarCard } from '@/components/sidebar-card';
 import { type ProjectType } from '@/modules/project/types';
 

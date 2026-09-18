@@ -4,14 +4,14 @@ import Link, { type LinkProps } from 'next/link';
 import { type PropsWithChildren } from 'react';
 import { Menu } from 'lucide-react';
 
-import { Button } from '../base/button';
+import { Button } from '../base/button/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from '../base/dropdown';
+} from '../base/dropdown/dropdown';
 import { SignIn } from '../sign-in';
 
 import { Logout } from './logout';

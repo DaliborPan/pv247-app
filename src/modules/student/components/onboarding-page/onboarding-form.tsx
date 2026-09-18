@@ -5,9 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-import { Form } from '@/components/form';
+import { Form } from '@/components/form/form';
 import { FormInput } from '@/components/form/form-fields/form-input';
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 
 import { profileFormSchema, type ProfileFormType } from '../../schema';
 import { onboardingFormAction } from '../../actions';

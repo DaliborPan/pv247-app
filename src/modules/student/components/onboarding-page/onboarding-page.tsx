@@ -1,4 +1,4 @@
-import { getSessionUser } from '@/modules/session-user';
+import { getSessionUser } from '@/modules/session-user/session-user';
 import { OnboardingForm } from './onboarding-form';
 
 export const OnboardingPage = async () => {

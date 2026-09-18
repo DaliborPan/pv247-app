@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import { refresh } from 'next/cache';
 
 import { db } from '@/db';
-import { projects } from '@/db/schema/projects';
+import { projects } from '@/db/schema/projects/projects';
 import { authLectorServerAction } from '@/server/server-actions';
 
 import { setProjectPointsFormSchema } from './schema';

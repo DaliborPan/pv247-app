@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 
 import { SidebarCard } from '@/components/sidebar-card';
-import { Icon } from '@/components/base/icon';
+import { Icon } from '@/components/base/icon/icon';
 
 import { SidebarLinkRow } from './sidebar-link-row';
 

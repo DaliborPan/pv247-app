@@ -8,8 +8,8 @@ import {
 
 import { homeworkRepositoryStatusSchema } from '@/modules/homework-repository/schema';
 
-import { lectures } from './lectures';
-import { users } from './users';
+import { lectures } from './lectures/lectures';
+import { user as users } from './users/users';
 
 export const homeworkRepositories = sqliteTable(
   'homework_repository',

@@ -2,7 +2,7 @@
 
 import { type PropsWithChildren, useState } from 'react';
 
-import { LiveCodeWrapper } from '@/components/mdx';
+import { LiveCodeWrapper } from '@/components/mdx/live-code-wrapper';
 
 export const CorrectState = ({ children }: PropsWithChildren) => {
   const [name, setName] = useState('');

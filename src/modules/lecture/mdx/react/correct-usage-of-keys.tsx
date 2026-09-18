@@ -3,7 +3,7 @@
 import { type PropsWithChildren, useState } from 'react';
 import { RefreshCcw } from 'lucide-react';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 
 export const CorrectUsageOfKeys = ({ children }: PropsWithChildren) => {
   const [items, setItems] = useState(['Item 1', 'Item 2', 'Item 3']);

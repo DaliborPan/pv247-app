@@ -1,6 +1,6 @@
 import { db } from '@/db';
 import { studentLectures } from '@/db/schema/studentLecture';
-import { getSession } from '@/modules/session-user';
+import { getSession } from '@/modules/session-user/session-user';
 import { acceptAttendanceCodeSchema } from '@/modules/student-lecture/schema';
 
 export const GET = async (

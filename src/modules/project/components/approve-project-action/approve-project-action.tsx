@@ -4,7 +4,7 @@ import { Check, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 
 import { type ProjectType } from '@/modules/project/types';
 

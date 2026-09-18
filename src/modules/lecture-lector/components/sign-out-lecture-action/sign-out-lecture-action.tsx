@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { UserMinus } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 
 import { signOutLectureAction } from './action';
 

@@ -4,7 +4,7 @@ import { lte } from 'drizzle-orm';
 import { revalidateTag } from 'next/cache';
 
 import { db } from '@/db';
-import { lectures } from '@/db/schema/lectures';
+import { lectures } from '@/db/schema/lectures/lectures';
 import { authLectorServerAction } from '@/server/server-actions';
 
 import { lecturesTag } from '../../tag';

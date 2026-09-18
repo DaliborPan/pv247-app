@@ -4,8 +4,8 @@ import { integer, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
 
 import { lectureLectorStatusSchema } from '@/modules/lecture-lector/schema';
 
-import { lectures } from './lectures';
-import { users } from './users';
+import { lectures } from './lectures/lectures';
+import { user as users } from './users/users';
 
 export const lectureLectors = sqliteTable(
   'lectureLector',

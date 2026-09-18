@@ -5,7 +5,7 @@ import { ArrowDownFromLine, ArrowUpFromLine } from 'lucide-react';
 
 import { cn } from '@/lib/cn';
 
-import { Button } from '../base/button';
+import { Button } from '../base/button/button';
 
 export const MdxCodeBlock = ({ children }: PropsWithChildren<object>) => {
   const [expanded, setExpanded] = useState(false);

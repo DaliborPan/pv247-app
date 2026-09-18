@@ -5,8 +5,8 @@ import { refresh } from 'next/cache';
 import { z } from 'zod';
 
 import { db } from '@/db';
-import { projects } from '@/db/schema/projects';
-import { users } from '@/db/schema/users';
+import { projects } from '@/db/schema/projects/projects';
+import { user as users } from '@/db/schema/users/users';
 import { authServerAction } from '@/server/server-actions';
 
 import { projectStatusSchema } from '../../schema';

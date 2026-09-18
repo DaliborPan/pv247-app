@@ -1,4 +1,4 @@
-import { getLectureMdxComponent } from '@/modules/lecture/mdx';
+import { getLectureMdxComponent } from '@/modules/lecture/mdx/get-mdx-component';
 import { type LectureSlugType } from '@/modules/lecture/schema';
 
 const Page = async (props: PageProps<'/lector/lectures/[slug]'>) => {

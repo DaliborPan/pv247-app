@@ -4,8 +4,8 @@ import { createColumnHelper } from '@tanstack/react-table';
 import Link from 'next/link';
 import { ArrowRight, ExternalLink, X } from 'lucide-react';
 
-import { DataTableColumnHeader } from '@/components/data-table';
-import { Icon } from '@/components/base/icon';
+import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
+import { Icon } from '@/components/base/icon/icon';
 
 import { type StudentProgressType } from '@/modules/student/types';
 

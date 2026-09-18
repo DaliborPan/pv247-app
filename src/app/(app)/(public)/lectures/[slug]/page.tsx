@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import { getIsLectureAvailableQuery, getLecturesQuery } from '@/modules/lecture/queries';
-import { getLectureMdxComponent } from '@/modules/lecture/mdx';
+import { getLectureMdxComponent } from '@/modules/lecture/mdx/get-mdx-component';
 import {
   lectureSlugSchema,
   type LectureSlugType

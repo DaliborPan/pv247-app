@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/libsql';
 
-import { lectures } from './schema/lectures';
+import { lectures } from './schema/lectures/lectures';
 
 // const usersData: User[] = [
 // 	{

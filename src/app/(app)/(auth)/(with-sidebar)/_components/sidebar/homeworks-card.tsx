@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 
-import { Icon } from '@/components/base/icon';
+import { Icon } from '@/components/base/icon/icon';
 import { SidebarCard } from '@/components/sidebar-card';
 import { getAvailableLecturesQuery, getLecturesQuery } from '@/modules/lecture/queries';
 

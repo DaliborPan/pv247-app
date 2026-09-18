@@ -1,9 +1,9 @@
 import { DetailCard } from '@/components/detail-card';
-import { getSessionUser } from '@/modules/session-user';
+import { getSessionUser } from '@/modules/session-user/session-user';
 import { getLecturesQuery } from '@/modules/lecture/queries';
-import { SignOutLectureAction } from '@/modules/lecture-lector/components/sign-out-lecture-action';
-import { SignUpLectureAction } from '@/modules/lecture-lector/components/sign-up-lecture-action';
-import { SetLectureTeacherApprovalAction } from '@/modules/lecture-lector/components/set-lecture-teacher-approval-action';
+import { SignOutLectureAction } from '@/modules/lecture-lector/components/sign-out-lecture-action/sign-out-lecture-action';
+import { SignUpLectureAction } from '@/modules/lecture-lector/components/sign-up-lecture-action/sign-up-lecture-action';
+import { SetLectureTeacherApprovalAction } from '@/modules/lecture-lector/components/set-lecture-teacher-approval-action/set-lecture-teacher-approval-action';
 import { getLectorsForLecturesQuery } from '@/modules/lecture-lector/queries';
 import { lectureLectorStatusOptions } from '@/modules/lecture-lector/schema';
 import { getLectureLectorStatusLabel } from '@/modules/lecture-lector/utils';

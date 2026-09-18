@@ -3,12 +3,12 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { ExternalLink } from 'lucide-react';
 
-import { DataTableColumnHeader } from '@/components/data-table';
-import { Icon } from '@/components/base/icon';
+import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
+import { Icon } from '@/components/base/icon/icon';
 import {
-  SetHomeworkPointsForm,
-  type SetHomeworkPointsFormSchema
-} from '@/modules/homework/components/set-homework-points-form';
+  SetHomeworkPointsForm
+} from '@/modules/homework/components/set-homework-points-form/set-homework-points-form';
+import type { SetHomeworkPointsFormSchema } from '@/modules/homework/components/set-homework-points-form/schema';
 import { type StudentHomeworkType } from '@/modules/student/types';
 import { getHomeworkGithubUrl } from '@/modules/homework/utils';
 

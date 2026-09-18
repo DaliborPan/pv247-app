@@ -3,7 +3,7 @@ import 'server-only';
 import { cache } from 'react';
 import { headers } from 'next/headers';
 
-import { auth } from '@/auth';
+import { auth } from '@/auth/auth';
 
 import { type UserRoleType } from './schema';
 import { tryCatch } from '@/lib/try-catch';

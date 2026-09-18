@@ -4,7 +4,7 @@ import { cacheLife, cacheTag } from 'next/cache';
 import { cache } from 'react';
 
 import { db } from '@/db';
-import { getSessionUser } from '@/modules/session-user';
+import { getSessionUser } from '@/modules/session-user/session-user';
 
 import { lecturesTag } from './tag';
 import { type LectureAttendanceType, type LectureType } from './types';

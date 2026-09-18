@@ -3,7 +3,7 @@ import 'server-only';
 import { cache } from 'react';
 
 import { db } from '@/db';
-import { getSessionUser } from '@/modules/session-user';
+import { getSessionUser } from '@/modules/session-user/session-user';
 
 import { type HomeworkRepositoryType } from './types';
 

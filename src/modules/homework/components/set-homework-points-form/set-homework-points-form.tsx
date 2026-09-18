@@ -6,8 +6,8 @@ import { useState } from 'react';
 import { Pencil, Send } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Button } from '@/components/base/button';
-import { Form } from '@/components/form';
+import { Button } from '@/components/base/button/button';
+import { Form } from '@/components/form/form';
 import { FormInput } from '@/components/form/form-fields/form-input';
 
 import { useSetHomeworkPointsMutation } from './mutation';

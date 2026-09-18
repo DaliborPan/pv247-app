@@ -3,15 +3,15 @@ import { type MDXComponents } from 'mdx/types';
 
 import { type HomeworkSlugType } from '@/modules/lecture/schema';
 
-import { TypescriptMdx } from './typescript';
-import { ReactBasictMdx } from './react-basics';
-import { StylingMdx } from './styling';
-import { StateMdx } from './state';
-import { TableMemoMdx } from './table-memo';
-import { FormsAsyncMdx } from './forms-async';
-import { NextjsBasicMdx } from './nextjs-basic';
-import { RscFormsMdx } from './rsc-forms';
-import { ApiActionsDatabaseMdx } from './api-actions-database';
+import TypescriptMdx from './typescript/typescript.mdx';
+import ReactBasictMdx from './react-basics/react-basics.mdx';
+import StylingMdx from './styling/styling.mdx';
+import StateMdx from './state/state.mdx';
+import TableMemoMdx from './table-memo/table-memo.mdx';
+import FormsAsyncMdx from './forms-async/forms-async.mdx';
+import NextjsBasicMdx from './nextjs-basic/nextjs-basic.mdx';
+import RscFormsMdx from './rsc-forms/rsc-forms.mdx';
+import ApiActionsDatabaseMdx from './api-actions-database/api-actions-database.mdx';
 
 type MdxComponent = ComponentType<{
   readonly components?: MDXComponents | undefined;

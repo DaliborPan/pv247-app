@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { TextPreview } from '@/components/text-preview';
 import { getAvailableLecturesQuery } from '@/modules/lecture/queries';
 

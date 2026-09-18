@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { LabeledValue } from '@/components/labeled-value';
 import { DetailCard } from '@/components/detail-card';
 import { getMyProjectQuery } from '@/modules/project/queries';

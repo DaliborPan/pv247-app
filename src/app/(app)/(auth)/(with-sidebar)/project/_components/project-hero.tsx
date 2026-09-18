@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { Github, Pencil, Users } from 'lucide-react';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { cn } from '@/lib/cn';
-import { Icon } from '@/components/base/icon';
+import { Icon } from '@/components/base/icon/icon';
 import { Hero } from '@/components/base/hero';
 import { type ProjectType } from '@/modules/project/types';
 

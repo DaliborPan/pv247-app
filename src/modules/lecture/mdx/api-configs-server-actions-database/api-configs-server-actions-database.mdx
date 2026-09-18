@@ -476,7 +476,7 @@ Next.js provides a few framework-level protections: it compares the request `Ori
 ```ts
 'use server';
 
-import { auth } from '@/auth';
+import { auth } from '@/auth/auth';
 import { db } from '@/db';
 
 export const deleteTodoAction = async (todoId: string) => {

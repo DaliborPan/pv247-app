@@ -3,7 +3,7 @@ import { ExternalLink } from 'lucide-react';
 
 import { LabeledValue } from '@/components/labeled-value';
 import { cn } from '@/lib/cn';
-import { Icon } from '@/components/base/icon';
+import { Icon } from '@/components/base/icon/icon';
 import { StudentOverviewCard } from '@/modules/student/components/student-overview-card';
 import { type StudentType } from '@/modules/student/types';
 import { getProjectStatusLabel } from '@/modules/project/utils/project-status';

@@ -4,7 +4,7 @@ import { type ReactNode } from 'react';
 import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { cn } from '@/lib/cn';
 
 import { setLectureTeacherApprovalAction } from './action';

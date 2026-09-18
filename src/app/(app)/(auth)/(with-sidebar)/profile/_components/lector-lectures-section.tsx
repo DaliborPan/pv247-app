@@ -1,7 +1,7 @@
 import { DetailCard } from '@/components/detail-card';
-import { RevalidateLecturesAction } from '@/modules/lecture/components/revalidate-lecture-action';
+import { RevalidateLecturesAction } from '@/modules/lecture/components/revalidate-lecture-action/revalidate-lecture-action';
 import { getLecturesForAttendanceQuery } from '@/modules/lecture/queries';
-import { ShowAttendanceQrCodeAction } from '@/modules/student-lecture/components/show-attendance-qr-code-action';
+import { ShowAttendanceQrCodeAction } from '@/modules/student-lecture/components/show-attendance-qr-code-action/show-attendance-qr-code-action';
 
 export const LectorLecturesSection = async () => {
   const lectures = await getLecturesForAttendanceQuery();

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { cn } from '@/lib/cn';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { BookOpen, Lock } from 'lucide-react';
 
 export const LectureCardActions = ({

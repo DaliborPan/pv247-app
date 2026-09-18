@@ -1,10 +1,10 @@
 import { Calendar, Check, Users } from 'lucide-react';
 import Link from 'next/link';
 
-import { Icon } from '@/components/base/icon';
+import { Icon } from '@/components/base/icon/icon';
 import { TextPreview } from '@/components/text-preview';
-import { Button } from '@/components/base/button';
-import { Badge } from '@/components/base/badge';
+import { Button } from '@/components/base/button/button';
+import { Badge } from '@/components/base/badge/badge';
 import { formatDate } from '@/lib/date';
 import { type ProjectType } from '@/modules/project/types';
 import { getProjectStatusLabel } from '@/modules/project/utils/project-status';

@@ -1,4 +1,4 @@
-import { type auth } from '@/auth';
+import { type auth } from '@/auth/auth';
 import { type UserRoleType } from './schema';
 
 export type SessionUserType = Omit<

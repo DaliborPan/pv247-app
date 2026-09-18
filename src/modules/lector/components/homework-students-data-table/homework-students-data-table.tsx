@@ -1,5 +1,5 @@
-import { DataTable } from '@/components/data-table';
-import { getSessionUser } from '@/modules/session-user';
+import { DataTable } from '@/components/data-table/data-table';
+import { getSessionUser } from '@/modules/session-user/session-user';
 import { type LectureType } from '@/modules/lecture/types';
 
 import { type StudentHomeworkType } from '@/modules/student/types';

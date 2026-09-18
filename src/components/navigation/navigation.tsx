@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Github, LogOut } from 'lucide-react';
 
 import { cn } from '@/lib/cn';
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 
 import MUNI_LOGO from '../../../public/muni-logo.png';
 import { SignIn } from '../sign-in';

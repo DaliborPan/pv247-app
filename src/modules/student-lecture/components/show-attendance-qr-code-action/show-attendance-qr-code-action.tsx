@@ -3,9 +3,9 @@
 import { Link, QrCode as QrCodeIcon } from 'lucide-react';
 import QrCode from 'react-qr-code';
 
-import { Button } from '@/components/base/button';
-import { Dialog } from '@/components/base/dialog';
-import { Icon } from '@/components/base/icon';
+import { Button } from '@/components/base/button/button';
+import { Dialog } from '@/components/base/dialog/dialog';
+import { Icon } from '@/components/base/icon/icon';
 
 export const ShowAttendanceQrCodeAction = ({
   attendanceToken

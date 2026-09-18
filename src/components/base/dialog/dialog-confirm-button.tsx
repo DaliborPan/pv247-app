@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { Check } from 'lucide-react';
 
-import { Button, type ButtonProps } from '../button';
+import { Button, type ButtonProps } from '../button/button';
 
 export const DialogConfirmButton = forwardRef<
   HTMLButtonElement,

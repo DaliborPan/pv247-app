@@ -2,7 +2,7 @@
 
 import { useFormContext } from 'react-hook-form';
 
-import { Textarea, type TextareaProps } from '@/components/base/textarea';
+import { Textarea, type TextareaProps } from '@/components/base/textarea/textarea';
 
 import {
   FormField,

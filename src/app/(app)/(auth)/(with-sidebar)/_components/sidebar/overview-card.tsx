@@ -6,7 +6,7 @@ import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 import { ReactNode, Suspense } from 'react';
 import { getLecturesQuery, getLecturesWithHomeworkQuery } from '@/modules/lecture/queries';
 import { Skeleton } from '@/components/skeleton';
-import { getSessionUser } from '@/modules/session-user';
+import { getSessionUser } from '@/modules/session-user/session-user';
 
 const OverviewSidebarCard = ({
   attendance,

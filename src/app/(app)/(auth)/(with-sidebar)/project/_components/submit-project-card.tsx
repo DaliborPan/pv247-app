@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Pencil } from 'lucide-react';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { DetailCard } from '@/components/detail-card';
 
 import { type ProjectType } from '@/modules/project/types';

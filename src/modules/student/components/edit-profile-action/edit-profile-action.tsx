@@ -5,9 +5,9 @@ import { toast } from 'sonner';
 import { Pencil } from 'lucide-react';
 import { use } from 'react';
 
-import { Prompt } from '@/components/base/prompt';
+import { Prompt } from '@/components/base/prompt/prompt';
 import { FormInput } from '@/components/form/form-fields/form-input';
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 
 import { profileFormSchema, type ProfileFormType } from '../../schema';
 import { editProfileAction } from '../../actions';

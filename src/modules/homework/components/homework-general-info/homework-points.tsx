@@ -1,11 +1,11 @@
 import Link from 'next/link';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { type LectureType } from '@/modules/lecture/types';
 
 import { LabeledItem } from './labeled-item';
 
-import { getSession } from '@/modules/session-user';
+import { getSession } from '@/modules/session-user/session-user';
 import {
   getMyHomeworksQuery,
   getHomeworkGradingStatusQuery

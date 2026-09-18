@@ -1,6 +1,6 @@
-import { getSessionUser } from '@/modules/session-user';
+import { getSessionUser } from '@/modules/session-user/session-user';
 import { Hero } from '@/components/base/hero';
-import { EditProfileAction } from '@/modules/student/components/edit-profile-action';
+import { EditProfileAction } from '@/modules/student/components/edit-profile-action/edit-profile-action';
 import { Suspense } from 'react';
 
 const ProfileHeroContent = async () => {

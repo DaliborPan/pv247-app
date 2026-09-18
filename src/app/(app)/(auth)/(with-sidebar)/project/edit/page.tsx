@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { getSessionUser } from '@/modules/session-user';
-import { ProjectForm } from '@/modules/project/components/project-form';
+import { getSessionUser } from '@/modules/session-user/session-user';
+import { ProjectForm } from '@/modules/project/components/project-form/project-form';
 import { getMyProjectQuery } from '@/modules/project/queries';
 import { Suspense } from 'react';
 

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
-import { getHomeworkMdxComponent } from '@/modules/homework/mdx';
+import { getHomeworkMdxComponent } from '@/modules/homework/mdx/get-mdx-component';
 import {
   getIsHomeworkAvailableQuery,
   getLecturesWithHomeworkQuery

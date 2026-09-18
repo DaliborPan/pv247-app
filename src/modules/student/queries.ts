@@ -5,7 +5,7 @@ import { cache } from 'react';
 import { db } from '@/db';
 import { getStudentHomeworksQuery } from '@/modules/homework/queries';
 import { getStudentProjectQuery } from '@/modules/project/queries';
-import { getSessionUser } from '@/modules/session-user';
+import { getSessionUser } from '@/modules/session-user/session-user';
 import { getStudentLecturesQuery } from '@/modules/student-lecture/queries';
 
 import {

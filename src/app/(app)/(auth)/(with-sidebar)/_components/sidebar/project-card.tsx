@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { ArrowRight, Users } from 'lucide-react';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { SidebarCard } from '@/components/sidebar-card';
-import { Icon } from '@/components/base/icon';
+import { Icon } from '@/components/base/icon/icon';
 import { getMyProjectQuery } from '@/modules/project/queries';
 import { Suspense } from 'react';
 

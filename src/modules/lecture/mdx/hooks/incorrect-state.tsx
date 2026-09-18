@@ -2,7 +2,7 @@
 
 import { type PropsWithChildren } from 'react';
 
-import { LiveCodeWrapper } from '@/components/mdx';
+import { LiveCodeWrapper } from '@/components/mdx/live-code-wrapper';
 
 export const IncorrectState = ({ children }: PropsWithChildren) => {
   let name = '';

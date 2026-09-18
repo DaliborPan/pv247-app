@@ -4,7 +4,7 @@ import { and, eq } from 'drizzle-orm';
 import { refresh } from 'next/cache';
 
 import { db } from '@/db';
-import { account } from '@/db/schema/users';
+import { account } from '@/db/schema/users/users';
 import {
   homeworkRepositories,
   type HomeworkRepositoryInsertType,

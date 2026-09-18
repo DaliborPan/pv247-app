@@ -4,9 +4,9 @@ import { drizzle } from 'drizzle-orm/libsql';
 
 import { homeworks } from './schema/homeworks';
 import { homeworkRepositories } from './schema/homework-repository';
-import { lectures } from './schema/lectures';
-import { projects } from './schema/projects';
-import { users } from './schema/users';
+import { lectures } from './schema/lectures/lectures';
+import { projects } from './schema/projects/projects';
+import { user as users } from './schema/users/users';
 import { studentLectures } from './schema/studentLecture';
 import { lectureLectors } from './schema/lecture-lector';
 import * as relations from './schema/relations';

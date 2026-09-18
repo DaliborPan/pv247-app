@@ -1,7 +1,7 @@
 import { Layers } from 'lucide-react';
 
-import { Badge } from '@/components/base/badge';
-import { Icon } from '@/components/base/icon';
+import { Badge } from '@/components/base/badge/badge';
+import { Icon } from '@/components/base/icon/icon';
 import { TextPreview } from '@/components/text-preview';
 import { formatDate } from '@/lib/date';
 

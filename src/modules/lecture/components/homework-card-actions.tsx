@@ -5,9 +5,9 @@ import { type LectureType } from '@/modules/lecture/types';
 import { getHomeworkGithubUrl } from '@/modules/homework/utils';
 
 import { cn } from '@/lib/cn';
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { Suspense } from 'react';
-import { getSession } from '@/modules/session-user';
+import { getSession } from '@/modules/session-user/session-user';
 import { getStudentHomeworkRepositoriesQuery } from '@/modules/homework-repository/queries';
 import { CreateHomeworkRepositoryAction } from '@/modules/homework-repository/components/create-homework-repository-action/create-homework-repository-action';
 

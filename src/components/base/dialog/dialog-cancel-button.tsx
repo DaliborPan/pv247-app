@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { X } from 'lucide-react';
 
-import { Button, type ButtonProps } from '../button';
+import { Button, type ButtonProps } from '../button/button';
 
 export const DialogCancelButton = forwardRef<
   HTMLButtonElement,

@@ -1,8 +1,8 @@
 import { useFormContext } from 'react-hook-form';
 import { ChevronsUpDown } from 'lucide-react';
 
-import { Combobox, type ComboboxProps } from '@/components/base/combobox';
-import { Button } from '@/components/base/button';
+import { Combobox, type ComboboxProps } from '@/components/base/combobox/combobox';
+import { Button } from '@/components/base/button/button';
 import { cn } from '@/lib/cn';
 
 import {

@@ -3,7 +3,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 
 import { cn } from '@/lib/cn';
 
-import { Icon } from '../base/icon';
+import { Icon } from '../base/icon/icon';
 
 type DataTableColumnHeaderProps<TData, TValue> = {
   className?: string;
