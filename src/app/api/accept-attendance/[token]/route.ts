@@ -12,16 +12,14 @@ export const GET = async (
   const token = (await params).token;
   const sessionUser = await getSession();
 
-  const url = new URL('/accept-attendance', request.url);
-
   if (!sessionUser) {
-    url.searchParams.set(
-      'code',
-      acceptAttendanceCodeSchema.Values.UNAUTHORIZED
-    );
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('callbackUrl', request.url);
 
-    return Response.redirect(url);
+    return Response.redirect(loginUrl);
   }
+
+  const url = new URL('/accept-attendance', request.url);
 
   const lectures = await lectureQueries.getMany();
   const lecture = lectures.find(lecture => lecture.attendanceToken === token);
