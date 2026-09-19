@@ -3,8 +3,8 @@ import { redirect } from 'next/navigation';
 
 import { getHomeworkMdxComponent } from '@/modules/homework/mdx/get-mdx-component';
 import {
-  getIsHomeworkAvailableQuery,
-  getLecturesWithHomeworkQuery
+  getIsHomeworkAvailableCachedQuery,
+  getLecturesWithHomeworkCachedQuery
 } from '@/modules/lecture/queries';
 import {
   homeworkSlugSchema,
@@ -19,7 +19,7 @@ export const generateMetadata = async ({
   params
 }: PageProps<'/homeworks/[slug]'>): Promise<Metadata> => {
   const slug = (await params).slug as HomeworkSlugType;
-  const lectures = await getLecturesWithHomeworkQuery();
+  const lectures = await getLecturesWithHomeworkCachedQuery();
   const lecture = lectures.find(l => l.homeworkSlug === slug);
 
   if (!lecture) {
@@ -41,7 +41,7 @@ export const generateStaticParams = () => {
 const Page = async ({ params }: PageProps<'/homeworks/[slug]'>) => {
   const slug = (await params).slug as HomeworkSlugType;
   const [isAvailable, error] = await tryCatch(
-    getIsHomeworkAvailableQuery(slug)
+    getIsHomeworkAvailableCachedQuery(slug)
   );
 
   if (error) {

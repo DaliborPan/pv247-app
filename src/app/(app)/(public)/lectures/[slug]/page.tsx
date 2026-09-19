@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
-import { getIsLectureAvailableQuery, getLecturesQuery } from '@/modules/lecture/queries';
+import {
+  getIsLectureAvailableCachedQuery,
+  getLecturesCachedQuery
+} from '@/modules/lecture/queries';
 import { getLectureMdxComponent } from '@/modules/lecture/mdx/get-mdx-component';
 import {
   lectureSlugSchema,
@@ -16,7 +19,7 @@ export const generateMetadata = async ({
   params
 }: PageProps<'/lectures/[slug]'>): Promise<Metadata> => {
   const slug = (await params).slug as LectureSlugType;
-  const lectures = await getLecturesQuery();
+  const lectures = await getLecturesCachedQuery();
   const lecture = lectures.find(l => l.slug === slug);
 
   if (!lecture) {
@@ -38,7 +41,7 @@ export const generateStaticParams = () => {
 const Page = async ({ params }: PageProps<'/lectures/[slug]'>) => {
   const slug = (await params).slug as LectureSlugType;
   const [isAvailable, error] = await tryCatch(
-    getIsLectureAvailableQuery(slug)
+    getIsLectureAvailableCachedQuery(slug)
   );
 
   if (error) {

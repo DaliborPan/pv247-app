@@ -2,15 +2,18 @@ import { ArrowRight } from 'lucide-react';
 
 import { Icon } from '@/components/base/icon/icon';
 import { SidebarCard } from '@/components/sidebar-card';
-import { getAvailableLecturesQuery, getLecturesQuery } from '@/modules/lecture/queries';
+import {
+  getAvailableLecturesCachedQuery,
+  getLecturesCachedQuery
+} from '@/modules/lecture/queries';
 
 import { SidebarLinkRow } from './sidebar-link-row';
 import { getMyStudentOverviewQuery } from '@/modules/student/queries';
 import { Suspense } from 'react';
 
 export const HomeworksCard = async () => {
-  const lectures = await getLecturesQuery();
-  const availableLectures = await getAvailableLecturesQuery();
+  const lectures = await getLecturesCachedQuery();
+  const availableLectures = await getAvailableLecturesCachedQuery();
 
   const overviewPromise = getMyStudentOverviewQuery();
 

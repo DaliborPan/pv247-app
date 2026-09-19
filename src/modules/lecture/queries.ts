@@ -9,9 +9,8 @@ import { getSessionUser } from '@/modules/session-user/session-user';
 import { lecturesTag } from './tag';
 import { type LectureAttendanceType, type LectureType } from './types';
 
-const readLectureCatalog = async (): Promise<LectureType[]> => {
+export const getLecturesCachedQuery = async (): Promise<LectureType[]> => {
   'use cache';
-
   cacheTag(lecturesTag);
   cacheLife('max');
 
@@ -35,16 +34,16 @@ const readLectureCatalog = async (): Promise<LectureType[]> => {
   });
 };
 
-export const getLecturesQuery = cache(readLectureCatalog);
+export const getLectureByHomeworkSlugCachedQuery = cache(
+  async (homeworkSlug: string) => {
+    const lectures = await getLecturesCachedQuery();
 
-export const getLectureByHomeworkSlugQuery = cache(async (homeworkSlug: string) => {
-  const lectures = await getLecturesQuery();
+    return lectures.find(lecture => lecture.homeworkSlug === homeworkSlug);
+  }
+);
 
-  return lectures.find(lecture => lecture.homeworkSlug === homeworkSlug);
-});
-
-export const getIsLectureAvailableQuery = cache(async (slug: string) => {
-  const lectures = await getLecturesQuery();
+export const getIsLectureAvailableCachedQuery = cache(async (slug: string) => {
+  const lectures = await getLecturesCachedQuery();
   const lecture = lectures.find(lecture => lecture.slug === slug);
 
   if (!lecture) {
@@ -54,24 +53,26 @@ export const getIsLectureAvailableQuery = cache(async (slug: string) => {
   return lecture.isAvailable;
 });
 
-export const getIsHomeworkAvailableQuery = cache(async (homeworkSlug: string) => {
-  const lecture = await getLectureByHomeworkSlugQuery(homeworkSlug);
+export const getIsHomeworkAvailableCachedQuery = cache(
+  async (homeworkSlug: string) => {
+    const lecture = await getLectureByHomeworkSlugCachedQuery(homeworkSlug);
 
-  if (!lecture) {
-    throw new Error(`Lecture with homework slug ${homeworkSlug} not found.`);
+    if (!lecture) {
+      throw new Error(`Lecture with homework slug ${homeworkSlug} not found.`);
+    }
+
+    return lecture.isAvailable;
   }
+);
 
-  return lecture.isAvailable;
-});
-
-export const getAvailableLecturesQuery = cache(async () => {
-  const lectures = await getLecturesQuery();
+export const getAvailableLecturesCachedQuery = cache(async () => {
+  const lectures = await getLecturesCachedQuery();
 
   return lectures.filter(lecture => lecture.isAvailable);
 });
 
-export const getLecturesWithHomeworkQuery = cache(async () => {
-  const lectures = await getLecturesQuery();
+export const getLecturesWithHomeworkCachedQuery = cache(async () => {
+  const lectures = await getLecturesCachedQuery();
 
   return lectures.filter(lecture => !!lecture.homeworkSlug);
 });

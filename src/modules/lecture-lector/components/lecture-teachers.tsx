@@ -1,4 +1,4 @@
-import { getLecturesQuery } from '@/modules/lecture/queries';
+import { getLecturesCachedQuery } from '@/modules/lecture/queries';
 import type { LectureSlugType } from '@/modules/lecture/schema';
 
 import { getLectureApprovedLectorsQuery } from '../queries';
@@ -11,7 +11,7 @@ export const LectureTeachers = async ({
   lectureSlug: Promise<LectureSlugType>;
 }) => {
   const slug = await lectureSlug;
-  const lectures = await getLecturesQuery();
+  const lectures = await getLecturesCachedQuery();
   const lecture = lectures.find(lecture => lecture.slug === slug);
 
   if (!lecture) return null;

@@ -9,7 +9,7 @@ import { getSessionUser } from '@/modules/session-user/session-user';
 import { homeworkSlugSchema } from '@/modules/lecture/schema';
 
 import { HomeworksNavigation } from './_components/homeworks-navigation';
-import { getLectureByHomeworkSlugQuery } from '@/modules/lecture/queries';
+import { getLectureByHomeworkSlugCachedQuery } from '@/modules/lecture/queries';
 import { Suspense } from 'react';
 import { getStudentsWithHomeworkQuery } from '@/modules/student/queries';
 
@@ -26,7 +26,7 @@ const Page = ({ params }: PageProps<'/lector/homeworks/[slug]'>) => {
         }
 
         const paramSlug = parsedSlug.data;
-        const lecture = await getLectureByHomeworkSlugQuery(paramSlug);
+        const lecture = await getLectureByHomeworkSlugCachedQuery(paramSlug);
 
         if (!lecture) {
           redirect('/');

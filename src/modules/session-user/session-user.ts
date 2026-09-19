@@ -11,8 +11,6 @@ import { tryCatch } from '@/lib/try-catch';
 /**
  * Get the current session user.
  * Must be called from authenticated pages/components only!
- *
- * @cache React cache
  */
 export const getSessionUser = cache(async () => {
   const session = await auth.api.getSession({
@@ -33,8 +31,6 @@ export const getSessionUser = cache(async () => {
 /**
  * Get the current session user. If there is no user,
  * return null.
- *
- * @cache React cache
  */
 export const getSession = cache(async () => {
   const [user, error] = await tryCatch(getSessionUser());

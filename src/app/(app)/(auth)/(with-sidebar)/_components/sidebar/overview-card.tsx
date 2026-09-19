@@ -4,7 +4,10 @@ import { SidebarCard } from '@/components/sidebar-card';
 import { SidebarCardRow } from './sidebar-card-row';
 import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 import { ReactNode, Suspense } from 'react';
-import { getLecturesQuery, getLecturesWithHomeworkQuery } from '@/modules/lecture/queries';
+import {
+  getLecturesCachedQuery,
+  getLecturesWithHomeworkCachedQuery
+} from '@/modules/lecture/queries';
 import { Skeleton } from '@/components/skeleton';
 import { getSessionUser } from '@/modules/session-user/session-user';
 
@@ -35,8 +38,8 @@ const OverviewSidebarCard = ({
 };
 
 export const OverviewCard = async () => {
-  const lectures = await getLecturesQuery();
-  const homeworkCount = (await getLecturesWithHomeworkQuery()).length;
+  const lectures = await getLecturesCachedQuery();
+  const homeworkCount = (await getLecturesWithHomeworkCachedQuery()).length;
 
   const overviewPromise = getMyStudentOverviewQuery();
 
@@ -49,8 +52,7 @@ export const OverviewCard = async () => {
               attendance={
                 <Suspense>
                   {overviewPromise.then(
-                    overview =>
-                      `${overview.attendanceCount}/${lectures.length}`
+                    overview => `${overview.attendanceCount}/${lectures.length}`
                   )}
                 </Suspense>
               }

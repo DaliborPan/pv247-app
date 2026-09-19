@@ -5,11 +5,14 @@ import { Icon } from '@/components/base/icon/icon';
 
 import { SidebarLinkRow } from './sidebar-link-row';
 
-import { getAvailableLecturesQuery, getLecturesQuery } from '@/modules/lecture/queries';
+import {
+  getAvailableLecturesCachedQuery,
+  getLecturesCachedQuery
+} from '@/modules/lecture/queries';
 
 export const LecturesCard = async () => {
-  const lectures = await getLecturesQuery();
-  const availableLectures = await getAvailableLecturesQuery();
+  const lectures = await getLecturesCachedQuery();
+  const availableLectures = await getAvailableLecturesCachedQuery();
 
   return (
     <SidebarCard title="Lectures" className="hidden lg:block">

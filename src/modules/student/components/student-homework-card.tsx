@@ -1,4 +1,7 @@
-import { getAvailableLecturesQuery, getLecturesQuery } from '@/modules/lecture/queries';
+import {
+  getAvailableLecturesCachedQuery,
+  getLecturesCachedQuery
+} from '@/modules/lecture/queries';
 
 import { ListCard } from './list-card';
 import { PointsBadge } from './points-badge';
@@ -16,8 +19,8 @@ const HomeworkListCard = async ({
 }: {
   points?: (lecture: LectureType) => ReactNode;
 }) => {
-  const lectures = await getLecturesQuery();
-  const availableLectures = await getAvailableLecturesQuery();
+  const lectures = await getLecturesCachedQuery();
+  const availableLectures = await getAvailableLecturesCachedQuery();
 
   return (
     <ListCard
@@ -69,12 +72,14 @@ export const StudentHomeworkCard = (props: {
 
               return (
                 <Suspense>
-                  {getHomeworkGradingStatusQuery(lecture.id).then(gradingStatus => (
-                    <PointsBadge
-                      points={lectureHomework?.points}
-                      hasGradingStarted={gradingStatus.hasGradingStarted}
-                    />
-                  ))}
+                  {getHomeworkGradingStatusQuery(lecture.id).then(
+                    ({ hasGradingStarted }) => (
+                      <PointsBadge
+                        points={lectureHomework?.points}
+                        hasGradingStarted={hasGradingStarted}
+                      />
+                    )
+                  )}
                 </Suspense>
               );
             }}
