@@ -1,6 +1,12 @@
 import Link from 'next/link';
+import { CircleHelp } from 'lucide-react';
 
 import { Button } from '@/components/base/button/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/base/tooltip/tooltip';
 import { type LectureType } from '@/modules/lecture/types';
 
 import { LabeledItem } from './labeled-item';
@@ -37,14 +43,32 @@ export const HomeworkPoints = async ({
   ]);
 
   const homeworkRecord = homework.at(0);
+  const hasPoints = homeworkRecord?.points !== undefined;
+  const gradingHasNotStarted = !hasPoints && !gradingStatus.hasGradingStarted;
 
   return (
     <LabeledItem label="Earned points">
-      <div>
-        {getHomeworkPointsMessage({
-          points: homeworkRecord?.points,
-          hasGradingStarted: gradingStatus.hasGradingStarted
-        })}
+      <div className="flex items-center gap-1">
+        {gradingHasNotStarted
+          ? 'N/A'
+          : getHomeworkPointsMessage({
+              points: homeworkRecord?.points,
+              hasGradingStarted: gradingStatus.hasGradingStarted
+            })}
+        {gradingHasNotStarted && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                aria-label="Grading hasn't started yet"
+                className="text-text-terciary"
+              >
+                <CircleHelp className="size-4" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>Grading hasn't started yet</TooltipContent>
+          </Tooltip>
+        )}
       </div>
     </LabeledItem>
   );
