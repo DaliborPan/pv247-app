@@ -48,9 +48,9 @@ export const HomeworkGeneralInfo = async ({
         </div>
       </div>
 
-      <Suspense>
+      {!!lecture.homeworkTemplateRepositoryUrl && (
         <HomeworkRepositoryLink lectureId={lecture.id} />
-      </Suspense>
+      )}
     </>
   );
 };
