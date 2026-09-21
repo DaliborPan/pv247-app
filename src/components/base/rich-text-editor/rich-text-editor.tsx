@@ -1,3 +1,5 @@
+'use client';
+
 /* eslint-disable import/no-named-as-default */
 import './rich-text-editor.css';
 
