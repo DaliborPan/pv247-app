@@ -4,6 +4,7 @@ import { type HomeworkSlugType } from '@/modules/lecture/schema';
 import { PersonHomeworkDeadline } from './person-homework-deadline';
 import { LabeledItem } from './labeled-item';
 import { HomeworkPoints } from './homework-points';
+import { HomeworkRepositoryLink } from './homework-repository-link';
 import { Suspense } from 'react';
 
 export const HomeworkGeneralInfo = async ({
@@ -46,6 +47,10 @@ export const HomeworkGeneralInfo = async ({
           </Suspense>
         </div>
       </div>
+
+      <Suspense>
+        <HomeworkRepositoryLink lectureId={lecture.id} />
+      </Suspense>
     </>
   );
 };
