@@ -22,6 +22,10 @@ export type StudentProgressType = StudentType & {
 
 export type StudentHomeworkType = StudentType & {
   homeworksStudent: HomeworkType[];
+  homeworkRepositories: {
+    lectureId: string;
+    repositoryUrl: string | null;
+  }[];
 };
 
 export type StudentOverviewType = {

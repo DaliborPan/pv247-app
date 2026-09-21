@@ -23,7 +23,6 @@ export const lectures = sqliteTable('lecture', {
     enum: homeworkSlugSchema.options
   }).notNull(),
   homeworkPreview: text('homeworkPreview').notNull().default(''),
-  homeworkClassroomLink: text('homeworkClassroomLink').notNull().default(''),
   homeworkTemplateRepositoryUrl: text('homeworkTemplateRepositoryUrl'),
   homeworkMaxPoints: integer('homeworkMaxPoints').notNull().default(0)
 });

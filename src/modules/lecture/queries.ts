@@ -25,7 +25,6 @@ export const getLecturesCachedQuery = async (): Promise<LectureType[]> => {
       homeworkName: true,
       homeworkSlug: true,
       homeworkPreview: true,
-      homeworkClassroomLink: true,
       homeworkTemplateRepositoryUrl: true,
       homeworkMaxPoints: true
     },

@@ -147,7 +147,6 @@ export const lecturesSeedData: LectureSeed[] = [
     preview:
       '"PV247 Modern Web Development" at Masaryk University is a comprehensive course that teaches students to build full-stack applications using React and Next.js. Guided by expert developers, participants learn through practical assignments and complete a project at the end.',
     availableFrom: '2026-09-14T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 10,
     homeworkName: 'TypeScript',
     homeworkPreview:
@@ -164,7 +163,6 @@ export const lecturesSeedData: LectureSeed[] = [
     preview:
       "Today's lecture introduces React, highlighting its role in developing dynamic Single Page Applications (SPAs) and efficient data management through the component tree for streamlined user interfaces.",
     availableFrom: '2026-09-21T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 10,
     homeworkName: 'React basics',
     homeworkPreview:
@@ -181,7 +179,6 @@ export const lecturesSeedData: LectureSeed[] = [
     preview:
       "Today's lecture covers various styling methods for web applications, including CSS, Sass, CSS-in-JS, and TailwindCSS. We'll discuss how these techniques enhance user experience and streamline development. Additionally, we'll emphasize the importance of accessibility in web design.",
     availableFrom: '2026-09-28T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 30,
     homeworkName: 'Styling - tailwindcss',
     homeworkPreview:
@@ -198,7 +195,6 @@ export const lecturesSeedData: LectureSeed[] = [
     preview:
       'React hooks, introduced in React 16.8, enable functional components to manage state, handle side effects, and access context without class components. Hooks like useState and useEffect simplify logic, promote code reuse, and encourage a functional approach to React development.',
     availableFrom: '2026-10-05T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 10,
     homeworkName: 'React state',
     homeworkPreview:
@@ -215,7 +211,6 @@ export const lecturesSeedData: LectureSeed[] = [
     preview:
       'This session covers advanced React hooks like useRef and forwardRef, global state management, and practical use of the tanstack-table library for efficient table handling in React applications.',
     availableFrom: '2026-10-12T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 20,
     homeworkName: 'Table, ref, memo',
     homeworkPreview:
@@ -232,7 +227,6 @@ export const lecturesSeedData: LectureSeed[] = [
     preview:
       'This lesson revisits React Context for global state management, explores asynchronous operations, introduces the Tanstack Query library for data fetching, discusses runtime validation with Zod, and handles forms efficiently with React Hook Form.',
     availableFrom: '2026-10-19T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 40,
     homeworkName: 'Forms, working with async data',
     homeworkPreview:
@@ -249,7 +243,6 @@ export const lecturesSeedData: LectureSeed[] = [
     preview:
       "Next.js extends React's capabilities for full-stack web development, featuring server-side rendering and efficient data fetching. It simplifies building web apps with SEO-friendly routing and dynamic content strategies. The next lesson will explore server-side rendering and advanced routing in more detail.",
     availableFrom: '2026-10-26T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 20,
     homeworkName: 'Next.js basics, routing',
     homeworkPreview:
@@ -266,7 +259,6 @@ export const lecturesSeedData: LectureSeed[] = [
     preview:
       "This lesson covers Next.js's server-side rendering and React Server Components to enhance SEO and performance. It explains how Next.js uses server components by default and requires explicit client component declarations. Upcoming topics will address custom API endpoints and caching strategies in Next.js.",
     availableFrom: '2026-11-02T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 30,
     homeworkName: 'Suspense, React Server Components',
     homeworkPreview:
@@ -283,7 +275,6 @@ export const lecturesSeedData: LectureSeed[] = [
     preview:
       "This lecture, we'll be focusing on custom API endpoints, caching, and revalidation options for cache layers. We'll explore server actions that allow for server-side processing without the need for API routes and discuss how to interact with databases using TypeScript.",
     availableFrom: '2026-11-09T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 40,
     homeworkName: 'API, server actions, database',
     homeworkPreview:
@@ -302,7 +293,6 @@ export const lecturesSeedData: LectureSeed[] = [
     availableFrom: '2026-11-16T06:00:00',
 
     // No homework for last lesson
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 0,
     homeworkName: '',
     homeworkPreview: '',
@@ -326,7 +316,7 @@ export const seed = async () => {
         .values(lecture)
         .onConflictDoUpdate({
           target: lectures.id,
-          // Keep existing content, classroom links, tokens and student records.
+          // Keep existing content, tokens and student records.
           set: {
             availableFrom: lecture.availableFrom,
             isAvailable: lecture.isAvailable

@@ -11,10 +11,7 @@ export const HomeworkStudentsDataTable = async ({
   lecture
 }: {
   students: StudentHomeworkType[];
-  lecture?: Pick<
-    LectureType,
-    'id' | 'homeworkName' | 'homeworkSlug' | 'homeworkTemplateRepositoryUrl'
-  >;
+  lecture?: Pick<LectureType, 'id' | 'homeworkName' | 'homeworkSlug'>;
 }) => {
   const sessionUser = await getSessionUser();
 
@@ -38,7 +35,9 @@ export const HomeworkStudentsDataTable = async ({
 
         return {
           ...student,
-          templateRepositoryUrl: lecture?.homeworkTemplateRepositoryUrl,
+          repositoryUrl: student.homeworkRepositories.find(
+            repository => repository.lectureId === lecture?.id
+          )?.repositoryUrl,
           defaultValues
         };
       })}

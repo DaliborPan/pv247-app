@@ -98,6 +98,10 @@ export const getStudentsWithHomeworkQuery = cache(
         homeworksStudent: {
           columns: { lectureId: true, points: true },
           where: (homeworks, { eq }) => eq(homeworks.lectureId, lectureId)
+        },
+        homeworkRepositories: {
+          columns: { lectureId: true, repositoryUrl: true },
+          where: (repositories, { eq }) => eq(repositories.lectureId, lectureId)
         }
       }
     });

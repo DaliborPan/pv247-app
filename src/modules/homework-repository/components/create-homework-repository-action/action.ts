@@ -17,7 +17,6 @@ import {
 } from '@/integrations/github/client';
 import { type SessionUserType } from '@/modules/session-user/types';
 import { type LectureType } from '@/modules/lecture/types';
-import { getHomeworkGithubUrl } from '@/modules/homework/utils';
 import { authStudentServerAction } from '@/server/server-actions';
 
 import { ownHomeworkRepositoryInputSchema } from '../../schema';
@@ -31,10 +30,7 @@ type HomeworkRepositoryInputType = {
 type HomeworkRepositoryContextType = HomeworkRepositoryInputType & {
   record: HomeworkRepositorySelectType | undefined;
   setRecord: (record: HomeworkRepositorySelectType) => void;
-  lecture: Pick<
-    LectureType,
-    'homeworkTemplateRepositoryUrl' | 'homeworkSlug'
-  >;
+  lecture: Pick<LectureType, 'homeworkTemplateRepositoryUrl' | 'homeworkSlug'>;
   github: ReturnType<typeof createGithubClient>;
   githubUserId: string;
   githubLogin: string;
@@ -250,14 +246,9 @@ const create = (user: SessionUserType, input: HomeworkRepositoryInputType) =>
       );
     }
 
-    const legacyUrl = getHomeworkGithubUrl({
-      githubName: githubLogin,
-      homeworkSlug: lecture.homeworkSlug
-    });
-    const baseName = legacyUrl?.split('/').pop();
     const repositoryName =
       record?.repositoryName ??
-      (baseName ? `2026-fall-${baseName}` : undefined);
+      `2026-fall-${lecture.homeworkSlug}-${githubLogin}`;
     if (!repositoryName || repositoryName.length > 100) {
       throw new GithubSetupError(
         'Cannot determine a valid repository name for this homework.'

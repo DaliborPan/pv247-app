@@ -10,7 +10,6 @@ export type LectureType = {
   homeworkName: string;
   homeworkSlug: HomeworkSlugType;
   homeworkPreview: string;
-  homeworkClassroomLink: string;
   homeworkTemplateRepositoryUrl: string | null;
   homeworkMaxPoints: number;
 };
