@@ -25,6 +25,5 @@ export const lectures = sqliteTable('lecture', {
   homeworkPreview: text('homeworkPreview').notNull().default(''),
   homeworkClassroomLink: text('homeworkClassroomLink').notNull().default(''),
   homeworkTemplateRepositoryUrl: text('homeworkTemplateRepositoryUrl'),
-  homeworkMaxPoints: integer('homeworkMaxPoints').notNull().default(0),
-  homeworkDeadline: text('homeworkDeadline').notNull().default('')
+  homeworkMaxPoints: integer('homeworkMaxPoints').notNull().default(0)
 });

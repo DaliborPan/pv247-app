@@ -1,16 +1,12 @@
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 
 import { getHomeworkMdxComponent } from '@/modules/homework/mdx/get-mdx-component';
 import {
   getIsHomeworkAvailableCachedQuery,
   getLecturesWithHomeworkCachedQuery
 } from '@/modules/lecture/queries';
-import {
-  homeworkSlugSchema,
-  type HomeworkSlugType
-} from '@/modules/lecture/schema';
-import { tryCatch } from '@/lib/try-catch';
+import { homeworkSlugSchema } from '@/modules/lecture/schema';
 
 const truncateDescription = (text: string, maxLength = 160) =>
   text.length <= maxLength ? text : `${text.slice(0, maxLength - 3)}...`;
@@ -18,12 +14,17 @@ const truncateDescription = (text: string, maxLength = 160) =>
 export const generateMetadata = async ({
   params
 }: PageProps<'/homeworks/[slug]'>): Promise<Metadata> => {
-  const slug = (await params).slug as HomeworkSlugType;
+  const parsedSlug = homeworkSlugSchema.safeParse((await params).slug);
+
+  if (!parsedSlug.success) {
+    return {};
+  }
+
   const lectures = await getLecturesWithHomeworkCachedQuery();
-  const lecture = lectures.find(l => l.homeworkSlug === slug);
+  const lecture = lectures.find(l => l.homeworkSlug === parsedSlug.data);
 
   if (!lecture) {
-    return { title: 'Homework' };
+    return {};
   }
 
   return {
@@ -39,25 +40,16 @@ export const generateStaticParams = () => {
 };
 
 const Page = async ({ params }: PageProps<'/homeworks/[slug]'>) => {
-  const slug = (await params).slug as HomeworkSlugType;
-  const [isAvailable, error] = await tryCatch(
-    getIsHomeworkAvailableCachedQuery(slug)
-  );
+  const parsedSlug = homeworkSlugSchema.safeParse((await params).slug);
 
-  if (error) {
-    return (
-      <div className="flex flex-col gap-4">
-        <h1 className="text-xl font-light">Something went wrong...</h1>
-        <p className="text-sm text-text-terciary">{error.message}</p>
-      </div>
-    );
+  if (
+    !parsedSlug.success ||
+    !(await getIsHomeworkAvailableCachedQuery(parsedSlug.data))
+  ) {
+    notFound();
   }
 
-  if (!isAvailable) {
-    redirect('/homeworks');
-  }
-
-  const MdxComponent = getHomeworkMdxComponent(slug);
+  const MdxComponent = getHomeworkMdxComponent(parsedSlug.data);
 
   return <MdxComponent />;
 };

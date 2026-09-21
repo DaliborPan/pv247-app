@@ -1,16 +1,12 @@
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 
 import {
   getIsLectureAvailableCachedQuery,
   getLecturesCachedQuery
 } from '@/modules/lecture/queries';
 import { getLectureMdxComponent } from '@/modules/lecture/mdx/get-mdx-component';
-import {
-  lectureSlugSchema,
-  type LectureSlugType
-} from '@/modules/lecture/schema';
-import { tryCatch } from '@/lib/try-catch';
+import { lectureSlugSchema } from '@/modules/lecture/schema';
 
 const truncateDescription = (text: string, maxLength = 160) =>
   text.length <= maxLength ? text : `${text.slice(0, maxLength - 3)}...`;
@@ -18,12 +14,17 @@ const truncateDescription = (text: string, maxLength = 160) =>
 export const generateMetadata = async ({
   params
 }: PageProps<'/lectures/[slug]'>): Promise<Metadata> => {
-  const slug = (await params).slug as LectureSlugType;
+  const parsedParams = lectureSlugSchema.safeParse((await params).slug);
+
+  if (!parsedParams.success) {
+    return {};
+  }
+
   const lectures = await getLecturesCachedQuery();
-  const lecture = lectures.find(l => l.slug === slug);
+  const lecture = lectures.find(l => l.slug === parsedParams.data);
 
   if (!lecture) {
-    return { title: 'Lecture' };
+    return {};
   }
 
   return {
@@ -39,25 +40,16 @@ export const generateStaticParams = () => {
 };
 
 const Page = async ({ params }: PageProps<'/lectures/[slug]'>) => {
-  const slug = (await params).slug as LectureSlugType;
-  const [isAvailable, error] = await tryCatch(
-    getIsLectureAvailableCachedQuery(slug)
-  );
+  const parsedParams = lectureSlugSchema.safeParse((await params).slug);
 
-  if (error) {
-    return (
-      <div className="flex flex-col gap-4">
-        <h1 className="text-xl font-light">Something went wrong...</h1>
-        <p className="text-sm text-text-terciary">{error.message}</p>
-      </div>
-    );
+  if (
+    !parsedParams.success ||
+    !(await getIsLectureAvailableCachedQuery(parsedParams.data))
+  ) {
+    notFound();
   }
 
-  if (!isAvailable) {
-    redirect('/lectures');
-  }
-
-  const MdxComponent = getLectureMdxComponent(slug);
+  const MdxComponent = getLectureMdxComponent(parsedParams.data);
 
   return <MdxComponent />;
 };

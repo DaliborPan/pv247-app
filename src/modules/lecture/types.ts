@@ -13,7 +13,6 @@ export type LectureType = {
   homeworkClassroomLink: string;
   homeworkTemplateRepositoryUrl: string | null;
   homeworkMaxPoints: number;
-  homeworkDeadline: string;
 };
 
 export type LectureAttendanceType = {

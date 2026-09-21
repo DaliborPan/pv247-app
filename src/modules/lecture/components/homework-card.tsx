@@ -25,6 +25,7 @@ export const HomeworkCard = ({ lecture }: { lecture: LectureType }) => {
         <HomeworkCardActions lecture={lecture} />
 
         <div>
+          {/* Potential ppr problem? */}
           <HomeworkPointsBadge
             maxPoints={lecture.homeworkMaxPoints}
             homework={getMyHomeworksQuery().then(homework =>

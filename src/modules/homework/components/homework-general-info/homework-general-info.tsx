@@ -17,24 +17,35 @@ export const HomeworkGeneralInfo = async ({
   if (!lecture) return null;
 
   return (
-    <div className="mt-8 grid items-center gap-4 rounded-lg bg-primary-100 p-4 lg:grid-cols-4 lg:gap-10">
-      <div className="grow">
-        <LabeledItem label="Maximum points">
-          {lecture?.homeworkMaxPoints} points
-        </LabeledItem>
+    <>
+      <div className="border-b border-primary-100 py-10">
+        <h1 className="text-5xl font-light tracking-tight sm:text-6xl">
+          {lecture.homeworkName}
+        </h1>
+        <p className="mt-10 text-lg font-light leading-8 text-markdown">
+          {lecture.homeworkPreview}
+        </p>
       </div>
 
-      <div className="col-span-2">
-        <LabeledItem label="Deadline">
-          <PersonHomeworkDeadline lecture={lecture} />
-        </LabeledItem>
-      </div>
+      <div className="mt-8 grid items-center gap-4 rounded-lg bg-primary-100 p-4 lg:grid-cols-4 lg:gap-10">
+        <div className="grow">
+          <LabeledItem label="Maximum points">
+            {lecture.homeworkMaxPoints} points
+          </LabeledItem>
+        </div>
 
-      <div>
-        <Suspense>
-          <HomeworkPoints lecture={lecture} />
-        </Suspense>
+        <div className="col-span-2">
+          <LabeledItem label="Deadline">
+            <PersonHomeworkDeadline lecture={lecture} />
+          </LabeledItem>
+        </div>
+
+        <div>
+          <Suspense>
+            <HomeworkPoints lecture={lecture} />
+          </Suspense>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
