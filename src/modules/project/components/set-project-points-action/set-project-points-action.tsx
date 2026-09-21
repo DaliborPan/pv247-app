@@ -3,7 +3,7 @@
 import { type PropsWithChildren } from 'react';
 import { toast } from 'sonner';
 
-import { Prompt } from '@/components/base/prompt';
+import { Prompt } from '@/components/base/prompt/prompt';
 import { FormInput } from '@/components/form/form-fields/form-input';
 import { FormTextarea } from '@/components/form/form-fields/form-textarea';
 

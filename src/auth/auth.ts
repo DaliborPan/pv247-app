@@ -1,13 +1,15 @@
+import 'server-only';
+
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
 import { db } from '../db';
 import {
-  users as user,
+  user,
   account,
   session,
   verification
-} from '../db/schema/users';
+} from '../db/schema/users/users';
 
 const betterAuthUrl = process.env.BETTER_AUTH_URL;
 const betterAuthSecret = process.env.BETTER_AUTH_SECRET;
@@ -53,10 +55,6 @@ export const auth = betterAuth({
         type: 'string'
       },
       lectorId: {
-        type: 'string',
-        input: false
-      },
-      projectId: {
         type: 'string',
         input: false
       }

@@ -1,11 +1,11 @@
 import { Layers } from 'lucide-react';
 
-import { Badge } from '@/components/base/badge';
-import { Icon } from '@/components/base/icon';
+import { Badge } from '@/components/base/badge/badge';
+import { Icon } from '@/components/base/icon/icon';
 import { TextPreview } from '@/components/text-preview';
 import { formatDate } from '@/lib/date';
 
-import { type LectureType } from '../schema';
+import { type LectureType } from '@/modules/lecture/types';
 
 import { AttendanceBadge } from './attendance-badge';
 import { LectureCardActions } from './lecture-card-actions';
@@ -43,9 +43,8 @@ export const LectureCard = ({
     <div className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-end">
       <Suspense>
         <LectureCardActions
-          lecture={lecture}
+          isAvailable={isAlwaysAvailable || lecture.isAvailable}
           href={href}
-          isAlwaysAvailable={isAlwaysAvailable}
         />
       </Suspense>
 

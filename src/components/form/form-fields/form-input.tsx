@@ -2,7 +2,7 @@
 
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/base/input';
+import { Input } from '@/components/base/input/input';
 import { type InputProps } from '@/components/base/input/input';
 
 import {

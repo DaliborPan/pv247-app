@@ -12,7 +12,7 @@ import {
 } from '@tanstack/react-table';
 import { Search } from 'lucide-react';
 
-import { Input } from '../base/input';
+import { Input } from '../base/input/input';
 
 type TableProps<TData extends { id: string }> = {
   data: TData[];

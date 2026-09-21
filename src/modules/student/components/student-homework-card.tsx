@@ -1,20 +1,26 @@
-import { lectureLoaders } from '@/modules/lecture/loader';
+import {
+  getAvailableLecturesCachedQuery,
+  getLecturesCachedQuery
+} from '@/modules/lecture/queries';
 
 import { ListCard } from './list-card';
 import { PointsBadge } from './points-badge';
 import { ReactNode, Suspense } from 'react';
-import { LectureType } from '@/modules/lecture/schema';
-import { UserType } from '@/modules/user/schema';
+import type { LectureType } from '@/modules/lecture/types';
+import { type StudentType } from '@/modules/student/types';
 
-import { homeworkLoader } from '@/modules/homework/loader';
+import {
+  getStudentHomeworksQuery,
+  getHomeworkGradingStatusQuery
+} from '@/modules/homework/queries';
 
 const HomeworkListCard = async ({
   points
 }: {
   points?: (lecture: LectureType) => ReactNode;
 }) => {
-  const lectures = await lectureLoaders.getMany();
-  const availableLectures = await lectureLoaders.getAvailable();
+  const lectures = await getLecturesCachedQuery();
+  const availableLectures = await getAvailableLecturesCachedQuery();
 
   return (
     <ListCard
@@ -45,7 +51,9 @@ const HomeworkListCard = async ({
   );
 };
 
-export const StudentHomeworkCard = (props: { user: Promise<UserType> }) => {
+export const StudentHomeworkCard = (props: {
+  user: Promise<Pick<StudentType, 'id' | 'role'>>;
+}) => {
   return (
     <Suspense fallback={<HomeworkListCard />}>
       {props.user.then(async user => {
@@ -53,9 +61,7 @@ export const StudentHomeworkCard = (props: { user: Promise<UserType> }) => {
           return null;
         }
 
-        const homework = await homeworkLoader.getMany({
-          userId: user.id
-        });
+        const homework = await getStudentHomeworksQuery(user.id);
 
         return (
           <HomeworkListCard
@@ -66,14 +72,14 @@ export const StudentHomeworkCard = (props: { user: Promise<UserType> }) => {
 
               return (
                 <Suspense>
-                  {homeworkLoader
-                    .getGradingStatus(lecture.id)
-                    .then(gradingStatus => (
+                  {getHomeworkGradingStatusQuery(lecture.id).then(
+                    ({ hasGradingStarted }) => (
                       <PointsBadge
                         points={lectureHomework?.points}
-                        hasGradingStarted={gradingStatus.hasGradingStarted}
+                        hasGradingStarted={hasGradingStarted}
                       />
-                    ))}
+                    )
+                  )}
                 </Suspense>
               );
             }}

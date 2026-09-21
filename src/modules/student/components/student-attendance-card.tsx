@@ -1,7 +1,7 @@
 import { DetailCard } from '@/components/detail-card';
-import { lectureLoaders } from '@/modules/lecture/loader';
-import { SetStudentAttendanceAction } from '@/modules/student-lecture/components/set-student-attendance-action';
-import { studentLectureLoaders } from '@/modules/student-lecture/loader';
+import { getLecturesCachedQuery } from '@/modules/lecture/queries';
+import { SetStudentAttendanceAction } from '@/modules/student-lecture/components/set-student-attendance-action/set-student-attendance-action';
+import { getStudentLecturesQuery } from '@/modules/student-lecture/queries';
 import { Suspense } from 'react';
 
 const AttendanceCell = ({
@@ -27,7 +27,7 @@ const AttendanceCell = ({
 export const StudentAttendanceCard = async (props: {
   userId: Promise<string>;
 }) => {
-  const lectures = await lectureLoaders.getMany();
+  const lectures = await getLecturesCachedQuery();
 
   return (
     <DetailCard title="Attendance">
@@ -48,9 +48,7 @@ export const StudentAttendanceCard = async (props: {
               <td className="py-2">
                 <Suspense>
                   {props.userId.then(async userId => {
-                    const attendances = await studentLectureLoaders.getMany({
-                      userId
-                    });
+                    const attendances = await getStudentLecturesQuery(userId);
 
                     return (
                       <AttendanceCell

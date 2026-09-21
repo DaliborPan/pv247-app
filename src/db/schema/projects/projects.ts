@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto';
 import { sql } from 'drizzle-orm';
 import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
-import { dbProjectStatusSchema } from './project-status';
+import { projectStatusSchema } from '@/modules/project/schema';
 
 export const projects = sqliteTable('project', {
   id: text('id').notNull().primaryKey().$defaultFn(randomUUID),
@@ -13,12 +13,10 @@ export const projects = sqliteTable('project', {
   github: text('github'),
   comment: text('comment'),
 
-  status: text('status', { enum: dbProjectStatusSchema.options })
+  status: text('status', { enum: projectStatusSchema.options })
     .notNull()
     .default('CREATED' as const),
   updatedAt: text('updated_at')
     .notNull()
     .default(sql`(CURRENT_TIMESTAMP)`)
 });
-
-export type ProjectInsertType = typeof projects.$inferInsert;

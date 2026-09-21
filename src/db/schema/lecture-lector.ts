@@ -2,9 +2,10 @@ import { randomUUID } from 'crypto';
 
 import { integer, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
 
-import { lectures } from './lectures';
-import { users } from './users';
-import { dbLectureLectorStatusSchema } from './lecture-lector-status';
+import { lectureLectorStatusSchema } from '@/modules/lecture-lector/schema';
+
+import { lectures } from './lectures/lectures';
+import { user as users } from './users/users';
 
 export const lectureLectors = sqliteTable(
   'lectureLector',
@@ -16,7 +17,7 @@ export const lectureLectors = sqliteTable(
     lectorId: text('lectorId')
       .notNull()
       .references(() => users.id),
-    status: text('status', { enum: dbLectureLectorStatusSchema.options })
+    status: text('status', { enum: lectureLectorStatusSchema.options })
       .notNull()
       .default('CAN_TEACH'),
     isApproved: integer('isApproved', { mode: 'boolean' })
@@ -25,5 +26,3 @@ export const lectureLectors = sqliteTable(
   },
   table => [unique().on(table.lectureId, table.lectorId)]
 );
-
-export type LectureLectorInsertType = typeof lectureLectors.$inferInsert;

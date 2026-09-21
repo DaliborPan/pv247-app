@@ -3,19 +3,18 @@
 import { Link, QrCode as QrCodeIcon } from 'lucide-react';
 import QrCode from 'react-qr-code';
 
-import { Button } from '@/components/base/button';
-import { Dialog } from '@/components/base/dialog';
-import { Icon } from '@/components/base/icon';
-import { type LectureType } from '@/modules/lecture/schema';
+import { Button } from '@/components/base/button/button';
+import { Dialog } from '@/components/base/dialog/dialog';
+import { Icon } from '@/components/base/icon/icon';
 
 export const ShowAttendanceQrCodeAction = ({
-  lecture
+  attendanceToken
 }: {
-  lecture: LectureType;
+  attendanceToken: string;
 }) => {
   const formattedAcceptAttendanceUrl =
     typeof window !== 'undefined'
-      ? `${window.location.origin}/api/accept-attendance/${lecture.attendanceToken}`
+      ? `${window.location.origin}/api/accept-attendance/${attendanceToken}`
       : '';
 
   return (

@@ -1,7 +1,7 @@
-import { ProjectType } from '../schema';
+import { type ProjectType } from '@/modules/project/types';
 
 export const getProjectStatusLabel = (
-  project: ProjectType | undefined | null
+  project: Pick<ProjectType, 'status'> | undefined | null
 ) => {
   if (!project) return 'No project';
 

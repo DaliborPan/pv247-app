@@ -7,8 +7,8 @@ import { toast } from 'sonner';
 import { Send } from 'lucide-react';
 
 import { useSession } from '@/auth/client';
-import { Form } from '@/components/form';
-import { Button } from '@/components/base/button';
+import { Form } from '@/components/form/form';
+import { Button } from '@/components/base/button/button';
 
 import { projectFormSchema, type ProjectFormSchema } from './schema';
 import { useSubmitProjectFormMutation } from './mutation';

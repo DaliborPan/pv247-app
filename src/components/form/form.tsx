@@ -12,7 +12,7 @@ import {
 
 import { cn } from '@/lib/cn';
 
-import { Label } from '../base/label';
+import { Label } from '../base/label/label';
 
 const Form = FormProvider;
 

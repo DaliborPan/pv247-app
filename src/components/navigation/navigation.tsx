@@ -3,8 +3,7 @@ import Link from 'next/link';
 import { Github, LogOut } from 'lucide-react';
 
 import { cn } from '@/lib/cn';
-import { Button } from '@/components/base/button';
-import { type UserType } from '@/modules/user/schema';
+import { Button } from '@/components/base/button/button';
 
 import MUNI_LOGO from '../../../public/muni-logo.png';
 import { SignIn } from '../sign-in';
@@ -13,12 +12,18 @@ import { NavigationItem } from './navigation-item';
 import { MobileNavigation } from './mobile-navigation';
 import { Logout } from './logout';
 import { Suspense } from 'react';
+import { UserRoleType } from '@/modules/session-user/schema';
+
+type NavigationUserType = {
+  name: string;
+  role: UserRoleType;
+};
 
 const NavigationDelimiter = ({ className }: { className?: string }) => (
   <div className={cn('mx-6 h-5 w-[2px] bg-[#B9BBC6]', className)} />
 );
 
-const UserMenuItem = ({ user }: { user: UserType }) => (
+const UserMenuItem = ({ user }: { user: NavigationUserType }) => (
   <Link href="/profile" className="flex items-center gap-x-3">
     <div className="size-8 rounded-full bg-neutral" />
 
@@ -30,7 +35,7 @@ export const Navigation = ({
   user,
   isUserLoading
 }: {
-  user?: UserType | Promise<UserType | undefined | null>;
+  user?: NavigationUserType | Promise<NavigationUserType | undefined | null>;
   isUserLoading?: boolean;
 }) => {
   if (user instanceof Promise) {
@@ -55,7 +60,10 @@ export const Navigation = ({
           />
         </Link>
 
-        <MobileNavigation user={user} isUserLoading={isUserLoading} />
+        <MobileNavigation
+          user={user ? { role: user.role } : undefined}
+          isUserLoading={isUserLoading}
+        />
 
         <div className="hidden grow items-center lg:flex">
           <nav className="grow">

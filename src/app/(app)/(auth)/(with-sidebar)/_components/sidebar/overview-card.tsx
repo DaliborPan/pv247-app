@@ -1,12 +1,15 @@
-import { studentLoaders } from '@/modules/student/loader';
+import { getMyStudentOverviewQuery } from '@/modules/student/queries';
 import { SidebarCard } from '@/components/sidebar-card';
 
 import { SidebarCardRow } from './sidebar-card-row';
 import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 import { ReactNode, Suspense } from 'react';
-import { lectureLoaders } from '@/modules/lecture/loader';
+import {
+  getLecturesCachedQuery,
+  getLecturesWithHomeworkCachedQuery
+} from '@/modules/lecture/queries';
 import { Skeleton } from '@/components/skeleton';
-import { getSessionUser } from '@/modules/session-user';
+import { getSessionUser } from '@/modules/session-user/session-user';
 
 const OverviewSidebarCard = ({
   attendance,
@@ -35,10 +38,10 @@ const OverviewSidebarCard = ({
 };
 
 export const OverviewCard = async () => {
-  const lectures = await lectureLoaders.getMany();
-  const homeworkCount = (await lectureLoaders.getAllWithHomework()).length;
+  const lectures = await getLecturesCachedQuery();
+  const homeworkCount = (await getLecturesWithHomeworkCachedQuery()).length;
 
-  const overviewPromise = studentLoaders.getMineOverview();
+  const overviewPromise = getMyStudentOverviewQuery();
 
   return (
     <Suspense fallback={<OverviewSidebarCard />}>
@@ -49,8 +52,7 @@ export const OverviewCard = async () => {
               attendance={
                 <Suspense>
                   {overviewPromise.then(
-                    overview =>
-                      `${overview.attendances.length}/${lectures.length}`
+                    overview => `${overview.attendanceCount}/${lectures.length}`
                   )}
                 </Suspense>
               }

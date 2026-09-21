@@ -3,9 +3,9 @@
 import { useFormContext } from 'react-hook-form';
 import { Plus, Trash } from 'lucide-react';
 
-import { Combobox, type ComboboxOption } from '@/components/base/combobox';
-import { Button } from '@/components/base/button';
-import { FormLabel } from '@/components/form';
+import { Combobox, type ComboboxOption } from '@/components/base/combobox/combobox';
+import { Button } from '@/components/base/button/button';
+import { FormLabel } from '@/components/form/form';
 
 import { type ProjectFormSchema } from './schema';
 

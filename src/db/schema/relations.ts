@@ -1,9 +1,9 @@
 import { relations } from 'drizzle-orm';
 
-import { users } from './users';
-import { projects } from './projects';
+import { user as users } from './users/users';
+import { projects } from './projects/projects';
 import { homeworks } from './homeworks';
-import { lectures } from './lectures';
+import { lectures } from './lectures/lectures';
 import { studentLectures } from './studentLecture';
 import { lectureLectors } from './lecture-lector';
 import { homeworkRepositories } from './homework-repository';

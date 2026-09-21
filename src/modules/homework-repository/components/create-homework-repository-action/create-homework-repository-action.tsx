@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { type HomeworkRepositoryStatusType } from '../../schema';
 import {
   createOwnHomeworkRepositoryAction,

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { acceptAttendanceCodeSchema } from '@/modules/student-lecture/schema';
 import { redirect } from 'next/navigation';
 

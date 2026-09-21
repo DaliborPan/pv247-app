@@ -1,19 +1,17 @@
 import { UserCheck } from 'lucide-react';
 
-import { Badge } from '@/components/base/badge';
-import { Icon } from '@/components/base/icon';
+import { Badge } from '@/components/base/badge/badge';
+import { Icon } from '@/components/base/icon/icon';
 
-import { getSession } from '@/modules/session-user';
-import { studentLectureLoaders } from '@/modules/student-lecture/loader';
+import { getSession } from '@/modules/session-user/session-user';
+import { getStudentLecturesQuery } from '@/modules/student-lecture/queries';
 
 export const AttendanceBadge = async ({ lectureId }: { lectureId: string }) => {
   const sessionUser = await getSession();
 
   if (!sessionUser) return null;
 
-  const attendances = await studentLectureLoaders.getMany({
-    userId: sessionUser.id
-  });
+  const attendances = await getStudentLecturesQuery(sessionUser.id);
 
   const hasAttendance = attendances.some(
     attendance => attendance.lectureId === lectureId

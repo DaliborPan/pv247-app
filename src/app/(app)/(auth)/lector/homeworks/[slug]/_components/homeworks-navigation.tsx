@@ -1,14 +1,14 @@
 import { type HomeworkSlugType } from '@/modules/lecture/schema';
 
 import { HomeworkNavigationLink } from './homework-navigation-link';
-import { lectureLoaders } from '@/modules/lecture/loader';
+import { getLecturesCachedQuery } from '@/modules/lecture/queries';
 
 export const HomeworksNavigation = async ({
   homeworkSlug
 }: {
   homeworkSlug: HomeworkSlugType;
 }) => {
-  const lectures = await lectureLoaders.getMany();
+  const lectures = await getLecturesCachedQuery();
 
   const slugLectureIndex = lectures.findIndex(
     lecture => lecture.homeworkSlug === homeworkSlug
@@ -20,11 +20,23 @@ export const HomeworksNavigation = async ({
   return (
     <div className="flex gap-x-4">
       {prevLecture && (
-        <HomeworkNavigationLink type="previous" lecture={prevLecture} />
+        <HomeworkNavigationLink
+          type="previous"
+          lecture={{
+            homeworkSlug: prevLecture.homeworkSlug,
+            name: prevLecture.name
+          }}
+        />
       )}
 
       {nextLecture && (
-        <HomeworkNavigationLink type="next" lecture={nextLecture} />
+        <HomeworkNavigationLink
+          type="next"
+          lecture={{
+            homeworkSlug: nextLecture.homeworkSlug,
+            name: nextLecture.name
+          }}
+        />
       )}
     </div>
   );

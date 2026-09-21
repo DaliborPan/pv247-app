@@ -1,8 +1,8 @@
-import { formatDate } from '@/lib/date';
-import { type LectureType } from '@/modules/lecture/schema';
+import { formatHomeworkDeadline } from '@/lib/date';
+import { type LectureType } from '@/modules/lecture/types';
 
 export const PersonHomeworkDeadline = ({
   lecture
 }: {
-  lecture: LectureType;
-}) => <div>{formatDate(lecture.homeworkDeadline)}</div>;
+  lecture: Pick<LectureType, 'availableFrom'>;
+}) => <div>{formatHomeworkDeadline(lecture.availableFrom)}</div>;

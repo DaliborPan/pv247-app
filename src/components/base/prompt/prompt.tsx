@@ -4,9 +4,9 @@ import React, { type ComponentType, useState } from 'react';
 import { type FieldValues, useForm } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
 
-import { Form } from '@/components/form';
+import { Form } from '@/components/form/form';
 
-import { Dialog } from '../dialog';
+import { Dialog } from '../dialog/dialog';
 
 import { type DecisionFn, type PromptProps } from './types';
 

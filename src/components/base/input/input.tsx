@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import { cn } from '@/lib/cn';
 
-import { Label } from '../label';
-import { Icon, type IconProps } from '../icon';
+import { Label } from '../label/label';
+import { Icon, type IconProps } from '../icon/icon';
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string;

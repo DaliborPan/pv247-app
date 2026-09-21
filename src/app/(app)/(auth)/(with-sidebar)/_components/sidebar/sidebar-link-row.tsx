@@ -2,7 +2,7 @@ import Link, { type LinkProps } from 'next/link';
 import { Suspense, type PropsWithChildren } from 'react';
 
 import { cn } from '@/lib/cn';
-import { LectureType } from '@/modules/lecture/schema';
+import { type LectureType } from '@/modules/lecture/types';
 
 const SidebarLinkRowDynamic = ({
   href,
@@ -11,7 +11,7 @@ const SidebarLinkRowDynamic = ({
   ...props
 }: LinkProps &
   PropsWithChildren<{
-    lecture: LectureType;
+    lecture: Pick<LectureType, 'isAvailable'>;
   }>) => {
   return (
     <Link
@@ -30,7 +30,7 @@ const SidebarLinkRowDynamic = ({
 export const SidebarLinkRow = (
   props: LinkProps &
     PropsWithChildren<{
-      lecture: LectureType;
+      lecture: Pick<LectureType, 'isAvailable'>;
     }>
 ) => {
   return (

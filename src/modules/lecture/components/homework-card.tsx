@@ -1,12 +1,12 @@
 import { formatDate } from '@/lib/date';
 import { TextPreview } from '@/components/text-preview';
 
-import { type LectureType } from '../schema';
+import { type LectureType } from '@/modules/lecture/types';
 
 import { HomeworkPointsBadge } from './homework-points-badge';
 import { HomeworkCardActions } from './homework-card-actions';
 
-import { homeworkLoader } from '@/modules/homework/loader';
+import { getMyHomeworksQuery } from '@/modules/homework/queries';
 
 export const HomeworkCard = ({ lecture }: { lecture: LectureType }) => {
   return (
@@ -25,13 +25,12 @@ export const HomeworkCard = ({ lecture }: { lecture: LectureType }) => {
         <HomeworkCardActions lecture={lecture} />
 
         <div>
+          {/* Potential ppr problem? */}
           <HomeworkPointsBadge
             maxPoints={lecture.homeworkMaxPoints}
-            homework={homeworkLoader
-              .getMine()
-              .then(homework =>
-                homework.find(hw => hw.lectureId === lecture.id)
-              )}
+            homework={getMyHomeworksQuery().then(homework =>
+              homework.find(hw => hw.lectureId === lecture.id)
+            )}
           />
         </div>
       </div>

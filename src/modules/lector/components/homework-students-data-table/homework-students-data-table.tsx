@@ -1,18 +1,17 @@
-import { DataTable } from '@/components/data-table';
-import { getSessionUser } from '@/modules/session-user';
-import { type LectureType } from '@/modules/lecture/schema';
+import { DataTable } from '@/components/data-table/data-table';
+import { getSessionUser } from '@/modules/session-user/session-user';
+import { type LectureType } from '@/modules/lecture/types';
 
-import { type studentLoaders } from '@/modules/student/loader';
+import { type StudentHomeworkType } from '@/modules/student/types';
 
 import { columns } from './columns';
-import { LoaderResult } from '@/types';
 
 export const HomeworkStudentsDataTable = async ({
   students,
   lecture
 }: {
-  students: LoaderResult<typeof studentLoaders.getStudentsWithHomework>;
-  lecture?: LectureType;
+  students: StudentHomeworkType[];
+  lecture?: Pick<LectureType, 'id' | 'homeworkName' | 'homeworkSlug'>;
 }) => {
   const sessionUser = await getSessionUser();
 
@@ -20,7 +19,13 @@ export const HomeworkStudentsDataTable = async ({
     <DataTable
       data={students.map(student => {
         const defaultValues = {
-          lecture,
+          lecture: lecture
+            ? {
+                id: lecture.id,
+                homeworkName: lecture.homeworkName,
+                homeworkSlug: lecture.homeworkSlug
+              }
+            : undefined,
           lectorId: sessionUser.id,
           studentId: student.id,
           points: student.homeworksStudent.find(
@@ -30,7 +35,9 @@ export const HomeworkStudentsDataTable = async ({
 
         return {
           ...student,
-          templateRepositoryUrl: lecture?.homeworkTemplateRepositoryUrl,
+          repositoryUrl: student.homeworkRepositories.find(
+            repository => repository.lectureId === lecture?.id
+          )?.repositoryUrl,
           defaultValues
         };
       })}

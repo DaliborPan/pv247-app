@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 
 import { FormEditor } from '@/components/form/form-fields/form-editor';
 import { FormInput } from '@/components/form/form-fields/form-input';
-import { studentLoaders } from '@/modules/student/loader';
+import { getProjectFormStudentComboboxOptionsQuery } from '@/modules/project/queries';
 
 import { ProjectFormProvider } from './project-form-provider';
 import { StudentCombobox } from './student-combobox';
@@ -13,18 +13,11 @@ const ProjectFormStudentCombobox = async ({
 }: {
   defaultValues?: Partial<ProjectFormSchema>;
 }) => {
-  const students = await studentLoaders.getProjectFormStudentComboboxOptions(
+  const options = await getProjectFormStudentComboboxOptionsQuery(
     defaultValues?.id
   );
 
-  return (
-    <StudentCombobox
-      options={students.map(user => ({
-        value: user.id,
-        label: `${user.firstName} ${user.lastName}`
-      }))}
-    />
-  );
+  return <StudentCombobox options={options} />;
 };
 
 export const ProjectForm = ({

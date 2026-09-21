@@ -1,8 +1,8 @@
 import { LectureCard } from '@/modules/lecture/components/lecture-card';
-import { lectureLoaders } from '@/modules/lecture/loader';
+import { getLecturesCachedQuery } from '@/modules/lecture/queries';
 
 const Page = async () => {
-  const lectures = await lectureLoaders.getMany();
+  const lectures = await getLecturesCachedQuery();
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

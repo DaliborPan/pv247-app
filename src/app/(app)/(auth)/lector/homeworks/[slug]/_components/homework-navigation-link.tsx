@@ -4,17 +4,17 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { cn } from '@/lib/cn';
-import { Icon } from '@/components/base/icon';
-import { type LectureType } from '@/modules/lecture/schema';
+import { Icon } from '@/components/base/icon/icon';
+import { type LectureType } from '@/modules/lecture/types';
 
 export const HomeworkNavigationLink = ({
   type,
   lecture
 }: {
   type: 'previous' | 'next';
-  lecture: LectureType;
+  lecture: Pick<LectureType, 'homeworkSlug' | 'name'>;
 }) => {
   const searchParams = useSearchParams();
   const viewType = searchParams.get('type') ?? 'all';

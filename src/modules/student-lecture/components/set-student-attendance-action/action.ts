@@ -1,12 +1,12 @@
 'use server';
 
+import { and, eq } from 'drizzle-orm';
+import { refresh } from 'next/cache';
 import { z } from 'zod';
 
+import { db } from '@/db';
+import { studentLectures } from '@/db/schema/studentLecture';
 import { authLectorServerAction } from '@/server/server-actions';
-
-import { studentLectureMutations } from '../../server/mutation';
-import { updateTag } from 'next/cache';
-import { getStudentLecturesTag } from '../../server/tag';
 
 export const setStudentAttendanceAction = authLectorServerAction
   .input(
@@ -15,13 +15,28 @@ export const setStudentAttendanceAction = authLectorServerAction
       lectureId: z.string()
     })
   )
-  .handler(async ({ input, ctx }) => {
-    const result = await studentLectureMutations.update(
-      ctx.sessionUserLector,
-      input
+  .handler(async ({ input }) => {
+    const attendanceFilter = and(
+      eq(studentLectures.studentId, input.studentId),
+      eq(studentLectures.lectureId, input.lectureId)
     );
+    const existing = await db.query.studentLectures.findFirst({
+      columns: { id: true },
+      where: attendanceFilter
+    });
 
-    updateTag(getStudentLecturesTag(input.studentId));
+    if (existing) {
+      await db.delete(studentLectures).where(attendanceFilter);
+    } else {
+      await db.insert(studentLectures).values({
+        studentId: input.studentId,
+        lectureId: input.lectureId
+      });
+    }
 
-    return result;
+    refresh();
+
+    return {
+      status: existing ? ('deleted' as const) : ('created' as const)
+    };
   });

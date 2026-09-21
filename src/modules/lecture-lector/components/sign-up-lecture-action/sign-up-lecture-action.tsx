@@ -5,8 +5,8 @@ import { UserPlus } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { z } from 'zod';
 
-import { Button } from '@/components/base/button';
-import { Prompt } from '@/components/base/prompt';
+import { Button } from '@/components/base/button/button';
+import { Prompt } from '@/components/base/prompt/prompt';
 import {
   FormField,
   FormItem,

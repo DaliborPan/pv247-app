@@ -1,17 +1,17 @@
 import { redirect } from 'next/navigation';
 
-import { TabsContent } from '@/components/base/tabs';
+import { TabsContent } from '@/components/base/tabs/tabs';
 import { LabeledValue } from '@/components/labeled-value';
 import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
-import { HomeworkStudentsDataTable } from '@/modules/lector/components/homework-students-data-table';
+import { HomeworkStudentsDataTable } from '@/modules/lector/components/homework-students-data-table/homework-students-data-table';
 
-import { getSessionUser } from '@/modules/session-user';
+import { getSessionUser } from '@/modules/session-user/session-user';
 import { homeworkSlugSchema } from '@/modules/lecture/schema';
 
 import { HomeworksNavigation } from './_components/homeworks-navigation';
-import { lectureLoaders } from '@/modules/lecture/loader';
+import { getLectureByHomeworkSlugCachedQuery } from '@/modules/lecture/queries';
 import { Suspense } from 'react';
-import { studentLoaders } from '@/modules/student/loader';
+import { getStudentsWithHomeworkQuery } from '@/modules/student/queries';
 
 const Page = ({ params }: PageProps<'/lector/homeworks/[slug]'>) => {
   return (
@@ -26,15 +26,13 @@ const Page = ({ params }: PageProps<'/lector/homeworks/[slug]'>) => {
         }
 
         const paramSlug = parsedSlug.data;
-        const lecture = await lectureLoaders.get({ homeworkSlug: paramSlug });
+        const lecture = await getLectureByHomeworkSlugCachedQuery(paramSlug);
 
         if (!lecture) {
           redirect('/');
         }
 
-        const students = await studentLoaders.getStudentsWithHomework({
-          lectureId: lecture.id
-        });
+        const students = await getStudentsWithHomeworkQuery(lecture.id);
 
         const sessionUser = await getSessionUser();
         const hasOwnStudents = students.some(

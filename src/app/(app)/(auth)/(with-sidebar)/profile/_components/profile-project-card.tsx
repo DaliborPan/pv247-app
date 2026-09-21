@@ -1,16 +1,16 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { LabeledValue } from '@/components/labeled-value';
 import { DetailCard } from '@/components/detail-card';
-import { projectLoaders } from '@/modules/project/loader';
+import { getMyProjectQuery } from '@/modules/project/queries';
 import { Suspense } from 'react';
 
 export const ProfileProjectCard = () => {
   return (
     <Suspense>
-      {projectLoaders.getMine().then(project => {
+      {getMyProjectQuery().then(project => {
         if (!project) return null;
 
         return (

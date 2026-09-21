@@ -1,4 +1,4 @@
-import { RichTextEditor } from '@/components/base/rich-text-editor';
+import { RichTextEditor } from '@/components/base/rich-text-editor/rich-text-editor';
 import { DetailCard } from '@/components/detail-card';
 
 export const ProjectDescriptionCard = ({

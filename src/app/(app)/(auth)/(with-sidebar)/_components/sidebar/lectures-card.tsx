@@ -1,15 +1,18 @@
 import { ArrowRight } from 'lucide-react';
 
 import { SidebarCard } from '@/components/sidebar-card';
-import { Icon } from '@/components/base/icon';
+import { Icon } from '@/components/base/icon/icon';
 
 import { SidebarLinkRow } from './sidebar-link-row';
 
-import { lectureLoaders } from '@/modules/lecture/loader';
+import {
+  getAvailableLecturesCachedQuery,
+  getLecturesCachedQuery
+} from '@/modules/lecture/queries';
 
 export const LecturesCard = async () => {
-  const lectures = await lectureLoaders.getMany();
-  const availableLectures = await lectureLoaders.getAvailable();
+  const lectures = await getLecturesCachedQuery();
+  const availableLectures = await getAvailableLecturesCachedQuery();
 
   return (
     <SidebarCard title="Lectures" className="hidden lg:block">

@@ -1,15 +1,28 @@
 import Link from 'next/link';
+import { CircleHelp } from 'lucide-react';
 
-import { Button } from '@/components/base/button';
-import { type LectureType } from '@/modules/lecture/schema';
+import { Button } from '@/components/base/button/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/base/tooltip/tooltip';
+import { type LectureType } from '@/modules/lecture/types';
 
 import { LabeledItem } from './labeled-item';
 
-import { getSession } from '@/modules/session-user';
-import { homeworkLoader } from '../../loader';
+import { getSession } from '@/modules/session-user/session-user';
+import {
+  getMyHomeworksQuery,
+  getHomeworkGradingStatusQuery
+} from '@/modules/homework/queries';
 import { getHomeworkPointsMessage } from '../../utils';
 
-export const HomeworkPoints = async ({ lecture }: { lecture: LectureType }) => {
+export const HomeworkPoints = async ({
+  lecture
+}: {
+  lecture: Pick<LectureType, 'id' | 'homeworkSlug'>;
+}) => {
   const sessionUser = await getSession();
 
   if (!sessionUser) return null;
@@ -25,19 +38,37 @@ export const HomeworkPoints = async ({ lecture }: { lecture: LectureType }) => {
   }
 
   const [homework, gradingStatus] = await Promise.all([
-    homeworkLoader.getMine({ lectureId: lecture.id }),
-    homeworkLoader.getGradingStatus(lecture.id)
+    getMyHomeworksQuery(lecture.id),
+    getHomeworkGradingStatusQuery(lecture.id)
   ]);
 
   const homeworkRecord = homework.at(0);
+  const hasPoints = homeworkRecord?.points !== undefined;
+  const gradingHasNotStarted = !hasPoints && !gradingStatus.hasGradingStarted;
 
   return (
     <LabeledItem label="Earned points">
-      <div>
-        {getHomeworkPointsMessage({
-          points: homeworkRecord?.points,
-          hasGradingStarted: gradingStatus.hasGradingStarted
-        })}
+      <div className="flex items-center gap-1">
+        {gradingHasNotStarted
+          ? 'N/A'
+          : getHomeworkPointsMessage({
+              points: homeworkRecord?.points,
+              hasGradingStarted: gradingStatus.hasGradingStarted
+            })}
+        {gradingHasNotStarted && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                aria-label="Grading hasn't started yet"
+                className="text-text-terciary"
+              >
+                <CircleHelp className="size-4" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>Grading hasn't started yet</TooltipContent>
+          </Tooltip>
+        )}
       </div>
     </LabeledItem>
   );

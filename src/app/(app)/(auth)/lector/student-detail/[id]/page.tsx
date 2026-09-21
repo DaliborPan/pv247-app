@@ -3,10 +3,10 @@ import { StudentAttendanceCard } from '@/modules/student/components/student-atte
 
 import { StudentHero } from './_components/student-hero';
 import { StudentDetailOverviewCard } from './_components/student-detail-overview-card';
-import { studentLoaders } from '@/modules/student/loader';
+import { getStudentQuery } from '@/modules/student/queries';
 
 const Page = ({ params }: PageProps<'/lector/student-detail/[id]'>) => {
-  const studentPromise = studentLoaders.get(params.then(({ id }) => id));
+  const studentPromise = params.then(({ id }) => getStudentQuery(id));
 
   return (
     <div className="mx-auto mb-8 flex max-w-4xl flex-col gap-y-4">

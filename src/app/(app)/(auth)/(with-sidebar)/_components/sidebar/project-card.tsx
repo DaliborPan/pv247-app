@@ -1,15 +1,13 @@
 import Link from 'next/link';
 import { ArrowRight, Users } from 'lucide-react';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { SidebarCard } from '@/components/sidebar-card';
-import { Icon } from '@/components/base/icon';
-import { projectLoaders } from '@/modules/project/loader';
+import { Icon } from '@/components/base/icon/icon';
+import { getMyProjectQuery } from '@/modules/project/queries';
 import { Suspense } from 'react';
 
 export const ProjectCard = () => {
-  const projectPromise = projectLoaders.getMine();
-
   return (
     <SidebarCard
       className="hidden lg:block"
@@ -28,7 +26,7 @@ export const ProjectCard = () => {
       }
     >
       <Suspense>
-        {projectPromise.then(project => (
+        {getMyProjectQuery().then(project => (
           <>
             {project ? (
               <div className="flex flex-col gap-y-2">

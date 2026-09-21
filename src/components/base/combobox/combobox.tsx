@@ -15,7 +15,7 @@ import {
   CommandList
 } from '../command/command';
 import { Popover, PopoverContent, PopoverTrigger } from '../popover/popover';
-import { Button, type ButtonProps } from '../button';
+import { Button, type ButtonProps } from '../button/button';
 
 export type ComboboxOption = {
   value: string;

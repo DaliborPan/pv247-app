@@ -1,9 +1,7 @@
-import { lectureQueries } from '@/modules/lecture/server';
-import { getSession } from '@/modules/session-user';
+import { db } from '@/db';
+import { studentLectures } from '@/db/schema/studentLecture';
+import { getSession } from '@/modules/session-user/session-user';
 import { acceptAttendanceCodeSchema } from '@/modules/student-lecture/schema';
-import { studentLectureMutations } from '@/modules/student-lecture/server/mutation';
-import { getStudentLecturesTag } from '@/modules/student-lecture/server/tag';
-import { revalidateTag } from 'next/cache';
 
 export const GET = async (
   request: Request,
@@ -21,8 +19,11 @@ export const GET = async (
 
   const url = new URL('/accept-attendance', request.url);
 
-  const lectures = await lectureQueries.getMany();
-  const lecture = lectures.find(lecture => lecture.attendanceToken === token);
+  const lecture = await db.query.lectures.findFirst({
+    columns: { id: true },
+    where: (lectures, { eq }) => eq(lectures.attendanceToken, token),
+    orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)]
+  });
 
   if (!lecture) {
     url.searchParams.set(
@@ -33,15 +34,23 @@ export const GET = async (
     return Response.redirect(url);
   }
 
-  const updated = await studentLectureMutations.createMine(
-    sessionUser,
-    lecture.id
-  );
-  url.searchParams.set('code', acceptAttendanceCodeSchema.Values.SUCCESS);
+  const existing = await db.query.studentLectures.findFirst({
+    columns: { id: true },
+    where: (studentLectures, { and, eq }) =>
+      and(
+        eq(studentLectures.studentId, sessionUser.id),
+        eq(studentLectures.lectureId, lecture.id)
+      )
+  });
 
-  if (updated) {
-    revalidateTag(getStudentLecturesTag(sessionUser.id), 'max');
+  if (!existing) {
+    await db.insert(studentLectures).values({
+      studentId: sessionUser.id,
+      lectureId: lecture.id
+    });
   }
+
+  url.searchParams.set('code', acceptAttendanceCodeSchema.Values.SUCCESS);
 
   return Response.redirect(url);
 };

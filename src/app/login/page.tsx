@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Book, Github } from 'lucide-react';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { SignIn } from '@/components/sign-in';
 
 export const metadata = {

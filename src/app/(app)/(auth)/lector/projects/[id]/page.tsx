@@ -1,14 +1,14 @@
 import { redirect } from 'next/navigation';
 
-import { RichTextEditor } from '@/components/base/rich-text-editor';
+import { RichTextEditor } from '@/components/base/rich-text-editor/rich-text-editor';
 
-import { projectLoaders } from '@/modules/project/loader';
+import { getProjectQuery } from '@/modules/project/queries';
 import { ProjectStatusCard } from './_components/project-status-card';
 import { ProjectUsersCard } from './_components/project-user-card';
 
 const Page = async (props: PageProps<'/lector/projects/[id]'>) => {
   const params = await props.params;
-  const project = await projectLoaders.get(params.id);
+  const project = await getProjectQuery(params.id);
 
   if (!project) {
     redirect('/lector/projects');

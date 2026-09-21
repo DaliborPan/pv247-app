@@ -1,7 +1,7 @@
-import { lectureLoaders } from '@/modules/lecture/loader';
+import { getLecturesCachedQuery } from '@/modules/lecture/queries';
 import type { LectureSlugType } from '@/modules/lecture/schema';
 
-import { lectureLectorLoaders } from '../loader';
+import { getLectureApprovedLectorsQuery } from '../queries';
 
 import { LectorChip } from '@/modules/lector/components/lector-chip';
 
@@ -11,14 +11,12 @@ export const LectureTeachers = async ({
   lectureSlug: Promise<LectureSlugType>;
 }) => {
   const slug = await lectureSlug;
-  const lectures = await lectureLoaders.getMany();
+  const lectures = await getLecturesCachedQuery();
   const lecture = lectures.find(lecture => lecture.slug === slug);
 
   if (!lecture) return null;
 
-  const lectureLectors = await lectureLectorLoaders.getLectureApprovedLectors(
-    lecture.id
-  );
+  const lectureLectors = await getLectureApprovedLectorsQuery(lecture.id);
 
   if (lectureLectors.length === 0) return null;
 

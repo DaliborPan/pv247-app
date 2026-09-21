@@ -1,14 +1,13 @@
 import Link from 'next/link';
-import { ExternalLink, Github, Lock, NotepadText } from 'lucide-react';
+import { Github, Lock, NotepadText } from 'lucide-react';
 
-import { LectureType } from '../schema';
-import { getHomeworkGithubUrl } from '@/modules/homework/utils';
+import { type LectureType } from '@/modules/lecture/types';
 
 import { cn } from '@/lib/cn';
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { Suspense } from 'react';
-import { getSession } from '@/modules/session-user';
-import { homeworkRepositoryLoader } from '@/modules/homework-repository/loader';
+import { getSession } from '@/modules/session-user/session-user';
+import { getStudentHomeworkRepositoriesQuery } from '@/modules/homework-repository/queries';
 import { CreateHomeworkRepositoryAction } from '@/modules/homework-repository/components/create-homework-repository-action/create-homework-repository-action';
 
 export const HomeworkCardActions = ({ lecture }: { lecture: LectureType }) => {
@@ -33,42 +32,17 @@ export const HomeworkCardActions = ({ lecture }: { lecture: LectureType }) => {
 
       {lecture.isAvailable && (
         <>
-          {!lecture.homeworkTemplateRepositoryUrl && (
-            <a
-              href={lecture.homeworkClassroomLink}
-              target="_blank"
-              rel="noreferrer"
-              className="grow lg:grow-0"
-            >
-              <Button
-                size="sm"
-                className="w-full lg:w-auto"
-                iconLeft={{ icon: <ExternalLink /> }}
-                variant="outline/primary"
-              >
-                GH classroom
-              </Button>
-            </a>
-          )}
-
           <Suspense>
             {getSession().then(async sessionUser => {
               const repository = sessionUser
                 ? (
-                    await homeworkRepositoryLoader.getManyForStudent(
-                      sessionUser.id
-                    )
+                    await getStudentHomeworkRepositoriesQuery(sessionUser.id)
                   ).find(item => item.lectureId === lecture.id)
                 : undefined;
               const homeworkGithubUrl =
                 repository?.status === 'ready'
                   ? repository.repositoryUrl
-                  : lecture.homeworkTemplateRepositoryUrl || repository
-                    ? undefined
-                    : getHomeworkGithubUrl({
-                        githubName: sessionUser?.github ?? null,
-                        homeworkSlug: lecture.homeworkSlug
-                      });
+                  : undefined;
 
               return (
                 <>

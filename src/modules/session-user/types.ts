@@ -1,5 +1,5 @@
-import { type auth } from '@/auth';
-import { type UserRoleType } from '@/modules/user/schema';
+import { type auth } from '@/auth/auth';
+import { type UserRoleType } from './schema';
 
 export type SessionUserType = Omit<
   (typeof auth.$Infer.Session)['user'],

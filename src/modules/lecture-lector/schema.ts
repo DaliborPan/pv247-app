@@ -1,8 +1,11 @@
 import { z } from 'zod';
 
-import { dbLectureLectorStatusSchema } from '@/db/schema/lecture-lector-status';
-
-export const lectureLectorStatusSchema = dbLectureLectorStatusSchema;
+export const lectureLectorStatusSchema = z.enum([
+  'WANT_TO_TEACH',
+  'CAN_TEACH',
+  'RATHER_NOT_TO_TEACH',
+  'CANNOT_TEACH'
+]);
 export type LectureLectorStatusType = z.infer<typeof lectureLectorStatusSchema>;
 
 export const lectureLectorStatusOptions: {

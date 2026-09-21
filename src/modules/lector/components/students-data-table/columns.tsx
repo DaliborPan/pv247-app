@@ -4,18 +4,14 @@ import { createColumnHelper } from '@tanstack/react-table';
 import Link from 'next/link';
 import { ArrowRight, ExternalLink, X } from 'lucide-react';
 
-import { DataTableColumnHeader } from '@/components/data-table';
-import { Icon } from '@/components/base/icon';
+import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
+import { Icon } from '@/components/base/icon/icon';
 
-import { type studentLoaders } from '@/modules/student/loader';
+import { type StudentProgressType } from '@/modules/student/types';
 
-import { LoaderResult } from '@/types';
 import { cn } from '@/lib/cn';
 
-const columnHelper =
-  createColumnHelper<
-    LoaderResult<typeof studentLoaders.listStudents>[number]
-  >();
+const columnHelper = createColumnHelper<StudentProgressType>();
 
 const StatusBadge = ({ success }: { success: boolean }) => {
   return (
@@ -76,7 +72,7 @@ export const columns = [
       row.original.project ? (
         <div className="truncate">
           <Link
-            href={`/lector/projects/${row.original.projectId}`}
+            href={`/lector/projects/${row.original.project.id}`}
             className="hover:text-primary hover:underline"
           >
             {row.original.project.name}
@@ -103,7 +99,7 @@ export const columns = [
     header: props => <DataTableColumnHeader {...props} title="Attendance" />,
     cell: ({ row }) => (
       <div className="flex items-center justify-end gap-x-2">
-        <span>{row.original.studentLectures.length}</span>
+        <span>{row.original.attendanceCount}</span>
         <StatusBadge success={row.original.hasEnoughAttendance} />
       </div>
     )

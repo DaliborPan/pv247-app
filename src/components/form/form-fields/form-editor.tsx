@@ -6,7 +6,7 @@ import { FormControl, FormField, FormItem, FormLabel } from '../form';
 import {
   RichTextEditor,
   type RichTextEditorProps
-} from '../../base/rich-text-editor/';
+} from '../../base/rich-text-editor/rich-text-editor';
 
 export type FormEditorProps = Omit<
   RichTextEditorProps,

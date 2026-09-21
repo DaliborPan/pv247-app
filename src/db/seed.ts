@@ -1,8 +1,6 @@
-import { type LectureType } from '@/modules/lecture/schema';
+import { drizzle } from 'drizzle-orm/libsql';
 
-import { lectures } from './schema/lectures';
-
-import { db } from '.';
+import { lectures } from './schema/lectures/lectures';
 
 // const usersData: User[] = [
 // 	{
@@ -137,7 +135,9 @@ import { db } from '.';
 // 	}
 // ];
 
-export const lecturesSeedData: LectureType[] = [
+type LectureSeed = Required<typeof lectures.$inferInsert>;
+
+export const lecturesSeedData: LectureSeed[] = [
   {
     id: 'intro',
     homeworkTemplateRepositoryUrl: null,
@@ -147,13 +147,11 @@ export const lecturesSeedData: LectureType[] = [
     preview:
       '"PV247 Modern Web Development" at Masaryk University is a comprehensive course that teaches students to build full-stack applications using React and Next.js. Guided by expert developers, participants learn through practical assignments and complete a project at the end.',
     availableFrom: '2026-09-14T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 10,
     homeworkName: 'TypeScript',
     homeworkPreview:
       "This week's TypeScript assignment involves enhancing an npm project by defining types and implementing four functions. Follow the descriptions in the project files, ensure your code passes linter checks, and matches the provided output.",
     homeworkSlug: 'typescript',
-    homeworkDeadline: '2026-09-21T22:00:00',
     isAvailable: false
   },
   {
@@ -165,13 +163,11 @@ export const lecturesSeedData: LectureType[] = [
     preview:
       "Today's lecture introduces React, highlighting its role in developing dynamic Single Page Applications (SPAs) and efficient data management through the component tree for streamlined user interfaces.",
     availableFrom: '2026-09-21T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 10,
     homeworkName: 'React basics',
     homeworkPreview:
       'This week, create a React page in Next.js to display and add GitHub repositories. Build a form for new entries and a list to show existing ones, with validation and conditional messages.',
     homeworkSlug: 'react-basics',
-    homeworkDeadline: '2026-09-28T22:00:00',
     isAvailable: false
   },
   {
@@ -183,13 +179,11 @@ export const lecturesSeedData: LectureType[] = [
     preview:
       "Today's lecture covers various styling methods for web applications, including CSS, Sass, CSS-in-JS, and TailwindCSS. We'll discuss how these techniques enhance user experience and streamline development. Additionally, we'll emphasize the importance of accessibility in web design.",
     availableFrom: '2026-09-28T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 30,
     homeworkName: 'Styling - tailwindcss',
     homeworkPreview:
       'This week, style a responsive page using TailwindCSS to display a GitHub repository description. The layout should include fixed top navigation, sidebars, and main content. Ensure responsiveness and basic accessibility.',
     homeworkSlug: 'styling',
-    homeworkDeadline: '2026-10-05T22:00:00',
     isAvailable: false
   },
   {
@@ -201,13 +195,11 @@ export const lecturesSeedData: LectureType[] = [
     preview:
       'React hooks, introduced in React 16.8, enable functional components to manage state, handle side effects, and access context without class components. Hooks like useState and useEffect simplify logic, promote code reuse, and encourage a functional approach to React development.',
     availableFrom: '2026-10-05T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 10,
     homeworkName: 'React state',
     homeworkPreview:
       "This week's task is to develop an interactive 'Task Manager' SPA that allows users to add, delete, and filter tasks using a provided useInitialTasks() hook. Users can reset the application to display tasks from the 'original database' only, without any applied filters or added tasks. The application does not need to be responsive.",
     homeworkSlug: 'state',
-    homeworkDeadline: '2026-10-12T22:00:00',
     isAvailable: false
   },
   {
@@ -219,13 +211,11 @@ export const lecturesSeedData: LectureType[] = [
     preview:
       'This session covers advanced React hooks like useRef and forwardRef, global state management, and practical use of the tanstack-table library for efficient table handling in React applications.',
     availableFrom: '2026-10-12T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 20,
     homeworkName: 'Table, ref, memo',
     homeworkPreview:
       'This week, implement a user management application that dynamically updates a table when adding users via a dialog-based form. Optimize performance using memoization, enable sorting for all table columns. Integrate a dialog component from the shadcn library for form submissions',
     homeworkSlug: 'table-memo',
-    homeworkDeadline: '2026-10-19T22:00:00',
     isAvailable: false
   },
   {
@@ -237,13 +227,11 @@ export const lecturesSeedData: LectureType[] = [
     preview:
       'This lesson revisits React Context for global state management, explores asynchronous operations, introduces the Tanstack Query library for data fetching, discusses runtime validation with Zod, and handles forms efficiently with React Hook Form.',
     availableFrom: '2026-10-19T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 40,
     homeworkName: 'Forms, working with async data',
     homeworkPreview:
       "This week, develop a 4-page application that handles user authentication, displays gifts, and allows gift creation via API interactions. Utilize tanstack-query, react-hook-form, and zod. Focus on role-specific functionalities: 'santa' can update gift statuses, while 'user' can add new gifts.",
     homeworkSlug: 'forms-async',
-    homeworkDeadline: '2026-10-26T22:00:00',
     isAvailable: false
   },
   {
@@ -255,13 +243,11 @@ export const lecturesSeedData: LectureType[] = [
     preview:
       "Next.js extends React's capabilities for full-stack web development, featuring server-side rendering and efficient data fetching. It simplifies building web apps with SEO-friendly routing and dynamic content strategies. The next lesson will explore server-side rendering and advanced routing in more detail.",
     availableFrom: '2026-10-26T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 20,
     homeworkName: 'Next.js basics, routing',
     homeworkPreview:
       'This week, set up routing for a TODO application in Next.js, focusing on handling loading, error, and navigation across pages like /list and /new. Ensure consistent layouts for the todo detail pages using Next.js route groups.',
     homeworkSlug: 'nextjs-basic',
-    homeworkDeadline: '2026-11-02T22:00:00',
     isAvailable: false
   },
   {
@@ -273,13 +259,11 @@ export const lecturesSeedData: LectureType[] = [
     preview:
       "This lesson covers Next.js's server-side rendering and React Server Components to enhance SEO and performance. It explains how Next.js uses server components by default and requires explicit client component declarations. Upcoming topics will address custom API endpoints and caching strategies in Next.js.",
     availableFrom: '2026-11-02T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 30,
     homeworkName: 'Suspense, React Server Components',
     homeworkPreview:
       'This week, create a Next.js app for CRUD operations on a movie database. Implement pages for adding movies, listing all movies with edit and delete options using React Server Components, and editing movie details. Use React Hook Form, Zod for validation, and tanstack query for API management.',
     homeworkSlug: 'rsc-forms',
-    homeworkDeadline: '2026-11-09T22:00:00',
     isAvailable: false
   },
   {
@@ -291,13 +275,11 @@ export const lecturesSeedData: LectureType[] = [
     preview:
       "This lecture, we'll be focusing on custom API endpoints, caching, and revalidation options for cache layers. We'll explore server actions that allow for server-side processing without the need for API routes and discuss how to interact with databases using TypeScript.",
     availableFrom: '2026-11-09T06:00:00',
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 40,
     homeworkName: 'API, server actions, database',
     homeworkPreview:
       'This week, modify the 6th task to use server actions and React Server Components for data management, ensuring persistent user sessions with server-side storage. Replace API calls with server actions, and manage data using a local sqlite database via Drizzle ORM.',
     homeworkSlug: 'api-actions-database',
-    homeworkDeadline: '2026-11-16T22:00:00',
     isAvailable: false
   },
   {
@@ -311,17 +293,22 @@ export const lecturesSeedData: LectureType[] = [
     availableFrom: '2026-11-16T06:00:00',
 
     // No homework for last lesson
-    homeworkClassroomLink: '',
     homeworkMaxPoints: 0,
     homeworkName: '',
     homeworkPreview: '',
     homeworkSlug: '',
-    homeworkDeadline: '',
     isAvailable: false
   }
 ];
 
 export const seed = async () => {
+  const db = drizzle({
+    connection: {
+      url: process.env.DATABASE_URL!,
+      authToken: process.env.AUTH_TOKEN
+    }
+  });
+
   await db.transaction(async tx => {
     for (const lecture of lecturesSeedData) {
       await tx
@@ -329,10 +316,9 @@ export const seed = async () => {
         .values(lecture)
         .onConflictDoUpdate({
           target: lectures.id,
-          // Keep existing content, classroom links, tokens and student records.
+          // Keep existing content, tokens and student records.
           set: {
             availableFrom: lecture.availableFrom,
-            homeworkDeadline: lecture.homeworkDeadline,
             isAvailable: lecture.isAvailable
           }
         });

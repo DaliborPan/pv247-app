@@ -1,13 +1,12 @@
-import { DataTable } from '@/components/data-table';
+import { DataTable } from '@/components/data-table/data-table';
 
 import { columns } from './columns';
-import { LoaderResult } from '@/types';
-import { type studentLoaders } from '@/modules/student/loader';
+import { type StudentProgressType } from '@/modules/student/types';
 
 export const StudentsDataTable = ({
   students
 }: {
-  students: LoaderResult<typeof studentLoaders.listStudents>;
+  students: StudentProgressType[];
 }) => (
   <DataTable
     data={students}

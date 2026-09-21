@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
-import { Tabs, TabsList, TabsTrigger } from '@/components/base/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/base/tabs/tabs';
 
 export const LectorTabsTable = ({
   contents,

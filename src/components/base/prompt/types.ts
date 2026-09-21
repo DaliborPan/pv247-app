@@ -2,7 +2,7 @@ import { type PropsWithChildren } from 'react';
 import { type DefaultValues } from 'react-hook-form';
 import { type z } from 'zod';
 
-import { type DialogContentProps } from '../dialog';
+import { type DialogContentProps } from '../dialog/dialog-content';
 
 type ConfirmComponent = (state: {
   isLoading: boolean;

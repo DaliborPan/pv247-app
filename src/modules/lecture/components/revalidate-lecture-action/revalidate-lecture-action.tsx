@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { RefreshCw } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 
 import { revalidateLecturesAction } from './action';
 

@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { TextPreview } from '@/components/text-preview';
-import { lectureLoaders } from '@/modules/lecture/loader';
+import { getAvailableLecturesCachedQuery } from '@/modules/lecture/queries';
 
 export const CurrentLectureCard = async () => {
-  const availableLectures = await lectureLoaders.getAvailable();
-  const currentLecture = availableLectures.pop();
+  const availableLectures = await getAvailableLecturesCachedQuery();
+  const currentLecture = availableLectures.at(-1);
 
   if (!currentLecture) {
     return null;

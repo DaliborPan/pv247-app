@@ -1,6 +1,8 @@
+import 'server-only';
+
 import { createServerActionProcedure } from 'zsa';
 
-import { getSessionUser } from '@/modules/session-user';
+import { getSessionUser } from '@/modules/session-user/session-user';
 
 const authServerProcedure = createServerActionProcedure().handler(async () => {
   try {

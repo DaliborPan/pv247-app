@@ -1,23 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { LectureType } from '../schema';
 import { cn } from '@/lib/cn';
 
-import { Button } from '@/components/base/button';
+import { Button } from '@/components/base/button/button';
 import { BookOpen, Lock } from 'lucide-react';
 
 export const LectureCardActions = ({
-  lecture,
-  href,
-  isAlwaysAvailable
+  isAvailable,
+  href
 }: {
-  lecture: LectureType;
+  isAvailable: boolean;
   href: string;
-  isAlwaysAvailable: boolean;
 }) => {
-  const isAvailable = isAlwaysAvailable || lecture.isAvailable;
-
   return (
     <Link
       href={href}

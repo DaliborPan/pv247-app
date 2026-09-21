@@ -1,7 +1,7 @@
 import { type PropsWithChildren } from 'react';
 
-import { Navigation } from '@/components/navigation';
-import { getSession } from '@/modules/session-user';
+import { Navigation } from '@/components/navigation/navigation';
+import { getSession } from '@/modules/session-user/session-user';
 
 const Layout = ({ children }: PropsWithChildren) => {
   return (

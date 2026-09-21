@@ -16,7 +16,7 @@ import {
   Underline
 } from 'lucide-react';
 
-import { Button, type ButtonProps } from '../button';
+import { Button, type ButtonProps } from '../button/button';
 
 type ToolbarButtonProps = ButtonProps & {
   active?: boolean;

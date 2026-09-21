@@ -142,7 +142,7 @@ On the server, we get the currently logged in user through `auth.api.getSession`
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 
-import { auth } from '@/auth';
+import { auth } from '@/auth/auth';
 
 export default async function Page() {
   const session = await auth.api.getSession({
@@ -272,7 +272,7 @@ import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 
-import { auth } from '@/auth';
+import { auth } from '@/auth/auth';
 import { db } from '@/db';
 import { events } from '@/db/schema';
 import { CreateEventForm } from '@/components/create-event-form';
@@ -339,7 +339,7 @@ export function CreateEventForm() {
 import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
 
-import { auth } from '@/auth';
+import { auth } from '@/auth/auth';
 import { db } from '@/db';
 import { events } from '@/db/schema';
 
@@ -371,7 +371,7 @@ If the app offers a login option, the user must also be able to log out. Better 
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 
-import { auth } from '@/auth';
+import { auth } from '@/auth/auth';
 import { SignoutButton } from '@/components/signout-button';
 
 export default async function Page() {

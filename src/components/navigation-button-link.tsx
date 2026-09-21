@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { Button } from '@/components/base/button';
-import { Icon } from '@/components/base/icon';
+import { Button } from '@/components/base/button/button';
+import { Icon } from '@/components/base/icon/icon';
 import { cn } from '@/lib/cn';
 
 export const NavigationButtonLink = ({
