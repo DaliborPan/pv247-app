@@ -1,7 +1,8 @@
-import { getSessionUser } from '@/modules/session-user/session-user';
-import { Hero } from '@/components/base/hero';
-import { EditProfileAction } from '@/modules/student/components/edit-profile-action/edit-profile-action';
 import { Suspense } from 'react';
+
+import { Hero } from '@/components/base/hero';
+import { getSessionUser } from '@/modules/session-user/session-user';
+import { EditProfileAction } from '@/modules/student/components/edit-profile-action/edit-profile-action';
 
 const ProfileHeroContent = async () => {
   const sessionUser = await getSessionUser();
@@ -19,12 +20,10 @@ const ProfileHeroContent = async () => {
         : '';
 
   return (
-    <>
-      <div className="pr-10 lg:pr-0">
-        <div className="text-2xl font-medium">{displayName}</div>
-        <div className="text-sm text-text-terciary">{displayRole}</div>
-      </div>
-    </>
+    <div className="pr-10 lg:pr-0">
+      <div className="text-2xl font-medium">{displayName}</div>
+      <div className="text-sm text-text-terciary">{displayRole}</div>
+    </div>
   );
 };
 

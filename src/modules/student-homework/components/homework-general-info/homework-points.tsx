@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { CircleHelp } from 'lucide-react';
+import Link from 'next/link';
 
 import { Button } from '@/components/base/button/button';
 import {
@@ -8,15 +8,14 @@ import {
   TooltipTrigger
 } from '@/components/base/tooltip/tooltip';
 import { type LectureType } from '@/modules/lecture/types';
-
-import { LabeledItem } from './labeled-item';
-
 import { getSession } from '@/modules/session-user/session-user';
 import {
   getMyHomeworksQuery,
   getHomeworkGradingStatusQuery
 } from '@/modules/student-homework/queries';
+
 import { getHomeworkPointsMessage } from '../../utils';
+import { LabeledItem } from './labeled-item';
 
 export const HomeworkPoints = async ({
   lecture
@@ -43,7 +42,8 @@ export const HomeworkPoints = async ({
   ]);
 
   const studentHomework = studentHomeworks.at(0);
-  const hasPoints = studentHomework?.points != null;
+  const hasPoints =
+    studentHomework?.points !== undefined && studentHomework?.points !== null;
   const gradingHasNotStarted = !hasPoints && !gradingStatus.hasGradingStarted;
 
   return (

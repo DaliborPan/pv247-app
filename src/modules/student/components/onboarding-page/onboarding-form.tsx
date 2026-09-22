@@ -1,20 +1,21 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
+import { Button } from '@/components/base/button/button';
 import { Form } from '@/components/form/form';
 import { FormInput } from '@/components/form/form-fields/form-input';
-import { Button } from '@/components/base/button/button';
 
-import { profileFormSchema, type ProfileFormType } from '../../schema';
 import { onboardingFormAction } from '../../actions';
+import { profileFormSchema, type ProfileFormType } from '../../schema';
 
 const useOnboardingFormMutation = () =>
   useMutation({
-    mutationFn: async (data: ProfileFormType) => onboardingFormAction(data)
+    mutationFn: async (data: ProfileFormType) =>
+      await onboardingFormAction(data)
   });
 
 export const OnboardingForm = ({

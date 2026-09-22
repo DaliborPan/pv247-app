@@ -1,10 +1,10 @@
 'use client';
 
+import { BookOpen, Lock } from 'lucide-react';
 import Link from 'next/link';
-import { cn } from '@/lib/cn';
 
 import { Button } from '@/components/base/button/button';
-import { BookOpen, Lock } from 'lucide-react';
+import { cn } from '@/lib/cn';
 
 export const LectureCardActions = ({
   isAvailable,
@@ -12,20 +12,18 @@ export const LectureCardActions = ({
 }: {
   isAvailable: boolean;
   href: string;
-}) => {
-  return (
-    <Link
-      href={href}
-      className={cn('grow', !isAvailable && 'pointer-events-none')}
+}) => (
+  <Link
+    href={href}
+    className={cn('grow', !isAvailable && 'pointer-events-none')}
+  >
+    <Button
+      className="w-full lg:w-auto"
+      iconLeft={{ icon: !isAvailable ? <Lock /> : <BookOpen /> }}
+      disabled={!isAvailable}
+      size="sm"
     >
-      <Button
-        className="w-full lg:w-auto"
-        iconLeft={{ icon: !isAvailable ? <Lock /> : <BookOpen /> }}
-        disabled={!isAvailable}
-        size="sm"
-      >
-        Start learning
-      </Button>
-    </Link>
-  );
-};
+      Start learning
+    </Button>
+  </Link>
+);

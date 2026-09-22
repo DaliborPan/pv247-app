@@ -1,9 +1,9 @@
 import { MonitorCheck, Layers } from 'lucide-react';
+import { Suspense } from 'react';
 
 import { Badge } from '@/components/base/badge/badge';
 import { Icon } from '@/components/base/icon/icon';
 import type { StudentHomeworkType } from '@/modules/student-homework/types';
-import { Suspense } from 'react';
 
 export const HomeworkPointsBadge = ({
   maxPoints,

@@ -1,8 +1,10 @@
 'use client';
 
+import { Menu } from 'lucide-react';
 import Link, { type LinkProps } from 'next/link';
 import { type PropsWithChildren } from 'react';
-import { Menu } from 'lucide-react';
+
+import { type UserRoleType } from '@/modules/session-user/schema';
 
 import { Button } from '../base/button/button';
 import {
@@ -13,9 +15,7 @@ import {
   DropdownMenuTrigger
 } from '../base/dropdown/dropdown';
 import { SignIn } from '../sign-in';
-
 import { Logout } from './logout';
-import { UserRoleType } from '@/modules/session-user/schema';
 
 const DropdownMenuLinkItem = ({
   children,

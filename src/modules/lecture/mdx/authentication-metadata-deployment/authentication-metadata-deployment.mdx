@@ -18,11 +18,11 @@ We will store the logged in users in a database, similar to the last lesson. The
 For authentication management we will use [Better Auth](https://www.better-auth.com/). It is a framework-agnostic authentication library written in TypeScript that works very well with the Next.js App Router. It is also the library that this PV247 application itself is built on, so everything shown here is code you can find in the course repository.
 
 <MdxComment>
-  You will still find a lot of tutorials that use `next-auth` (or Auth.js).
-  It is not the recommended approach anymore, Better Auth became the new standard.
-  The main practical difference is that with Better Auth the database schema, the
-  configuration and all the generated types live in your own project, so there
-  is much less hidden magic.
+  You will still find a lot of tutorials that use `next-auth` (or Auth.js). It
+  is not the recommended approach anymore, Better Auth became the new standard.
+  The main practical difference is that with Better Auth the database schema,
+  the configuration and all the generated types live in your own project, so
+  there is much less hidden magic.
 </MdxComment>
 
 ```bash
@@ -60,11 +60,11 @@ export const auth = betterAuth({
 ```
 
 <MdxComment>
-  The `auth` object is the server side of the library. It contains `auth.handler`
-  (a plain function that takes a `Request` and returns a `Response`) and
-  `auth.api`, which exposes server functions such as `getSession`. It must never
-  be imported into a client component - it talks to the database and reads the
-  secrets.
+  The `auth` object is the server side of the library. It contains
+  `auth.handler` (a plain function that takes a `Request` and returns a
+  `Response`) and `auth.api`, which exposes server functions such as
+  `getSession`. It must never be imported into a client component - it talks to
+  the database and reads the secrets.
 </MdxComment>
 
 Better Auth serves all of its endpoints - sign in, sign out, the OAuth callback, session lookup and so on - from a single **catch-all route**. We create `src/app/api/auth/[...all]/route.ts` and hand the whole `/api/auth` subtree over to the library:
@@ -258,9 +258,9 @@ export const events = sqliteTable('event', {
 ```
 
 <MdxComment>
-  We use `crypto.randomUUID()` to generate a unique `id` for each new record in the `event`
-  table. This is so that we don't have to manually enter the `id` each time we
-  create a new record in the `event` table.
+  We use `crypto.randomUUID()` to generate a unique `id` for each new record in
+  the `event` table. This is so that we don't have to manually enter the `id`
+  each time we create a new record in the `event` table.
 </MdxComment>
 
 ### Example implementation of creating an event for logged in user
@@ -507,9 +507,9 @@ export const metadata: Metadata = {
 ```tsx
 import type { Metadata } from 'next';
 
-export async function generateMetadata(
-  { params }: PageProps<'/products/[id]'>
-): Promise<Metadata> {
+export async function generateMetadata({
+  params
+}: PageProps<'/products/[id]'>): Promise<Metadata> {
   const { id } = await params;
 
   return {
@@ -575,22 +575,20 @@ export default async function Image() {
   ).then(res => res.arrayBuffer());
 
   return new ImageResponse(
-    (
-      // ImageResponse JSX element
-      <div
-        style={{
-          fontSize: 128,
-          background: 'white',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-      >
-        About
-      </div>
-    ),
+    // ImageResponse JSX element
+    <div
+      style={{
+        fontSize: 128,
+        background: 'white',
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
+      About
+    </div>,
     {
       // ImageResponse options
       // For convenience, we can re-use the exported opengraph-image

@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 
-import { getSessionUser } from '@/modules/session-user/session-user';
 import { ProjectForm } from '@/modules/project/components/project-form/project-form';
 import { getMyProjectQuery } from '@/modules/project/queries';
-import { Suspense } from 'react';
+import { getSessionUser } from '@/modules/session-user/session-user';
 
 const PageAsync = async () => {
   const sessionUser = await getSessionUser();
@@ -27,12 +27,10 @@ const PageAsync = async () => {
   return <ProjectForm defaultValues={defaultValues} />;
 };
 
-const Page = () => {
-  return (
-    <Suspense>
-      <PageAsync />
-    </Suspense>
-  );
-};
+const Page = () => (
+  <Suspense>
+    <PageAsync />
+  </Suspense>
+);
 
 export default Page;

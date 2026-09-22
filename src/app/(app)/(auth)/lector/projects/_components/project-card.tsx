@@ -1,19 +1,15 @@
-import { Calendar, Check, Users } from 'lucide-react';
+import { Calendar, Users } from 'lucide-react';
 import Link from 'next/link';
 
+import { Badge } from '@/components/base/badge/badge';
+import { Button } from '@/components/base/button/button';
 import { Icon } from '@/components/base/icon/icon';
 import { TextPreview } from '@/components/text-preview';
-import { Button } from '@/components/base/button/button';
-import { Badge } from '@/components/base/badge/badge';
 import { formatDate } from '@/lib/date';
 import { type ProjectType } from '@/modules/project/types';
 import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 
-export const ProjectCard = ({
-  project
-}: {
-  project: ProjectType;
-}) => (
+export const ProjectCard = ({ project }: { project: ProjectType }) => (
   <article className="flex flex-col rounded-lg bg-white p-6 shadow">
     <span className="mb-1 flex items-center truncate text-xs text-text-terciary">
       <Icon icon={<Users />} className="mr-2" />

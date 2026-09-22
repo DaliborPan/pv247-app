@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { Book, Github } from 'lucide-react';
+import Link from 'next/link';
 
 import { Button } from '@/components/base/button/button';
 import { SignIn } from '@/components/sign-in';

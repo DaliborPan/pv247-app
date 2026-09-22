@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 import { Button } from '@/components/base/button/button';
 import { Icon } from '@/components/base/icon/icon';

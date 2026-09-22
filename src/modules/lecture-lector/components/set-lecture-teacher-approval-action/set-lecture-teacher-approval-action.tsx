@@ -1,8 +1,8 @@
 'use client';
 
+import { useMutation } from '@tanstack/react-query';
 import { type ReactNode } from 'react';
 import { toast } from 'sonner';
-import { useMutation } from '@tanstack/react-query';
 
 import { Button } from '@/components/base/button/button';
 import { cn } from '@/lib/cn';
@@ -15,7 +15,7 @@ const useSetLectureTeacherApprovalMutation = () =>
       lectureId: string;
       lectorId: string;
       isApproved: boolean;
-    }) => setLectureTeacherApprovalAction(input)
+    }) => await setLectureTeacherApprovalAction(input)
   });
 
 export const SetLectureTeacherApprovalAction = ({
@@ -39,7 +39,7 @@ export const SetLectureTeacherApprovalAction = ({
     <Button
       size="sm"
       variant="ghost"
-      disabled={disabled || mutation.isPending}
+      disabled={disabled ?? mutation.isPending}
       aria-busy={mutation.isPending}
       aria-label={isApproved ? 'Remove teacher' : 'Set as teacher'}
       title={isApproved ? 'Remove teacher' : 'Set as teacher'}

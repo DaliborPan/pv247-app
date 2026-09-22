@@ -1,5 +1,4 @@
 import 'server-only';
-
 import { createServerActionProcedure } from 'zsa';
 
 import { getSessionUser } from '@/modules/session-user/session-user';
@@ -11,7 +10,7 @@ const authServerProcedure = createServerActionProcedure().handler(async () => {
     return {
       sessionUser
     };
-  } catch (err) {
+  } catch {
     throw new Error('User not authenticated');
   }
 });

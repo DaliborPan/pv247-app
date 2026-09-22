@@ -1,8 +1,8 @@
 'use client';
 
-import { toast } from 'sonner';
-import { RefreshCw } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
+import { RefreshCw } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/base/button/button';
 
@@ -10,7 +10,7 @@ import { revalidateLecturesAction } from './action';
 
 const useRevalidateLectureMutation = () =>
   useMutation({
-    mutationFn: async () => revalidateLecturesAction()
+    mutationFn: async () => await revalidateLecturesAction()
   });
 
 export const RevalidateLecturesAction = () => {

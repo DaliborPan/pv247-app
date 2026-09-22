@@ -1,8 +1,8 @@
 'use client';
 
 import { Slot } from '@radix-ui/react-slot';
-import { Suspense, type PropsWithChildren } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { Suspense, type PropsWithChildren } from 'react';
 
 import { signIn } from '@/auth/client';
 

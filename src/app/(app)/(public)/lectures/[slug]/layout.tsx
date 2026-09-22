@@ -1,7 +1,8 @@
+import { Suspense } from 'react';
+
+import { LectureTeachers } from '@/modules/lecture-lector/components/lecture-teachers';
 import { LectureNavigation } from '@/modules/lecture/components/lecture-navigation';
 import { type LectureSlugType } from '@/modules/lecture/schema';
-import { LectureTeachers } from '@/modules/lecture-lector/components/lecture-teachers';
-import { Suspense } from 'react';
 
 const Layout = ({ children, params }: LayoutProps<'/lectures/[slug]'>) => {
   const lectureSlug = params.then(p => p.slug as LectureSlugType);

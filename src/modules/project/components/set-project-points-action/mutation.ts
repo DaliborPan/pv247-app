@@ -6,5 +6,5 @@ import { type SetProjectPointsFormSchema } from './schema';
 export const useSetProjectPointsMutation = () =>
   useMutation({
     mutationFn: async (data: SetProjectPointsFormSchema) =>
-      setProjectPointsAction(data)
+      await setProjectPointsAction(data)
   });

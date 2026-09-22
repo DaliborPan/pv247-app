@@ -12,30 +12,26 @@ const SidebarLinkRowDynamic = ({
 }: LinkProps &
   PropsWithChildren<{
     lecture: Pick<LectureType, 'isAvailable'>;
-  }>) => {
-  return (
-    <Link
-      {...props}
-      href={href}
-      className={cn(
-        'flex items-center text-text-secondary hover:underline',
-        !lecture.isAvailable && 'pointer-events-none opacity-50'
-      )}
-    >
-      {children}
-    </Link>
-  );
-};
+  }>) => (
+  <Link
+    {...props}
+    href={href}
+    className={cn(
+      'flex items-center text-text-secondary hover:underline',
+      !lecture.isAvailable && 'pointer-events-none opacity-50'
+    )}
+  >
+    {children}
+  </Link>
+);
 
 export const SidebarLinkRow = (
   props: LinkProps &
     PropsWithChildren<{
       lecture: Pick<LectureType, 'isAvailable'>;
     }>
-) => {
-  return (
-    <Suspense fallback={props.children}>
-      <SidebarLinkRowDynamic {...props} />
-    </Suspense>
-  );
-};
+) => (
+  <Suspense fallback={props.children}>
+    <SidebarLinkRowDynamic {...props} />
+  </Suspense>
+);

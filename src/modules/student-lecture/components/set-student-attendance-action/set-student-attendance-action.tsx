@@ -1,8 +1,8 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
-import { toast } from 'sonner';
 import { Trash, UserCheck } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/base/button/button';
 

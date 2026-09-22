@@ -1,8 +1,8 @@
 'use client';
 
-import { toast } from 'sonner';
-import { UserPlus } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
+import { UserPlus } from 'lucide-react';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Button } from '@/components/base/button/button';
@@ -15,11 +15,11 @@ import {
 } from '@/components/form/form';
 import { cn } from '@/lib/cn';
 
-import { signUpLectureAction } from './action';
 import {
   lectureLectorStatusOptions,
   lectureLectorStatusSchema
 } from '../../schema';
+import { signUpLectureAction } from './action';
 
 const signUpLectureFormSchema = z.object({
   status: lectureLectorStatusSchema
@@ -30,7 +30,7 @@ type SignUpLectureFormType = z.infer<typeof signUpLectureFormSchema>;
 const useSignUpLectureMutation = (lectureId: string) =>
   useMutation({
     mutationFn: async (input: SignUpLectureFormType) =>
-      signUpLectureAction({ lectureId, status: input.status })
+      await signUpLectureAction({ lectureId, status: input.status })
   });
 
 export const SignUpLectureAction = ({

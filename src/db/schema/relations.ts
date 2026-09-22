@@ -1,11 +1,11 @@
 import { relations } from 'drizzle-orm';
 
-import { user as users } from './users/users';
-import { projects } from './projects/projects';
-import { lectures } from './lectures/lectures';
-import { studentLectures } from './studentLecture';
 import { lectureLectors } from './lecture-lector';
+import { lectures } from './lectures/lectures';
+import { projects } from './projects/projects';
 import { studentHomeworks } from './student-homework';
+import { studentLectures } from './studentLecture';
+import { user as users } from './users/users';
 
 export const userRelations = relations(users, ({ one, many }) => ({
   project: one(projects, {

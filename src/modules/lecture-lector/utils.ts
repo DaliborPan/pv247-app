@@ -1,4 +1,7 @@
-import { lectureLectorStatusOptions, LectureLectorStatusType } from './schema';
+import {
+  lectureLectorStatusOptions,
+  type LectureLectorStatusType
+} from './schema';
 
 export const getLectureLectorStatusLabel = (status: LectureLectorStatusType) =>
   lectureLectorStatusOptions.find(option => option.value === status)?.label ??

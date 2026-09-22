@@ -1,7 +1,7 @@
 import { DataTable } from '@/components/data-table/data-table';
+import { type StudentProgressType } from '@/modules/student/types';
 
 import { columns } from './columns';
-import { type StudentProgressType } from '@/modules/student/types';
 
 export const StudentsDataTable = ({
   students

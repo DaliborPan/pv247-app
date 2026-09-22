@@ -15,11 +15,7 @@ export const SidebarCard = ({
   className
 }: SidebarCardProps) => (
   <div className={cn('rounded-lg bg-primary-100 p-6 text-sm', className)}>
-    {customTitle ? (
-      customTitle
-    ) : title ? (
-      <h3 className="mb-4 text-xl">{title}</h3>
-    ) : null}
+    {customTitle ?? (title ? <h3 className="mb-4 text-xl">{title}</h3> : null)}
 
     {children}
   </div>

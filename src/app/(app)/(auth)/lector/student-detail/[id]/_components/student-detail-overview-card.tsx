@@ -1,12 +1,12 @@
-import Link from 'next/link';
 import { ExternalLink } from 'lucide-react';
+import Link from 'next/link';
 
+import { Icon } from '@/components/base/icon/icon';
 import { LabeledValue } from '@/components/labeled-value';
 import { cn } from '@/lib/cn';
-import { Icon } from '@/components/base/icon/icon';
+import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 import { StudentOverviewCard } from '@/modules/student/components/student-overview-card';
 import { type StudentType } from '@/modules/student/types';
-import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 
 export const StudentDetailOverviewCard = ({
   student

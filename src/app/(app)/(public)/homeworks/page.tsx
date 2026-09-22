@@ -1,5 +1,6 @@
-import { getLecturesWithHomeworkCachedQuery } from '@/modules/lecture/queries';
 import { HomeworkCard } from '@/modules/lecture/components/homework-card';
+import { getLecturesWithHomeworkCachedQuery } from '@/modules/lecture/queries';
+
 import { CardsLayout } from '../_components/cards-layout';
 
 export const metadata = {

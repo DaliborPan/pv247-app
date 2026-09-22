@@ -1,8 +1,9 @@
+import { Suspense } from 'react';
+
 import { DetailCard } from '@/components/detail-card';
 import { getLecturesCachedQuery } from '@/modules/lecture/queries';
 import { SetStudentAttendanceAction } from '@/modules/student-lecture/components/set-student-attendance-action/set-student-attendance-action';
 import { getStudentLecturesQuery } from '@/modules/student-lecture/queries';
-import { Suspense } from 'react';
 
 const AttendanceCell = ({
   studentId,

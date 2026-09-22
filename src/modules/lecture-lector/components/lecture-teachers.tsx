@@ -1,9 +1,8 @@
+import { LectorChip } from '@/modules/lector/components/lector-chip';
 import { getLecturesCachedQuery } from '@/modules/lecture/queries';
 import type { LectureSlugType } from '@/modules/lecture/schema';
 
 import { getLectureApprovedLectorsQuery } from '../queries';
-
-import { LectorChip } from '@/modules/lector/components/lector-chip';
 
 export const LectureTeachers = async ({
   lectureSlug

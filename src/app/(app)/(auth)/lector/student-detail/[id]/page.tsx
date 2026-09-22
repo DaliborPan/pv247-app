@@ -1,9 +1,9 @@
-import { StudentHomeworkCard } from '@/modules/student/components/student-homework-card';
 import { StudentAttendanceCard } from '@/modules/student/components/student-attendance-card';
-
-import { StudentHero } from './_components/student-hero';
-import { StudentDetailOverviewCard } from './_components/student-detail-overview-card';
+import { StudentHomeworkCard } from '@/modules/student/components/student-homework-card';
 import { getStudentQuery } from '@/modules/student/queries';
+
+import { StudentDetailOverviewCard } from './_components/student-detail-overview-card';
+import { StudentHero } from './_components/student-hero';
 
 const Page = ({ params }: PageProps<'/lector/student-detail/[id]'>) => {
   const studentPromise = params.then(({ id }) => getStudentQuery(id));

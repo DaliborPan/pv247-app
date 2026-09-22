@@ -1,5 +1,5 @@
-import { v4 as uuid } from 'uuid';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { v4 as uuid } from 'uuid';
 
 import {
   lectureSlugSchema,

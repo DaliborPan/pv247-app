@@ -1,7 +1,6 @@
 import 'server-only';
-
-import { cache } from 'react';
 import { and, eq, isNotNull } from 'drizzle-orm';
+import { cache } from 'react';
 
 import { db } from '@/db';
 import {
@@ -29,7 +28,7 @@ export const getStudentHomeworksQuery = cache(
       throw new Error('Unauthorized');
     }
 
-    return db.query.studentHomeworks.findMany({
+    return await db.query.studentHomeworks.findMany({
       columns: studentHomeworkSelection,
       where: (studentHomeworks, { eq }) =>
         eq(studentHomeworks.studentId, studentId)

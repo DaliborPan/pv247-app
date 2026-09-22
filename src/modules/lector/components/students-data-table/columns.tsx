@@ -1,28 +1,24 @@
 'use client';
 
 import { createColumnHelper } from '@tanstack/react-table';
-import Link from 'next/link';
 import { ArrowRight, ExternalLink, X } from 'lucide-react';
+import Link from 'next/link';
 
-import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import { Icon } from '@/components/base/icon/icon';
-
-import { type StudentProgressType } from '@/modules/student/types';
-
+import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import { cn } from '@/lib/cn';
+import { type StudentProgressType } from '@/modules/student/types';
 
 const columnHelper = createColumnHelper<StudentProgressType>();
 
-const StatusBadge = ({ success }: { success: boolean }) => {
-  return (
-    <div
-      className={cn(
-        'size-3 rounded-full',
-        success ? 'bg-green-500' : 'bg-red-500'
-      )}
-    />
-  );
-};
+const StatusBadge = ({ success }: { success: boolean }) => (
+  <div
+    className={cn(
+      'size-3 rounded-full',
+      success ? 'bg-green-500' : 'bg-red-500'
+    )}
+  />
+);
 
 export const columns = [
   columnHelper.display({

@@ -2,11 +2,11 @@
 
 import { useFormContext } from 'react-hook-form';
 
-import { FormControl, FormField, FormItem, FormLabel } from '../form';
 import {
   RichTextEditor,
   type RichTextEditorProps
 } from '../../base/rich-text-editor/rich-text-editor';
+import { FormControl, FormField, FormItem, FormLabel } from '../form';
 
 export type FormEditorProps = Omit<
   RichTextEditorProps,

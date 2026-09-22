@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 
 const NotFound = () => (
   <main className="grid grow place-items-center px-4 py-12">

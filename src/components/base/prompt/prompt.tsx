@@ -7,7 +7,6 @@ import { v4 as uuid } from 'uuid';
 import { Form } from '@/components/form/form';
 
 import { Dialog } from '../dialog/dialog';
-
 import { type DecisionFn, type PromptProps } from './types';
 
 export const Prompt = <T extends FieldValues>({

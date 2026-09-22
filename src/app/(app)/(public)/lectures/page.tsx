@@ -1,7 +1,7 @@
 import { LectureCard } from '@/modules/lecture/components/lecture-card';
+import { getLecturesCachedQuery } from '@/modules/lecture/queries';
 
 import { CardsLayout } from '../_components/cards-layout';
-import { getLecturesCachedQuery } from '@/modules/lecture/queries';
 
 export const metadata = {
   title: 'Lectures',

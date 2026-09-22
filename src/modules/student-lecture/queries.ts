@@ -1,5 +1,4 @@
 import 'server-only';
-
 import { cache } from 'react';
 
 import { db } from '@/db';
@@ -15,7 +14,7 @@ export const getStudentLecturesQuery = cache(
       throw new Error('Unauthorized');
     }
 
-    return db.query.studentLectures.findMany({
+    return await db.query.studentLectures.findMany({
       columns: { lectureId: true },
       where: (studentLectures, { eq }) =>
         eq(studentLectures.studentId, studentId)

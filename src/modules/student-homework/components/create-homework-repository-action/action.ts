@@ -4,19 +4,19 @@ import { and, eq } from 'drizzle-orm';
 import { refresh } from 'next/cache';
 
 import { db } from '@/db';
-import { account } from '@/db/schema/users/users';
 import {
   studentHomeworks,
   type StudentHomeworkInsertType,
   type StudentHomeworkSelectType
 } from '@/db/schema/student-homework';
+import { account } from '@/db/schema/users/users';
 import {
   createGithubClient,
   githubOrganization,
   GithubSetupError
 } from '@/integrations/github/client';
-import { type SessionUserType } from '@/modules/session-user/types';
 import { type LectureType } from '@/modules/lecture/types';
+import { type SessionUserType } from '@/modules/session-user/types';
 import { authStudentServerAction } from '@/server/server-actions';
 
 import { ownHomeworkRepositoryInputSchema } from '../../schema';
@@ -101,7 +101,7 @@ const withStudentHomeworkContext = async (
         )
     ]);
 
-    if (!lecture || !student || student.role !== 'student') {
+    if (!lecture || student?.role !== 'student') {
       throw new GithubSetupError('Homework or student not found.');
     }
     if (accounts.length !== 1 || !/^\d+$/.test(accounts[0].accountId)) {
@@ -144,11 +144,11 @@ const withStudentHomeworkContext = async (
         record = value;
       }
     });
-  } catch (error) {
+  } catch (err) {
     // Keep actionable errors in the DB without exposing raw API or database errors.
     const status =
-      error && typeof error === 'object' && 'status' in error
-        ? error.status
+      err && typeof err === 'object' && 'status' in err
+        ? err.status
         : undefined;
     let message =
       'GitHub setup could not finish. Refresh the table and try again.';
@@ -161,8 +161,8 @@ const withStudentHomeworkContext = async (
     } else if (status === 422) {
       message =
         'GitHub rejected the request. Check the repository name, invitation limits and organization policies.';
-    } else if (error instanceof GithubSetupError) {
-      message = error.message;
+    } else if (err instanceof GithubSetupError) {
+      message = err.message;
     }
     if (record) {
       try {
@@ -280,16 +280,16 @@ const create = (user: SessionUserType, input: StudentHomeworkInputType) =>
         repo: repositoryName
       });
       exists = true;
-    } catch (error) {
+    } catch (err) {
       if (
         !(
-          error &&
-          typeof error === 'object' &&
-          'status' in error &&
-          error.status === 404
+          err &&
+          typeof err === 'object' &&
+          'status' in err &&
+          err.status === 404
         )
       )
-        throw error;
+        throw err;
     }
     if (exists) {
       throw new GithubSetupError(
@@ -367,12 +367,12 @@ const complete = (user: SessionUserType, input: StudentHomeworkInputType) =>
           ref: repository.default_branch
         });
         initialCommitSha = commit.sha;
-      } catch (error) {
+      } catch (err) {
         const status =
-          error && typeof error === 'object' && 'status' in error
-            ? error.status
+          err && typeof err === 'object' && 'status' in err
+            ? err.status
             : undefined;
-        if (status !== 409) throw error;
+        if (status !== 409) throw err;
         await updateStudentHomework(record.id, {
           lastError: null
         });
@@ -434,11 +434,11 @@ export const createOwnHomeworkRepositoryAction = authStudentServerAction
         studentId: ctx.sessionUserStudent.id
       });
       return { result, error: null };
-    } catch (error) {
+    } catch (err) {
       return {
         error:
-          error instanceof GithubSetupError
-            ? error.message
+          err instanceof GithubSetupError
+            ? err.message
             : 'Repository setup failed. Refresh and try again.'
       };
     } finally {
@@ -455,11 +455,11 @@ export const completeOwnHomeworkRepositoryAction = authStudentServerAction
         studentId: ctx.sessionUserStudent.id
       });
       return { result, error: null };
-    } catch (error) {
+    } catch (err) {
       return {
         error:
-          error instanceof GithubSetupError
-            ? error.message
+          err instanceof GithubSetupError
+            ? err.message
             : 'Repository setup failed. Refresh and try again.'
       };
     } finally {

@@ -12,6 +12,6 @@ export const useSubmitProjectFormMutation = ({
     mutationFn: async (data: ProjectFormSchema) => {
       const action = isCreating ? createProjectAction : updateProjectAction;
 
-      return action(data);
+      return await action(data);
     }
   });

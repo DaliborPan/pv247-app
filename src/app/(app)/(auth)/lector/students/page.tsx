@@ -1,7 +1,6 @@
 import { TabsContent } from '@/components/base/tabs/tabs';
 import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
 import { StudentsDataTable } from '@/modules/lector/components/students-data-table/students-data-table';
-
 import { getSessionUser } from '@/modules/session-user/session-user';
 import { getStudentsQuery } from '@/modules/student/queries';
 

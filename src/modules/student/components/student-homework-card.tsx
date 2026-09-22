@@ -1,18 +1,18 @@
+import { type ReactNode, Suspense } from 'react';
+
 import {
   getAvailableLecturesCachedQuery,
   getLecturesCachedQuery
 } from '@/modules/lecture/queries';
-
-import { ListCard } from './list-card';
-import { PointsBadge } from './points-badge';
-import { ReactNode, Suspense } from 'react';
 import type { LectureType } from '@/modules/lecture/types';
-import { type StudentType } from '@/modules/student/types';
-
 import {
   getStudentHomeworksQuery,
   getHomeworkGradingStatusQuery
 } from '@/modules/student-homework/queries';
+import { type StudentType } from '@/modules/student/types';
+
+import { ListCard } from './list-card';
+import { PointsBadge } from './points-badge';
 
 const HomeworkListCard = async ({
   points
@@ -53,39 +53,37 @@ const HomeworkListCard = async ({
 
 export const StudentHomeworkCard = (props: {
   user: Promise<Pick<StudentType, 'id' | 'role'>>;
-}) => {
-  return (
-    <Suspense fallback={<HomeworkListCard />}>
-      {props.user.then(async user => {
-        if (user.role !== 'student') {
-          return null;
-        }
+}) => (
+  <Suspense fallback={<HomeworkListCard />}>
+    {props.user.then(async user => {
+      if (user.role !== 'student') {
+        return null;
+      }
 
-        const homework = await getStudentHomeworksQuery(user.id);
+      const homework = await getStudentHomeworksQuery(user.id);
 
-        return (
-          <HomeworkListCard
-            points={lecture => {
-              const lectureHomework = homework.find(
-                hw => hw.lectureId === lecture.id
-              );
+      return (
+        <HomeworkListCard
+          points={lecture => {
+            const lectureHomework = homework.find(
+              hw => hw.lectureId === lecture.id
+            );
 
-              return (
-                <Suspense>
-                  {getHomeworkGradingStatusQuery(lecture.id).then(
-                    ({ hasGradingStarted }) => (
-                      <PointsBadge
-                        points={lectureHomework?.points ?? undefined}
-                        hasGradingStarted={hasGradingStarted}
-                      />
-                    )
-                  )}
-                </Suspense>
-              );
-            }}
-          />
-        );
-      })}
-    </Suspense>
-  );
-};
+            return (
+              <Suspense>
+                {getHomeworkGradingStatusQuery(lecture.id).then(
+                  ({ hasGradingStarted }) => (
+                    <PointsBadge
+                      points={lectureHomework?.points ?? undefined}
+                      hasGradingStarted={hasGradingStarted}
+                    />
+                  )
+                )}
+              </Suspense>
+            );
+          }}
+        />
+      );
+    })}
+  </Suspense>
+);

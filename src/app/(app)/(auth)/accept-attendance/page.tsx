@@ -1,9 +1,9 @@
-import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 import { Button } from '@/components/base/button/button';
 import { acceptAttendanceCodeSchema } from '@/modules/student-lecture/schema';
-import { redirect } from 'next/navigation';
 
 const Page = async ({ searchParams }: PageProps<'/accept-attendance'>) => {
   const parsedCode = acceptAttendanceCodeSchema.safeParse(

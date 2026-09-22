@@ -1,7 +1,7 @@
+import { getLecturesCachedQuery } from '@/modules/lecture/queries';
 import { type HomeworkSlugType } from '@/modules/lecture/schema';
 
 import { HomeworkNavigationLink } from './homework-navigation-link';
-import { getLecturesCachedQuery } from '@/modules/lecture/queries';
 
 export const HomeworksNavigation = async ({
   homeworkSlug

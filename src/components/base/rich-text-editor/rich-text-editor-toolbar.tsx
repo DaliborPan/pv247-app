@@ -1,5 +1,4 @@
 import { type Editor } from '@tiptap/react';
-import { forwardRef, useCallback } from 'react';
 import {
   AlignCenter,
   AlignLeft,
@@ -15,6 +14,7 @@ import {
   Strikethrough,
   Underline
 } from 'lucide-react';
+import { forwardRef, useCallback } from 'react';
 
 import { Button, type ButtonProps } from '../button/button';
 

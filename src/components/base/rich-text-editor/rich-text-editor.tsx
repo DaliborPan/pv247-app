@@ -2,7 +2,6 @@
 
 /* eslint-disable import/no-named-as-default */
 import './rich-text-editor.css';
-
 import { Portal } from '@radix-ui/react-portal';
 import Highlight from '@tiptap/extension-highlight';
 import Placeholder from '@tiptap/extension-placeholder';
