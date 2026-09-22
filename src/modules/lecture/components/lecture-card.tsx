@@ -1,15 +1,14 @@
 import { Layers } from 'lucide-react';
+import { Suspense } from 'react';
 
 import { Badge } from '@/components/base/badge/badge';
 import { Icon } from '@/components/base/icon/icon';
 import { TextPreview } from '@/components/text-preview';
 import { formatDate } from '@/lib/date';
-
 import { type LectureType } from '@/modules/lecture/types';
 
 import { AttendanceBadge } from './attendance-badge';
 import { LectureCardActions } from './lecture-card-actions';
-import { Suspense } from 'react';
 
 const getNumberWithOrdinal = (num: number) => {
   const s = ['th', 'st', 'nd', 'rd'];

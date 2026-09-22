@@ -1,8 +1,8 @@
 import { Suspense, type PropsWithChildren } from 'react';
 
+import { LectureTeachers } from '@/modules/lecture-lector/components/lecture-teachers';
 import { LectureNavigation } from '@/modules/lecture/components/lecture-navigation';
 import { type LectureSlugType } from '@/modules/lecture/schema';
-import { LectureTeachers } from '@/modules/lecture-lector/components/lecture-teachers';
 
 const Layout = ({
   children,

@@ -1,12 +1,12 @@
 'use client';
 
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { Button } from '@/components/base/button/button';
-import { cn } from '@/lib/cn';
 import { Icon } from '@/components/base/icon/icon';
+import { cn } from '@/lib/cn';
 import { type LectureType } from '@/modules/lecture/types';
 
 export const HomeworkNavigationLink = ({

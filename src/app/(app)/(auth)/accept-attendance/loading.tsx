@@ -1,5 +1,3 @@
-const Loading = () => {
-  return null;
-};
+const Loading = () => null;
 
 export default Loading;

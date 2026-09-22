@@ -1,6 +1,6 @@
-import { type StudentHomeworkType } from '@/modules/student-homework/types';
 import { type ProjectType } from '@/modules/project/types';
 import { type UserRoleType } from '@/modules/session-user/schema';
+import { type StudentHomeworkType } from '@/modules/student-homework/types';
 
 export type StudentType = {
   id: string;

@@ -1,0 +1,29 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "useTabs": false,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "quoteProps": "consistent",
+  "trailingComma": "none",
+  "arrowParens": "avoid",
+  "printWidth": 80,
+  "sortTailwindcss": {
+    "functions": ["cls", "cn", "clsx"]
+  },
+  "sortImports": {
+    "internalPattern": ["@/", "#"]
+  },
+  "ignorePatterns": [
+    "node_modules",
+    ".next",
+    "out",
+    "build",
+    "coverage",
+    ".vercel",
+    "*.tsbuildinfo",
+    "dev.sqlite*",
+    "*.log",
+    "drizzle",
+    ".drizzle"
+  ]
+}

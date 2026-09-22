@@ -3,10 +3,10 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { ExternalLink } from 'lucide-react';
 
-import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import { Icon } from '@/components/base/icon/icon';
-import { SetHomeworkPointsForm } from '@/modules/student-homework/components/set-homework-points-form/set-homework-points-form';
+import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import type { SetHomeworkPointsFormSchema } from '@/modules/student-homework/components/set-homework-points-form/schema';
+import { SetHomeworkPointsForm } from '@/modules/student-homework/components/set-homework-points-form/set-homework-points-form';
 import { type StudentHomeworkStudentType } from '@/modules/student/types';
 
 const columnHelper = createColumnHelper<

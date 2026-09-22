@@ -1,9 +1,9 @@
 import type { MDXComponents } from 'mdx/types';
 import { type ImageProps } from 'next/image';
 
-import { MdxImage } from './components/mdx/mdx-image';
 import { MdxCodeBlock } from './components/mdx/mdx-code-block';
 import { MdxComment } from './components/mdx/mdx-comment';
+import { MdxImage } from './components/mdx/mdx-image';
 
 export const useMDXComponents = (components: MDXComponents): MDXComponents => ({
   // headings

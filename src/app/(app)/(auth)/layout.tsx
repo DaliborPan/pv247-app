@@ -1,7 +1,7 @@
+import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
 import { getSession } from '@/modules/session-user/session-user';
-import { redirect } from 'next/navigation';
 import { OnboardingPage } from '@/modules/student/components/onboarding-page/onboarding-page';
 
 export const metadata = {

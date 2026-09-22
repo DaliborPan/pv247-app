@@ -1,99 +1,96 @@
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 
 import { TabsContent } from '@/components/base/tabs/tabs';
 import { LabeledValue } from '@/components/labeled-value';
-import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
 import { HomeworkStudentsDataTable } from '@/modules/lector/components/homework-students-data-table/homework-students-data-table';
-
-import { getSessionUser } from '@/modules/session-user/session-user';
-import { homeworkSlugSchema } from '@/modules/lecture/schema';
-
-import { HomeworksNavigation } from './_components/homeworks-navigation';
+import { LectorTabsTable } from '@/modules/lector/components/lector-tabs-table';
 import { getLectureByHomeworkSlugCachedQuery } from '@/modules/lecture/queries';
-import { Suspense } from 'react';
+import { homeworkSlugSchema } from '@/modules/lecture/schema';
+import { getSessionUser } from '@/modules/session-user/session-user';
 import { getStudentsWithHomeworkQuery } from '@/modules/student/queries';
 
-const Page = ({ params }: PageProps<'/lector/homeworks/[slug]'>) => {
-  return (
-    <Suspense>
-      {params.then(async ({ slug }) => {
-        const parsedSlug = homeworkSlugSchema.safeParse(
-          slug ?? homeworkSlugSchema.options[0]
-        );
+import { HomeworksNavigation } from './_components/homeworks-navigation';
 
-        if (!parsedSlug.success) {
-          redirect('/');
-        }
+const Page = ({ params }: PageProps<'/lector/homeworks/[slug]'>) => (
+  <Suspense>
+    {params.then(async ({ slug }) => {
+      const parsedSlug = homeworkSlugSchema.safeParse(
+        slug ?? homeworkSlugSchema.options[0]
+      );
 
-        const paramSlug = parsedSlug.data;
-        const lecture = await getLectureByHomeworkSlugCachedQuery(paramSlug);
+      if (!parsedSlug.success) {
+        redirect('/');
+      }
 
-        if (!lecture) {
-          redirect('/');
-        }
+      const paramSlug = parsedSlug.data;
+      const lecture = await getLectureByHomeworkSlugCachedQuery(paramSlug);
 
-        const students = await getStudentsWithHomeworkQuery(lecture.id);
+      if (!lecture) {
+        redirect('/');
+      }
 
-        const sessionUser = await getSessionUser();
-        const hasOwnStudents = students.some(
-          student => student.lectorId === sessionUser.id
-        );
+      const students = await getStudentsWithHomeworkQuery(lecture.id);
 
-        return (
-          <LectorTabsTable
-            title="Homework evaluation"
-            triggers={
-              !hasOwnStudents
-                ? []
-                : [
-                    {
-                      href: `/lector/homeworks/${paramSlug}?type=all`,
-                      label: 'All students',
-                      value: 'all'
-                    },
-                    {
-                      href: `/lector/homeworks/${paramSlug}?type=own`,
-                      label: 'My students',
-                      value: 'own'
-                    }
-                  ]
-            }
-            contents={
-              <>
-                <div className="mb-4 flex items-center rounded-lg bg-gray-50 py-2 pl-4 shadow">
-                  <div className="grow">
-                    <LabeledValue label="Name">
-                      <h2 className="text-xl text-text-primary-color">
-                        {lecture?.homeworkName}
-                      </h2>
-                    </LabeledValue>
-                  </div>
+      const sessionUser = await getSessionUser();
+      const hasOwnStudents = students.some(
+        student => student.lectorId === sessionUser.id
+      );
 
-                  <HomeworksNavigation homeworkSlug={paramSlug} />
+      return (
+        <LectorTabsTable
+          title="Homework evaluation"
+          triggers={
+            !hasOwnStudents
+              ? []
+              : [
+                  {
+                    href: `/lector/homeworks/${paramSlug}?type=all`,
+                    label: 'All students',
+                    value: 'all'
+                  },
+                  {
+                    href: `/lector/homeworks/${paramSlug}?type=own`,
+                    label: 'My students',
+                    value: 'own'
+                  }
+                ]
+          }
+          contents={
+            <>
+              <div className="mb-4 flex items-center rounded-lg bg-gray-50 py-2 pl-4 shadow">
+                <div className="grow">
+                  <LabeledValue label="Name">
+                    <h2 className="text-xl text-text-primary-color">
+                      {lecture?.homeworkName}
+                    </h2>
+                  </LabeledValue>
                 </div>
 
-                <TabsContent value="all">
-                  <HomeworkStudentsDataTable
-                    students={students}
-                    lecture={lecture}
-                  />
-                </TabsContent>
+                <HomeworksNavigation homeworkSlug={paramSlug} />
+              </div>
 
-                <TabsContent value="own">
-                  <HomeworkStudentsDataTable
-                    students={students.filter(
-                      student => student.lectorId === sessionUser.id
-                    )}
-                    lecture={lecture}
-                  />
-                </TabsContent>
-              </>
-            }
-          />
-        );
-      })}
-    </Suspense>
-  );
-};
+              <TabsContent value="all">
+                <HomeworkStudentsDataTable
+                  students={students}
+                  lecture={lecture}
+                />
+              </TabsContent>
+
+              <TabsContent value="own">
+                <HomeworkStudentsDataTable
+                  students={students.filter(
+                    student => student.lectorId === sessionUser.id
+                  )}
+                  lecture={lecture}
+                />
+              </TabsContent>
+            </>
+          }
+        />
+      );
+    })}
+  </Suspense>
+);
 
 export default Page;

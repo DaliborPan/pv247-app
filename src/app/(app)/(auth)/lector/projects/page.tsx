@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
-import { ProjectCard } from './_components/project-card';
+
 import { getProjectsQuery } from '@/modules/project/queries';
+
+import { ProjectCard } from './_components/project-card';
 
 const Page = async () => {
   const projects = await getProjectsQuery();

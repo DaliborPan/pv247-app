@@ -1,7 +1,7 @@
 'use client';
 
-import { type PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { ArrowDownFromLine, ArrowUpFromLine } from 'lucide-react';
+import { type PropsWithChildren, useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/cn';
 

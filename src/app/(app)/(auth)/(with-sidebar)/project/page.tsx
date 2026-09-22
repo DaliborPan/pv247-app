@@ -1,9 +1,9 @@
 import { ProjectForm } from '@/modules/project/components/project-form/project-form';
 import { getMyProjectQuery } from '@/modules/project/queries';
 
-import { SubmitProjectCard } from './_components/submit-project-card';
 import { ProjectDescriptionCard } from './_components/project-description-card';
 import { ProjectHero } from './_components/project-hero';
+import { SubmitProjectCard } from './_components/submit-project-card';
 
 const Page = async () => {
   const project = await getMyProjectQuery();

@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { getLectureMdxComponent } from '@/modules/lecture/mdx/get-mdx-component';
 import {
   getIsLectureAvailableCachedQuery,
   getLecturesCachedQuery
 } from '@/modules/lecture/queries';
-import { getLectureMdxComponent } from '@/modules/lecture/mdx/get-mdx-component';
 import { lectureSlugSchema } from '@/modules/lecture/schema';
 
 const truncateDescription = (text: string, maxLength = 160) =>

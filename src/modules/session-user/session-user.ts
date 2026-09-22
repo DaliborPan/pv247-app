@@ -1,12 +1,11 @@
 import 'server-only';
-
-import { cache } from 'react';
 import { headers } from 'next/headers';
+import { cache } from 'react';
 
 import { auth } from '@/auth/auth';
+import { tryCatch } from '@/lib/try-catch';
 
 import { type UserRoleType } from './schema';
-import { tryCatch } from '@/lib/try-catch';
 
 /**
  * Get the current session user.

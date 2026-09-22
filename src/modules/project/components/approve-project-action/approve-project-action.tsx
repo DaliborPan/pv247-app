@@ -1,11 +1,10 @@
 'use client';
 
+import { useMutation } from '@tanstack/react-query';
 import { Check, X } from 'lucide-react';
 import { toast } from 'sonner';
-import { useMutation } from '@tanstack/react-query';
 
 import { Button } from '@/components/base/button/button';
-
 import { type ProjectType } from '@/modules/project/types';
 
 import { approveProjectAction } from './action';
@@ -15,7 +14,7 @@ const useApproveProjectMutation = (
 ) =>
   useMutation({
     mutationFn: async () =>
-      approveProjectAction({
+      await approveProjectAction({
         projectId: project.id,
         currentStatus: project.status
       })

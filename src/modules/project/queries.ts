@@ -1,15 +1,11 @@
 import 'server-only';
-
 import { cache } from 'react';
 
 import { db } from '@/db';
 import { user as users } from '@/db/schema/users/users';
 import { getSessionUser } from '@/modules/session-user/session-user';
 
-import {
-  type ProjectStudentOptionType,
-  type ProjectType
-} from './types';
+import { type ProjectStudentOptionType, type ProjectType } from './types';
 
 const projectSelection = {
   columns: {
@@ -29,11 +25,13 @@ const projectSelection = {
   }
 } satisfies Parameters<typeof db.query.projects.findFirst>[0];
 
-export const getMyProjectQuery = cache(async (): Promise<ProjectType | null> => {
-  const sessionUser = await getSessionUser();
+export const getMyProjectQuery = cache(
+  async (): Promise<ProjectType | null> => {
+    const sessionUser = await getSessionUser();
 
-  return getStudentProjectQuery(sessionUser.id);
-});
+    return await getStudentProjectQuery(sessionUser.id);
+  }
+);
 
 export const getProjectQuery = cache(
   async (projectId: string): Promise<ProjectType | undefined> => {
@@ -43,7 +41,7 @@ export const getProjectQuery = cache(
       throw new Error(`${sessionUser.id} cannot read projects`);
     }
 
-    return db.query.projects.findFirst({
+    return await db.query.projects.findFirst({
       ...projectSelection,
       where: (projects, { eq }) => eq(projects.id, projectId)
     });
@@ -57,7 +55,7 @@ export const getProjectsQuery = cache(async (): Promise<ProjectType[]> => {
     throw new Error(`${sessionUser.id} cannot read projects`);
   }
 
-  return db.query.projects.findMany(projectSelection);
+  return await db.query.projects.findMany(projectSelection);
 });
 
 export const getStudentProjectQuery = cache(

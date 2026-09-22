@@ -1,16 +1,16 @@
 'use client';
 
-import { type DefaultValues } from 'react-hook-form';
-import { toast } from 'sonner';
 import { Pencil } from 'lucide-react';
 import { use } from 'react';
+import { type DefaultValues } from 'react-hook-form';
+import { toast } from 'sonner';
 
+import { Button } from '@/components/base/button/button';
 import { Prompt } from '@/components/base/prompt/prompt';
 import { FormInput } from '@/components/form/form-fields/form-input';
-import { Button } from '@/components/base/button/button';
 
-import { profileFormSchema, type ProfileFormType } from '../../schema';
 import { editProfileAction } from '../../actions';
+import { profileFormSchema, type ProfileFormType } from '../../schema';
 
 export const EditProfileAction = ({
   defaultValuesPromise

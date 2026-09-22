@@ -2,7 +2,6 @@ import { UserCheck } from 'lucide-react';
 
 import { Badge } from '@/components/base/badge/badge';
 import { Icon } from '@/components/base/icon/icon';
-
 import { getSession } from '@/modules/session-user/session-user';
 import { getStudentLecturesQuery } from '@/modules/student-lecture/queries';
 

@@ -1,10 +1,10 @@
-import Link from 'next/link';
 import { Github, Pencil, Users } from 'lucide-react';
+import Link from 'next/link';
 
 import { Button } from '@/components/base/button/button';
-import { cn } from '@/lib/cn';
-import { Icon } from '@/components/base/icon/icon';
 import { Hero } from '@/components/base/hero';
+import { Icon } from '@/components/base/icon/icon';
+import { cn } from '@/lib/cn';
 import { type ProjectType } from '@/modules/project/types';
 
 const GithubLink = ({ href }: { href?: string | null }) => (
@@ -34,11 +34,7 @@ const EditLink = ({ disabled }: { disabled: boolean }) => (
   </Link>
 );
 
-export const ProjectHero = ({
-  project
-}: {
-  project: ProjectType;
-}) => {
+export const ProjectHero = ({ project }: { project: ProjectType }) => {
   const displayUsers = project.users
     .map(user => `${user.firstName} ${user.lastName}`)
     .join(', ');

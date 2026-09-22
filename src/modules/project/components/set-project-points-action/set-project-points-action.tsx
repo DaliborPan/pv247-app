@@ -4,15 +4,14 @@ import { type PropsWithChildren } from 'react';
 import { toast } from 'sonner';
 
 import { Prompt } from '@/components/base/prompt/prompt';
-import { FormInput } from '@/components/form/form-fields/form-input';
+import { FormCombobox } from '@/components/form/form-fields/form-combobox';
 import { FormTextarea } from '@/components/form/form-fields/form-textarea';
 
+import { useSetProjectPointsMutation } from './mutation';
 import {
   type SetProjectPointsFormSchema,
   setProjectPointsFormSchema
 } from './schema';
-import { useSetProjectPointsMutation } from './mutation';
-import { FormCombobox } from '@/components/form/form-fields/form-combobox';
 
 export const SetProjectPointsAction = ({
   projectId,

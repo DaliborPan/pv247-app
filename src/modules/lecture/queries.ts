@@ -1,5 +1,4 @@
 import 'server-only';
-
 import { cacheLife, cacheTag } from 'next/cache';
 import { cache } from 'react';
 
@@ -14,7 +13,7 @@ export const getLecturesCachedQuery = async (): Promise<LectureType[]> => {
   cacheTag(lecturesTag);
   cacheLife('max');
 
-  return db.query.lectures.findMany({
+  return await db.query.lectures.findMany({
     columns: {
       id: true,
       name: true,
@@ -83,7 +82,7 @@ export const getLecturesForAttendanceQuery = cache(
       throw new Error('User not authorized');
     }
 
-    return db.query.lectures.findMany({
+    return await db.query.lectures.findMany({
       columns: { id: true, name: true, attendanceToken: true },
       orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)]
     });

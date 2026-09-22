@@ -1,7 +1,7 @@
 'use client';
 
-import { type PropsWithChildren, useState } from 'react';
 import { RefreshCcw } from 'lucide-react';
+import { type PropsWithChildren, useState } from 'react';
 
 import { Button } from '@/components/base/button/button';
 

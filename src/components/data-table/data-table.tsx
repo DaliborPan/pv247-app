@@ -3,7 +3,7 @@
 import {
   type ColumnDef,
   type SortingState,
-  VisibilityState,
+  type VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,

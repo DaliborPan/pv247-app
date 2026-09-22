@@ -5,8 +5,8 @@ import { FormInput } from '@/components/form/form-fields/form-input';
 import { getProjectFormStudentComboboxOptionsQuery } from '@/modules/project/queries';
 
 import { ProjectFormProvider } from './project-form-provider';
-import { StudentCombobox } from './student-combobox';
 import { type ProjectFormSchema } from './schema';
+import { StudentCombobox } from './student-combobox';
 
 const ProjectFormStudentCombobox = async ({
   defaultValues

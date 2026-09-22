@@ -1,18 +1,17 @@
+import { Github, LogOut } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Github, LogOut } from 'lucide-react';
+import { Suspense } from 'react';
 
-import { cn } from '@/lib/cn';
 import { Button } from '@/components/base/button/button';
+import { cn } from '@/lib/cn';
+import { type UserRoleType } from '@/modules/session-user/schema';
 
 import MUNI_LOGO from '../../../public/muni-logo.png';
 import { SignIn } from '../sign-in';
-
-import { NavigationItem } from './navigation-item';
-import { MobileNavigation } from './mobile-navigation';
 import { Logout } from './logout';
-import { Suspense } from 'react';
-import { UserRoleType } from '@/modules/session-user/schema';
+import { MobileNavigation } from './mobile-navigation';
+import { NavigationItem } from './navigation-item';
 
 type NavigationUserType = {
   name: string;
@@ -40,7 +39,7 @@ export const Navigation = ({
 }) => {
   if (user instanceof Promise) {
     return (
-      <Suspense fallback={<Navigation isUserLoading={true} />}>
+      <Suspense fallback={<Navigation isUserLoading />}>
         {user.then(awaitUser => (
           <Navigation user={awaitUser ?? undefined} />
         ))}

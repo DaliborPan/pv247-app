@@ -806,7 +806,7 @@ The `control` in combination with the `Controller` component is used in case we 
 ```tsx
 const formSchema = z.object({
   name: z.string().min(1),
-  secondName: z.string().min(1),
+  secondName: z.string().min(1)
 });
 
 type FormSchema = z.infer<typeof formSchema>;
@@ -822,7 +822,7 @@ function CustomFormInput() {
       render={({ field, fieldState }) => (
         <>
           <input
-            onChange={(e) => {
+            onChange={e => {
               if (name === '') return;
               field.onChange(e.target.value);
             }}
@@ -840,8 +840,8 @@ function Home() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      secondName: '',
-    },
+      secondName: ''
+    }
   });
 
   const onSubmit = (values: FormSchema) => {
@@ -858,7 +858,6 @@ function Home() {
     </FormProvider>
   );
 }
-
 ```
 
 <MdxComment>

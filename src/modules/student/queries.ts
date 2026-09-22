@@ -1,14 +1,13 @@
 import 'server-only';
-
 import { cache } from 'react';
 
 import { db } from '@/db';
+import { getStudentProjectQuery } from '@/modules/project/queries';
+import { getSessionUser } from '@/modules/session-user/session-user';
 import {
   getStudentHomeworksQuery,
   studentHomeworkSelection
 } from '@/modules/student-homework/queries';
-import { getStudentProjectQuery } from '@/modules/project/queries';
-import { getSessionUser } from '@/modules/session-user/session-user';
 import { getStudentLecturesQuery } from '@/modules/student-lecture/queries';
 
 import {
@@ -96,7 +95,7 @@ export const getStudentsWithHomeworkQuery = cache(
       throw new Error('Unauthorized');
     }
 
-    return db.query.users.findMany({
+    return await db.query.users.findMany({
       ...studentSelection,
       where: (users, { eq }) => eq(users.role, 'student'),
       with: {
@@ -130,7 +129,7 @@ export const getStudentOverviewQuery = cache(
 
     return {
       awardedHomeworkCount: studentHomeworks.filter(
-        record => record.points != null
+        record => record.points !== undefined && record.points !== null
       ).length,
       studentHomeworks,
       homeworkTotalPoints,
@@ -145,6 +144,6 @@ export const getMyStudentOverviewQuery = cache(
   async (): Promise<StudentOverviewType> => {
     const sessionUser = await getSessionUser();
 
-    return getStudentOverviewQuery(sessionUser.id);
+    return await getStudentOverviewQuery(sessionUser.id);
   }
 );

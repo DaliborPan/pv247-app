@@ -1,11 +1,12 @@
+import { Suspense } from 'react';
+
 import { getLecturesWithHomeworkCachedQuery } from '@/modules/lecture/queries';
 import { type HomeworkSlugType } from '@/modules/lecture/schema';
 
-import { PersonHomeworkDeadline } from './person-homework-deadline';
-import { LabeledItem } from './labeled-item';
 import { HomeworkPoints } from './homework-points';
 import { HomeworkRepositoryLink } from './homework-repository-link';
-import { Suspense } from 'react';
+import { LabeledItem } from './labeled-item';
+import { PersonHomeworkDeadline } from './person-homework-deadline';
 
 export const HomeworkGeneralInfo = async ({
   slug

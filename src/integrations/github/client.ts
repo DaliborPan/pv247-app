@@ -1,8 +1,8 @@
 import 'server-only';
-
 import { createPrivateKey } from 'crypto';
-import { Octokit } from '@octokit/rest';
+
 import { createAppAuth } from '@octokit/auth-app';
+import { Octokit } from '@octokit/rest';
 
 export const githubOrganization = 'FI-PV247';
 

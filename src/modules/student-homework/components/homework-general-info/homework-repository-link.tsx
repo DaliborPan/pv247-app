@@ -1,11 +1,11 @@
-import { Suspense } from 'react';
 import { ExternalLink, Github } from 'lucide-react';
+import { Suspense } from 'react';
 
 import { Skeleton } from '@/components/skeleton';
+import { getSession } from '@/modules/session-user/session-user';
 import { CreateHomeworkRepositoryAction } from '@/modules/student-homework/components/create-homework-repository-action/create-homework-repository-action';
 import { getStudentHomeworksQuery } from '@/modules/student-homework/queries';
 import { type StudentHomeworkType } from '@/modules/student-homework/types';
-import { getSession } from '@/modules/session-user/session-user';
 
 const RepositoryCard = ({
   lectureId,
@@ -95,27 +95,25 @@ export const HomeworkRepositoryLink = async ({
   lectureId
 }: {
   lectureId: string;
-}) => {
-  return (
-    <Suspense fallback={<RepositoryCard lectureId={lectureId} isLoading />}>
-      {getSession().then(sessionUser => {
-        if (sessionUser?.role !== 'student') return null;
+}) => (
+  <Suspense fallback={<RepositoryCard lectureId={lectureId} isLoading />}>
+    {getSession().then(sessionUser => {
+      if (sessionUser?.role !== 'student') return null;
 
-        const studentHomeworkPromise = getStudentHomeworksQuery(
-          sessionUser.id
-        ).then(studentHomeworks =>
-          studentHomeworks.find(
-            studentHomework => studentHomework.lectureId === lectureId
-          )
-        );
+      const studentHomeworkPromise = getStudentHomeworksQuery(
+        sessionUser.id
+      ).then(studentHomeworks =>
+        studentHomeworks.find(
+          studentHomework => studentHomework.lectureId === lectureId
+        )
+      );
 
-        return (
-          <RepositoryCardAsync
-            lectureId={lectureId}
-            studentHomeworkPromise={studentHomeworkPromise}
-          />
-        );
-      })}
-    </Suspense>
-  );
-};
+      return (
+        <RepositoryCardAsync
+          lectureId={lectureId}
+          studentHomeworkPromise={studentHomeworkPromise}
+        />
+      );
+    })}
+  </Suspense>
+);

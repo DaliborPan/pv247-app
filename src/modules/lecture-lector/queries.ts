@@ -1,5 +1,4 @@
 import 'server-only';
-
 import { cache } from 'react';
 
 import { db } from '@/db';
@@ -45,7 +44,7 @@ export const getLectorsForLecturesQuery = cache(
 
 export const getLectureApprovedLectorsQuery = cache(
   async (lectureId: string): Promise<LectureApprovedLectorType[]> =>
-    db.query.lectureLectors.findMany({
+    await db.query.lectureLectors.findMany({
       columns: { id: true },
       where: (lectureLectors, { and, eq }) =>
         and(

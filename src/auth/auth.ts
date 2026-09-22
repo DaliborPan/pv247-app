@@ -1,15 +1,9 @@
 import 'server-only';
-
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
 import { db } from '../db';
-import {
-  user,
-  account,
-  session,
-  verification
-} from '../db/schema/users/users';
+import { user, account, session, verification } from '../db/schema/users/users';
 
 const betterAuthUrl = process.env.BETTER_AUTH_URL;
 const betterAuthSecret = process.env.BETTER_AUTH_SECRET;

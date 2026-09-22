@@ -1,11 +1,11 @@
 import { Github, Pencil, SquareArrowOutUpRight } from 'lucide-react';
 
 import { Button } from '@/components/base/button/button';
+import { Icon } from '@/components/base/icon/icon';
 import { SidebarCard } from '@/components/sidebar-card';
 import { cn } from '@/lib/cn';
-import { Icon } from '@/components/base/icon/icon';
-import { SetProjectPointsAction } from '@/modules/project/components/set-project-points-action/set-project-points-action';
 import { ApproveProjectButton } from '@/modules/project/components/approve-project-action/approve-project-action';
+import { SetProjectPointsAction } from '@/modules/project/components/set-project-points-action/set-project-points-action';
 import { type ProjectType } from '@/modules/project/types';
 
 const getStatusText = (status: ProjectType['status']) => {

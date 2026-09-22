@@ -26,10 +26,8 @@ const InternalNavigationItem = ({ children, href }: NavigationItemProps) => {
   );
 };
 
-export const NavigationItem = ({ children, href }: NavigationItemProps) => {
-  return (
-    <Suspense>
-      <InternalNavigationItem href={href}>{children}</InternalNavigationItem>
-    </Suspense>
-  );
-};
+export const NavigationItem = ({ children, href }: NavigationItemProps) => (
+  <Suspense>
+    <InternalNavigationItem href={href}>{children}</InternalNavigationItem>
+  </Suspense>
+);

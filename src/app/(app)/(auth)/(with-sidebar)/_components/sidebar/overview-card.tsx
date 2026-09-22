@@ -1,15 +1,16 @@
-import { getMyStudentOverviewQuery } from '@/modules/student/queries';
-import { SidebarCard } from '@/components/sidebar-card';
+import { type ReactNode, Suspense } from 'react';
 
-import { SidebarCardRow } from './sidebar-card-row';
-import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
-import { ReactNode, Suspense } from 'react';
+import { SidebarCard } from '@/components/sidebar-card';
+import { Skeleton } from '@/components/skeleton';
 import {
   getLecturesCachedQuery,
   getLecturesWithHomeworkCachedQuery
 } from '@/modules/lecture/queries';
-import { Skeleton } from '@/components/skeleton';
+import { getProjectStatusLabel } from '@/modules/project/utils/project-status';
 import { getSessionUser } from '@/modules/session-user/session-user';
+import { getMyStudentOverviewQuery } from '@/modules/student/queries';
+
+import { SidebarCardRow } from './sidebar-card-row';
 
 const OverviewSidebarCard = ({
   attendance,
@@ -19,23 +20,21 @@ const OverviewSidebarCard = ({
   attendance?: ReactNode;
   homework?: ReactNode;
   project?: ReactNode;
-}) => {
-  return (
-    <SidebarCard title="Overview">
-      <div className="flex flex-col gap-y-1">
-        <SidebarCardRow title="Attendance">
-          {attendance ?? <Skeleton className="w-10" />}
-        </SidebarCardRow>
-        <SidebarCardRow title="Homework">
-          {homework ?? <Skeleton className="w-14" />}
-        </SidebarCardRow>
-        <SidebarCardRow title="Project">
-          {project ?? <Skeleton className="w-14" />}
-        </SidebarCardRow>
-      </div>
-    </SidebarCard>
-  );
-};
+}) => (
+  <SidebarCard title="Overview">
+    <div className="flex flex-col gap-y-1">
+      <SidebarCardRow title="Attendance">
+        {attendance ?? <Skeleton className="w-10" />}
+      </SidebarCardRow>
+      <SidebarCardRow title="Homework">
+        {homework ?? <Skeleton className="w-14" />}
+      </SidebarCardRow>
+      <SidebarCardRow title="Project">
+        {project ?? <Skeleton className="w-14" />}
+      </SidebarCardRow>
+    </div>
+  </SidebarCard>
+);
 
 export const OverviewCard = async () => {
   const lectures = await getLecturesCachedQuery();

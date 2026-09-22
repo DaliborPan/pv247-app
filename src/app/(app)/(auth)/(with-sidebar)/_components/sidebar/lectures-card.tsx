@@ -1,14 +1,13 @@
 import { ArrowRight } from 'lucide-react';
 
-import { SidebarCard } from '@/components/sidebar-card';
 import { Icon } from '@/components/base/icon/icon';
-
-import { SidebarLinkRow } from './sidebar-link-row';
-
+import { SidebarCard } from '@/components/sidebar-card';
 import {
   getAvailableLecturesCachedQuery,
   getLecturesCachedQuery
 } from '@/modules/lecture/queries';
+
+import { SidebarLinkRow } from './sidebar-link-row';
 
 export const LecturesCard = async () => {
   const lectures = await getLecturesCachedQuery();

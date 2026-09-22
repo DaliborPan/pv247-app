@@ -1,8 +1,11 @@
-import { useFormContext } from 'react-hook-form';
 import { ChevronsUpDown } from 'lucide-react';
+import { useFormContext } from 'react-hook-form';
 
-import { Combobox, type ComboboxProps } from '@/components/base/combobox/combobox';
 import { Button } from '@/components/base/button/button';
+import {
+  Combobox,
+  type ComboboxProps
+} from '@/components/base/combobox/combobox';
 import { cn } from '@/lib/cn';
 
 import {
@@ -63,7 +66,7 @@ export const FormCombobox = ({
                   {field.value
                     ? options.find(option => option.value === field.value)
                         ?.label
-                    : placeholder ?? 'Select an option'}
+                    : (placeholder ?? 'Select an option')}
                   <TriggerIcon className="ml-2 size-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>

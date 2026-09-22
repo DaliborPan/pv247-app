@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { HomeworkGeneralInfo } from '@/modules/student-homework/components/homework-general-info/homework-general-info';
 import {
   getIsHomeworkAvailableCachedQuery,
   getLecturesWithHomeworkCachedQuery
 } from '@/modules/lecture/queries';
 import { homeworkSlugSchema } from '@/modules/lecture/schema';
+import { HomeworkGeneralInfo } from '@/modules/student-homework/components/homework-general-info/homework-general-info';
 
 const truncateDescription = (text: string, maxLength = 160) =>
   text.length <= maxLength ? text : `${text.slice(0, maxLength - 3)}...`;
