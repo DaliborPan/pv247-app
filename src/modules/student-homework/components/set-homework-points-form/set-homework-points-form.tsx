@@ -30,7 +30,7 @@ export const SetHomeworkPointsForm = ({
     defaultValues
   });
 
-  const mutation = useSetHomeworkPointsMutation({ isCreating: !hasPoints });
+  const mutation = useSetHomeworkPointsMutation();
 
   const onSubmit = async (data: SetHomeworkPointsFormSchema) => {
     const [_, error] = await mutation.mutateAsync(data);

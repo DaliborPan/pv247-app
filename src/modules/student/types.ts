@@ -1,4 +1,4 @@
-import { type HomeworkType } from '@/modules/homework/types';
+import { type StudentHomeworkType } from '@/modules/student-homework/types';
 import { type ProjectType } from '@/modules/project/types';
 import { type UserRoleType } from '@/modules/session-user/schema';
 
@@ -20,17 +20,13 @@ export type StudentProgressType = StudentType & {
   hasEnoughAttendance: boolean;
 };
 
-export type StudentHomeworkType = StudentType & {
-  homeworksStudent: HomeworkType[];
-  homeworkRepositories: {
-    lectureId: string;
-    repositoryUrl: string | null;
-  }[];
+export type StudentHomeworkStudentType = StudentType & {
+  studentHomeworks: StudentHomeworkType[];
 };
 
 export type StudentOverviewType = {
   awardedHomeworkCount: number;
-  homework: HomeworkType[];
+  studentHomeworks: StudentHomeworkType[];
   homeworkTotalPoints: number;
   totalPoints: number;
   attendanceCount: number;

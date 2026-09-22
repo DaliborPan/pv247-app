@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
-export const homeworkRepositoryStatusSchema = z.enum([
+export const studentHomeworkStatusSchema = z.enum([
   'pending',
   'repository_created',
   'ready'
 ]);
-export type HomeworkRepositoryStatusType = z.infer<
-  typeof homeworkRepositoryStatusSchema
+export type StudentHomeworkStatusType = z.infer<
+  typeof studentHomeworkStatusSchema
 >;
 
 export const ownHomeworkRepositoryInputSchema = z.object({

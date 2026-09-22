@@ -2,8 +2,7 @@ import 'server-only';
 
 import { drizzle } from 'drizzle-orm/libsql';
 
-import { homeworks } from './schema/homeworks';
-import { homeworkRepositories } from './schema/homework-repository';
+import { studentHomeworks } from './schema/student-homework';
 import { lectures } from './schema/lectures/lectures';
 import { projects } from './schema/projects/projects';
 import { user as users } from './schema/users/users';
@@ -17,8 +16,7 @@ export const db = drizzle({
     authToken: process.env.AUTH_TOKEN
   },
   schema: {
-    homeworks,
-    homeworkRepositories,
+    studentHomeworks,
     lectures,
     projects,
     users,

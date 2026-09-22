@@ -2,11 +2,10 @@ import { relations } from 'drizzle-orm';
 
 import { user as users } from './users/users';
 import { projects } from './projects/projects';
-import { homeworks } from './homeworks';
 import { lectures } from './lectures/lectures';
 import { studentLectures } from './studentLecture';
 import { lectureLectors } from './lecture-lector';
-import { homeworkRepositories } from './homework-repository';
+import { studentHomeworks } from './student-homework';
 
 export const userRelations = relations(users, ({ one, many }) => ({
   project: one(projects, {
@@ -20,15 +19,14 @@ export const userRelations = relations(users, ({ one, many }) => ({
   }),
 
   studentLectures: many(studentLectures),
-  homeworkRepositories: many(homeworkRepositories),
+  studentHomeworks: many(studentHomeworks, {
+    relationName: 'student-homework-student'
+  }),
+  gradedStudentHomeworks: many(studentHomeworks, {
+    relationName: 'student-homework-grader'
+  }),
   lectureLectors: many(lectureLectors),
 
-  homeworksStudent: many(homeworks, {
-    relationName: 'hw-student'
-  }),
-  homeworksLector: many(homeworks, {
-    relationName: 'hw-lector'
-  }),
   students: many(users, {
     relationName: 'lector'
   })
@@ -39,42 +37,30 @@ export const projectRelations = relations(projects, ({ many }) => ({
 }));
 
 export const lectureRelations = relations(lectures, ({ many }) => ({
-  homeworkRepositories: many(homeworkRepositories),
-  homeworks: many(homeworks),
+  studentHomeworks: many(studentHomeworks),
   students: many(studentLectures),
   lectors: many(lectureLectors)
 }));
 
-export const homeworkRepositoryRelations = relations(
-  homeworkRepositories,
+export const studentHomeworkRelations = relations(
+  studentHomeworks,
   ({ one }) => ({
     student: one(users, {
-      fields: [homeworkRepositories.studentId],
-      references: [users.id]
+      fields: [studentHomeworks.studentId],
+      references: [users.id],
+      relationName: 'student-homework-student'
     }),
     lecture: one(lectures, {
-      fields: [homeworkRepositories.lectureId],
+      fields: [studentHomeworks.lectureId],
       references: [lectures.id]
+    }),
+    grader: one(users, {
+      fields: [studentHomeworks.gradedBy],
+      references: [users.id],
+      relationName: 'student-homework-grader'
     })
   })
 );
-
-export const homeworkRelations = relations(homeworks, ({ one }) => ({
-  student: one(users, {
-    fields: [homeworks.studentId],
-    references: [users.id],
-    relationName: 'hw-student'
-  }),
-  lector: one(users, {
-    fields: [homeworks.lectorId],
-    references: [users.id],
-    relationName: 'hw-lector'
-  }),
-  lecture: one(lectures, {
-    fields: [homeworks.lectureId],
-    references: [lectures.id]
-  })
-}));
 
 export const studentLecutreRelations = relations(
   studentLectures,

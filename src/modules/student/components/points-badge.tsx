@@ -2,7 +2,7 @@ import { MonitorCheck, MonitorX } from 'lucide-react';
 
 import { Badge } from '@/components/base/badge/badge';
 import { Icon } from '@/components/base/icon/icon';
-import { getHomeworkPointsMessage } from '@/modules/homework/utils';
+import { getHomeworkPointsMessage } from '@/modules/student-homework/utils';
 
 export const PointsBadge = ({
   points,

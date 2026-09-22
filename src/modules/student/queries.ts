@@ -3,13 +3,16 @@ import 'server-only';
 import { cache } from 'react';
 
 import { db } from '@/db';
-import { getStudentHomeworksQuery } from '@/modules/homework/queries';
+import {
+  getStudentHomeworksQuery,
+  studentHomeworkSelection
+} from '@/modules/student-homework/queries';
 import { getStudentProjectQuery } from '@/modules/project/queries';
 import { getSessionUser } from '@/modules/session-user/session-user';
 import { getStudentLecturesQuery } from '@/modules/student-lecture/queries';
 
 import {
-  type StudentHomeworkType,
+  type StudentHomeworkStudentType,
   type StudentOverviewType,
   type StudentProgressType,
   type StudentType
@@ -49,42 +52,44 @@ export const getStudentQuery = cache(
   }
 );
 
-export const getStudentsQuery = cache(async (): Promise<StudentProgressType[]> => {
-  const sessionUser = await getSessionUser();
+export const getStudentsQuery = cache(
+  async (): Promise<StudentProgressType[]> => {
+    const sessionUser = await getSessionUser();
 
-  if (sessionUser.role !== 'lector') {
-    throw new Error('Unauthorized');
-  }
-
-  const students = await db.query.users.findMany({
-    ...studentSelection,
-    where: (users, { eq }) => eq(users.role, 'student'),
-    with: {
-      homeworksStudent: { columns: { points: true } },
-      studentLectures: { columns: { id: true } },
-      project: { columns: { id: true, name: true } }
+    if (sessionUser.role !== 'lector') {
+      throw new Error('Unauthorized');
     }
-  });
 
-  return students.map(({ homeworksStudent, studentLectures, ...student }) => {
-    const homeworkPoints = homeworksStudent.reduce(
-      (total, homework) => total + homework.points,
-      0
-    );
-    const attendanceCount = studentLectures.length;
+    const students = await db.query.users.findMany({
+      ...studentSelection,
+      where: (users, { eq }) => eq(users.role, 'student'),
+      with: {
+        studentHomeworks: { columns: { points: true } },
+        studentLectures: { columns: { id: true } },
+        project: { columns: { id: true, name: true } }
+      }
+    });
 
-    return {
-      ...student,
-      homeworkPoints,
-      attendanceCount,
-      hasEnoughHomeworkPoints: homeworkPoints >= 130,
-      hasEnoughAttendance: attendanceCount >= 8
-    };
-  });
-});
+    return students.map(({ studentHomeworks, studentLectures, ...student }) => {
+      const homeworkPoints = studentHomeworks.reduce(
+        (total, homework) => total + (homework.points ?? 0),
+        0
+      );
+      const attendanceCount = studentLectures.length;
+
+      return {
+        ...student,
+        homeworkPoints,
+        attendanceCount,
+        hasEnoughHomeworkPoints: homeworkPoints >= 130,
+        hasEnoughAttendance: attendanceCount >= 8
+      };
+    });
+  }
+);
 
 export const getStudentsWithHomeworkQuery = cache(
-  async (lectureId: string): Promise<StudentHomeworkType[]> => {
+  async (lectureId: string): Promise<StudentHomeworkStudentType[]> => {
     const sessionUser = await getSessionUser();
 
     if (sessionUser.role !== 'lector') {
@@ -95,13 +100,10 @@ export const getStudentsWithHomeworkQuery = cache(
       ...studentSelection,
       where: (users, { eq }) => eq(users.role, 'student'),
       with: {
-        homeworksStudent: {
-          columns: { lectureId: true, points: true },
-          where: (homeworks, { eq }) => eq(homeworks.lectureId, lectureId)
-        },
-        homeworkRepositories: {
-          columns: { lectureId: true, repositoryUrl: true },
-          where: (repositories, { eq }) => eq(repositories.lectureId, lectureId)
+        studentHomeworks: {
+          columns: studentHomeworkSelection,
+          where: (studentHomeworks, { eq }) =>
+            eq(studentHomeworks.lectureId, lectureId)
         }
       }
     });
@@ -116,19 +118,21 @@ export const getStudentOverviewQuery = cache(
       throw new Error('Unauthorized');
     }
 
-    const [homework, attendances, project] = await Promise.all([
+    const [studentHomeworks, attendances, project] = await Promise.all([
       getStudentHomeworksQuery(studentId),
       getStudentLecturesQuery(studentId),
       getStudentProjectQuery(studentId)
     ]);
-    const homeworkTotalPoints = homework.reduce(
-      (total, homework) => total + homework.points,
+    const homeworkTotalPoints = studentHomeworks.reduce(
+      (total, homework) => total + (homework.points ?? 0),
       0
     );
 
     return {
-      awardedHomeworkCount: homework.length,
-      homework,
+      awardedHomeworkCount: studentHomeworks.filter(
+        record => record.points != null
+      ).length,
+      studentHomeworks,
       homeworkTotalPoints,
       totalPoints: homeworkTotalPoints,
       attendanceCount: attendances.length,

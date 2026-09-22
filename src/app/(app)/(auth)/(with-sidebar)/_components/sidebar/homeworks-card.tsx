@@ -33,13 +33,13 @@ export const HomeworksCard = async () => {
 
               <Suspense>
                 {overviewPromise.then(overview => {
-                  const homework = overview.homework.find(
-                    hw => hw.lectureId === lecture.id
+                  const studentHomework = overview.studentHomeworks.find(
+                    item => item.lectureId === lecture.id
                   );
 
-                  return homework ? (
+                  return typeof studentHomework?.points === 'number' ? (
                     <span className="font-medium text-text-primary-color">
-                      {homework.points}/{lecture.homeworkMaxPoints}
+                      {studentHomework.points}/{lecture.homeworkMaxPoints}
                     </span>
                   ) : (
                     <Icon icon={<ArrowRight />} />

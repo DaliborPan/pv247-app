@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { HomeworkGeneralInfo } from '@/modules/homework/components/homework-general-info/homework-general-info';
+import { HomeworkGeneralInfo } from '@/modules/student-homework/components/homework-general-info/homework-general-info';
 import {
   getIsHomeworkAvailableCachedQuery,
   getLecturesWithHomeworkCachedQuery

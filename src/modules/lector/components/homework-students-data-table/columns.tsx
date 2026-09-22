@@ -5,14 +5,15 @@ import { ExternalLink } from 'lucide-react';
 
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import { Icon } from '@/components/base/icon/icon';
-import { SetHomeworkPointsForm } from '@/modules/homework/components/set-homework-points-form/set-homework-points-form';
-import type { SetHomeworkPointsFormSchema } from '@/modules/homework/components/set-homework-points-form/schema';
-import { type StudentHomeworkType } from '@/modules/student/types';
+import { SetHomeworkPointsForm } from '@/modules/student-homework/components/set-homework-points-form/set-homework-points-form';
+import type { SetHomeworkPointsFormSchema } from '@/modules/student-homework/components/set-homework-points-form/schema';
+import { type StudentHomeworkStudentType } from '@/modules/student/types';
 
 const columnHelper = createColumnHelper<
-  StudentHomeworkType & {
+  StudentHomeworkStudentType & {
     defaultValues: Partial<SetHomeworkPointsFormSchema>;
     repositoryUrl?: string | null;
+    canGrade: boolean;
   }
 >();
 
@@ -60,7 +61,7 @@ export const columns = [
     header: props => <DataTableColumnHeader {...props} title="Points" />,
     minSize: 225,
     cell: ({ row }) =>
-      !!row.original.github && (
+      row.original.canGrade && (
         <SetHomeworkPointsForm defaultValues={row.original.defaultValues} />
       )
   })

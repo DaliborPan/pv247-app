@@ -15,7 +15,7 @@ import { getSession } from '@/modules/session-user/session-user';
 import {
   getMyHomeworksQuery,
   getHomeworkGradingStatusQuery
-} from '@/modules/homework/queries';
+} from '@/modules/student-homework/queries';
 import { getHomeworkPointsMessage } from '../../utils';
 
 export const HomeworkPoints = async ({
@@ -37,13 +37,13 @@ export const HomeworkPoints = async ({
     );
   }
 
-  const [homework, gradingStatus] = await Promise.all([
+  const [studentHomeworks, gradingStatus] = await Promise.all([
     getMyHomeworksQuery(lecture.id),
     getHomeworkGradingStatusQuery(lecture.id)
   ]);
 
-  const homeworkRecord = homework.at(0);
-  const hasPoints = homeworkRecord?.points !== undefined;
+  const studentHomework = studentHomeworks.at(0);
+  const hasPoints = studentHomework?.points != null;
   const gradingHasNotStarted = !hasPoints && !gradingStatus.hasGradingStarted;
 
   return (
@@ -52,7 +52,7 @@ export const HomeworkPoints = async ({
         {gradingHasNotStarted
           ? 'N/A'
           : getHomeworkPointsMessage({
-              points: homeworkRecord?.points,
+              points: studentHomework?.points,
               hasGradingStarted: gradingStatus.hasGradingStarted
             })}
         {gradingHasNotStarted && (

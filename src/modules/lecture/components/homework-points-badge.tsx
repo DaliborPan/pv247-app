@@ -2,28 +2,28 @@ import { MonitorCheck, Layers } from 'lucide-react';
 
 import { Badge } from '@/components/base/badge/badge';
 import { Icon } from '@/components/base/icon/icon';
-import type { HomeworkType } from '@/modules/homework/types';
+import type { StudentHomeworkType } from '@/modules/student-homework/types';
 import { Suspense } from 'react';
 
 export const HomeworkPointsBadge = ({
   maxPoints,
   ...props
 }: {
-  homework?: Promise<HomeworkType | undefined>;
+  studentHomework?: Promise<StudentHomeworkType | undefined>;
   maxPoints: number;
 }) => {
-  if (props.homework instanceof Promise) {
+  if (props.studentHomework instanceof Promise) {
     return (
       <Suspense fallback={<HomeworkPointsBadge maxPoints={maxPoints} />}>
-        {props.homework.then(homework => {
-          if (homework) {
+        {props.studentHomework.then(studentHomework => {
+          if (studentHomework) {
             return (
               <Badge
                 variant="outline"
                 className="border-text-primary-color text-text-primary-color"
               >
                 <Icon icon={<MonitorCheck />} className="mr-2" />
-                {homework.points} / {maxPoints}
+                {studentHomework.points} / {maxPoints}
               </Badge>
             );
           }

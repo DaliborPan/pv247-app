@@ -2,18 +2,18 @@ import { Suspense } from 'react';
 import { ExternalLink, Github } from 'lucide-react';
 
 import { Skeleton } from '@/components/skeleton';
-import { CreateHomeworkRepositoryAction } from '@/modules/homework-repository/components/create-homework-repository-action/create-homework-repository-action';
-import { getStudentHomeworkRepositoriesQuery } from '@/modules/homework-repository/queries';
-import { type HomeworkRepositoryType } from '@/modules/homework-repository/types';
+import { CreateHomeworkRepositoryAction } from '@/modules/student-homework/components/create-homework-repository-action/create-homework-repository-action';
+import { getStudentHomeworksQuery } from '@/modules/student-homework/queries';
+import { type StudentHomeworkType } from '@/modules/student-homework/types';
 import { getSession } from '@/modules/session-user/session-user';
 
 const RepositoryCard = ({
   lectureId,
-  repository,
+  studentHomework,
   isLoading = false
 }: {
   lectureId: string;
-  repository?: HomeworkRepositoryType;
+  studentHomework?: StudentHomeworkType;
   isLoading?: boolean;
 }) => {
   if (isLoading) {
@@ -31,12 +31,12 @@ const RepositoryCard = ({
     );
   }
 
-  if (repository?.status === 'ready') {
-    if (!repository.repositoryUrl) return null;
+  if (studentHomework?.status === 'ready') {
+    if (!studentHomework.repositoryUrl) return null;
 
     return (
       <a
-        href={repository.repositoryUrl}
+        href={studentHomework.repositoryUrl}
         target="_blank"
         rel="noreferrer"
         className="mt-6 flex items-center justify-between gap-4 rounded-lg border border-primary bg-primary-100 p-5 transition-colors hover:bg-primary-200"
@@ -72,7 +72,7 @@ const RepositoryCard = ({
       </div>
       <CreateHomeworkRepositoryAction
         lectureId={lectureId}
-        status={repository?.status}
+        status={studentHomework?.status}
       />
     </div>
   );
@@ -80,12 +80,15 @@ const RepositoryCard = ({
 
 const RepositoryCardAsync = async ({
   lectureId,
-  repositoryPromise
+  studentHomeworkPromise
 }: {
   lectureId: string;
-  repositoryPromise: Promise<HomeworkRepositoryType | undefined>;
+  studentHomeworkPromise: Promise<StudentHomeworkType | undefined>;
 }) => (
-  <RepositoryCard lectureId={lectureId} repository={await repositoryPromise} />
+  <RepositoryCard
+    lectureId={lectureId}
+    studentHomework={await studentHomeworkPromise}
+  />
 );
 
 export const HomeworkRepositoryLink = async ({
@@ -98,16 +101,18 @@ export const HomeworkRepositoryLink = async ({
       {getSession().then(sessionUser => {
         if (sessionUser?.role !== 'student') return null;
 
-        const repositoryPromise = getStudentHomeworkRepositoriesQuery(
+        const studentHomeworkPromise = getStudentHomeworksQuery(
           sessionUser.id
-        ).then(repositories =>
-          repositories.find(repository => repository.lectureId === lectureId)
+        ).then(studentHomeworks =>
+          studentHomeworks.find(
+            studentHomework => studentHomework.lectureId === lectureId
+          )
         );
 
         return (
           <RepositoryCardAsync
             lectureId={lectureId}
-            repositoryPromise={repositoryPromise}
+            studentHomeworkPromise={studentHomeworkPromise}
           />
         );
       })}

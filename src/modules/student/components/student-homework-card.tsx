@@ -12,7 +12,7 @@ import { type StudentType } from '@/modules/student/types';
 import {
   getStudentHomeworksQuery,
   getHomeworkGradingStatusQuery
-} from '@/modules/homework/queries';
+} from '@/modules/student-homework/queries';
 
 const HomeworkListCard = async ({
   points
@@ -75,7 +75,7 @@ export const StudentHomeworkCard = (props: {
                   {getHomeworkGradingStatusQuery(lecture.id).then(
                     ({ hasGradingStarted }) => (
                       <PointsBadge
-                        points={lectureHomework?.points}
+                        points={lectureHomework?.points ?? undefined}
                         hasGradingStarted={hasGradingStarted}
                       />
                     )

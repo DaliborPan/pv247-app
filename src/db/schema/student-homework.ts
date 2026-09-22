@@ -6,13 +6,13 @@ import {
   uniqueIndex
 } from 'drizzle-orm/sqlite-core';
 
-import { homeworkRepositoryStatusSchema } from '@/modules/homework-repository/schema';
+import { studentHomeworkStatusSchema } from '@/modules/student-homework/schema';
 
 import { lectures } from './lectures/lectures';
 import { user as users } from './users/users';
 
-export const homeworkRepositories = sqliteTable(
-  'homework_repository',
+export const studentHomeworks = sqliteTable(
+  'studentHomework',
   {
     id: text('id').primaryKey().$defaultFn(randomUUID),
     lectureId: text('lectureId')
@@ -27,12 +27,15 @@ export const homeworkRepositories = sqliteTable(
     repositoryUrl: text('repositoryUrl'),
     initialCommitSha: text('initialCommitSha'),
     status: text('status', {
-      enum: homeworkRepositoryStatusSchema.options
+      enum: studentHomeworkStatusSchema.options
     })
       .notNull()
       .default('pending'),
     invitationId: integer('invitationId'),
     lastError: text('lastError'),
+    points: integer('points'),
+    gradedBy: text('gradedBy').references(() => users.id),
+    gradedAt: integer('gradedAt', { mode: 'timestamp_ms' }),
     createdAt: integer('createdAt', { mode: 'timestamp_ms' })
       .notNull()
       .$defaultFn(() => new Date()),
@@ -42,14 +45,12 @@ export const homeworkRepositories = sqliteTable(
       .$onUpdate(() => new Date())
   },
   table => [
-    uniqueIndex('homework_repository_lecture_student_unique').on(
+    uniqueIndex('studentHomework_lecture_student_unique').on(
       table.lectureId,
       table.studentId
     )
   ]
 );
 
-export type HomeworkRepositoryInsertType =
-  typeof homeworkRepositories.$inferInsert;
-export type HomeworkRepositorySelectType =
-  typeof homeworkRepositories.$inferSelect;
+export type StudentHomeworkInsertType = typeof studentHomeworks.$inferInsert;
+export type StudentHomeworkSelectType = typeof studentHomeworks.$inferSelect;

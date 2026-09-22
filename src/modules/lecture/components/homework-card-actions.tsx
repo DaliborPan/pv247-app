@@ -7,8 +7,8 @@ import { cn } from '@/lib/cn';
 import { Button } from '@/components/base/button/button';
 import { Suspense } from 'react';
 import { getSession } from '@/modules/session-user/session-user';
-import { getStudentHomeworkRepositoriesQuery } from '@/modules/homework-repository/queries';
-import { CreateHomeworkRepositoryAction } from '@/modules/homework-repository/components/create-homework-repository-action/create-homework-repository-action';
+import { getStudentHomeworksQuery } from '@/modules/student-homework/queries';
+import { CreateHomeworkRepositoryAction } from '@/modules/student-homework/components/create-homework-repository-action/create-homework-repository-action';
 
 export const HomeworkCardActions = ({ lecture }: { lecture: LectureType }) => {
   return (
@@ -34,14 +34,14 @@ export const HomeworkCardActions = ({ lecture }: { lecture: LectureType }) => {
         <>
           <Suspense>
             {getSession().then(async sessionUser => {
-              const repository = sessionUser
-                ? (
-                    await getStudentHomeworkRepositoriesQuery(sessionUser.id)
-                  ).find(item => item.lectureId === lecture.id)
+              const studentHomework = sessionUser
+                ? (await getStudentHomeworksQuery(sessionUser.id)).find(
+                    item => item.lectureId === lecture.id
+                  )
                 : undefined;
               const homeworkGithubUrl =
-                repository?.status === 'ready'
-                  ? repository.repositoryUrl
+                studentHomework?.status === 'ready'
+                  ? studentHomework.repositoryUrl
                   : undefined;
 
               return (
@@ -64,10 +64,10 @@ export const HomeworkCardActions = ({ lecture }: { lecture: LectureType }) => {
                   )}
                   {sessionUser?.role === 'student' &&
                     lecture.homeworkTemplateRepositoryUrl &&
-                    repository?.status !== 'ready' && (
+                    studentHomework?.status !== 'ready' && (
                       <CreateHomeworkRepositoryAction
                         lectureId={lecture.id}
-                        status={repository?.status}
+                        status={studentHomework?.status}
                       />
                     )}
                 </>

@@ -1,8 +1,7 @@
 import { DataTable } from '@/components/data-table/data-table';
-import { getSessionUser } from '@/modules/session-user/session-user';
 import { type LectureType } from '@/modules/lecture/types';
 
-import { type StudentHomeworkType } from '@/modules/student/types';
+import { type StudentHomeworkStudentType } from '@/modules/student/types';
 
 import { columns } from './columns';
 
@@ -10,34 +9,30 @@ export const HomeworkStudentsDataTable = async ({
   students,
   lecture
 }: {
-  students: StudentHomeworkType[];
-  lecture?: Pick<LectureType, 'id' | 'homeworkName' | 'homeworkSlug'>;
+  students: StudentHomeworkStudentType[];
+  lecture: Pick<LectureType, 'id'>;
 }) => {
-  const sessionUser = await getSessionUser();
-
   return (
     <DataTable
       data={students.map(student => {
         const defaultValues = {
-          lecture: lecture
-            ? {
-                id: lecture.id,
-                homeworkName: lecture.homeworkName,
-                homeworkSlug: lecture.homeworkSlug
-              }
-            : undefined,
-          lectorId: sessionUser.id,
+          lectureId: lecture.id,
           studentId: student.id,
-          points: student.homeworksStudent.find(
-            hw => hw.lectureId === lecture?.id
-          )?.points
+          points:
+            student.studentHomeworks.find(hw => hw.lectureId === lecture.id)
+              ?.points ?? undefined
         };
+        const studentHomework = student.studentHomeworks.find(
+          homework => homework.lectureId === lecture.id
+        );
 
         return {
           ...student,
-          repositoryUrl: student.homeworkRepositories.find(
-            repository => repository.lectureId === lecture?.id
-          )?.repositoryUrl,
+          repositoryUrl:
+            studentHomework?.status === 'ready'
+              ? studentHomework.repositoryUrl
+              : undefined,
+          canGrade: studentHomework?.status === 'ready',
           defaultValues
         };
       })}

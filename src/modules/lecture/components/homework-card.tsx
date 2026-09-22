@@ -6,7 +6,7 @@ import { type LectureType } from '@/modules/lecture/types';
 import { HomeworkPointsBadge } from './homework-points-badge';
 import { HomeworkCardActions } from './homework-card-actions';
 
-import { getMyHomeworksQuery } from '@/modules/homework/queries';
+import { getMyHomeworksQuery } from '@/modules/student-homework/queries';
 
 export const HomeworkCard = ({ lecture }: { lecture: LectureType }) => {
   return (
@@ -28,8 +28,10 @@ export const HomeworkCard = ({ lecture }: { lecture: LectureType }) => {
           {/* Potential ppr problem? */}
           <HomeworkPointsBadge
             maxPoints={lecture.homeworkMaxPoints}
-            homework={getMyHomeworksQuery().then(homework =>
-              homework.find(hw => hw.lectureId === lecture.id)
+            studentHomework={getMyHomeworksQuery().then(studentHomeworks =>
+              studentHomeworks.find(
+                studentHomework => studentHomework.lectureId === lecture.id
+              )
             )}
           />
         </div>

@@ -6,10 +6,10 @@ import { refresh } from 'next/cache';
 import { db } from '@/db';
 import { account } from '@/db/schema/users/users';
 import {
-  homeworkRepositories,
-  type HomeworkRepositoryInsertType,
-  type HomeworkRepositorySelectType
-} from '@/db/schema/homework-repository';
+  studentHomeworks,
+  type StudentHomeworkInsertType,
+  type StudentHomeworkSelectType
+} from '@/db/schema/student-homework';
 import {
   createGithubClient,
   githubOrganization,
@@ -20,27 +20,27 @@ import { type LectureType } from '@/modules/lecture/types';
 import { authStudentServerAction } from '@/server/server-actions';
 
 import { ownHomeworkRepositoryInputSchema } from '../../schema';
-import { type HomeworkRepositoryResultType } from '../../types';
+import { type StudentHomeworkResultType } from '../../types';
 
-type HomeworkRepositoryInputType = {
+type StudentHomeworkInputType = {
   lectureId: string;
   studentId: string;
 };
 
-type HomeworkRepositoryContextType = HomeworkRepositoryInputType & {
-  record: HomeworkRepositorySelectType | undefined;
-  setRecord: (record: HomeworkRepositorySelectType) => void;
+type StudentHomeworkContextType = StudentHomeworkInputType & {
+  record: StudentHomeworkSelectType | undefined;
+  setRecord: (record: StudentHomeworkSelectType) => void;
   lecture: Pick<LectureType, 'homeworkTemplateRepositoryUrl' | 'homeworkSlug'>;
   github: ReturnType<typeof createGithubClient>;
   githubUserId: string;
   githubLogin: string;
 };
 
-const updateHomeworkRepository = (
+const updateStudentHomework = (
   id: string,
   values: Partial<
     Pick<
-      HomeworkRepositoryInsertType,
+      StudentHomeworkInsertType,
       | 'githubRepositoryId'
       | 'repositoryName'
       | 'repositoryUrl'
@@ -50,31 +50,27 @@ const updateHomeworkRepository = (
       | 'lastError'
     >
   >
-) =>
-  db
-    .update(homeworkRepositories)
-    .set(values)
-    .where(eq(homeworkRepositories.id, id));
+) => db.update(studentHomeworks).set(values).where(eq(studentHomeworks.id, id));
 
-const withHomeworkRepositoryContext = async (
+const withStudentHomeworkContext = async (
   user: SessionUserType,
-  { lectureId, studentId }: HomeworkRepositoryInputType,
+  { lectureId, studentId }: StudentHomeworkInputType,
   operation: (
-    context: HomeworkRepositoryContextType
-  ) => Promise<HomeworkRepositoryResultType>
-): Promise<HomeworkRepositoryResultType> => {
+    context: StudentHomeworkContextType
+  ) => Promise<StudentHomeworkResultType>
+): Promise<StudentHomeworkResultType> => {
   if (user.role !== 'student' || user.id !== studentId) {
     throw new Error('Unauthorized');
   }
 
-  let record: HomeworkRepositorySelectType | undefined;
+  let record: StudentHomeworkSelectType | undefined;
 
   try {
     // Completed assignments do not need any more GitHub requests.
-    record = await db.query.homeworkRepositories.findFirst({
+    record = await db.query.studentHomeworks.findFirst({
       where: and(
-        eq(homeworkRepositories.lectureId, lectureId),
-        eq(homeworkRepositories.studentId, studentId)
+        eq(studentHomeworks.lectureId, lectureId),
+        eq(studentHomeworks.studentId, studentId)
       )
     });
     if (record?.status === 'ready') {
@@ -170,7 +166,7 @@ const withHomeworkRepositoryContext = async (
     }
     if (record) {
       try {
-        await updateHomeworkRepository(record.id, {
+        await updateStudentHomework(record.id, {
           lastError: message
         });
       } catch {
@@ -192,8 +188,8 @@ const withHomeworkRepositoryContext = async (
  * @throws {GithubSetupError} When the homework, student, linked GitHub account,
  * template, target name, or GitHub operation cannot be verified or completed.
  */
-const create = (user: SessionUserType, input: HomeworkRepositoryInputType) =>
-  withHomeworkRepositoryContext(user, input, async context => {
+const create = (user: SessionUserType, input: StudentHomeworkInputType) =>
+  withStudentHomeworkContext(user, input, async context => {
     const {
       lectureId,
       studentId,
@@ -258,7 +254,7 @@ const create = (user: SessionUserType, input: HomeworkRepositoryInputType) =>
     if (!record) {
       // Persist the name so a manual retry refers to the same assignment.
       const [created] = await db
-        .insert(homeworkRepositories)
+        .insert(studentHomeworks)
         .values({
           lectureId,
           studentId,
@@ -311,7 +307,7 @@ const create = (user: SessionUserType, input: HomeworkRepositoryInputType) =>
       include_all_branches: false
     });
     // Save the GitHub ID immediately; readiness and access belong to completion.
-    await updateHomeworkRepository(record.id, {
+    await updateStudentHomework(record.id, {
       githubRepositoryId: repository.id,
       repositoryUrl: repository.html_url,
       status: 'repository_created',
@@ -331,8 +327,8 @@ const create = (user: SessionUserType, input: HomeworkRepositoryInputType) =>
  * @throws {GithubSetupError} When no created repository exists, its ownership or
  * visibility is invalid, or a GitHub, account, or database operation fails.
  */
-const complete = (user: SessionUserType, input: HomeworkRepositoryInputType) =>
-  withHomeworkRepositoryContext(user, input, async context => {
+const complete = (user: SessionUserType, input: StudentHomeworkInputType) =>
+  withStudentHomeworkContext(user, input, async context => {
     const { record, github, githubUserId, githubLogin } = context;
     // Completion is never allowed to generate another repository.
     if (!record?.githubRepositoryId)
@@ -357,7 +353,7 @@ const complete = (user: SessionUserType, input: HomeworkRepositoryInputType) =>
       );
     }
     const target = { owner: githubOrganization, repo: repository.name };
-    await updateHomeworkRepository(record.id, {
+    await updateStudentHomework(record.id, {
       repositoryName: repository.name,
       repositoryUrl: repository.html_url
     });
@@ -377,12 +373,12 @@ const complete = (user: SessionUserType, input: HomeworkRepositoryInputType) =>
             ? error.status
             : undefined;
         if (status !== 409) throw error;
-        await updateHomeworkRepository(record.id, {
+        await updateStudentHomework(record.id, {
           lastError: null
         });
         return { status: 'preparing' };
       }
-      await updateHomeworkRepository(record.id, {
+      await updateStudentHomework(record.id, {
         initialCommitSha
       });
     }
@@ -421,7 +417,7 @@ const complete = (user: SessionUserType, input: HomeworkRepositoryInputType) =>
       });
       if (invitation.status === 201) invitationId = invitation.data.id;
     }
-    await updateHomeworkRepository(record.id, {
+    await updateStudentHomework(record.id, {
       status: 'ready',
       invitationId,
       lastError: null
