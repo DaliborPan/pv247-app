@@ -1,6 +1,7 @@
 'use client';
 
 import { Link, QrCode as QrCodeIcon } from 'lucide-react';
+import { type ReactElement } from 'react';
 import QrCode from 'react-qr-code';
 
 import { Button } from '@/components/base/button/button';
@@ -8,9 +9,11 @@ import { Dialog } from '@/components/base/dialog/dialog';
 import { Icon } from '@/components/base/icon/icon';
 
 export const ShowAttendanceQrCodeAction = ({
-  attendanceToken
+  attendanceToken,
+  children
 }: {
   attendanceToken: string;
+  children?: ReactElement;
 }) => {
   const formattedAcceptAttendanceUrl =
     typeof window !== 'undefined'
@@ -20,11 +23,13 @@ export const ShowAttendanceQrCodeAction = ({
   return (
     <Dialog>
       <Dialog.Trigger asChild>
-        <Button
-          variant="outline/primary"
-          size="sm"
-          iconLeft={{ icon: <QrCodeIcon /> }}
-        />
+        {children ?? (
+          <Button
+            variant="outline/primary"
+            size="sm"
+            iconLeft={{ icon: <QrCodeIcon /> }}
+          />
+        )}
       </Dialog.Trigger>
 
       <Dialog.Content size="6xl" title="Attendance QR Code">

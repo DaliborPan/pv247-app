@@ -3,6 +3,8 @@ import { RevalidateLecturesAction } from '@/modules/lecture/components/revalidat
 import { getLecturesForAttendanceQuery } from '@/modules/lecture/queries';
 import { ShowAttendanceQrCodeAction } from '@/modules/student-lecture/components/show-attendance-qr-code-action/show-attendance-qr-code-action';
 
+import { CurrentWeekLecture } from './current-week-lecture';
+
 export const LectorLecturesSection = async () => {
   const lectures = await getLecturesForAttendanceQuery();
 
@@ -15,6 +17,8 @@ export const LectorLecturesSection = async () => {
         </div>
       }
     >
+      <CurrentWeekLecture lectures={lectures} />
+
       <div className="grid gap-2 md:grid-cols-2">
         {lectures.map(lecture => (
           <div key={lecture.id} className="flex items-center gap-x-2">

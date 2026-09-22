@@ -83,7 +83,12 @@ export const getLecturesForAttendanceQuery = cache(
     }
 
     return await db.query.lectures.findMany({
-      columns: { id: true, name: true, attendanceToken: true },
+      columns: {
+        id: true,
+        name: true,
+        availableFrom: true,
+        attendanceToken: true
+      },
       orderBy: (lectures, { asc }) => [asc(lectures.availableFrom)]
     });
   }

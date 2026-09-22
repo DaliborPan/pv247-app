@@ -17,5 +17,6 @@ export type LectureType = {
 export type LectureAttendanceType = {
   id: string;
   name: string;
+  availableFrom: string;
   attendanceToken: string;
 };
