@@ -16,7 +16,7 @@ export const HomeworkPointsBadge = ({
     return (
       <Suspense fallback={<HomeworkPointsBadge maxPoints={maxPoints} />}>
         {props.studentHomework.then(studentHomework => {
-          if (studentHomework) {
+          if (typeof studentHomework?.points === 'number') {
             return (
               <Badge
                 variant="outline"
