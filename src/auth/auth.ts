@@ -2,6 +2,11 @@ import 'server-only';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
+import {
+  getLectorWithLeastStudentsQuery,
+  isLectorEmail
+} from '@/modules/lector/queries';
+
 import { db } from '../db';
 import { user, account, session, verification } from '../db/schema/users/users';
 
@@ -62,6 +67,33 @@ export const auth = betterAuth({
     additionalFields: {
       role: {
         type: 'string'
+      }
+    }
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        before: async userData => {
+          const isLector = isLectorEmail(userData.email);
+
+          if (isLector) {
+            return {
+              data: {
+                role: 'lector',
+                lectorId: null
+              }
+            };
+          }
+
+          const lectorId = await getLectorWithLeastStudentsQuery();
+
+          return {
+            data: {
+              role: 'student',
+              lectorId
+            }
+          };
+        }
       }
     }
   }
