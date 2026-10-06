@@ -39,7 +39,12 @@ next-env.d.ts
 
 # db
 dev.db*
+/homework-repos/
+/homework-solutions/
 
 # Agents
-.agents/
+.agents/*
+!.agents/skills/
+.agents/skills/*
+!.agents/skills/homework-review/
 skills-lock.json

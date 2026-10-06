@@ -2,6 +2,29 @@
 
 GitHub homework repository setup: [deployment and recovery guide](docs/github-homework-repositories.md).
 
+## Stažení domácích úkolů studentů vybraného lektora
+
+Skript potřebuje v `.env` nastavené `DATABASE_URL`, `AUTH_TOKEN`,
+`HOMEWORK_REVIEW_LECTOR_GITHUB` a přístup GitHub App (`GITHUB_APP_ID`,
+`GITHUB_APP_PRIVATE_KEY`, `GITHUB_APP_INSTALLATION_ID`). Vyžaduje Node.js 20.6+ a Git.
+
+```sh
+pnpm clone:homeworks 1
+# Například druhý úkol do vlastní složky:
+pnpm clone:homeworks 2 /cesta/k/repozitarum
+```
+
+Číslo 1–9 určuje pořadí lekce podle `availableFrom`. Výchozí složka je
+`homework-repos/lecture-<číslo>/` (ignorovaná Gitem); klony jsou v ní pojmenované
+podle studentů. Pokud mají dva studenti stejné jméno, skript jejich klony přeskočí
+a vypíše `Chyba`, aby nic nepřepsal. Skript vybere připravené repozitáře pro
+zvolenou lekci, naklonuje je a přepne na jinou branch než `main` (pokud je jich
+více, na branch s nejnovějším commitem). Klon obsahující
+pouze `main` odstraní a vypíše studenta bez odevzdaného úkolu. Existující složky
+nepřepisuje. Na terminál vypisuje pouze jméno studenta a stav (`Odevzdáno`,
+`Neodevzdáno`, `Přeskočeno` nebo `Chyba`). Stejný přehled ukládá jako tabulku do
+`RESULTS.md` v cílové složce; při dalším spuštění soubor přepíše.
+
 The application used for the course PV247 Modern Development of User Interfaces and implemented as part of the diploma thesis.
 
 ## General stack
