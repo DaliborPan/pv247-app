@@ -48,3 +48,5 @@ dev.db*
 .agents/skills/*
 !.agents/skills/homework-review/
 skills-lock.json
+opencode.json
+.playwright-mcp
