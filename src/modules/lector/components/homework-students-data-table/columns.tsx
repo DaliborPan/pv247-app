@@ -26,7 +26,7 @@ export const columns = [
       const url = row.original.repositoryUrl;
       return url ? (
         <a
-          href={url}
+          href={`${url}/pull/1`}
           target="_blank"
           rel="noreferrer"
           className="flex items-center gap-x-2 font-light hover:text-primary hover:underline"
