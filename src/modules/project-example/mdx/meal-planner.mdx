@@ -1,0 +1,50 @@
+## Role
+
+- **Uživatel** - po prvním přihlášení nastaví své preference. Pro vybraný týden nechá pomocí AI vygenerovat jídelníček společně se surovinami. Pro jídelníček vznikne nákupní seznam.
+
+## Onboarding a profil
+
+- Po prvním přihlášení uživatel projde onboardingem a nastaví své preference
+- Výběr jídel dne, která se mají plánovat: snídaně, oběd, večeře (aspoň jedno)
+- Preferované kategorie jídel, nejvýš 3: rychlá jídla, nízkokalorické, rodinná klasika, zdravý comfort food, „fakeaway“, šetrné k trávení, proteinové, česká klasika
+- Výběr dostupných spotřebičů (varná deska, trouba, mikrovlnka, airfryer), aspoň jeden povinný
+- Počet porcí
+- Dokončení onboardingu uloží preference; jídelníček se generuje až samostatně pro vybraný týden
+- Preference jde později změnit v profilu. Změna neovlivní existující jídelníčky, použije se při dalším generování
+
+## Přehled jídelníčků
+
+- Samostatná stránka s historickými jídelníčky a jídelníčky pro aktuální a příští týden
+- Každý jídelníček patří ke kalendářnímu týdnu od pondělí do neděle. Uživatel může mít pro každý týden nejvýš jeden jídelníček
+- Pokud pro aktuální nebo příští týden ještě jídelníček neexistuje, nabídne se možnost ho vytvořit. Uživatel vybírá pouze mezi těmito dvěma týdny; pro minulé ani vzdálenější budoucí týdny generovat nelze
+- Existující jídelníček nelze celý přegenerovat. Lze ho smazat a vygenerovat znovu, nebo přegenerovat jen nějaké jídlo z jídelníčku.
+
+## Generování jídelníčku
+
+- Uživatel vybere aktuální nebo příští týden, pro který ještě nemá jídelníček, a vyplní formulář předvyplněný preferencemi z profilu: jídla dne, kategorie, spotřebiče a počet porcí
+- Nepovinná textová poznámka upřesní přání pro daný týden, například „využij cuketu, tento týden bez ryb“
+- Pro aktuální týden AI vygeneruje jídla od dneška včetně do neděle. Při generování ve středu tedy vzniknou jídla na středu–neděli; pondělí a úterý se zpětně nedoplňují
+- Pro příští týden AI vygeneruje celý týden od pondělí do neděle
+- Vygenerovaná jídla obsahují recepty, suroviny, množství a orientační nutriční hodnoty. Současně vznikne nákupní seznam pouze pro tato jídla — při generování ve středu tedy jen na středu–neděli
+
+## Detail týdenního jídelníčku
+
+- Dny pokryté jídelníčkem, u každého dne zvolená jídla (snídaně, oběd, večeře). Karta jídla má název, štítek kategorie, čas přípravy a počet porcí.
+- Denní součet kcal a maker
+- Odkaz na nákupní seznam daného jídelníčku
+
+## Detail receptu
+
+- Název, kcal, čas přípravy, počet porcí a makra (sacharidy, bílkoviny, tuky).
+- Suroviny s množstvím pro počet porcí zvolený v jídelníčku a číslovaný postup
+- Nutriční hodnoty jsou označené jako orientační odhady AI; u hodnot je jasné, zda platí pro jednu porci, nebo celé jídlo
+- **Vyměnit jídlo** v jídelníčku pro aktuální nebo příští týden nabízí právě dvě možnosti:
+  - **Návrh podle poznámky** - uživatel napíše, co chce změnit, a AI navrhne jiné jídlo podle poznámky a preferencí daného jídelníčku
+  - **Doplnění podle názvu** - uživatel zadá název jídla a AI doplní suroviny, množství, postup, čas přípravy a orientační kcal a makra
+
+## Nákupní seznam
+
+- Z detailu jídelníčku vede proklik na jeho nákupní seznam.
+- Seznam obsahuje suroviny a jejich celkové množství pro daný jídelníček; stejné suroviny jsou sloučené do jedné položky
+- U každé položky je checkbox „mám / koupeno“. Zaškrtnutí se ukládá
+- Při výměně jídla se seznam aktualizuje. Nové nebo množstvím změněné položky budou nezaškrtnuté
