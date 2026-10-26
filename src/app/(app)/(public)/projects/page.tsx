@@ -1,6 +1,8 @@
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 import { projectExamples } from '@/modules/project-example/examples';
+import { MyProjectLink } from '@/modules/project/components/my-project-link';
 
 export const metadata = {
   title: 'Projects',
@@ -9,7 +11,13 @@ export const metadata = {
 
 const Page = () => (
   <main className="mx-auto max-w-4xl">
-    <h1 className="mb-6 text-3xl">Projects</h1>
+    <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+      <h1 className="text-3xl">Projects</h1>
+
+      <Suspense fallback={null}>
+        <MyProjectLink />
+      </Suspense>
+    </div>
 
     <p className="mb-8 max-w-3xl leading-7 text-text-secondary">
       Use one of these example assignments, adapt it to your team, or propose
