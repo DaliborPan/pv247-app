@@ -14,9 +14,9 @@ type ProjectExampleType = {
 export const projectExamples: ProjectExampleType[] = [
   {
     slug: 'meal-planner',
-    title: 'Plánovač týdenních jídel',
+    title: 'Weekly Meal Planner',
     description:
-      'Týdenní jídelníček podle osobních preferencí, recepty a nákupní seznam s pomocí AI.',
+      'AI-generated weekly meal plan based on personal preferences, with recipes and a shopping list.',
     Content: MealPlannerMdx
   },
   {
