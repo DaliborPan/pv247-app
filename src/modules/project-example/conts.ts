@@ -2,7 +2,7 @@ import { type MDXComponents } from 'mdx/types';
 import { type ComponentType } from 'react';
 
 import MealPlannerMdx from './mdx/meal-planner.mdx';
-import TbaMdx from './mdx/tba.mdx';
+import TherapistBookingMdx from './mdx/therapist-booking.mdx';
 
 type ProjectExampleType = {
   slug: string;
@@ -20,8 +20,10 @@ export const projectExamples: ProjectExampleType[] = [
     Content: MealPlannerMdx
   },
   {
-    slug: 'tba',
-    title: 'TBA',
-    Content: TbaMdx
+    slug: 'therapist-booking',
+    title: 'Therapist Booking System',
+    description:
+      'Session booking for a therapist with availability, client management, payment details and a blog.',
+    Content: TherapistBookingMdx
   }
 ];
