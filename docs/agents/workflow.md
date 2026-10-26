@@ -20,6 +20,7 @@ Use Matt Pocock's applicable skills as an end-to-end workflow, not only as imple
 ## 3. Implement and verify
 
 - Capture a fixed review baseline and identify pre-existing local changes. Preserve unrelated user work.
+- Before editing or committing, switch to a task-specific feature branch. Never commit implementation work directly to `main`; this rule overrides a skill's instruction to commit to the current branch when the current branch is `main`.
 - Follow `implement`, adapted to the repository's verification rules: manual verification and static checks, without TDD or automated test changes.
 - Check every acceptance criterion. State explicitly which checks passed, failed, or could not be performed; static checks alone are not evidence of browser behavior.
 - For browser-verifiable acceptance criteria, use Playwright MCP to open the running application and exercise the relevant UI. Reuse its dedicated persistent browser profile. If authentication expires, ask the user to sign in manually in that same browser, then resume verification; keep passwords, session cookies, and tokens out of chat and version control. Verify the active role and database target before data-changing checks, and obtain authorization for those changes.
@@ -29,6 +30,7 @@ Use Matt Pocock's applicable skills as an end-to-end workflow, not only as imple
 
 - Proactively carry the work through verification, review, and delivery; the user should not need to prompt for each phase. Pause for unresolved decisions, blockers, or actions that need permission.
 - Commit only the intended changes. Obtain permission before publishing a branch or PR unless already authorized; obtain explicit authorization to merge.
+- Deliver implementation through a GitHub pull request (the equivalent of an MR), targeting `main`, rather than pushing commits directly to `main`.
 - Merge PRs using squash merge (`gh pr merge --squash`) unless the user explicitly requests another method. If squash merge is unavailable, ask before using a different method.
 - Use `pr` for the PR body, include verification evidence and risk, and link the originating issue. For a PR that fully resolves the issue, use GitHub's closing reference (for example, `Closes #47`).
 - Keep the issue open while the implementation is local or awaiting merge. Let the merged closing PR close it; do not equate a local change with issue completion.
