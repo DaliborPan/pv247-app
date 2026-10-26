@@ -7,15 +7,21 @@ import { projectExamples } from '@/modules/project-example/examples';
 export const generateStaticParams = () =>
   projectExamples.map(example => ({ slug: example.slug }));
 
-export const generateMetadata = async ({
-  params
-}: PageProps<'/projects/examples/[slug]'>): Promise<Metadata> => {
-  const { slug } = await params;
+const getProjectExampleOrNotFound = (slug: string) => {
   const example = projectExamples.find(example => example.slug === slug);
 
   if (!example) {
     notFound();
   }
+
+  return example;
+};
+
+export const generateMetadata = async ({
+  params
+}: PageProps<'/projects/examples/[slug]'>): Promise<Metadata> => {
+  const { slug } = await params;
+  const example = getProjectExampleOrNotFound(slug);
 
   return {
     title: example.title,
@@ -25,12 +31,7 @@ export const generateMetadata = async ({
 
 const Page = async ({ params }: PageProps<'/projects/examples/[slug]'>) => {
   const { slug } = await params;
-  const example = projectExamples.find(example => example.slug === slug);
-
-  if (!example) {
-    notFound();
-  }
-
+  const example = getProjectExampleOrNotFound(slug);
   const { Content } = example;
 
   return (
