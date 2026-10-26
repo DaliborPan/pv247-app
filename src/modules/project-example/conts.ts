@@ -16,14 +16,14 @@ export const projectExamples: ProjectExampleType[] = [
     slug: 'meal-planner',
     title: 'Weekly Meal Planner',
     description:
-      'AI-generated weekly meal plan based on personal preferences, with recipes and a shopping list.',
+      'Weekly meal plans based on personal preferences, with recipes and a shopping list.',
     Content: MealPlannerMdx
   },
   {
     slug: 'therapist-booking',
     title: 'Therapist Booking System',
     description:
-      'Session booking for a therapist with availability, client management, payment details and a blog.',
+      'Session booking for a therapist with availability, client management and a blog.',
     Content: TherapistBookingMdx
   }
 ];
