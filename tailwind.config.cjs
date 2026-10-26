@@ -16,6 +16,7 @@ module.exports = {
       colors: {
         'neutral': '#f7f7fa',
         'background': '#f7f7fa',
+        'card': '#ffffff',
 
         'primary': '#0000d2',
         'primary-100': '#ebebff',

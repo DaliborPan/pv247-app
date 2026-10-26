@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 
 import { Badge } from '@/components/base/badge/badge';
 import { Icon } from '@/components/base/icon/icon';
-import { TextPreview } from '@/components/text-preview';
+import { OverviewCard } from '@/components/overview-card';
 import { formatDate } from '@/lib/date';
 import { type LectureType } from '@/modules/lecture/types';
 
@@ -28,18 +28,16 @@ export const LectureCard = ({
   isAlwaysAvailable?: boolean;
   href?: string;
 }) => (
-  <article className="flex flex-col rounded-lg bg-white p-6 shadow">
-    <span className="mb-1 flex items-center text-xs text-text-terciary">
+  <OverviewCard>
+    <OverviewCard.Meta>
       from {formatDate(lecture.availableFrom)}
-    </span>
+    </OverviewCard.Meta>
 
-    <h2 className="text-xl font-medium">{lecture.name}</h2>
+    <OverviewCard.Title>{lecture.name}</OverviewCard.Title>
 
-    <TextPreview className="mt-3 line-clamp-5 grow">
-      {lecture.preview}
-    </TextPreview>
+    <OverviewCard.Description>{lecture.preview}</OverviewCard.Description>
 
-    <div className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-end">
+    <OverviewCard.Footer>
       <Suspense>
         <LectureCardActions
           isAvailable={isAlwaysAvailable || lecture.isAvailable}
@@ -57,6 +55,6 @@ export const LectureCard = ({
           {getNumberWithOrdinal(index + 1)} week
         </Badge>
       </div>
-    </div>
-  </article>
+    </OverviewCard.Footer>
+  </OverviewCard>
 );

@@ -2,7 +2,7 @@ import { type Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { projectExamples } from '@/modules/project-example/examples';
+import { projectExamples } from '@/modules/project-example/conts';
 
 export const generateStaticParams = () =>
   projectExamples.map(example => ({ slug: example.slug }));

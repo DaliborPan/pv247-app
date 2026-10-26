@@ -4,14 +4,14 @@ import { type ComponentType } from 'react';
 import MealPlannerMdx from './mdx/meal-planner.mdx';
 import TbaMdx from './mdx/tba.mdx';
 
-type ProjectExample = {
+type ProjectExampleType = {
   slug: string;
   title: string;
   description?: string;
   Content: ComponentType<{ components?: MDXComponents }>;
 };
 
-export const projectExamples: ProjectExample[] = [
+export const projectExamples: ProjectExampleType[] = [
   {
     slug: 'meal-planner',
     title: 'Plánovač týdenních jídel',

@@ -1,7 +1,8 @@
-import Link from 'next/link';
 import { Suspense } from 'react';
 
-import { projectExamples } from '@/modules/project-example/examples';
+import { Button } from '@/components/base/button/button';
+import { OverviewCard } from '@/components/overview-card';
+import { projectExamples } from '@/modules/project-example/conts';
 import { MyProjectLink } from '@/modules/project/components/my-project-link';
 
 export const metadata = {
@@ -32,28 +33,27 @@ const Page = () => (
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {projectExamples.map(example => (
-          <article
-            key={example.slug}
-            className="flex flex-col rounded-lg bg-white p-6 shadow"
-          >
-            <h3 className="text-xl font-medium" lang="cs">
+          <OverviewCard key={example.slug}>
+            <OverviewCard.Title as="h3" lang="cs">
               {example.title}
-            </h3>
+            </OverviewCard.Title>
 
             {example.description && (
-              <p className="mt-3 leading-7 text-text-secondary" lang="cs">
+              <OverviewCard.Description lang="cs">
                 {example.description}
-              </p>
+              </OverviewCard.Description>
             )}
 
-            <Link
-              href={`/projects/examples/${example.slug}`}
-              className="mt-auto self-start pt-6 text-primary underline underline-offset-4 hover:no-underline focus-visible:outline-primary"
-              aria-label={`View assignment: ${example.title}`}
-            >
-              View assignment <span aria-hidden="true">→</span>
-            </Link>
-          </article>
+            <OverviewCard.Footer>
+              <Button
+                href={`/projects/examples/${example.slug}`}
+                size="sm"
+                aria-label={`View assignment: ${example.title}`}
+              >
+                View assignment
+              </Button>
+            </OverviewCard.Footer>
+          </OverviewCard>
         ))}
       </div>
     </section>

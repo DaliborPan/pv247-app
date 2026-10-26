@@ -1,6 +1,4 @@
-import Link from 'next/link';
-
-import { buttonVariants } from '@/components/base/button/button';
+import { Button } from '@/components/base/button/button';
 import { getSession } from '@/modules/session-user/session-user';
 
 import { getMyProjectQuery } from '../queries';
@@ -15,8 +13,6 @@ export const MyProjectLink = async () => {
   const project = await getMyProjectQuery();
 
   return (
-    <Link href="/project" className={buttonVariants()}>
-      {project ? 'My project' : 'Create project'}
-    </Link>
+    <Button href="/project">{project ? 'My project' : 'Create project'}</Button>
   );
 };
