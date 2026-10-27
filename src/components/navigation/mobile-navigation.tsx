@@ -10,6 +10,7 @@ import { Button } from '../base/button/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger
@@ -55,27 +56,32 @@ export const MobileNavigation = ({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent>
-        <DropdownMenuLinkItem href="/">Home</DropdownMenuLinkItem>
-        <DropdownMenuLinkItem href="/lectures">Lectures</DropdownMenuLinkItem>
-        <DropdownMenuLinkItem href="/homeworks">Homeworks</DropdownMenuLinkItem>
-
-        {user?.role === 'lector' && (
-          <DropdownMenuLinkItem href="/lector/students">
-            Lector
+        <DropdownMenuGroup>
+          <DropdownMenuLinkItem href="/">Home</DropdownMenuLinkItem>
+          <DropdownMenuLinkItem href="/lectures">Lectures</DropdownMenuLinkItem>
+          <DropdownMenuLinkItem href="/homeworks">
+            Homeworks
           </DropdownMenuLinkItem>
-        )}
+          <DropdownMenuLinkItem href="/projects">Projects</DropdownMenuLinkItem>
 
-        {user?.role === 'student' && (
-          <DropdownMenuLinkItem href="/project">Project</DropdownMenuLinkItem>
-        )}
+          {user?.role === 'lector' && (
+            <DropdownMenuLinkItem href="/lector/students">
+              Lector
+            </DropdownMenuLinkItem>
+          )}
+        </DropdownMenuGroup>
 
         {!user ? null : (
           <>
             <DropdownMenuSeparator />
-            <DropdownMenuLinkItem href="/profile">Profile</DropdownMenuLinkItem>
-            <Logout>
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-            </Logout>
+            <DropdownMenuGroup>
+              <DropdownMenuLinkItem href="/profile">
+                Profile
+              </DropdownMenuLinkItem>
+              <Logout>
+                <DropdownMenuItem>Logout</DropdownMenuItem>
+              </Logout>
+            </DropdownMenuGroup>
           </>
         )}
       </DropdownMenuContent>

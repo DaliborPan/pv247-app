@@ -39,5 +39,8 @@ Společná práce týmu, kterou v aplikaci založí jeden z jeho členů, přiř
 **Schválení projektu**:
 Souhlas kteréhokoliv lektora se založeným týmovým projektem; schvalování není omezené na dva lektory skupin.
 
+**Vzorové zadání projektu**:
+Kompletně sepsané téma týmového projektu, které studenti mohou převzít nebo lehce upravit. Slouží také jako vzor struktury pro zadání vlastního projektu; samo není založeným týmovým projektem.
+
 **Docházka**:
 Záznam účasti studenta na lekci, který slouží k posouzení povinné docházky. Student ji potvrzuje na konci navštíveného termínu naskenováním QR kódu, čímž se jeho účast zapíše.

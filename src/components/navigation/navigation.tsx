@@ -70,13 +70,10 @@ export const Navigation = ({
               <NavigationItem href="/">Home</NavigationItem>
               <NavigationItem href="/lectures">Lectures</NavigationItem>
               <NavigationItem href="/homeworks">Homeworks</NavigationItem>
+              <NavigationItem href="/projects">Projects</NavigationItem>
 
               {user?.role === 'lector' && (
                 <NavigationItem href="/lector/students">Lector</NavigationItem>
-              )}
-
-              {user?.role === 'student' && (
-                <NavigationItem href="/project">Project</NavigationItem>
               )}
             </ul>
           </nav>

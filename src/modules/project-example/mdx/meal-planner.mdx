@@ -1,0 +1,50 @@
+## Roles
+
+- **User** - sets their preferences after the first sign-in. For a selected week, they let AI generate a meal plan together with ingredients. A shopping list is created for the meal plan.
+
+## Onboarding and profile
+
+- After the first sign-in, the user goes through onboarding and sets their preferences
+- Choice of meals of the day to plan: breakfast, lunch, dinner (at least one)
+- Preferred meal categories, at most 3: quick meals, low-calorie, family classics, healthy comfort food, "fakeaway", easy to digest, high-protein, Czech classics
+- Choice of available appliances (stovetop, oven, microwave, air fryer), at least one is required
+- Number of servings
+- Completing onboarding saves the preferences; a meal plan is generated separately for a selected week
+- Preferences can be changed later in the profile. The change does not affect existing meal plans; it is used for the next generation
+
+## Meal plan overview
+
+- A separate page with past meal plans and meal plans for the current and next week
+- Each meal plan belongs to a calendar week from Monday to Sunday. A user can have at most one meal plan per week
+- If a meal plan for the current or next week does not exist yet, the option to create it is offered. The user chooses only between these two weeks; meal plans cannot be generated for past or more distant future weeks
+- An existing meal plan cannot be regenerated as a whole. It can be deleted and generated again, or only a single meal in it can be regenerated.
+
+## Meal plan generation
+
+- The user selects the current or next week for which they do not have a meal plan yet and fills in a form prefilled with the profile preferences: meals of the day, categories, appliances and number of servings
+- An optional text note specifies wishes for the given week, e.g. "use up the zucchini, no fish this week"
+- For the current week, AI generates meals from today (inclusive) until Sunday. When generating on Wednesday, meals for Wednesday–Sunday are created; Monday and Tuesday are not filled in retroactively
+- For the next week, AI generates the whole week from Monday to Sunday
+- Generated meals include recipes, ingredients, quantities and approximate nutritional values. At the same time, a shopping list is created only for these meals — when generating on Wednesday, only for Wednesday–Sunday
+
+## Weekly meal plan detail
+
+- Days covered by the meal plan, with the chosen meals (breakfast, lunch, dinner) for each day. A meal card shows the name, a category tag, preparation time and number of servings.
+- Daily total of kcal and macros
+- Link to the shopping list of the meal plan
+
+## Recipe detail
+
+- Name, kcal, preparation time, number of servings and macros (carbohydrates, protein, fat).
+- Ingredients with quantities for the number of servings chosen in the meal plan and numbered steps
+- Nutritional values are marked as approximate AI estimates; it is clear whether the values apply to one serving or the whole meal
+- **Replace meal** in a meal plan for the current or next week offers exactly two options:
+  - **Suggestion based on a note** - the user writes what they want to change, and AI suggests a different meal based on the note and the preferences of the meal plan
+  - **Completion by name** - the user enters a meal name, and AI fills in the ingredients, quantities, steps, preparation time and approximate kcal and macros
+
+## Shopping list
+
+- The meal plan detail links to its shopping list.
+- The list contains ingredients and their total quantities for the meal plan; identical ingredients are merged into one item
+- Each item has a "have it / bought" checkbox. The checked state is saved
+- When a meal is replaced, the list is updated. New items or items with a changed quantity will be unchecked

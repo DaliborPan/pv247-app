@@ -1,5 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Loader } from 'lucide-react';
+import Link from 'next/link';
 import * as React from 'react';
 
 import { cn } from '@/lib/cn';
@@ -40,44 +41,45 @@ const buttonVariants = cva(
   }
 );
 
-export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
+type SharedButtonProps = VariantProps<typeof buttonVariants> & {
+  asChild?: boolean;
 
-    iconLeft?: {
-      icon: IconProps['icon'];
-      className?: string;
-    };
-
-    iconRight?: {
-      icon: IconProps['icon'];
-      className?: string;
-    };
-
-    isLoading?: boolean;
+  iconLeft?: {
+    icon: IconProps['icon'];
+    className?: string;
   };
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      className,
-      variant,
-      size,
-      isLoading = false,
-      disabled,
-      children,
-      iconLeft,
-      iconRight,
-      ...props
-    },
-    ref
-  ) => (
-    <button
-      className={cn(buttonVariants({ variant, size, className }))}
-      ref={ref}
-      disabled={!!disabled || isLoading}
-      {...props}
-    >
+  iconRight?: {
+    icon: IconProps['icon'];
+    className?: string;
+  };
+
+  isLoading?: boolean;
+};
+
+// Keep native button props available to action-only wrappers (dialogs, toolbars).
+export type ButtonProps = React.ComponentPropsWithRef<'button'> &
+  SharedButtonProps & { href?: never };
+
+type ButtonLinkProps = React.ComponentPropsWithRef<typeof Link> &
+  SharedButtonProps & { disabled?: boolean };
+
+const Button = ({
+  className,
+  variant,
+  size,
+  isLoading = false,
+  disabled,
+  children,
+  iconLeft,
+  iconRight,
+  asChild: _asChild,
+  ...props
+}: ButtonProps | ButtonLinkProps) => {
+  const isDisabled = !!disabled || isLoading;
+  const classes = cn(buttonVariants({ variant, size, className }));
+  const content = (
+    <>
       {(!!iconLeft || !!isLoading) && (
         <Icon
           icon={isLoading ? <Loader /> : iconLeft?.icon}
@@ -98,9 +100,49 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           className={cn(children && 'ml-2', iconRight?.className)}
         />
       )}
+    </>
+  );
+
+  if (props.href !== undefined) {
+    const { ref, ...linkProps } = props;
+
+    if (isDisabled) {
+      // An anchor without href cannot navigate, even from the keyboard or context menu.
+      return (
+        // oxlint-disable-next-line jsx-a11y/anchor-is-valid -- Disabled links deliberately have no destination.
+        <a
+          ref={ref}
+          aria-disabled="true"
+          aria-label={linkProps['aria-label']}
+          title={linkProps.title}
+          tabIndex={-1}
+          className={cn(classes, 'pointer-events-none opacity-50')}
+        >
+          {content}
+        </a>
+      );
+    }
+
+    return (
+      <Link {...linkProps} ref={ref} className={classes}>
+        {content}
+      </Link>
+    );
+  }
+
+  const { ref, ...buttonProps } = props;
+
+  return (
+    <button
+      {...buttonProps}
+      ref={ref}
+      disabled={isDisabled}
+      className={classes}
+    >
+      {content}
     </button>
-  )
-);
+  );
+};
 Button.displayName = 'Button';
 
 export { Button };

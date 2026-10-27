@@ -1,10 +1,10 @@
 import { getSessionCookie } from 'better-auth/cookies';
 import { type NextRequest, NextResponse } from 'next/server';
 
-const PUBLIC_ROUTES = ['/login', '/lectures', '/homeworks'];
+const PUBLIC_ROUTES = ['/login', '/lectures', '/homeworks', '/projects'];
 
 const getIsProtectedPath = (path: string) =>
-  !PUBLIC_ROUTES.some(route => path.startsWith(route));
+  !PUBLIC_ROUTES.some(route => path === route || path.startsWith(`${route}/`));
 
 const proxy = (request: NextRequest) => {
   const sessionCookie = getSessionCookie(request);
