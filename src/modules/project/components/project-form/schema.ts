@@ -3,9 +3,16 @@ import { z } from 'zod';
 import { projectGithubSchema } from '@/modules/project/schema';
 
 const projectFormSchema = z.object({
-  name: z.string(),
-  shortDescription: z.string(),
-  description: z.string(),
+  name: z.string().trim().min(1, 'Project name is required.'),
+  shortDescription: z.string().trim().min(1, 'Short overview is required.'),
+  description: z.string().refine(
+    value =>
+      value
+        .replace(/<[^>]*>/g, '')
+        .replace(/&nbsp;|&#160;/gi, ' ')
+        .trim().length > 0,
+    'Project description is required.'
+  ),
   github: projectGithubSchema.nullish()
 });
 
