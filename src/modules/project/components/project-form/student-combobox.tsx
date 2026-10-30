@@ -1,6 +1,6 @@
 'use client';
 
-import { Plus, Trash, UserRound } from 'lucide-react';
+import { Plus, Trash } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 
 import { Button } from '@/components/base/button/button';
@@ -10,6 +10,8 @@ import {
 } from '@/components/base/combobox/combobox';
 import { Field } from '@/components/base/field/field';
 import { type SessionUserType } from '@/modules/session-user/types';
+
+import { ProjectTeamMembers } from './project-team-members';
 
 export const StudentCombobox = ({
   options,
@@ -79,36 +81,30 @@ export const StudentCombobox = ({
         cannot be changed after creation.
       </p>
 
-      <ul className="flex flex-col gap-2">
-        {members.map(member => (
-          <li
-            key={member.value}
-            className="flex items-center gap-3 rounded-lg bg-card p-4"
-          >
-            <UserRound aria-hidden="true" />
-            <span className="grow">
-              {member.label}
-              {member.value === sessionUserOption.value && ' (you)'}
-            </span>
-
-            {member.value !== sessionUserOption.value && (
-              <Button
-                type="button"
-                size="sm"
-                variant="outline/destructive"
-                disabled={isSubmitting}
-                iconLeft={{ icon: <Trash data-icon="inline-start" /> }}
-                onClick={() =>
-                  setValue(
-                    'teamMemberIds',
-                    teamMemberIds.filter(id => id !== member.value)
-                  )
-                }
-              />
-            )}
-          </li>
-        ))}
-      </ul>
+      <ProjectTeamMembers
+        members={members.map(member => ({
+          id: member.value,
+          name: member.label
+        }))}
+        currentUserId={sessionUserOption.value}
+        renderAction={member =>
+          member.id !== sessionUserOption.value && (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline/destructive"
+              disabled={isSubmitting}
+              iconLeft={{ icon: <Trash data-icon="inline-start" /> }}
+              onClick={() =>
+                setValue(
+                  'teamMemberIds',
+                  teamMemberIds.filter(id => id !== member.id)
+                )
+              }
+            />
+          )
+        }
+      />
 
       {error && (
         <p role="alert" className="text-sm text-destructive">

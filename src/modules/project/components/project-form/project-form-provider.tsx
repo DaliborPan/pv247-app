@@ -57,29 +57,23 @@ export const ProjectFormProvider = ({
     router.push('/project');
   };
 
+  const submitButton = (
+    <Button
+      disabled={isPending}
+      type="submit"
+      iconLeft={{ icon: <Send data-icon="inline-start" /> }}
+    >
+      {isPending ? 'Saving…' : 'Save project'}
+    </Button>
+  );
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Button href="/project" variant="link">
-          Back to my project
-        </Button>
-        <div className="mb-6 flex items-center">
-          <h1 className="grow text-3xl">
-            {projectId ? 'Edit your project' : 'Create your own project'}
-          </h1>
-
-          <Button
-            disabled={isPending}
-            type="submit"
-            iconLeft={{ icon: <Send data-icon="inline-start" /> }}
-          >
-            {isPending ? 'Saving…' : 'Save project'}
-          </Button>
-        </div>
-
         <fieldset disabled={isPending}>
           <FieldGroup>{children}</FieldGroup>
         </fieldset>
+        <div className="mt-8 flex justify-end">{submitButton}</div>
       </form>
     </Form>
   );

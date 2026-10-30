@@ -1,8 +1,9 @@
 import { type Metadata } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { projectExamples } from '@/modules/project-example/conts';
+
+import { BackButton } from './_components/back-button';
 
 export const generateStaticParams = () =>
   projectExamples.map(example => ({ slug: example.slug }));
@@ -36,12 +37,7 @@ const Page = async ({ params }: PageProps<'/projects/examples/[slug]'>) => {
 
   return (
     <main className="mx-auto max-w-4xl">
-      <Link
-        href="/projects"
-        className="text-primary underline underline-offset-4 hover:no-underline focus-visible:outline-primary"
-      >
-        <span aria-hidden="true">← </span>Offered assignments
-      </Link>
+      <BackButton />
 
       <h1 className="mb-6 mt-8 text-3xl leading-tight sm:text-4xl" lang="cs">
         {example.title}

@@ -70,7 +70,15 @@ export const Navigation = ({
               <NavigationItem href="/">Home</NavigationItem>
               <NavigationItem href="/lectures">Lectures</NavigationItem>
               <NavigationItem href="/homeworks">Homeworks</NavigationItem>
-              <NavigationItem href="/projects">Projects</NavigationItem>
+              {user && !isUserLoading && (
+                <NavigationItem
+                  href={
+                    user.role === 'lector' ? '/lector/projects' : '/project'
+                  }
+                >
+                  Projects
+                </NavigationItem>
+              )}
 
               {user?.role === 'lector' && (
                 <NavigationItem href="/lector/students">Lector</NavigationItem>

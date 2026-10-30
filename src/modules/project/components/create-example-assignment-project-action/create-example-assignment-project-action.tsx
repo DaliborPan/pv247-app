@@ -24,9 +24,14 @@ function Fields({
   const options = use(userOptionsPromise);
 
   return (
-    <FieldGroup>
-      <StudentCombobox options={options} sessionUser={sessionUser} />
-    </FieldGroup>
+    <section
+      aria-label="Project team"
+      className="min-w-0 rounded-lg bg-background p-5"
+    >
+      <FieldGroup>
+        <StudentCombobox options={options} sessionUser={sessionUser} />
+      </FieldGroup>
+    </section>
   );
 }
 
