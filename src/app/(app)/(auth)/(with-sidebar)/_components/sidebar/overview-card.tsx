@@ -40,39 +40,40 @@ export const OverviewCard = async () => {
   const lectures = await getLecturesCachedQuery();
   const homeworkCount = (await getLecturesWithHomeworkCachedQuery()).length;
 
-  const overviewPromise = getMyStudentOverviewQuery();
-
   return (
     <Suspense fallback={<OverviewSidebarCard />}>
-      {getSessionUser().then(
-        sessionUser =>
-          sessionUser.role === 'student' && (
-            <OverviewSidebarCard
-              attendance={
-                <Suspense>
-                  {overviewPromise.then(
-                    overview => `${overview.attendanceCount}/${lectures.length}`
-                  )}
-                </Suspense>
-              }
-              homework={
-                <Suspense>
-                  {overviewPromise.then(
-                    overview =>
-                      `${overview.awardedHomeworkCount}/${homeworkCount} | ${overview.totalPoints}p`
-                  )}
-                </Suspense>
-              }
-              project={
-                <Suspense>
-                  {overviewPromise.then(overview =>
-                    getProjectStatusLabel(overview.project)
-                  )}
-                </Suspense>
-              }
-            />
-          )
-      )}
+      {getSessionUser().then(sessionUser => {
+        if (sessionUser.role !== 'student') return null;
+
+        const overviewPromise = getMyStudentOverviewQuery();
+
+        return (
+          <OverviewSidebarCard
+            attendance={
+              <Suspense>
+                {overviewPromise.then(
+                  overview => `${overview.attendanceCount}/${lectures.length}`
+                )}
+              </Suspense>
+            }
+            homework={
+              <Suspense>
+                {overviewPromise.then(
+                  overview =>
+                    `${overview.awardedHomeworkCount}/${homeworkCount} | ${overview.totalPoints}p`
+                )}
+              </Suspense>
+            }
+            project={
+              <Suspense>
+                {overviewPromise.then(overview =>
+                  getProjectStatusLabel(overview.project)
+                )}
+              </Suspense>
+            }
+          />
+        );
+      })}
     </Suspense>
   );
 };

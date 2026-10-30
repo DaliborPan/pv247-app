@@ -5,8 +5,12 @@ import { Button } from '@/components/base/button/button';
 import { OverviewCard } from '@/components/overview-card';
 import { ProjectForm } from '@/modules/project/components/project-form/project-form';
 import { getMyProjectQuery } from '@/modules/project/queries';
+import { getSessionUser } from '@/modules/session-user/session-user';
 
 const PageAsync = async () => {
+  const sessionUser = await getSessionUser();
+  if (sessionUser.role === 'lector') redirect('/lector/projects');
+
   const project = await getMyProjectQuery();
 
   if (project?.assignment !== null) {
