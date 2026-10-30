@@ -7,7 +7,7 @@ import { MyProjectLink } from '@/modules/project/components/my-project-link';
 
 export const metadata = {
   title: 'Projects',
-  description: 'Example assignments for your PV247 team project'
+  description: 'Offered assignments for your PV247 team project'
 };
 
 const Page = () => (
@@ -21,14 +21,16 @@ const Page = () => (
     </div>
 
     <p className="mb-8 max-w-3xl leading-7 text-text-secondary">
-      Use one of these example assignments, adapt it to your team, or propose
-      your own project following a similar structure. Your team project still
-      needs to be approved by a lector.
+      Form a team of 2–4 students. Choose one of these offered assignments
+      without changes, or propose your own project following a similar
+      structure. Each assignment can be used by multiple teams. Team members
+      stay fixed after creation; to change your team or topic, cancel the
+      project and create a new one.
     </p>
 
     <section aria-labelledby="example-assignments">
       <h2 id="example-assignments" className="mb-4 text-xl font-medium">
-        Example assignments
+        Offered assignments
       </h2>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">

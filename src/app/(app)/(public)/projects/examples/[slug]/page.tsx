@@ -40,7 +40,7 @@ const Page = async ({ params }: PageProps<'/projects/examples/[slug]'>) => {
         href="/projects"
         className="text-primary underline underline-offset-4 hover:no-underline focus-visible:outline-primary"
       >
-        <span aria-hidden="true">← </span>Example assignments
+        <span aria-hidden="true">← </span>Offered assignments
       </Link>
 
       <h1 className="mb-6 mt-8 text-3xl leading-tight sm:text-4xl" lang="cs">
@@ -49,8 +49,10 @@ const Page = async ({ params }: PageProps<'/projects/examples/[slug]'>) => {
 
       {example.description && (
         <p className="leading-7 text-text-secondary">
-          You can use this assignment for your team project, adapt it, or follow
-          its structure when proposing your own topic.
+          Choose this assignment without changes for a team of 2–4 students, or
+          follow its structure when proposing your own topic. The assignment and
+          team members stay fixed after creation; you can add a GitHub
+          repository later.
         </p>
       )}
 

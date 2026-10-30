@@ -1,8 +1,11 @@
+import { type ProjectAssignment } from '@/modules/project-example/assignments';
+
 import { type ProjectStatusType } from './schema';
 
 export type ProjectType = {
   id: string;
   name: string;
+  assignment: ProjectAssignment | null;
   description: string | null;
   shortDescription: string | null;
   github: string | null;

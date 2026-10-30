@@ -1,6 +1,6 @@
 'use client';
 
-import { Plus, Trash } from 'lucide-react';
+import { Plus, Trash, UserRound } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 
 import { Button } from '@/components/base/button/button';
@@ -8,94 +8,113 @@ import {
   Combobox,
   type ComboboxOption
 } from '@/components/base/combobox/combobox';
-import { FormLabel } from '@/components/form/form';
+import { Field } from '@/components/base/field/field';
+import { type SessionUserType } from '@/modules/session-user/types';
 
-import { type ProjectFormSchema } from './schema';
-
-const StudentSelectedComboboxItem = ({
-  studentOption
+export const StudentCombobox = ({
+  options,
+  sessionUser
 }: {
-  studentOption: ComboboxOption;
+  options: ComboboxOption[];
+  sessionUser: SessionUserType;
 }) => {
-  const formContext = useFormContext<ProjectFormSchema>();
+  const {
+    watch,
+    setValue,
+    formState: { errors, isSubmitting }
+  } = useFormContext<{ teamMemberIds: string[] | undefined }>();
 
-  const students = formContext.watch('students');
+  const teamMemberIds = watch('teamMemberIds') ?? [];
+
+  const sessionUserOption = {
+    value: sessionUser.id,
+    label: `${sessionUser.firstName} ${sessionUser.lastName}`
+  };
+
+  const members = [
+    sessionUserOption,
+    ...teamMemberIds.map(
+      id =>
+        options.find(option => option.value === id) ?? {
+          value: id,
+          label: 'Unavailable student — please remove'
+        }
+    )
+  ];
+
+  const error = errors.teamMemberIds?.message;
 
   return (
-    <div className="flex items-center rounded-lg bg-white p-4">
-      <div className="flex grow items-center gap-x-3">
-        <div className="size-10 rounded-full bg-background" />
-
-        <div className="flex flex-col">
-          <span className="text-sm">{studentOption.label}</span>
-          <span className="-mt-px text-xxs text-text-secondary">
-            Web developer
-          </span>
-        </div>
+    <Field data-invalid={!!error}>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-xl">Team members ({members.length}/4)</h2>
+        <Combobox
+          value=""
+          searchPlaceholder="Search students…"
+          emptyMessage="No students without a project."
+          trigger={
+            <Button
+              type="button"
+              size="sm"
+              variant="outline/primary"
+              disabled={teamMemberIds.length >= 3 || isSubmitting}
+              aria-label="Add teammate"
+              aria-invalid={!!error}
+              iconLeft={{ icon: <Plus data-icon="inline-start" /> }}
+            >
+              Add teammate
+            </Button>
+          }
+          options={options.filter(
+            option => !teamMemberIds.includes(option.value)
+          )}
+          onSelect={value => {
+            setValue('teamMemberIds', [...teamMemberIds, value]);
+          }}
+        />
       </div>
 
-      <Button
-        size="sm"
-        variant="outline/destructive"
-        iconLeft={{ icon: <Trash /> }}
-        onClick={() => {
-          formContext.setValue(
-            'students',
-            students.filter(s => s !== studentOption.value)
-          );
-        }}
-      />
-    </div>
-  );
-};
+      <p className="text-sm text-text-secondary">
+        Choose 2–4 members including yourself. Members are added immediately and
+        cannot be changed after creation.
+      </p>
 
-export const StudentCombobox = ({ options }: { options: ComboboxOption[] }) => {
-  const formContext = useFormContext<ProjectFormSchema>();
+      <ul className="flex flex-col gap-2">
+        {members.map(member => (
+          <li
+            key={member.value}
+            className="flex items-center gap-3 rounded-lg bg-card p-4"
+          >
+            <UserRound aria-hidden="true" />
+            <span className="grow">
+              {member.label}
+              {member.value === sessionUserOption.value && ' (you)'}
+            </span>
 
-  const students = formContext.watch('students');
-
-  return (
-    <div>
-      <div className="flex flex-col gap-y-2">
-        <div className="flex items-center">
-          <FormLabel className="grow text-xl">Students</FormLabel>
-
-          <Combobox
-            emptyMessage="No options available."
-            value=""
-            TriggerIcon={Plus}
-            trigger={
+            {member.value !== sessionUserOption.value && (
               <Button
-                variant="outline/primary"
+                type="button"
                 size="sm"
-                iconLeft={{ icon: <Plus /> }}
-              >
-                Add student
-              </Button>
-            }
-            triggerPlaceholder="Add student..."
-            options={options.filter(option => !students.includes(option.value))}
-            onSelect={currentValue => {
-              formContext.setValue('students', [...students, currentValue]);
-            }}
-          />
-        </div>
-      </div>
+                variant="outline/destructive"
+                disabled={isSubmitting}
+                iconLeft={{ icon: <Trash data-icon="inline-start" /> }}
+                onClick={() =>
+                  setValue(
+                    'teamMemberIds',
+                    teamMemberIds.filter(id => id !== member.value)
+                  )
+                }
+              />
+            )}
+          </li>
+        ))}
+      </ul>
 
-      {students.length > 0 ? (
-        <div className="mt-4 flex flex-col gap-y-2">
-          {students.map(s => (
-            <StudentSelectedComboboxItem
-              key={s}
-              studentOption={options.find(opt => opt.value === s)!}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="mt-4 flex items-center justify-center rounded-lg bg-white p-4 text-text-terciary">
-          No students added yet.
-        </div>
+      {error && (
+        <p role="alert" className="text-sm text-destructive">
+          {error}
+        </p>
       )}
-    </div>
+    </Field>
   );
 };

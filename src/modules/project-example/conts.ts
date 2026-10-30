@@ -1,6 +1,7 @@
 import { type MDXComponents } from 'mdx/types';
 import { type ComponentType } from 'react';
 
+import { projectAssignments } from './assignments';
 import MealPlannerMdx from './mdx/meal-planner.mdx';
 import TherapistBookingMdx from './mdx/therapist-booking.mdx';
 
@@ -11,19 +12,11 @@ type ProjectExampleType = {
   Content: ComponentType<{ components?: MDXComponents }>;
 };
 
-export const projectExamples: ProjectExampleType[] = [
-  {
-    slug: 'meal-planner',
-    title: 'Weekly Meal Planner',
-    description:
-      'Weekly meal plans based on personal preferences, with recipes and a shopping list.',
-    Content: MealPlannerMdx
-  },
-  {
-    slug: 'therapist-booking',
-    title: 'Therapist Booking System',
-    description:
-      'Session booking for a therapist with availability, client management and a blog.',
-    Content: TherapistBookingMdx
-  }
-];
+const assignmentContent = {
+  'meal-planner': MealPlannerMdx,
+  'therapist-booking': TherapistBookingMdx
+};
+
+export const projectExamples: ProjectExampleType[] = projectAssignments.map(
+  assignment => ({ ...assignment, Content: assignmentContent[assignment.slug] })
+);

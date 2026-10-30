@@ -2,80 +2,84 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Send } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { type PropsWithChildren } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import { useSession } from '@/auth/client';
 import { Button } from '@/components/base/button/button';
+import { FieldGroup } from '@/components/base/field/field';
 import { Form } from '@/components/form/form';
 
-import { useSubmitProjectFormMutation } from './mutation';
-import { projectFormSchema, type ProjectFormSchema } from './schema';
+import {
+  useCreateProjectFormMutation,
+  useUpdateProjectFormMutation
+} from './mutation';
+import {
+  type CreateProjectFormType,
+  createProjectSchema,
+  updateProjectSchema,
+  type UpdateProjectFormType
+} from './schema';
 
 export const ProjectFormProvider = ({
+  projectId,
   children,
   defaultValues
 }: PropsWithChildren<{
-  defaultValues?: Partial<ProjectFormSchema>;
+  projectId?: string;
+  defaultValues?: Partial<UpdateProjectFormType>;
 }>) => {
-  const { data: session } = useSession();
+  const router = useRouter();
 
-  const form = useForm<ProjectFormSchema>({
-    resolver: zodResolver(projectFormSchema),
-    defaultValues: defaultValues ?? {
-      name: '',
-      description: '',
-      students: []
-    }
+  const form = useForm<CreateProjectFormType | UpdateProjectFormType>({
+    resolver: zodResolver(
+      projectId ? updateProjectSchema : createProjectSchema
+    ),
+    defaultValues
   });
 
-  const mutation = useSubmitProjectFormMutation({
-    isCreating: !defaultValues?.id
-  });
+  const createMutation = useCreateProjectFormMutation();
+  const updateMutation = useUpdateProjectFormMutation();
 
-  const onSubmit = async (data: ProjectFormSchema) => {
-    if (!session?.user) {
-      return;
+  const isPending = createMutation.isPending || updateMutation.isPending;
+
+  const onSubmit = async (
+    data: CreateProjectFormType | UpdateProjectFormType
+  ) => {
+    if (projectId) {
+      await updateMutation.mutateAsync(data);
+    } else {
+      await createMutation.mutateAsync(data as CreateProjectFormType);
     }
 
-    // TODO: < 2
-    if (data.students.length < 0) {
-      toast.error('Please add at least two students.');
-
-      return;
-    }
-
-    const [_result, error] = await mutation.mutateAsync({
-      ...data,
-      students: [...data.students, session.user.id]
-    });
-
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-
-    toast.success('Project updated successfully.');
+    toast.success(projectId ? 'Project updated.' : 'Project created.');
+    router.push('/project');
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
+        <Button href="/project" variant="link">
+          Back to my project
+        </Button>
         <div className="mb-6 flex items-center">
           <h1 className="grow text-3xl">
-            {defaultValues ? 'Edit your project' : 'Create a project'}
+            {projectId ? 'Edit your project' : 'Create your own project'}
           </h1>
+
           <Button
-            isLoading={mutation.isPending}
+            disabled={isPending}
             type="submit"
-            iconLeft={{ icon: <Send /> }}
+            iconLeft={{ icon: <Send data-icon="inline-start" /> }}
           >
-            Submit
+            {isPending ? 'Saving…' : 'Save project'}
           </Button>
         </div>
 
-        <div className="flex flex-col gap-y-4">{children}</div>
+        <fieldset disabled={isPending}>
+          <FieldGroup>{children}</FieldGroup>
+        </fieldset>
       </form>
     </Form>
   );

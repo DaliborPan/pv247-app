@@ -3,32 +3,35 @@ import { Suspense } from 'react';
 
 import { ProjectForm } from '@/modules/project/components/project-form/project-form';
 import { getMyProjectQuery } from '@/modules/project/queries';
-import { getSessionUser } from '@/modules/session-user/session-user';
 
 const PageAsync = async () => {
-  const sessionUser = await getSessionUser();
   const project = await getMyProjectQuery();
 
-  if (!project) {
+  if (project?.assignment !== null) {
     redirect('/project');
   }
 
   const defaultValues = {
-    id: project.id,
     name: project.name,
     shortDescription: project.shortDescription ?? '',
     description: project.description ?? '',
-    github: project.github ?? '',
-    students: project.users
-      .filter(user => user.id !== sessionUser.id)
-      .map(user => user.id)
+    github: project.github ?? ''
   };
 
-  return <ProjectForm defaultValues={defaultValues} />;
+  return (
+    <ProjectForm
+      projectId={project.id}
+      defaultValues={defaultValues}
+      members={project.users.map(
+        user =>
+          [user.firstName, user.lastName].filter(Boolean).join(' ') || user.name
+      )}
+    />
+  );
 };
 
 const Page = () => (
-  <Suspense>
+  <Suspense fallback={<p role="status">Loading project form…</p>}>
     <PageAsync />
   </Suspense>
 );

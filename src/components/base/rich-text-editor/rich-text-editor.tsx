@@ -9,14 +9,17 @@ import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
 import { type Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { useMemo, useState } from 'react';
+import { type ComponentProps, useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/cn';
 
 import { PageBreakExtension } from './extensions/page-break/extension';
 import { RichTextEditorToolbar } from './rich-text-editor-toolbar';
 
-export type RichTextEditorProps = {
+export type RichTextEditorProps = Pick<
+  ComponentProps<'div'>,
+  'id' | 'aria-invalid' | 'aria-describedby' | 'aria-labelledby'
+> & {
   value: string;
   onChange?: (value: string) => void;
   className?: string;
@@ -27,9 +30,27 @@ export type RichTextEditorProps = {
 const useRichTextEditor = ({
   value,
   onChange,
-  disabled
-}: Omit<RichTextEditorProps, 'className' | 'wrapperClassName'>) =>
-  useEditor(
+  disabled,
+  id,
+  'aria-invalid': ariaInvalid,
+  'aria-describedby': ariaDescribedby,
+  'aria-labelledby': ariaLabelledby
+}: Omit<RichTextEditorProps, 'className' | 'wrapperClassName'>) => {
+  const attributes = useMemo(
+    () => ({
+      'class': 'focus:outline-none prose max-w-none',
+      'role': 'textbox',
+      'aria-multiline': 'true',
+      ...(id ? { id } : {}),
+      ...(ariaInvalid !== undefined
+        ? { 'aria-invalid': String(ariaInvalid) }
+        : {}),
+      ...(ariaDescribedby ? { 'aria-describedby': ariaDescribedby } : {}),
+      ...(ariaLabelledby ? { 'aria-labelledby': ariaLabelledby } : {})
+    }),
+    [id, ariaInvalid, ariaDescribedby, ariaLabelledby]
+  );
+  const editor = useEditor(
     {
       editable: !disabled,
       immediatelyRender: false,
@@ -46,9 +67,7 @@ const useRichTextEditor = ({
         })
       ],
       editorProps: {
-        attributes: {
-          class: 'focus:outline-none prose max-w-none'
-        }
+        attributes
       },
       onUpdate: ({ editor }) => {
         onChange?.(editor.getText() ? editor.getHTML() : '');
@@ -58,6 +77,13 @@ const useRichTextEditor = ({
     },
     [disabled]
   );
+
+  useEffect(() => {
+    editor?.setOptions({ editorProps: { attributes } });
+  }, [editor, attributes]);
+
+  return editor;
+};
 
 const RichTextEditorComponent = (
   props: RichTextEditorProps & {

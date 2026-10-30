@@ -13,6 +13,7 @@ export type DecisionFnParams<T> =
   | { confirmed: false; data: undefined }
   | { confirmed: true; data: T };
 
+/** Throw on failure to keep the prompt open and preserve the entered values. */
 export type DecisionFn<T> = (
   params: DecisionFnParams<T>
 ) => Promise<void> | void;

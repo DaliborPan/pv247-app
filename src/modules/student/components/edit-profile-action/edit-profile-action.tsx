@@ -6,6 +6,7 @@ import { type DefaultValues } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/base/button/button';
+import { FieldGroup } from '@/components/base/field/field';
 import { Prompt } from '@/components/base/prompt/prompt';
 import { FormInput } from '@/components/form/form-fields/form-input';
 
@@ -25,21 +26,18 @@ export const EditProfileAction = ({
       formSchema={profileFormSchema}
       defaultValues={defaultValues}
       content={
-        <div className="flex flex-col gap-y-3 pt-2">
+        <FieldGroup className="pt-2">
           <FormInput name="firstName" label="First name" />
           <FormInput name="lastName" label="Last name" />
           <FormInput name="github" label="Github nick" />
-        </div>
+        </FieldGroup>
       }
       onDecision={async ({ confirmed, data }) => {
         if (!confirmed) return;
 
-        const [_, error] = await editProfileAction(data);
+        const [, error] = await editProfileAction(data);
 
-        if (error) {
-          toast.error(error.message);
-          return;
-        }
+        if (error) throw new Error(error.message);
 
         toast.success('Profile updated successfully!');
       }}
