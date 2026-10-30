@@ -31,8 +31,8 @@ export const FormInput = ({
     <FormField
       control={formContext.control}
       name={name}
-      render={({ field }) => (
-        <FormItem>
+      render={({ field, fieldState }) => (
+        <FormItem data-invalid={!!fieldState.error}>
           {label && <FormLabel>{label}</FormLabel>}
 
           <FormControl>

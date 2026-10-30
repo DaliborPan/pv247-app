@@ -3,11 +3,12 @@
 import { type PropsWithChildren } from 'react';
 import { toast } from 'sonner';
 
+import { FieldGroup } from '@/components/base/field/field';
 import { Prompt } from '@/components/base/prompt/prompt';
 import { FormCombobox } from '@/components/form/form-fields/form-combobox';
 import { FormTextarea } from '@/components/form/form-fields/form-textarea';
 
-import { useSetProjectPointsMutation } from './mutation';
+import { setProjectPointsAction } from './action';
 import {
   type SetProjectPointsFormSchema,
   setProjectPointsFormSchema
@@ -20,45 +21,38 @@ export const SetProjectPointsAction = ({
 }: PropsWithChildren<{
   projectId: string;
   defaultValues?: Partial<SetProjectPointsFormSchema>;
-}>) => {
-  const mutation = useSetProjectPointsMutation();
+}>) => (
+  <Prompt<SetProjectPointsFormSchema>
+    dialogProps={{ size: '2xl' }}
+    title="Set points"
+    formSchema={setProjectPointsFormSchema}
+    defaultValues={{
+      ...defaultValues,
+      projectId
+    }}
+    content={
+      <FieldGroup className="pt-2">
+        <FormCombobox
+          name="status"
+          label="Status"
+          options={[
+            { value: 'COMPLETED', label: 'Completed' },
+            { value: 'FAILED', label: 'Failed' }
+          ]}
+        />
+        <FormTextarea name="comment" label="Comment" />
+      </FieldGroup>
+    }
+    onDecision={async ({ confirmed, data }) => {
+      if (!confirmed) return;
 
-  return (
-    <Prompt<SetProjectPointsFormSchema>
-      dialogProps={{ size: '2xl' }}
-      title="Set points"
-      formSchema={setProjectPointsFormSchema}
-      defaultValues={{
-        ...defaultValues,
-        projectId
-      }}
-      content={
-        <div className="flex flex-col gap-y-4 pt-2">
-          <FormCombobox
-            name="status"
-            label="Status"
-            options={[
-              { value: 'COMPLETED', label: 'Completed' },
-              { value: 'FAILED', label: 'Failed' }
-            ]}
-          />
-          <FormTextarea name="comment" label="Comment" />
-        </div>
-      }
-      onDecision={async ({ confirmed, data }) => {
-        if (!confirmed) return;
+      const [, error] = await setProjectPointsAction(data);
 
-        const [_, error] = await mutation.mutateAsync(data);
+      if (error) throw new Error(error.message);
 
-        if (error) {
-          toast.error(error.message);
-          return;
-        }
-
-        toast.success('Project points updated!');
-      }}
-    >
-      {children}
-    </Prompt>
-  );
-};
+      toast.success('Project points updated!');
+    }}
+  >
+    {children}
+  </Prompt>
+);

@@ -1,83 +1,56 @@
 'use server';
 
-import { and, eq, inArray } from 'drizzle-orm';
-import { revalidatePath } from 'next/cache';
+import { eq } from 'drizzle-orm';
+import { refresh } from 'next/cache';
 
 import { db } from '@/db';
 import { projects } from '@/db/schema/projects/projects';
-import { user as users } from '@/db/schema/users/users';
-import { authServerAction } from '@/server/server-actions';
+import { createProject } from '@/modules/project/mutations';
+import { authStudentServerAction } from '@/server/server-actions';
 
-import { projectFormSchema } from './schema';
+import { getStudentProject } from '../../queries';
+import { createProjectSchema, updateProjectSchema } from './schema';
 
-export const createProjectAction = authServerAction
-  .input(projectFormSchema)
-  .handler(async ({ input: { students, ...input }, ctx }) => {
-    const currentUser = await db.query.users.findFirst({
-      columns: { projectId: true },
-      where: eq(users.id, ctx.sessionUser.id)
+export const createProjectAction = authStudentServerAction
+  .input(createProjectSchema)
+  .handler(async ({ input: { teamMemberIds, ...input }, ctx }) => {
+    await createProject(ctx.sessionUserStudent.id, teamMemberIds, {
+      ...input,
+      assignment: null,
+      github: input.github ?? null
     });
 
-    if (
-      !currentUser ||
-      currentUser.projectId ||
-      !students.includes(ctx.sessionUser.id)
-    ) {
-      throw new Error(
-        `User ${ctx.sessionUser.id} is not allowed to create a project.`
-      );
-    }
-
-    const [project] = await db
-      .insert(projects)
-      .values(input)
-      .returning({ id: projects.id });
-
-    await db
-      .update(users)
-      .set({ projectId: project.id })
-      .where(and(inArray(users.id, students), eq(users.role, 'student')));
-
-    revalidatePath('/project');
+    refresh();
   });
 
-export const updateProjectAction = authServerAction
-  .input(projectFormSchema)
-  .handler(async ({ input: { id, students, ...input }, ctx }) => {
-    if (!id) {
-      throw new Error('Project id is required');
-    }
-
-    const currentProjectStudents = await db.query.users.findMany({
-      columns: { id: true },
-      where: eq(users.projectId, id)
+export const updateProjectAction = authStudentServerAction
+  .input(updateProjectSchema)
+  .handler(async ({ input, ctx }) => {
+    const project = await getStudentProject({
+      sessionUser: ctx.sessionUserStudent,
+      studentId: ctx.sessionUserStudent.id
     });
 
-    if (!currentProjectStudents.some(user => user.id === ctx.sessionUser.id)) {
+    if (!project) {
       throw new Error(
-        `User ${ctx.sessionUser.id} is not allowed to update project ${id}`
+        `User ${ctx.sessionUserStudent.id} does not have a project.`
       );
     }
 
-    await db.update(projects).set(input).where(eq(projects.id, id));
-
-    await db
-      .update(users)
-      .set({ projectId: null })
-      .where(
-        and(
-          inArray(
-            users.id,
-            currentProjectStudents.map(user => user.id)
-          ),
-          eq(users.role, 'student')
-        )
+    if (project.assignment !== null) {
+      throw new Error(
+        'Only the GitHub repository can be changed for an assigned project.'
       );
+    }
 
     await db
-      .update(users)
-      .set({ projectId: id })
-      .where(and(inArray(users.id, students), eq(users.role, 'student')));
+      .update(projects)
+      .set({
+        ...input,
+        github: input.github ?? null,
+        updatedAt: new Date().toISOString()
+      })
+      .where(eq(projects.id, project.id));
 
-    revalidatePath('/project/edit');
+    refresh();
   });

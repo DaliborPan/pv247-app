@@ -9,6 +9,7 @@ export const DialogCancelButton = forwardRef<
 >(({ children, ...props }, ref) => (
   <Button
     ref={ref}
+    type="button"
     variant="outline/primary"
     iconLeft={{
       icon: <X />

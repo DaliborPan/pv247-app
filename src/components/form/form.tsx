@@ -12,6 +12,7 @@ import {
 
 import { cn } from '@/lib/cn';
 
+import { Field } from '../base/field/field';
 import { Label } from '../base/label/label';
 
 const Form = FormProvider;
@@ -77,7 +78,7 @@ const FormItem = React.forwardRef<
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div
+      <Field
         ref={ref}
         className={cn('flex flex-col gap-y-2', className)}
         {...props}
@@ -98,6 +99,7 @@ const FormLabel = React.forwardRef<
       ref={ref}
       className={cn(error && 'text-destructive', className)}
       htmlFor={formItemId}
+      id={`${formItemId}-label`}
       {...props}
     />
   );
@@ -115,6 +117,7 @@ const FormControl = React.forwardRef<
     <Slot
       ref={ref}
       id={formItemId}
+      aria-labelledby={`${formItemId}-label`}
       aria-describedby={
         !error
           ? `${formDescriptionId}`

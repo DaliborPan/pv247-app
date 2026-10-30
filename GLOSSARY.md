@@ -31,16 +31,26 @@ Studentské řešení domácího úkolu odevzdané otevřením pull requestu z v
 _Avoid_: Merge request (pro odevzdání na GitHubu).
 
 **Tým**:
-Skupina tří až čtyř studentů, kteří společně pracují na týmovém projektu.
+Skupina dvou až čtyř studentů, kteří společně pracují na jednom týmovém projektu a jejichž členství je po založení neměnné. Student je současně členem nejvýše jednoho týmu.
 
 **Týmový projekt**:
-Společná práce týmu, kterou v aplikaci založí jeden z jeho členů, přiřadí ostatní členy a uvede název, GitHub URL a popis. Projekt následně vyžaduje schválení jedním z lektorů.
+Společná práce týmu podle nabízeného nebo vlastního zadání. Projekt zakládá jeden z členů pro celý tým; jeho založení nevyžaduje schválení lektorem.
+
+**Projekt podle nabízeného zadání**:
+Týmový projekt, který přebírá jedno z nabízených zadání beze změn. Jeho zadání a složení týmu jsou neměnné; GitHub repozitář lze doplnit dodatečně.
+
+**Vlastní projekt**:
+Týmový projekt s vlastním zadáním studentů, které může po založení upravovat kterýkoliv člen týmu. Složení týmu zůstává neměnné.
+
+**Zrušení projektu**:
+Definitivní odstranění týmového projektu kterýmkoliv jeho členem a rozpuštění jeho týmu bez možnosti obnovení. Všichni členové jsou poté bez projektu a mohou založit nový projekt nebo se stát členy jiného týmu.
 
 **Schválení projektu**:
 Souhlas kteréhokoliv lektora se založeným týmovým projektem; schvalování není omezené na dva lektory skupin.
 
-**Vzorové zadání projektu**:
-Kompletně sepsané téma týmového projektu, které studenti mohou převzít nebo lehce upravit. Slouží také jako vzor struktury pro zadání vlastního projektu; samo není založeným týmovým projektem.
+**Nabízené zadání projektu**:
+Kompletně sepsané téma, které může beze změn převzít libovolný počet týmů pro své projekty. Slouží také jako vzor struktury vlastního zadání; samo není týmovým projektem.
+_Avoid_: Vzorové zadání jako označení upravitelné předlohy projektu.
 
 **Docházka**:
 Záznam účasti studenta na lekci, který slouží k posouzení povinné docházky. Student ji potvrzuje na konci navštíveného termínu naskenováním QR kódu, čímž se jeho účast zapíše.

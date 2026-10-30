@@ -1,7 +1,10 @@
+'use client';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import React, { type ComponentType, useState } from 'react';
 import { type FieldValues, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { v4 as uuid } from 'uuid';
 
 import { Form } from '@/components/form/form';
@@ -44,26 +47,33 @@ export const Prompt = <T extends FieldValues>({
     defaultValues
   });
 
-  if (Object.entries(form.formState.errors).length > 0) {
-    console.log('values', form.getValues());
-    console.log('form errors', form.formState.errors);
-  }
-
   const {
     mutate: decisionMutate,
     isError,
-    isPending: isLoading
+    isPending: isLoading,
+    reset: resetDecision
   } = useMutation({
     mutationFn: async (params: Parameters<DecisionFn<T>>[0]) =>
-      await onDecision(params)
+      await onDecision(params),
+    retry: false,
+    onError:
+      onError ??
+      (error => {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : 'Something went wrong. Please try again.'
+        );
+      })
   });
 
   const onSubmit = (data: T) => {
+    if (isLoading) return;
+
     decisionMutate(
       { confirmed: true, data },
       {
-        onSuccess: () => handleOpenChange(false),
-        onError
+        onSuccess: () => handleOpenChange(false)
       }
     );
   };
@@ -72,11 +82,14 @@ export const Prompt = <T extends FieldValues>({
     <Dialog
       open={isControlled ? controlledOpen : isOpen}
       onOpenChange={newState => {
+        if (isLoading) return;
+
         handleOpenChange(newState);
 
         if (newState) {
           // reset form on open
           form.reset(defaultValues);
+          resetDecision();
           setKey(uuid());
         }
 
@@ -99,19 +112,25 @@ export const Prompt = <T extends FieldValues>({
               </Dialog.Header>
             )}
 
-            {content}
+            <fieldset disabled={isLoading}>
+              {content}
 
-            <Dialog.Footer>
-              <Dialog.Close asChild>
-                {cancel ?? <Dialog.CancelButton />}
-              </Dialog.Close>
+              <Dialog.Footer>
+                <Dialog.Close asChild>
+                  {cancel ?? <Dialog.CancelButton />}
+                </Dialog.Close>
 
-              {confirm ? (
-                confirm({ isError, isLoading })
-              ) : (
-                <Dialog.ConfirmButton isLoading={isLoading} />
-              )}
-            </Dialog.Footer>
+                {confirm ? (
+                  confirm({ isError, isLoading })
+                ) : (
+                  <Dialog.ConfirmButton
+                    type="submit"
+                    isError={isError}
+                    isLoading={isLoading}
+                  />
+                )}
+              </Dialog.Footer>
+            </fieldset>
           </form>
         </Form>
       </Dialog.Content>

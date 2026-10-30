@@ -45,7 +45,10 @@
         "args": "all",
         "argsIgnorePattern": "^_",
         "varsIgnorePattern": "^_",
-        "caughtErrorsIgnorePattern": "^_"
+        "caughtErrorsIgnorePattern": "^_",
+        "fix": {
+          "imports": "safe-fix"
+        }
       }
     ],
     "unicorn/catch-error-name": ["error", { "name": "err" }],

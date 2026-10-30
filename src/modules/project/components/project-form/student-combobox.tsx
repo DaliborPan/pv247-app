@@ -8,94 +8,109 @@ import {
   Combobox,
   type ComboboxOption
 } from '@/components/base/combobox/combobox';
-import { FormLabel } from '@/components/form/form';
+import { Field } from '@/components/base/field/field';
+import { type SessionUserType } from '@/modules/session-user/types';
 
-import { type ProjectFormSchema } from './schema';
+import { ProjectTeamMembers } from './project-team-members';
 
-const StudentSelectedComboboxItem = ({
-  studentOption
+export const StudentCombobox = ({
+  options,
+  sessionUser
 }: {
-  studentOption: ComboboxOption;
+  options: ComboboxOption[];
+  sessionUser: SessionUserType;
 }) => {
-  const formContext = useFormContext<ProjectFormSchema>();
+  const {
+    watch,
+    setValue,
+    formState: { errors, isSubmitting }
+  } = useFormContext<{ teamMemberIds: string[] | undefined }>();
 
-  const students = formContext.watch('students');
+  const teamMemberIds = watch('teamMemberIds') ?? [];
 
-  return (
-    <div className="flex items-center rounded-lg bg-white p-4">
-      <div className="flex grow items-center gap-x-3">
-        <div className="size-10 rounded-full bg-background" />
+  const sessionUserOption = {
+    value: sessionUser.id,
+    label: `${sessionUser.firstName} ${sessionUser.lastName}`
+  };
 
-        <div className="flex flex-col">
-          <span className="text-sm">{studentOption.label}</span>
-          <span className="-mt-px text-xxs text-text-secondary">
-            Web developer
-          </span>
-        </div>
-      </div>
+  const members = [
+    sessionUserOption,
+    ...teamMemberIds.map(
+      id =>
+        options.find(option => option.value === id) ?? {
+          value: id,
+          label: 'Unavailable student — please remove'
+        }
+    )
+  ];
 
-      <Button
-        size="sm"
-        variant="outline/destructive"
-        iconLeft={{ icon: <Trash /> }}
-        onClick={() => {
-          formContext.setValue(
-            'students',
-            students.filter(s => s !== studentOption.value)
-          );
-        }}
-      />
-    </div>
-  );
-};
-
-export const StudentCombobox = ({ options }: { options: ComboboxOption[] }) => {
-  const formContext = useFormContext<ProjectFormSchema>();
-
-  const students = formContext.watch('students');
+  const error = errors.teamMemberIds?.message;
 
   return (
-    <div>
-      <div className="flex flex-col gap-y-2">
-        <div className="flex items-center">
-          <FormLabel className="grow text-xl">Students</FormLabel>
-
-          <Combobox
-            emptyMessage="No options available."
-            value=""
-            TriggerIcon={Plus}
-            trigger={
-              <Button
-                variant="outline/primary"
-                size="sm"
-                iconLeft={{ icon: <Plus /> }}
-              >
-                Add student
-              </Button>
-            }
-            triggerPlaceholder="Add student..."
-            options={options.filter(option => !students.includes(option.value))}
-            onSelect={currentValue => {
-              formContext.setValue('students', [...students, currentValue]);
-            }}
-          />
-        </div>
+    <Field data-invalid={!!error}>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-xl">Team members ({members.length}/4)</h2>
+        <Combobox
+          value=""
+          searchPlaceholder="Search students…"
+          emptyMessage="No students without a project."
+          trigger={
+            <Button
+              type="button"
+              size="sm"
+              variant="outline/primary"
+              disabled={teamMemberIds.length >= 3 || isSubmitting}
+              aria-label="Add teammate"
+              aria-invalid={!!error}
+              iconLeft={{ icon: <Plus data-icon="inline-start" /> }}
+            >
+              Add teammate
+            </Button>
+          }
+          options={options.filter(
+            option => !teamMemberIds.includes(option.value)
+          )}
+          onSelect={value => {
+            setValue('teamMemberIds', [...teamMemberIds, value]);
+          }}
+        />
       </div>
 
-      {students.length > 0 ? (
-        <div className="mt-4 flex flex-col gap-y-2">
-          {students.map(s => (
-            <StudentSelectedComboboxItem
-              key={s}
-              studentOption={options.find(opt => opt.value === s)!}
+      <p className="text-sm text-text-secondary">
+        Choose 2–4 members including yourself. Members are added immediately and
+        cannot be changed after creation.
+      </p>
+
+      <ProjectTeamMembers
+        members={members.map(member => ({
+          id: member.value,
+          name: member.label
+        }))}
+        currentUserId={sessionUserOption.value}
+        renderAction={member =>
+          member.id !== sessionUserOption.value && (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline/destructive"
+              disabled={isSubmitting}
+              iconLeft={{ icon: <Trash data-icon="inline-start" /> }}
+              onClick={() =>
+                setValue(
+                  'teamMemberIds',
+                  teamMemberIds.filter(id => id !== member.id)
+                )
+              }
             />
-          ))}
-        </div>
-      ) : (
-        <div className="mt-4 flex items-center justify-center rounded-lg bg-white p-4 text-text-terciary">
-          No students added yet.
-        </div>
+          )
+        }
+      />
+
+      {error && (
+        <p role="alert" className="text-sm text-destructive">
+          {error}
+        </p>
       )}
-    </div>
+    </Field>
   );
 };

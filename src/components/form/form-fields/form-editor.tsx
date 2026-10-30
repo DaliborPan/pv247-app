@@ -6,7 +6,13 @@ import {
   RichTextEditor,
   type RichTextEditorProps
 } from '../../base/rich-text-editor/rich-text-editor';
-import { FormControl, FormField, FormItem, FormLabel } from '../form';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '../form';
 
 export type FormEditorProps = Omit<
   RichTextEditorProps,
@@ -23,8 +29,8 @@ export const FormEditor = ({ name, label, ...props }: FormEditorProps) => {
     <FormField
       control={control}
       name={name}
-      render={({ field, formState: { defaultValues } }) => (
-        <FormItem>
+      render={({ field, fieldState, formState: { defaultValues } }) => (
+        <FormItem data-invalid={!!fieldState.error}>
           {label && <FormLabel className="pb-1.5">{label}</FormLabel>}
 
           <FormControl>
@@ -36,6 +42,7 @@ export const FormEditor = ({ name, label, ...props }: FormEditorProps) => {
               key={defaultValues?.[name] ?? ''}
             />
           </FormControl>
+          <FormMessage />
         </FormItem>
       )}
     />
