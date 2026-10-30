@@ -19,12 +19,17 @@ const Page = () => {
       <div className="mt-4 flex flex-col gap-y-4 lg:mt-8">
         <StudentOverviewCard user={sessionUserPromise} />
         <StudentHomeworkCard user={sessionUserPromise} />
-        <ProfileProjectCard />
+        <Suspense>
+          {sessionUserPromise.then(
+            sessionUser =>
+              sessionUser.role === 'student' && <ProfileProjectCard />
+          )}
+        </Suspense>
 
         <Suspense>
           {sessionUserPromise.then(
-            user =>
-              user.role === 'lector' && (
+            sessionUser =>
+              sessionUser.role === 'lector' && (
                 <>
                   <LectorLecturesSection />
                   <LectorSignUpLecturesSection />

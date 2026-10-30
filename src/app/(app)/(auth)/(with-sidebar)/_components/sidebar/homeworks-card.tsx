@@ -7,6 +7,7 @@ import {
   getAvailableLecturesCachedQuery,
   getLecturesCachedQuery
 } from '@/modules/lecture/queries';
+import { getSessionUser } from '@/modules/session-user/session-user';
 import { getMyStudentOverviewQuery } from '@/modules/student/queries';
 
 import { SidebarLinkRow } from './sidebar-link-row';
@@ -14,8 +15,6 @@ import { SidebarLinkRow } from './sidebar-link-row';
 export const HomeworksCard = async () => {
   const lectures = await getLecturesCachedQuery();
   const availableLectures = await getAvailableLecturesCachedQuery();
-
-  const overviewPromise = getMyStudentOverviewQuery();
 
   return (
     <SidebarCard title="Homework" className="hidden lg:block">
@@ -32,19 +31,25 @@ export const HomeworksCard = async () => {
               <span className="grow">{lecture.homeworkName}</span>
 
               <Suspense>
-                {overviewPromise.then(overview => {
-                  const studentHomework = overview.studentHomeworks.find(
-                    item => item.lectureId === lecture.id
-                  );
+                {getSessionUser().then(sessionUser =>
+                  sessionUser.role === 'student' ? (
+                    getMyStudentOverviewQuery().then(overview => {
+                      const studentHomework = overview.studentHomeworks.find(
+                        item => item.lectureId === lecture.id
+                      );
 
-                  return typeof studentHomework?.points === 'number' ? (
-                    <span className="font-medium text-text-primary-color">
-                      {studentHomework.points}/{lecture.homeworkMaxPoints}
-                    </span>
+                      return typeof studentHomework?.points === 'number' ? (
+                        <span className="font-medium text-text-primary-color">
+                          {studentHomework.points}/{lecture.homeworkMaxPoints}
+                        </span>
+                      ) : (
+                        <Icon icon={<ArrowRight />} />
+                      );
+                    })
                   ) : (
                     <Icon icon={<ArrowRight />} />
-                  );
-                })}
+                  )
+                )}
               </Suspense>
             </SidebarLinkRow>
           ))}
